@@ -3,46 +3,72 @@ package main
 import (
 	"fmt"
 	"news-aggregator/pkg/model"
+	"news-aggregator/pkg/parser"
 	"news-aggregator/pkg/repository"
 	"news-aggregator/pkg/service"
+	"os"
 )
 
 func main() {
-	var parser service.Parser
-	parser = &service.RssParser{}
+	files := []string{
+		"data/abcnews-international-category-19-05-24.xml",
+		"data/bbc-world-category-19-05-24.xml",
+		"data/washingtontimes-world-category-19-05-24.xml",
+		//"data/nbc-news.json",
+	}
+
 	var articles []model.Article
 	db := repository.NewArticleInMemory(articles)
 	svc := service.NewArticleService(db)
-	err := startParsing(parser, db, svc, "data/abcnews-international-category-19-05-24.xml")
-	err = startParsing(parser, db, svc, "data/bbc-world-category-19-05-24.xml")
-	if err != nil {
-		return
+	context := &parser.Context{}
+
+	for _, filePath := range files {
+		file, err := os.Open(filePath)
+		if err != nil {
+			fmt.Println("Error opening file:", err)
+			continue
+		}
+
+		defer file.Close()
+
+		format := parser.DetermineFileFormat(filePath)
+		switch format {
+		case "rss":
+			context.SetParser(&parser.RssParser{})
+		//case "json":
+		//	context.SetParser(&parser.JsonParser{})
+		//case "html":
+		//	context.SetParser(&parser.HtmlParser{})
+		default:
+			fmt.Println("Unsupported file format:", filePath)
+			continue
+		}
+
+		articles, err := context.Parse(file)
+		if err != nil {
+			fmt.Println("Error parser file with", format, "parser:", err)
+			continue
+		}
+
+		for _, item := range articles {
+			article := model.Article{
+				Id:          len(db.Articles) + 1,
+				Title:       item.Title,
+				Link:        item.Link,
+				Description: item.Description,
+				Source:      item.Source,
+				PubDate:     item.PubDate,
+			}
+			_, err := svc.Create(article)
+			if err != nil {
+				fmt.Println("Error creating article:", err)
+				continue
+			}
+		}
 	}
-	fmt.Println("Parsing and saving articles completed!")
-	fmt.Println("Articles in the database:")
-	articlesInDb, err := svc.GetAll()
+
+	articlesInDb, _ := svc.GetAll()
 	for _, article := range articlesInDb {
 		fmt.Println(article)
 	}
-}
-
-func startParsing(parser service.Parser, db *repository.ArticleInMemory, svc *service.ArticleService, filePath string) error {
-	file, err := parser.ParseFile(filePath)
-	if err != nil {
-		panic(err)
-	}
-	for _, item := range file.Items {
-		article := model.Article{
-			Id:          len(db.Articles) + 1,
-			Title:       item.Title,
-			Link:        item.Link,
-			Description: item.Description,
-		}
-		_, err := svc.Create(article)
-		if err != nil {
-			panic(err)
-		}
-
-	}
-	return err
 }
