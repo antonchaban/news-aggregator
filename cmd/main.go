@@ -46,6 +46,10 @@ func main() {
 				PubDateSelector:     "div.gnt_m_flm_sbt",
 				Source:              "USA TODAY",
 				DateAttribute:       "data-c-dt",
+				TimeFormat: []string{
+					"12:59 p.m. ET May 19 2006",
+					"Jan 02, 2006",
+				},
 			}
 
 			htmlParser := parser.NewHtmlParser(config)

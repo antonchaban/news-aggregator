@@ -1,10 +1,12 @@
 package parser
 
 import (
+	"fmt"
 	"github.com/PuerkitoBio/goquery"
 	"news-aggregator/pkg/model"
 	"os"
 	"strings"
+	"time"
 )
 
 type HtmlParser struct {
@@ -19,6 +21,7 @@ type HtmlFeedConfig struct {
 	PubDateSelector     string
 	Source              string
 	DateAttribute       string
+	TimeFormat          []string
 }
 
 func NewHtmlParser(config HtmlFeedConfig) *HtmlParser {
@@ -35,12 +38,15 @@ func (h *HtmlParser) parseFile(f *os.File) ([]model.Article, error) {
 		title := strings.TrimSpace(s.Text())
 		url, _ := s.Attr("href")
 		description := strings.TrimSpace(s.AttrOr(h.config.DescriptionSelector, ""))
-		date := strings.TrimSpace(s.Parent().Find(h.config.PubDateSelector).AttrOr(h.config.DateAttribute, ""))
-
+		date := strings.TrimSpace(s.Find(h.config.PubDateSelector).AttrOr(h.config.DateAttribute, ""))
+		parsedDate, err := parseDate(date, h.config.TimeFormat)
+		if err != nil {
+			fmt.Println("Setting current date because of error parsing date:", err)
+		}
 		article := model.Article{
 			Title:       title,
 			Link:        url,
-			PubDate:     date,
+			PubDate:     parsedDate,
 			Source:      h.config.Source,
 			Description: description,
 		}
@@ -50,4 +56,14 @@ func (h *HtmlParser) parseFile(f *os.File) ([]model.Article, error) {
 	})
 
 	return articles, nil
+}
+
+func parseDate(date string, timeFormats []string) (time.Time, error) {
+	for _, format := range timeFormats {
+		parsedTime, err := time.Parse(format, date)
+		if err == nil {
+			return parsedTime, nil
+		}
+	}
+	return time.Now(), fmt.Errorf("no matching format for date: %s", date)
 }

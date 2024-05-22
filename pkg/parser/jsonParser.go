@@ -5,6 +5,7 @@ import (
 	"io"
 	"news-aggregator/pkg/model"
 	"os"
+	"time"
 )
 
 type JsonParser struct {
@@ -17,11 +18,11 @@ type JsonFeed struct {
 		Source struct {
 			Name string `json:"name"`
 		} `json:"source"`
-		Author      string `json:"author"`
-		Title       string `json:"title"`
-		Description string `json:"description"`
-		URL         string `json:"url"`
-		PublishedAt string `json:"publishedAt"`
+		Author      string    `json:"author"`
+		Title       string    `json:"title"`
+		Description string    `json:"description"`
+		URL         string    `json:"url"`
+		PublishedAt time.Time `json:"publishedAt"`
 	} `json:"articles"`
 }
 

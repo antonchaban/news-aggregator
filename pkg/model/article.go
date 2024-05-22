@@ -2,6 +2,7 @@ package model
 
 import (
 	"fmt"
+	"time"
 )
 
 type Article struct {
@@ -10,7 +11,7 @@ type Article struct {
 	Description string
 	Link        string
 	Source      string
-	PubDate     string
+	PubDate     time.Time
 }
 
 func (a Article) String() string {

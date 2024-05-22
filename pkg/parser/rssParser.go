@@ -13,12 +13,13 @@ func (r *RssParser) parseFile(f *os.File) ([]model.Article, error) {
 	feed, _ := parser.Parse(f)
 	articles := make([]model.Article, 0)
 	for _, item := range feed.Items {
+		date := item.PublishedParsed
 		article := model.Article{
 			Title:       item.Title,
 			Link:        item.Link,
 			Description: item.Description,
 			Source:      feed.Title,
-			PubDate:     item.Published,
+			PubDate:     *date,
 		}
 		articles = append(articles, article)
 	}
