@@ -82,7 +82,8 @@ func main() {
 		}
 	}
 
-	articlesInDb, _ := svc.GetAll()
+	//articlesInDb, _ := svc.GetAll()
+	articlesInDb, _ := svc.GetByDateInRange("2024-05-12", "")
 	for _, article := range articlesInDb {
 		fmt.Println(article)
 	}

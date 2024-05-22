@@ -41,7 +41,7 @@ func (h *HtmlParser) parseFile(f *os.File) ([]model.Article, error) {
 		date := strings.TrimSpace(s.Find(h.config.PubDateSelector).AttrOr(h.config.DateAttribute, ""))
 		parsedDate, err := parseDate(date, h.config.TimeFormat)
 		if err != nil {
-			fmt.Println("Setting current date because of error parsing date:", err)
+			//fmt.Println("Setting current date because of error parsing date:", err)
 		}
 		article := model.Article{
 			Title:       title,
