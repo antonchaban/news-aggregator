@@ -14,7 +14,8 @@ func main() {
 		"data/abcnews-international-category-19-05-24.xml",
 		"data/bbc-world-category-19-05-24.xml",
 		"data/washingtontimes-world-category-19-05-24.xml",
-		//"data/nbc-news.json",
+		"data/nbc-news.json",
+		"data/usatoday-world-news.html",
 	}
 
 	var articles []model.Article
@@ -35,10 +36,20 @@ func main() {
 		switch format {
 		case "rss":
 			context.SetParser(&parser.RssParser{})
-		//case "json":
-		//	context.SetParser(&parser.JsonParser{})
-		//case "html":
-		//	context.SetParser(&parser.HtmlParser{})
+		case "json":
+			context.SetParser(&parser.JsonParser{})
+		case "html":
+			config := parser.HtmlFeedConfig{
+				ArticleSelector:     "a.gnt_m_flm_a",
+				LinkSelector:        "",
+				DescriptionSelector: "data-c-br",
+				PubDateSelector:     "div.gnt_m_flm_sbt",
+				Source:              "USA TODAY",
+				DateAttribute:       "data-c-dt",
+			}
+
+			htmlParser := parser.NewHtmlParser(config)
+			context.SetParser(htmlParser)
 		default:
 			fmt.Println("Unsupported file format:", filePath)
 			continue
