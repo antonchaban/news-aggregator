@@ -30,11 +30,11 @@ func main() {
 	svc := service.NewArticleService(db)
 
 	files := []string{
-		"C:\\Work\\news-aggregator\\data\\abcnews-international-category-19-05-24.xml",
-		"C:\\Work\\news-aggregator\\data\\bbc-world-category-19-05-24.xml",
-		"C:\\Work\\news-aggregator\\data\\nbc-news.json",
-		"C:\\Work\\news-aggregator\\data\\usatoday-world-news.html",
-		"C:\\Work\\news-aggregator\\data\\washingtontimes-world-category-19-05-24.xml",
+		"../../data/abcnews-international-category-19-05-24.xml",
+		"../../data/bbc-news-category-19-05-24.xml",
+		"../../data/washingtontimes-world-category-19-05-24.xml",
+		"../../data/nbc-news.json",
+		"../../data/usatoday-world-news.html",
 	}
 
 	err := parser.LoadArticlesFromFiles(files, svc)
