@@ -5,6 +5,7 @@ import (
 	"os"
 )
 
+// ParsingAlgorithm is an interface that defines parsing strategy
 type ParsingAlgorithm interface {
 	parseFile(f *os.File) ([]model.Article, error)
 }

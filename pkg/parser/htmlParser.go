@@ -9,10 +9,13 @@ import (
 	"time"
 )
 
+// HtmlParser is a struct that contains the configuration for parsing HTML feeds
+// and implements the ParsingAlgorithm interface.
 type HtmlParser struct {
 	config HtmlFeedConfig
 }
 
+// HtmlFeedConfig is a struct that contains the configuration for parsing HTML feeds.
 type HtmlFeedConfig struct {
 	ArticleSelector     string
 	TitleSelector       string
@@ -24,10 +27,12 @@ type HtmlFeedConfig struct {
 	TimeFormat          []string
 }
 
+// NewHtmlParser creates a new HtmlParser with the given configuration.
 func NewHtmlParser(config HtmlFeedConfig) *HtmlParser {
 	return &HtmlParser{config: config}
 }
 
+// parseFile parses the given file and returns a slice of articles.
 func (h *HtmlParser) parseFile(f *os.File) ([]model.Article, error) {
 	var articles []model.Article
 	doc, err := goquery.NewDocumentFromReader(f)
@@ -58,6 +63,7 @@ func (h *HtmlParser) parseFile(f *os.File) ([]model.Article, error) {
 	return articles, nil
 }
 
+// parseDate parses the given date string using the provided time formats.
 func parseDate(date string, timeFormats []string) (time.Time, error) {
 	for _, format := range timeFormats {
 		parsedTime, err := time.Parse(format, date)

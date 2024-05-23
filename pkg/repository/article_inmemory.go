@@ -7,11 +7,13 @@ import (
 	"time"
 )
 
+// ArticleInMemory is a struct that contains the in-memory database for articles.
 type ArticleInMemory struct {
 	Articles []model.Article
 	nextID   int
 }
 
+// Article is an interface that defines the methods for interacting with the article repository.
 type Article interface {
 	GetAll() ([]model.Article, error)
 	GetById(id int) (model.Article, error)
@@ -29,10 +31,12 @@ func NewArticleInMemory(db []model.Article) *ArticleInMemory {
 	}
 }
 
+// GetAll returns all articles in the database.
 func (a *ArticleInMemory) GetAll() ([]model.Article, error) {
 	return a.Articles, nil
 }
 
+// GetById returns the article with the given ID.
 func (a *ArticleInMemory) GetById(id int) (model.Article, error) {
 	for _, article := range a.Articles {
 		if article.Id == id {
@@ -42,6 +46,7 @@ func (a *ArticleInMemory) GetById(id int) (model.Article, error) {
 	return model.Article{}, nil
 }
 
+// Create adds a new article to the database.
 func (a *ArticleInMemory) Create(article model.Article) (model.Article, error) {
 	article.Id = a.nextID
 	a.nextID++
@@ -49,6 +54,7 @@ func (a *ArticleInMemory) Create(article model.Article) (model.Article, error) {
 	return article, nil
 }
 
+// Delete removes the article with the given ID from the database.
 func (a *ArticleInMemory) Delete(id int) error {
 	for i, article := range a.Articles {
 		if article.Id == id {
@@ -59,6 +65,7 @@ func (a *ArticleInMemory) Delete(id int) error {
 	return nil
 }
 
+// GetByKeyword returns all articles that contain the given keyword in their title or description.
 func (a *ArticleInMemory) GetByKeyword(keyword string) ([]model.Article, error) {
 	var articles []model.Article
 	for _, article := range a.Articles {
@@ -77,6 +84,7 @@ func (a *ArticleInMemory) GetByKeyword(keyword string) ([]model.Article, error) 
 	return articles, nil
 }
 
+// GetBySource returns all articles from the given source.
 func (a *ArticleInMemory) GetBySource(source string) ([]model.Article, error) {
 	var articles []model.Article
 	for _, article := range a.Articles {
@@ -87,6 +95,7 @@ func (a *ArticleInMemory) GetBySource(source string) ([]model.Article, error) {
 	return articles, nil
 }
 
+// GetByDateInRange returns all articles published between the given start and end dates.
 func (a *ArticleInMemory) GetByDateInRange(startDate, endDate time.Time) ([]model.Article, error) {
 	var articles []model.Article
 	for _, article := range a.Articles {

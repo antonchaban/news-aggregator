@@ -6,8 +6,10 @@ import (
 	"os"
 )
 
+// RssParser is a struct that implements the ParsingAlgorithm interface
 type RssParser struct{}
 
+// parseFile parses the given file and returns a slice of articles.
 func (r *RssParser) parseFile(f *os.File) ([]model.Article, error) {
 	parser := gofeed.NewParser()
 	feed, _ := parser.Parse(f)

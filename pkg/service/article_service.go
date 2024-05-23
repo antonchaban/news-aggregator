@@ -19,6 +19,7 @@ type ArticleService struct {
 	articleRepoInMem repository.Article
 }
 
+// Article is an interface that defines the methods for interacting with the article repository.
 type Article interface {
 	GetAll() ([]model.Article, error)
 	GetById(id int) (model.Article, error)
@@ -33,22 +34,27 @@ func NewArticleService(articleRepo repository.Article) *ArticleService {
 	return &ArticleService{articleRepoInMem: articleRepo}
 }
 
+// GetAll returns all articles in the database.
 func (a *ArticleService) GetAll() ([]model.Article, error) {
 	return a.articleRepoInMem.GetAll()
 }
 
+// GetById returns the article with the given ID.
 func (a *ArticleService) GetById(id int) (model.Article, error) {
 	return a.articleRepoInMem.GetById(id)
 }
 
+// Create adds a new article to the database.
 func (a *ArticleService) Create(article model.Article) (model.Article, error) {
 	return a.articleRepoInMem.Create(article)
 }
 
+// Delete removes the article with the given ID from the database.
 func (a *ArticleService) Delete(id int) error {
 	return a.articleRepoInMem.Delete(id)
 }
 
+// GetBySource returns all articles from the given source.
 func (a *ArticleService) GetBySource(source string) ([]model.Article, error) {
 	switch source {
 	case "abcnews":
@@ -66,10 +72,12 @@ func (a *ArticleService) GetBySource(source string) ([]model.Article, error) {
 	}
 }
 
+// GetByKeyword returns all articles that contain the given keyword.
 func (a *ArticleService) GetByKeyword(keyword string) ([]model.Article, error) {
 	return a.articleRepoInMem.GetByKeyword(keyword)
 }
 
+// GetByDateInRange returns all articles published between the given start and end dates.
 func (a *ArticleService) GetByDateInRange(startDate, endDate string) ([]model.Article, error) {
 	var startDateObj, endDateObj time.Time
 	var err error
