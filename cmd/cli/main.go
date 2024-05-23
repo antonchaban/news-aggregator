@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	// Define CLI arguments
+	// Init CLI arguments
 	help := flag.Bool("help", false, "Show all available arguments and their descriptions.")
 	sources := flag.String("sources", "", "Select the desired news sources to get the news from. Supported sources: abcnews, bbc, washingtontimes, nbc, usatoday")
 	keywords := flag.String("keywords", "", "Specify the keywords to filter the news by.")
