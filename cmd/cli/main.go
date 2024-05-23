@@ -31,7 +31,7 @@ func main() {
 
 	files := []string{
 		"../../data/abcnews-international-category-19-05-24.xml",
-		"../../data/bbc-news-category-19-05-24.xml",
+		"../../data/bbc-world-category-19-05-24.xml",
 		"../../data/washingtontimes-world-category-19-05-24.xml",
 		"../../data/nbc-news.json",
 		"../../data/usatoday-world-news.html",
