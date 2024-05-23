@@ -9,6 +9,7 @@ import (
 
 type ArticleInMemory struct {
 	Articles []model.Article
+	nextID   int
 }
 
 type Article interface {
@@ -22,7 +23,10 @@ type Article interface {
 }
 
 func NewArticleInMemory(db []model.Article) *ArticleInMemory {
-	return &ArticleInMemory{Articles: db}
+	return &ArticleInMemory{
+		Articles: db,
+		nextID:   len(db) + 1,
+	}
 }
 
 func (a *ArticleInMemory) GetAll() ([]model.Article, error) {
@@ -39,6 +43,8 @@ func (a *ArticleInMemory) GetById(id int) (model.Article, error) {
 }
 
 func (a *ArticleInMemory) Create(article model.Article) (model.Article, error) {
+	article.Id = a.nextID
+	a.nextID++
 	a.Articles = append(a.Articles, article)
 	return article, nil
 }
