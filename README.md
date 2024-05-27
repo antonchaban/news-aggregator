@@ -23,7 +23,7 @@ filter, and deliver news articles efficiently based on user preferences.
 
 ### Article
 
-```
+``` go
 type Article struct {
 Id          int
 Title       string
@@ -34,11 +34,51 @@ PubDate     time.Time
 }
 ```
 
+## Used repositories
+
+### In Memory Repository
+
+```go
+type ArticleInMemory struct {
+Articles []model.Article
+nextID   int
+}
+```
+
+### Interface for accessing articles
+
+```go
+type Article interface {
+GetAll() ([]model.Article, error)
+GetById(id int) (model.Article, error)
+Create(article model.Article) (model.Article, error)
+Delete(id int) error
+GetByKeyword(keyword string) ([]model.Article, error)
+GetBySource(source string) ([]model.Article, error)
+GetByDateInRange(startDate, endDate time.Time) ([]model.Article, error)
+}
+```
+
+## Used services
+
+### Article Service
+
+We can use different repositories implementations for the ArticleService. For example, we can use the InMemoryRepository
+We just need to send the repository to the service. In the future, we can easily switch to another repository
+
+```go
+func NewArticleService(articleRepo repository.Article) *ArticleService {
+return &ArticleService{articleRepoInMem: articleRepo}
+}
+```
+
 ## CLI Design
 
 The News Aggregator application will be accessible via a Command Line Interface (CLI). The CLI will provide users with
 various commands to interact with the application, such as fetching news articles, filtering articles based on source,
 keyword, and date range, and displaying articles in a user-friendly format.
+
+And then we just need to add required repositories to the service and run the application
 
 ### Commands
 
