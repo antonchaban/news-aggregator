@@ -19,6 +19,81 @@ filter, and deliver news articles efficiently based on user preferences.
 
 # API Design
 
+## Use case diagram
+
+The following diagram illustrates the primary use cases of the News Aggregator application:
+
+<img height="600" src="https://i.imgur.com/JHF2CVb.png" width="800"/>
+
+## Use cases
+
+The News Aggregator application will support the following use cases:
+
+| Use case name  | Article Creation                                                                                                       |
+|----------------|------------------------------------------------------------------------------------------------------------------------|
+| Use case ID    | UC-01                                                                                                                  |
+| Goals          | Aggregator creates article                                                                                             |
+| Actors         | Aggregator                                                                                                             |
+| Trigger        | Aggregator receives parsed Article entity                                                                              |
+| Pre-conditions | Database (in memory or other) initialized, service received required DB, article was parsed and Create func was called |
+| Flow of Events | 1. Service receives Article entity to Create.                                                                          |
+|                | 2. Service calls create function                                                                                       |
+|                | 3. Creation performed in specified DB                                                                                  |
+| Extension      | -                                                                                                                      |
+| Post-Condition | Article created and added to specified DB                                                                              |
+
+| Use case name  | View all articles                                    |
+|----------------|------------------------------------------------------|
+| Use case ID    | UC-02                                                |
+| Goals          | User see all available articles                      |
+| Actors         | User                                                 |
+| Trigger        | User calls specified command to view all articles    |
+| Pre-conditions | -                                                    |
+| Flow of Events | 1. User calls specified command                      |
+|                | 2. The request is sent to the appropriate service    |
+|                | 3. Articles that are found are displayed to the user |
+| Extension      | -                                                    |
+| Post-Condition | Articles that are found are displayed to the user    |
+
+| Use case name  | View articles by keyword                                   |
+|----------------|------------------------------------------------------------|
+| Use case ID    | UC-03                                                      |
+| Goals          | User see all available articles by specified keyword       |
+| Actors         | User                                                       |
+| Trigger        | User calls specified command to search articles by keyword |
+| Pre-conditions | -                                                          |
+| Flow of Events | 1. User calls specified command                            |
+|                | 2. The request is sent to the appropriate service          |
+|                | 3. Articles that are found are displayed to the user       |
+| Extension      | -                                                          |
+| Post-Condition | Articles that are found are displayed to the user          |
+
+| Use case name  | View articles by source                                                      |
+|----------------|------------------------------------------------------------------------------|
+| Use case ID    | UC-04                                                                        |
+| Goals          | User see all available articles by specified source                          |
+| Actors         | User                                                                         |
+| Trigger        | User calls specified command to search articles by source                    |
+| Pre-conditions | -                                                                            |
+| Flow of Events | 1. User calls specified command                                              |
+|                | 2. The request is sent to the appropriate service                            |
+|                | 3. Articles that are found are displayed to the user                         |
+| Extension      | Search by source should be available only from the pool of available sources |
+| Post-Condition | Articles that are found are displayed to the user                            |
+
+| Use case name  | View articles by date range                                                                      |
+|----------------|--------------------------------------------------------------------------------------------------|
+| Use case ID    | UC-05                                                                                            |
+| Goals          | User see all available articles by specified date range                                          |
+| Actors         | User                                                                                             |
+| Trigger        | User calls specified command to search articles by date range                                    |
+| Pre-conditions | -                                                                                                |
+| Flow of Events | 1. User calls specified command                                                                  |
+|                | 2. The request is sent to the appropriate service                                                |
+|                | 3. Articles that are found are displayed to the user                                             |
+| Extension      | Search by date range should be available only if received data has specified format (YYYY-MM-DD) |
+| Post-Condition | Articles that are found are displayed to the user                                                |
+
 ## Used models
 
 ### Article
