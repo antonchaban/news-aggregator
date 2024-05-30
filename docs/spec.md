@@ -94,59 +94,6 @@ The News Aggregator application will support the following use cases:
 | Extension      | Search by date range should be available only if received data has specified format (YYYY-MM-DD) |
 | Post-Condition | Articles that are found are displayed to the user                                                |
 
-## Used models
-
-### Article
-
-``` go
-type Article struct {
-Id          int
-Title       string
-Description string
-Link        string
-Source      string
-PubDate     time.Time
-}
-```
-
-## Used repositories
-
-### In Memory Repository
-
-```go
-type ArticleInMemory struct {
-Articles []model.Article
-nextID   int
-}
-```
-
-### Interface for accessing articles
-
-```go
-type Article interface {
-GetAll() ([]model.Article, error)
-GetById(id int) (model.Article, error)
-Create(article model.Article) (model.Article, error)
-Delete(id int) error
-GetByKeyword(keyword string) ([]model.Article, error)
-GetBySource(source string) ([]model.Article, error)
-GetByDateInRange(startDate, endDate time.Time) ([]model.Article, error)
-}
-```
-
-## Used services
-
-### Article Service
-
-We can use different repositories implementations for the ArticleService. For example, we can use the InMemoryRepository
-We just need to send the repository to the service. In the future, we can easily switch to another repository
-
-```go
-func NewArticleService(articleRepo repository.Article) *ArticleService {
-return &ArticleService{articleRepoInMem: articleRepo}
-}
-```
-
 ## CLI Design
 
 The News Aggregator application will be accessible via a Command Line Interface (CLI). The CLI will provide users with
@@ -155,92 +102,288 @@ keyword, and date range, and displaying articles in a user-friendly format.
 
 And then we just need to add required repositories to the service and run the application
 
-### Commands
+### CLI Commands
 
-The following commands will be available in the CLI:
 
-- `-help` - Displays a list of available commands and their descriptions.
+1. `-help` - Displays a list of available commands and their descriptions.
 
-Expected output:
+   * Name: ```news-aggregator -help```
+   * Input: none
+   * Response: List of all available commands and their descriptions
+   * Possible errors: None
 
-```
-  -date-end string
-        Specify the end date to filter the news by (format: YYYY-MM-DD).
-  -date-start string
-        Specify the start date to filter the news by (format: YYYY-MM-DD).
-  -help
-        Show all available arguments and their descriptions.
-  -keywords string
-        Specify the keywords to filter the news by.
-  -sources string
-        Select the desired news sources to get the news from. Supported sources: abcnews, bbc, washingtontimes, nbc, usatoday
-
-```
-
-- `-date-end <string>` - Specify the end date to filter the news by (format: YYYY-MM-DD).
-
-Expected output:
-
-```
-List of articles:
-
-ID: int
-Title: string
-Date: time
-Description: string
-Link: string
-Source: string
+  Expected output:
   
-```
-
-- `-date-start <string>` - Specify the start date to filter the news by (format: YYYY-MM-DD).
-
-Expected output:
-
-```
-List of articles:
-
-ID: int
-Title: string
-Date: time
-Description: string
-Link: string
-Source: string
+  ```
+    -date-end string
+          Specify the end date to filter the news by (format: YYYY-MM-DD).
+    -date-start string
+          Specify the start date to filter the news by (format: YYYY-MM-DD).
+    -help
+          Show all available arguments and their descriptions.
+    -keywords string
+          Specify the keywords to filter the news by.
+    -sources string
+          Select the desired news sources to get the news from. Supported sources: abcnews, bbc, washingtontimes, nbc, usatoday
   
-```
+  ```
 
-- `-keywords <string>` - Specify the keywords to filter the news by.
+2. `-date-end <string>` - Specify the end date to filter the news by (format: YYYY-MM-DD).
 
-Expected output:
+  * Name: ```-date-end <string>```
+  * Input: Date in format (YYYY-MM-DD)
+  * Response: List of articles in the specified date range
+  * Possible errors: Incorrect date format, data access errors
 
-```
-List of articles:
-
-ID: int
-Title: string
-Date: time
-Description: string
-Link: string
-Source: string
+  Expected output:
   
-```
+  ```
+  List of articles:
+  
+  ID: int
+  Title: string
+  Date: time
+  Description: string
+  Link: string
+  Source: string
+    
+  ```
 
-- `-source <string>` - Select the desired news sources to get the news from. Supported sources:
+3. `-date-start <string>` - Specify the start date to filter the news by (format: YYYY-MM-DD).
+
+   * Name: ```-date-start <string>```
+   * Input: Date in format (YYYY-MM-DD)
+   * Response: List of articles in the specified date range
+   * Possible errors: Incorrect date format, data access errors
+
+     Expected output:
+  
+     ```
+     List of articles:
+  
+     ID: int
+     Title: string
+     Date: time
+     Description: string
+     Link: string
+     Source: string
+    
+     ```
+
+4. `-keywords <string>` - Specify the keywords to filter the news by.
+
+  * Name: ```-keywords <string>```
+  * Input: Keyword (string), might be multiple comma separated keywords 
+  * Response: List of articles containing the keyword
+  * Possible errors: Data access errors
+
+  Expected output:
+  
+  ```
+  List of articles:
+  
+  ID: int
+  Title: string
+  Date: time
+  Description: string
+  Link: string
+  Source: string
+    
+  ```
+
+5.  `-source <string>` - Select the desired news sources to get the news from. Supported sources:
   `abcnews, bbc, washingtontimes, nbc, usatoday`
 
-Expected output:
+   * Name: ```-source <string>```
+   * Input: Source name (string) from given pool (abcnews, bbc, washingtontimes, nbc, usatoday)
+   * Response: List of articles from the relevant source
+   * Possible errors: Source not found, data access errors
 
-```
-List of articles:
+   Expected output:
 
-ID: int
-Title: string
-Date: time
-Description: string
-Link: string
-Source: string
+   ```
+     List of articles:
   
+     ID: int
+     Title: string
+     Date: time
+     Description: string
+     Link: string
+     Source: string
+    
+   ```
+
+## Service Layer
+
+### Article Service
+
+The service layer is responsible for
+business logic and interaction with the repository.
+
+Article service is a struct that works with ArticleRepository
+
+```go
+type ArticleService struct {
+	articleRepoInMem repository.Article
+}
 ```
+
+Article is an interface that defines the methods for interacting with the article repository.
+```go
+type Article interface {
+	GetAll() ([]model.Article, error)
+	GetById(id int) (model.Article, error)
+	Create(article model.Article) (model.Article, error)
+	Delete(id int) error
+	GetBySource(source string) ([]model.Article, error)
+	GetByKeyword(keyword string) ([]model.Article, error)
+	GetByDateInRange(startDate, endDate string) ([]model.Article, error)
+}
+```
+
+```go
+func NewArticleService(articleRepo repository.Article) *ArticleService {
+    return &ArticleService{articleRepoInMem: articleRepo}
+}
+```
+
+- GetAll
+  - Input data: None
+  - Output data: List of all articles ([]model.Article, error)
+  - Possible errors: Connection errors, data access errors
+
+- GetById
+
+  - Input data: ID (int)
+  -  Output data: The corresponding article (model.Article, error)
+  -  Possible errors: Article not found, data access errors
+
+
+- Create
+
+  - Input data: Article (model.Article)
+  - Output data: Created article (model.Article, error)
+  - Possible errors: Invalid data, data access errors
+
+
+- Delete
+
+  - Input data: ID (int)
+  - Output data: Deletion confirmation (error)
+  - Possible errors: Article not found, data access errors
+
+
+- GetBySource
+
+  - Input data: Source (string)
+  - Output data: List of articles ([], error)
+  - Possible errors: Source not found, data access errors
+
+- GetByKeyword
+
+  - Input data: Keyword (string)
+  - Output data: List of articles ([], error)
+  - Possible errors: Data access errors
+
+
+- GetByDateInRange
+
+  - Input data: Start date (string), end date (string)
+  - Output data: List of articles ([], error)
+  - Possible errors: Invalid date format, data access errors
+
+
+
+## Repository Layer
+
+### In Memory Repository
+
+This level of abstraction stores data in memory and provides methods for retrieving,
+creating, deleting articles, and searching for articles by different parameters.
+
+```go
+type ArticleInMemory struct {
+    Articles []model.Article
+    nextID   int
+}
+```
+
+Article is an interface that defines the methods for interacting
+with the article storage.
+```go
+type Article interface {
+	GetAll() ([]model.Article, error)
+	GetById(id int) (model.Article, error)
+	Create(article model.Article) (model.Article, error)
+	Delete(id int) error
+	GetByKeyword(keyword string) ([]model.Article, error)
+	GetBySource(source string) ([]model.Article, error)
+	GetByDateInRange(startDate, endDate time.Time) ([]model.Article, error)
+}
+```
+
+
+- GetAll
+  - Input data: None
+  - Output data: List of all articles ([]model.Article, error)
+  - Possible errors: Connection errors, data access errors
+
+- GetById
+
+  - Input data: ID (int)
+  -  Output data: The corresponding article (model.Article, error)
+  -  Possible errors: Article not found, data access errors
+
+
+- Create
+
+  - Input data: Article (model.Article)
+  - Output data: Created article (model.Article, error)
+  - Possible errors: Invalid data, data access errors
+
+
+- Delete
+
+  - Input data: ID (int)
+  - Output data: Deletion confirmation (error)
+  - Possible errors: Article not found, data access errors
+
+
+- GetBySource
+
+  - Input data: Source (string)
+  - Output data: List of articles ([], error)
+  - Possible errors: Source not found, data access errors
+
+- GetByKeyword
+
+  - Input data: Keyword (string)
+  - Output data: List of articles ([], error)
+  - Possible errors: Data access errors
+
+
+- GetByDateInRange
+
+  - Input data: Start date (string), end date (string)
+  - Output data: List of articles ([], error)
+  - Possible errors: Invalid date format, data access errors
+
+
+## Entities
+
+### Article
+
+```go
+type Article struct {
+    Id          int
+    Title       string
+    Description string
+    Link        string
+    Source      string
+    PubDate     time.Time
+}
+```
+
 
 ## Example Usage
 
