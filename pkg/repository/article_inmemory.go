@@ -24,7 +24,7 @@ type Article interface {
 	GetByDateInRange(startDate, endDate time.Time) ([]model.Article, error)
 }
 
-func NewArticleInMemory(db []model.Article) *ArticleInMemory {
+func NewInMemory(db []model.Article) *ArticleInMemory {
 	return &ArticleInMemory{
 		Articles: db,
 		nextID:   len(db) + 1,

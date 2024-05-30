@@ -30,7 +30,7 @@ type Article interface {
 	GetByDateInRange(startDate, endDate string) ([]model.Article, error)
 }
 
-func NewArticleService(articleRepo repository.Article) *ArticleService {
+func New(articleRepo repository.Article) *ArticleService {
 	return &ArticleService{articleRepoInMem: articleRepo}
 }
 

@@ -10,8 +10,8 @@ import (
 func main() {
 	// Initialize repository and service
 	var articles []model.Article
-	db := repository.NewArticleInMemory(articles)
-	svc := service.NewArticleService(db)
+	db := repository.NewInMemory(articles)
+	svc := service.New(db)
 
 	// Initialize handler and execute CLI commands
 	handler := cli.NewHandler(svc)
