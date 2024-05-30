@@ -19,11 +19,11 @@ filter, and deliver news articles efficiently based on user preferences.
 
 # API Design
 
-## Use case diagram
+## Dynamic diagram
 
-The following diagram illustrates the primary use cases of the News Aggregator application:
+The following diagram illustrates how elements collaborate at runtime:
 
-<img height="600" src="https://i.imgur.com/JHF2CVb.png" width="800"/>
+<img height="600" src="https://i.imgur.com/m19hE4k.jpeg" width="800"/>
 
 ## Use cases
 
