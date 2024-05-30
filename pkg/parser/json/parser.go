@@ -1,4 +1,4 @@
-package parser
+package json
 
 import (
 	"encoding/json"
@@ -8,12 +8,12 @@ import (
 	"time"
 )
 
-// JsonParser is a struct that implements the ParsingAlgorithm interface
-type JsonParser struct {
+// Parser is a struct that implements the ParsingAlgorithm interface
+type Parser struct {
 }
 
-// JsonFeed is a struct that represents the JSON feed
-type JsonFeed struct {
+// Feed is a struct that represents the JSON feed
+type Feed struct {
 	Status       string `json:"status"`
 	TotalResults int    `json:"totalResults"`
 	Articles     []struct {
@@ -28,13 +28,13 @@ type JsonFeed struct {
 	} `json:"articles"`
 }
 
-// parseFile parses the given file and returns a slice of articles.
-func (j *JsonParser) parseFile(f *os.File) ([]model.Article, error) {
+// ParseFile parses the given file and returns a slice of articles.
+func (j *Parser) ParseFile(f *os.File) ([]model.Article, error) {
 	bytes, err := io.ReadAll(f)
 	if err != nil {
 		return nil, err
 	}
-	var feed JsonFeed
+	var feed Feed
 	err = json.Unmarshal(bytes, &feed)
 	if err != nil {
 		return nil, err

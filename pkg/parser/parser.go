@@ -3,12 +3,16 @@ package parser
 import (
 	"fmt"
 	"news-aggregator/pkg/model"
+	"news-aggregator/pkg/parser/html"
+	"news-aggregator/pkg/parser/json"
+	"news-aggregator/pkg/parser/rss"
+	"news-aggregator/pkg/parser/strategy"
 	"news-aggregator/pkg/service"
 	"os"
 )
 
 func LoadArticlesFromFiles(files []string, svc *service.ArticleService) error {
-	context := &Context{}
+	context := &strategy.Context{}
 
 	for _, filePath := range files {
 		file, err := os.Open(filePath)
@@ -22,11 +26,11 @@ func LoadArticlesFromFiles(files []string, svc *service.ArticleService) error {
 		format := DetermineFileFormat(filePath)
 		switch format {
 		case "rss":
-			context.SetParser(&RssParser{})
+			context.SetParser(&rss.Parser{})
 		case "json":
-			context.SetParser(&JsonParser{})
+			context.SetParser(&json.Parser{})
 		case "html":
-			config := HtmlFeedConfig{
+			config := html.FeedConfig{
 				ArticleSelector:     "a.gnt_m_flm_a",
 				LinkSelector:        "",
 				DescriptionSelector: "data-c-br",
@@ -39,7 +43,7 @@ func LoadArticlesFromFiles(files []string, svc *service.ArticleService) error {
 				},
 			}
 
-			htmlParser := NewHtmlParser(config)
+			htmlParser := html.NewHtmlParser(config)
 			context.SetParser(htmlParser)
 		default:
 			fmt.Println("Unsupported file format:", filePath)

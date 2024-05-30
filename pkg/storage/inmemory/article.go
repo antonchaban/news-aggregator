@@ -1,4 +1,4 @@
-package repository
+package inmemory
 
 import (
 	"github.com/reiver/go-porterstemmer"
@@ -13,18 +13,7 @@ type ArticleInMemory struct {
 	nextID   int
 }
 
-// Article is an interface that defines the methods for interacting with the article repository.
-type Article interface {
-	GetAll() ([]model.Article, error)
-	GetById(id int) (model.Article, error)
-	Create(article model.Article) (model.Article, error)
-	Delete(id int) error
-	GetByKeyword(keyword string) ([]model.Article, error)
-	GetBySource(source string) ([]model.Article, error)
-	GetByDateInRange(startDate, endDate time.Time) ([]model.Article, error)
-}
-
-func NewInMemory(db []model.Article) *ArticleInMemory {
+func New(db []model.Article) *ArticleInMemory {
 	return &ArticleInMemory{
 		Articles: db,
 		nextID:   len(db) + 1,

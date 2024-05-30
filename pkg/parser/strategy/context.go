@@ -1,4 +1,4 @@
-package parser
+package strategy
 
 import (
 	"news-aggregator/pkg/model"
@@ -14,5 +14,5 @@ func (pc *Context) SetParser(parser ParsingAlgorithm) {
 }
 
 func (pc *Context) Parse(f *os.File) ([]model.Article, error) {
-	return pc.parser.parseFile(f)
+	return pc.parser.ParseFile(f)
 }

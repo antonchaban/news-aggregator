@@ -1,4 +1,4 @@
-package parser
+package strategy
 
 import (
 	"news-aggregator/pkg/model"
@@ -7,5 +7,5 @@ import (
 
 // ParsingAlgorithm is an interface that defines parsing strategy
 type ParsingAlgorithm interface {
-	parseFile(f *os.File) ([]model.Article, error)
+	ParseFile(f *os.File) ([]model.Article, error)
 }
