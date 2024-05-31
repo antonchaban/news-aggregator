@@ -5,9 +5,13 @@ name: Go
 
 on:
   push:
-    branches: [ "master" ]
+    branches:
+      - master
+      - feature/clean-code-doc
   pull_request:
-    branches: [ "master" ]
+    branches:
+      - master
+      - feature/clean-code-doc
 
 jobs:
 
