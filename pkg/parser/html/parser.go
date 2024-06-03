@@ -67,9 +67,10 @@ func (h *Parser) ParseFile(f *os.File) ([]model.Article, error) {
 func parseDate(date string, timeFormats []string) (parsedDate time.Time, err error) {
 	for _, format := range timeFormats {
 		parsedTime, err := time.Parse(format, date)
+
 		if err == nil {
 			return parsedTime, nil
 		}
 	}
-	return time.Now(), fmt.Errorf("no matching format for date: %s", date)
+	return time.Now().UTC(), fmt.Errorf("no matching format for date: %s", date)
 }

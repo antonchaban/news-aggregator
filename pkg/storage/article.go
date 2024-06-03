@@ -10,6 +10,7 @@ type Article interface {
 	GetAll() ([]model.Article, error)
 	GetById(id int) (model.Article, error)
 	Create(article model.Article) (model.Article, error)
+	SaveAll(articles []model.Article) error
 	Delete(id int) error
 	GetByKeyword(keyword string) ([]model.Article, error)
 	GetBySource(source string) ([]model.Article, error)

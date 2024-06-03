@@ -10,8 +10,10 @@ import (
 	"strings"
 )
 
+// loadData loads articles from the specified files and saves them to the service.
 func (h *Handler) loadData() []model.Article {
 	execDir, err := os.Executable()
+	var articles []model.Article
 	if err != nil {
 		log.Fatalf("Error getting executable directory: %v", err)
 	}
@@ -25,25 +27,29 @@ func (h *Handler) loadData() []model.Article {
 		filepath.Join(execDir, "../../data/nbc-news.json"),
 		filepath.Join(execDir, "../../data/usatoday-world-news.html"),
 	}
-	err = parser.LoadArticlesFromFiles(files, h.services)
+	articles, err = parser.ParseArticlesFromFiles(files)
 	if err != nil {
 		log.Fatalf("Error loading articles from files: %v", err)
 	}
 
-	allArticles, err := h.services.GetAll()
+	h.service.SaveAll(articles)
+
+	allArticles, err := h.service.GetAll()
 	if err != nil {
 		log.Fatalf("Error fetching all articles: %v", err)
 	}
 	return allArticles
 }
 
+// filterArticles filters the provided articles based on the provided sources, keywords, and date range.
+// It returns the filtered articles.
 func (h *Handler) filterArticles(articles []model.Article, sources, keywords, dateStart, dateEnd string) []model.Article {
 	var filteredArticles []model.Article
 
 	if sources != "" {
 		sourceList := strings.Split(sources, ",")
 		for _, source := range sourceList {
-			sourceArticles, err := h.services.GetBySource(strings.TrimSpace(source))
+			sourceArticles, err := h.service.GetBySource(strings.TrimSpace(source))
 			if err != nil {
 				log.Fatalf("Error fetching articles by source: %v", err)
 			}
@@ -57,7 +63,7 @@ func (h *Handler) filterArticles(articles []model.Article, sources, keywords, da
 		keywordList := strings.Split(keywords, ",")
 		var keywordFilteredArticles []model.Article
 		for _, keyword := range keywordList {
-			keywordArticles, err := h.services.GetByKeyword(strings.TrimSpace(keyword))
+			keywordArticles, err := h.service.GetByKeyword(strings.TrimSpace(keyword))
 			if err != nil {
 				log.Fatalf("Error fetching articles by keyword: %v", err)
 			}
@@ -67,7 +73,7 @@ func (h *Handler) filterArticles(articles []model.Article, sources, keywords, da
 	}
 
 	if dateStart != "" || dateEnd != "" {
-		dateRangeArticles, err := h.services.GetByDateInRange(dateStart, dateEnd)
+		dateRangeArticles, err := h.service.GetByDateInRange(dateStart, dateEnd)
 		if err != nil {
 			log.Fatalf("Error fetching articles by date range: %v", err)
 		}

@@ -13,10 +13,10 @@ type ArticleInMemory struct {
 	nextID   int
 }
 
-func New(db []model.Article) *ArticleInMemory {
+func New() *ArticleInMemory {
 	return &ArticleInMemory{
-		Articles: db,
-		nextID:   len(db) + 1,
+		Articles: []model.Article{},
+		nextID:   1,
 	}
 }
 
@@ -93,4 +93,14 @@ func (a *ArticleInMemory) GetByDateInRange(startDate, endDate time.Time) ([]mode
 		}
 	}
 	return articles, nil
+}
+
+func (a *ArticleInMemory) SaveAll(articles []model.Article) error {
+	for _, article := range articles {
+		_, err := a.Create(article)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }

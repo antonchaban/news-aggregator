@@ -28,6 +28,14 @@ type Article interface {
 	GetBySource(source string) ([]model.Article, error)
 	GetByKeyword(keyword string) ([]model.Article, error)
 	GetByDateInRange(startDate, endDate string) ([]model.Article, error)
+	SaveAll(articles []model.Article)
+}
+
+func (a *ArticleService) SaveAll(articles []model.Article) {
+	err := a.articleStorage.SaveAll(articles)
+	if err != nil {
+		fmt.Printf("Failed to save articles: %v", err)
+	}
 }
 
 func New(articleRepo storage.Article) *ArticleService {
