@@ -4,7 +4,6 @@ go 1.22
 
 require (
 	github.com/PuerkitoBio/goquery v1.9.2
-	github.com/gravwell/gravwell/v3 v3.8.32
 	github.com/mmcdole/gofeed v1.3.0
 	github.com/reiver/go-porterstemmer v1.0.1
 )
