@@ -7,11 +7,11 @@ on:
   push:
     branches:
       - master
-      - feature/clean-code-doc
+      - feature/testing
   pull_request:
     branches:
       - master
-      - feature/clean-code-doc
+      - feature/testing
 
 jobs:
 
