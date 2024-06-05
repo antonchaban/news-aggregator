@@ -5,10 +5,11 @@ import (
 	"time"
 )
 
+//go:generate mockgen -destination=mocks/mock_article.go -package=mocks news-aggregator/pkg/storage Article
+
 // Article is an interface that defines the methods for interacting with the article storage.
 type Article interface {
 	GetAll() ([]model.Article, error)
-	GetById(id int) (model.Article, error)
 	Create(article model.Article) (model.Article, error)
 	SaveAll(articles []model.Article) error
 	Delete(id int) error
