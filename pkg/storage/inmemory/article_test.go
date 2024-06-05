@@ -1,72 +1,62 @@
 package inmemory
 
 import (
-	"fmt"
-	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 	"news-aggregator/pkg/model"
-	"news-aggregator/pkg/storage/mocks"
 	"reflect"
 	"testing"
 	"time"
 )
 
 func TestArticleInMemory_Create(t *testing.T) {
+	storage := New()
 	tests := []struct {
-		name           string
-		newArticle     model.Article
-		createdArticle model.Article
+		name      string
+		articles  model.Article
+		expected  []model.Article
+		expectErr bool
 	}{
 		{
-			name: "Create new article successfully",
-			newArticle: model.Article{
-				Title:       "New Article",
-				Description: "New Description",
-				Link:        "http://newlink.com",
-				Source:      "New Source",
-				PubDate:     time.Now(),
+			name: "Save 1 article successfully",
+			articles: model.Article{
+				Title:       "Article 1",
+				Description: "Description 1",
+				Link:        "http://link1.com",
+				Source:      "Source 1",
+				PubDate:     time.Date(2023, 6, 15, 0, 0, 0, 0, time.UTC),
 			},
-			createdArticle: model.Article{
-				Id:          1,
-				Title:       "New Article",
-				Description: "New Description",
-				Link:        "http://newlink.com",
-				Source:      "New Source",
-				PubDate:     time.Now(),
+			expected: []model.Article{
+				{Id: 1, Title: "Article 1", Description: "Description 1", Link: "http://link1.com", Source: "Source 1", PubDate: time.Date(2023, 6, 15, 0, 0, 0, 0, time.UTC)},
 			},
+			expectErr: false,
 		},
 		{
-			name: "Create another new article successfully",
-			newArticle: model.Article{
-				Title:       "Another New Article",
-				Description: "Another New Description",
-				Link:        "http://anotherlink.com",
-				Source:      "Another New Source",
-				PubDate:     time.Now(),
+			name: "Save 2 articles successfully",
+			articles: model.Article{
+				Title:       "Article 2",
+				Description: "Description 2",
+				Link:        "http://link2.com",
+				Source:      "Source 2",
+				PubDate:     time.Date(2023, 6, 15, 0, 0, 0, 0, time.UTC),
 			},
-			createdArticle: model.Article{
-				Id:          2,
-				Title:       "Another New Article",
-				Description: "Another New Description",
-				Link:        "http://anotherlink.com",
-				Source:      "Another New Source",
-				PubDate:     time.Now(),
+			expected: []model.Article{
+				{Id: 1, Title: "Article 1", Description: "Description 1", Link: "http://link1.com", Source: "Source 1", PubDate: time.Date(2023, 6, 15, 0, 0, 0, 0, time.UTC)},
+				{Id: 2, Title: "Article 2", Description: "Description 2", Link: "http://link2.com", Source: "Source 2", PubDate: time.Date(2023, 6, 15, 0, 0, 0, 0, time.UTC)},
 			},
+			expectErr: false,
 		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			ctrl := gomock.NewController(t)
-			defer ctrl.Finish()
+			_, err := storage.Create(tt.articles)
 
-			mockArticleStorage := mocks.NewMockArticleStorage(ctrl)
-
-			mockArticleStorage.EXPECT().Create(tt.newArticle).Return(tt.createdArticle, nil)
-
-			article, err := mockArticleStorage.Create(tt.newArticle)
-
-			assert.NoError(t, err)
-			assert.Equal(t, tt.createdArticle, article)
+			if tt.expectErr {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, tt.expected, storage.Articles)
+			}
 		})
 	}
 }
@@ -75,11 +65,22 @@ func TestArticleInMemory_Delete(t *testing.T) {
 	tests := []struct {
 		name      string
 		id        int
+		articles  []model.Article
+		expected  []model.Article
 		expectErr bool
 	}{
 		{
-			name:      "Delete article successfully",
-			id:        1,
+			name: "Delete article successfully",
+			id:   1,
+			articles: []model.Article{
+				{Id: 1, Title: "Article 1", Description: "Description 1", Link: "http://link1.com", Source: "Source 1", PubDate: time.Now()},
+				{Id: 2, Title: "Article 2", Description: "Description 2", Link: "http://link2.com", Source: "Source 2", PubDate: time.Now()},
+				{Id: 3, Title: "Article 3", Description: "Description 3", Link: "http://link3.com", Source: "Source 3", PubDate: time.Now()},
+			},
+			expected: []model.Article{
+				{Id: 2, Title: "Article 2", Description: "Description 2", Link: "http://link2.com", Source: "Source 2", PubDate: time.Now()},
+				{Id: 3, Title: "Article 3", Description: "Description 3", Link: "http://link3.com", Source: "Source 3", PubDate: time.Now()},
+			},
 			expectErr: false,
 		},
 		{
@@ -91,188 +92,230 @@ func TestArticleInMemory_Delete(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			ctrl := gomock.NewController(t)
-			defer ctrl.Finish()
-
-			mockArticleStorage := mocks.NewMockArticleStorage(ctrl)
-			if tt.expectErr {
-				mockArticleStorage.EXPECT().Delete(tt.id).Return(fmt.Errorf("article not found"))
-			} else {
-				mockArticleStorage.EXPECT().Delete(tt.id).Return(nil)
-			}
-
-			err := mockArticleStorage.Delete(tt.id)
+			storage := &ArticleInMemory{Articles: tt.articles}
+			err := storage.Delete(tt.id)
 
 			if tt.expectErr {
 				assert.Error(t, err)
 			} else {
 				assert.NoError(t, err)
+				assert.Equal(t, tt.expected, storage.Articles)
 			}
 		})
 	}
 }
 
 func TestArticleInMemory_GetAll(t *testing.T) {
-	type fields struct {
-		Articles []model.Article
-		nextID   int
-	}
 	tests := []struct {
-		name    string
-		fields  fields
-		want    []model.Article
-		wantErr bool
+		name      string
+		articles  []model.Article
+		expected  []model.Article
+		expectErr bool
 	}{
-		// TODO: Add test cases.
+		{
+			name: "Get all articles successfully",
+			articles: []model.Article{
+				{Id: 1, Title: "Article 1", Description: "Description 1", Link: "http://link1.com", Source: "Source 1", PubDate: time.Now()},
+				{Id: 2, Title: "Article 2", Description: "Description 2", Link: "http://link2.com", Source: "Source 2", PubDate: time.Now()},
+			},
+			expected: []model.Article{
+				{Id: 1, Title: "Article 1", Description: "Description 1", Link: "http://link1.com", Source: "Source 1", PubDate: time.Now()},
+				{Id: 2, Title: "Article 2", Description: "Description 2", Link: "http://link2.com", Source: "Source 2", PubDate: time.Now()},
+			},
+			expectErr: false,
+		},
+		{
+			name:      "Get empty list of articles",
+			articles:  []model.Article{},
+			expected:  []model.Article{},
+			expectErr: false,
+		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			a := &ArticleInMemory{
-				Articles: tt.fields.Articles,
-				nextID:   tt.fields.nextID,
-			}
-			got, err := a.GetAll()
-			if (err != nil) != tt.wantErr {
-				t.Errorf("GetAll() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("GetAll() got = %v, want %v", got, tt.want)
+
+			storage := &ArticleInMemory{Articles: tt.articles}
+			articles, err := storage.GetAll()
+
+			if tt.expectErr {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, tt.expected, articles)
 			}
 		})
 	}
 }
 
 func TestArticleInMemory_GetByDateInRange(t *testing.T) {
-	type fields struct {
-		Articles []model.Article
-		nextID   int
-	}
-	type args struct {
+	tests := []struct {
+		name      string
 		startDate time.Time
 		endDate   time.Time
-	}
-	tests := []struct {
-		name    string
-		fields  fields
-		args    args
-		want    []model.Article
-		wantErr bool
+		articles  []model.Article
+		expected  []model.Article
+		expectErr bool
 	}{
-		// TODO: Add test cases.
+		{
+			name:      "Get articles in date range successfully",
+			startDate: time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC),
+			endDate:   time.Date(2023, 7, 31, 0, 0, 0, 0, time.UTC),
+			articles: []model.Article{
+				{Id: 1, Title: "Article 1", Description: "Description 1", Link: "http://link1.com", Source: "Source 1", PubDate: time.Date(2023, 6, 15, 0, 0, 0, 0, time.UTC)},
+				{Id: 2, Title: "Article 2", Description: "Description 2", Link: "http://link2.com", Source: "Source 2", PubDate: time.Date(2023, 8, 20, 0, 0, 0, 0, time.UTC)},
+			},
+			expected: []model.Article{
+				{Id: 1, Title: "Article 1", Description: "Description 1", Link: "http://link1.com", Source: "Source 1", PubDate: time.Date(2023, 6, 15, 0, 0, 0, 0, time.UTC)},
+			},
+			expectErr: false,
+		},
+		{
+			name:      "No articles in date range",
+			startDate: time.Date(2022, 1, 1, 0, 0, 0, 0, time.UTC),
+			endDate:   time.Date(2022, 12, 31, 0, 0, 0, 0, time.UTC),
+			articles: []model.Article{
+				{Id: 1, Title: "Article 1", Description: "Description 1", Link: "http://link1.com", Source: "Source 1", PubDate: time.Date(2023, 6, 15, 0, 0, 0, 0, time.UTC)},
+			},
+			expected:  []model.Article{},
+			expectErr: false,
+		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			a := &ArticleInMemory{
-				Articles: tt.fields.Articles,
-				nextID:   tt.fields.nextID,
-			}
-			got, err := a.GetByDateInRange(tt.args.startDate, tt.args.endDate)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("GetByDateInRange() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("GetByDateInRange() got = %v, want %v", got, tt.want)
+			storage := &ArticleInMemory{Articles: tt.articles}
+			articles, err := storage.GetByDateInRange(tt.startDate, tt.endDate)
+
+			if tt.expectErr {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, tt.expected, articles)
 			}
 		})
 	}
 }
 
 func TestArticleInMemory_GetByKeyword(t *testing.T) {
-	type fields struct {
-		Articles []model.Article
-		nextID   int
-	}
-	type args struct {
-		keyword string
-	}
 	tests := []struct {
-		name    string
-		fields  fields
-		args    args
-		want    []model.Article
-		wantErr bool
+		name      string
+		keyword   string
+		articles  []model.Article
+		expected  []model.Article
+		expectErr bool
 	}{
-		// TODO: Add test cases.
+		{
+			name:    "Get articles by keyword successfully",
+			keyword: "Article 1",
+			articles: []model.Article{
+				{Id: 1, Title: "Article 1", Description: "Description 1", Link: "http://link1.com", Source: "Source 1", PubDate: time.Now()},
+				{Id: 2, Title: "Another Article", Description: "Description 2", Link: "http://link2.com", Source: "Source 2", PubDate: time.Now()},
+			},
+			expected: []model.Article{
+				{Id: 1, Title: "Article 1", Description: "Description 1", Link: "http://link1.com", Source: "Source 1", PubDate: time.Now()},
+			},
+			expectErr: false,
+		},
+		{
+			name:    "No articles found with keyword",
+			keyword: "NonExistingKeyword",
+			articles: []model.Article{
+				{Id: 1, Title: "Article 1", Description: "Description 1", Link: "http://link1.com", Source: "Source 1", PubDate: time.Now()},
+			},
+			expected:  []model.Article{},
+			expectErr: false,
+		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			a := &ArticleInMemory{
-				Articles: tt.fields.Articles,
-				nextID:   tt.fields.nextID,
-			}
-			got, err := a.GetByKeyword(tt.args.keyword)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("GetByKeyword() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("GetByKeyword() got = %v, want %v", got, tt.want)
+			storage := &ArticleInMemory{Articles: tt.articles}
+			articles, err := storage.GetByKeyword(tt.keyword)
+
+			if tt.expectErr {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, tt.expected, articles)
 			}
 		})
 	}
 }
 
 func TestArticleInMemory_GetBySource(t *testing.T) {
-	type fields struct {
-		Articles []model.Article
-		nextID   int
-	}
-	type args struct {
-		source string
-	}
 	tests := []struct {
-		name    string
-		fields  fields
-		args    args
-		want    []model.Article
-		wantErr bool
+		name      string
+		source    string
+		articles  []model.Article
+		expected  []model.Article
+		expectErr bool
 	}{
-		// TODO: Add test cases.
+		{
+			name:   "Get articles by source successfully",
+			source: "Source 1",
+			articles: []model.Article{
+				{Id: 1, Title: "Article 1", Description: "Description 1", Link: "http://link1.com", Source: "Source 1", PubDate: time.Now()},
+				{Id: 2, Title: "Another Article", Description: "Description 2", Link: "http://link2.com", Source: "Source 2", PubDate: time.Now()},
+			},
+			expected: []model.Article{
+				{Id: 1, Title: "Article 1", Description: "Description 1", Link: "http://link1.com", Source: "Source 1", PubDate: time.Now()},
+			},
+			expectErr: false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			a := &ArticleInMemory{
-				Articles: tt.fields.Articles,
-				nextID:   tt.fields.nextID,
-			}
-			got, err := a.GetBySource(tt.args.source)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("GetBySource() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("GetBySource() got = %v, want %v", got, tt.want)
+			storage := &ArticleInMemory{Articles: tt.articles}
+			articles, err := storage.GetBySource(tt.source)
+
+			if tt.expectErr {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, tt.expected, articles)
 			}
 		})
 	}
 }
 
 func TestArticleInMemory_SaveAll(t *testing.T) {
-	type fields struct {
-		Articles []model.Article
-		nextID   int
-	}
-	type args struct {
-		articles []model.Article
-	}
 	tests := []struct {
-		name    string
-		fields  fields
-		args    args
-		wantErr bool
+		name      string
+		articles  []model.Article
+		expected  []model.Article
+		expectErr bool
 	}{
-		// TODO: Add test cases.
+		{
+			name: "Save all articles successfully",
+			articles: []model.Article{
+				{Id: 1, Title: "Article 1", Description: "Description 1", Link: "http://link1.com", Source: "Source 1", PubDate: time.Now()},
+				{Id: 2, Title: "Article 2", Description: "Description 2", Link: "http://link2.com", Source: "Source 2", PubDate: time.Now()},
+			},
+			expected: []model.Article{
+				{Id: 1, Title: "Article 1", Description: "Description 1", Link: "http://link1.com", Source: "Source 1", PubDate: time.Now()},
+				{Id: 2, Title: "Article 2", Description: "Description 2", Link: "http://link2.com", Source: "Source 2", PubDate: time.Now()},
+			},
+			expectErr: false,
+		},
+		{
+			name:      "Save empty list of articles",
+			articles:  []model.Article{},
+			expected:  []model.Article{},
+			expectErr: false,
+		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			a := &ArticleInMemory{
-				Articles: tt.fields.Articles,
-				nextID:   tt.fields.nextID,
-			}
-			if err := a.SaveAll(tt.args.articles); (err != nil) != tt.wantErr {
-				t.Errorf("SaveAll() error = %v, wantErr %v", err, tt.wantErr)
+			storage := New()
+			err := storage.SaveAll(tt.articles)
+
+			if tt.expectErr {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, tt.expected, storage.Articles)
 			}
 		})
 	}
