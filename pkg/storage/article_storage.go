@@ -5,8 +5,8 @@ import (
 	"time"
 )
 
-// Article is an interface that defines the methods for interacting with the article storage.
-type Article interface {
+// ArticleStorage is an interface that defines the methods for interacting with the article storage.
+type ArticleStorage interface {
 	GetAll() ([]model.Article, error)
 	GetById(id int) (model.Article, error)
 	Create(article model.Article) (model.Article, error)
