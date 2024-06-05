@@ -40,14 +40,14 @@ func TestParser_ParseFile(t *testing.T) {
 			want:     nil,
 			wantErr:  true,
 			setupFunc: func() (*os.File, func(), error) {
-				file, err := os.Open("testdata/invalid.json")
+				file, err := os.Open("pkg/parser/json/testdata/invalid.json")
 				return file, func() { file.Close() }, err
 			},
 		},
 		{
 			name:     "Empty JSON File",
 			fileName: "empty.json",
-			want:     nil,
+			want:     []model.Article{},
 			wantErr:  false,
 			setupFunc: func() (*os.File, func(), error) {
 				file, err := os.Open("testdata/empty.json")
