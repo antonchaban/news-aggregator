@@ -9,7 +9,7 @@ import (
 
 func TestArticleService_Create(t *testing.T) {
 	type fields struct {
-		articleStorage storage.Article
+		articleStorage storage.ArticleStorage
 	}
 	type args struct {
 		article model.Article
@@ -42,7 +42,7 @@ func TestArticleService_Create(t *testing.T) {
 
 func TestArticleService_Delete(t *testing.T) {
 	type fields struct {
-		articleStorage storage.Article
+		articleStorage storage.ArticleStorage
 	}
 	type args struct {
 		id int
@@ -69,7 +69,7 @@ func TestArticleService_Delete(t *testing.T) {
 
 func TestArticleService_GetAll(t *testing.T) {
 	type fields struct {
-		articleStorage storage.Article
+		articleStorage storage.ArticleStorage
 	}
 	tests := []struct {
 		name    string
@@ -98,7 +98,7 @@ func TestArticleService_GetAll(t *testing.T) {
 
 func TestArticleService_GetByDateInRange(t *testing.T) {
 	type fields struct {
-		articleStorage storage.Article
+		articleStorage storage.ArticleStorage
 	}
 	type args struct {
 		startDate string
@@ -130,42 +130,9 @@ func TestArticleService_GetByDateInRange(t *testing.T) {
 	}
 }
 
-func TestArticleService_GetById(t *testing.T) {
-	type fields struct {
-		articleStorage storage.Article
-	}
-	type args struct {
-		id int
-	}
-	tests := []struct {
-		name    string
-		fields  fields
-		args    args
-		want    model.Article
-		wantErr bool
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			a := &ArticleService{
-				articleStorage: tt.fields.articleStorage,
-			}
-			got, err := a.GetById(tt.args.id)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("GetById() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("GetById() got = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
 func TestArticleService_GetByKeyword(t *testing.T) {
 	type fields struct {
-		articleStorage storage.Article
+		articleStorage storage.ArticleStorage
 	}
 	type args struct {
 		keyword string
@@ -198,7 +165,7 @@ func TestArticleService_GetByKeyword(t *testing.T) {
 
 func TestArticleService_GetBySource(t *testing.T) {
 	type fields struct {
-		articleStorage storage.Article
+		articleStorage storage.ArticleStorage
 	}
 	type args struct {
 		source string
@@ -231,7 +198,7 @@ func TestArticleService_GetBySource(t *testing.T) {
 
 func TestArticleService_SaveAll(t *testing.T) {
 	type fields struct {
-		articleStorage storage.Article
+		articleStorage storage.ArticleStorage
 	}
 	type args struct {
 		articles []model.Article
@@ -255,7 +222,7 @@ func TestArticleService_SaveAll(t *testing.T) {
 
 func TestNew(t *testing.T) {
 	type args struct {
-		articleRepo storage.Article
+		articleRepo storage.ArticleStorage
 	}
 	tests := []struct {
 		name string

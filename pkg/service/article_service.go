@@ -16,7 +16,7 @@ const (
 )
 
 type ArticleService struct {
-	articleStorage storage.Article
+	articleStorage storage.ArticleStorage
 }
 
 // Article is an interface that defines the methods for interacting with the article storage.
@@ -37,7 +37,7 @@ func (a *ArticleService) SaveAll(articles []model.Article) {
 	}
 }
 
-func New(articleRepo storage.Article) *ArticleService {
+func New(articleRepo storage.ArticleStorage) *ArticleService {
 	return &ArticleService{articleStorage: articleRepo}
 }
 

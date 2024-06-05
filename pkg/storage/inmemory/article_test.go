@@ -59,7 +59,7 @@ func TestArticleInMemory_Create(t *testing.T) {
 			ctrl := gomock.NewController(t)
 			defer ctrl.Finish()
 
-			mockArticleStorage := mocks.NewMockArticle(ctrl)
+			mockArticleStorage := mocks.NewMockArticleStorage(ctrl)
 
 			mockArticleStorage.EXPECT().Create(tt.newArticle).Return(tt.createdArticle, nil)
 
@@ -94,7 +94,7 @@ func TestArticleInMemory_Delete(t *testing.T) {
 			ctrl := gomock.NewController(t)
 			defer ctrl.Finish()
 
-			mockArticleStorage := mocks.NewMockArticle(ctrl)
+			mockArticleStorage := mocks.NewMockArticleStorage(ctrl)
 			if tt.expectErr {
 				mockArticleStorage.EXPECT().Delete(tt.id).Return(fmt.Errorf("article not found"))
 			} else {
