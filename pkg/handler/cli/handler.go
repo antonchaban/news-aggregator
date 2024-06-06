@@ -9,10 +9,10 @@ import (
 
 // Handler is a struct that holds a reference to the ArticleService.
 type Handler struct {
-	service *service.ArticleService
+	service service.Article
 }
 
-func NewHandler(services *service.ArticleService) *Handler {
+func NewHandler(services service.Article) *Handler {
 	return &Handler{service: services}
 }
 

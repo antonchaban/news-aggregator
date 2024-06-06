@@ -15,6 +15,8 @@ const (
 	USATodaySource        = "USA TODAY"
 )
 
+//go:generate mockgen -destination=../service/mocks/mock_article_service.go -package=mocks news-aggregator/pkg/service Article
+
 type ArticleService struct {
 	articleStorage storage.ArticleStorage
 }
