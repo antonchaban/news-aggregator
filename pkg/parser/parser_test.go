@@ -1,9 +1,10 @@
 package parser
 
 import (
+	"github.com/stretchr/testify/require"
 	"news-aggregator/pkg/model"
-	"reflect"
 	"testing"
+	"time"
 )
 
 func TestParseArticlesFromFiles(t *testing.T) {
@@ -16,18 +17,86 @@ func TestParseArticlesFromFiles(t *testing.T) {
 		want    []model.Article
 		wantErr bool
 	}{
-		// TODO: Add test cases.
+		{
+			name: "success",
+			args: args{
+				files: []string{"testdata/rss.xml", "testdata/json.json"},
+			},
+			want: []model.Article{
+				{
+					Title:       "Article 1",
+					Link:        "http://example.com/article1",
+					Description: "This is the first article.",
+					Source:      "Sample Feed",
+					PubDate:     time.Date(2006, time.January, 2, 15, 4, 5, 0, time.UTC),
+				},
+				{
+					Title:       "Article 2",
+					Link:        "http://example.com/article2",
+					Description: "This is the second article.",
+					Source:      "Sample Feed",
+					PubDate:     time.Date(2006, time.January, 3, 15, 4, 5, 0, time.UTC),
+				},
+				{
+					Title:       "Test Title",
+					Link:        "http://testurl.com",
+					Description: "Test Description",
+					Source:      "Test Source",
+					PubDate:     time.Date(2023, 6, 4, 12, 0, 0, 0, time.UTC),
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "one invalid file",
+			args: args{
+				files: []string{"testdata/rss.xml", "testdata/invalid.json"},
+			},
+			want: []model.Article{
+				{
+					Title:       "Article 1",
+					Link:        "http://example.com/article1",
+					Description: "This is the first article.",
+					Source:      "Sample Feed",
+					PubDate:     time.Date(2006, time.January, 2, 15, 4, 5, 0, time.UTC),
+				},
+				{
+					Title:       "Article 2",
+					Link:        "http://example.com/article2",
+					Description: "This is the second article.",
+					Source:      "Sample Feed",
+					PubDate:     time.Date(2006, time.January, 3, 15, 4, 5, 0, time.UTC),
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "all invalid files",
+			args: args{
+				files: []string{"testdata/invalid_rss.xml", "testdata/invalid.json"},
+			},
+			want:    nil,
+			wantErr: false,
+		},
+		{
+			name: "empty files",
+			args: args{
+				files: []string{"testdata/empty_rss.xml", "testdata/empty.json"},
+			},
+			want:    nil,
+			wantErr: false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			assert := require.New(t)
 			got, err := ParseArticlesFromFiles(tt.args.files)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("ParseArticlesFromFiles() error = %v, wantErr %v", err, tt.wantErr)
-				return
+			if tt.wantErr {
+				assert.Error(err, "ParseArticlesFromFiles() should return an error")
+			} else {
+				assert.NoError(err, "ParseArticlesFromFiles() should not return an error")
 			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ParseArticlesFromFiles() got = %v, want %v", got, tt.want)
-			}
+			assert.Equal(tt.want, got, "ParseArticlesFromFiles() returned unexpected result")
 		})
 	}
 }

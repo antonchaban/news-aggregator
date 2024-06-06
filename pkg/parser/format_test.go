@@ -11,7 +11,34 @@ func TestDetermineFileFormat(t *testing.T) {
 		args       args
 		wantFormat string
 	}{
-		// TODO: Add test cases.
+		{
+			name: "rss",
+			args: args{
+				filename: "file.xml",
+			},
+			wantFormat: "rss",
+		},
+		{
+			name: "json",
+			args: args{
+				filename: "file.json",
+			},
+			wantFormat: "json",
+		},
+		{
+			name: "html",
+			args: args{
+				filename: "file.html",
+			},
+			wantFormat: "html",
+		},
+		{
+			name: "unknown",
+			args: args{
+				filename: "file.txt",
+			},
+			wantFormat: "unknown",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
