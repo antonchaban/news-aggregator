@@ -22,7 +22,6 @@ type ArticleService struct {
 // Article is an interface that defines the methods for interacting with the article storage.
 type Article interface {
 	GetAll() ([]model.Article, error)
-	GetById(id int) (model.Article, error)
 	Create(article model.Article) (model.Article, error)
 	Delete(id int) error
 	GetBySource(source string) ([]model.Article, error)
@@ -45,11 +44,6 @@ func New(articleRepo storage.ArticleStorage) *ArticleService {
 // GetAll returns all articles in the database.
 func (a *ArticleService) GetAll() ([]model.Article, error) {
 	return a.articleStorage.GetAll()
-}
-
-// GetById returns the article with the given ID.
-func (a *ArticleService) GetById(id int) (model.Article, error) {
-	return a.articleStorage.GetById(id)
 }
 
 // Create adds a new article to the database.

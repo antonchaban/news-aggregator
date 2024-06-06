@@ -25,16 +25,6 @@ func (a *ArticleInMemory) GetAll() ([]model.Article, error) {
 	return a.Articles, nil
 }
 
-// GetById returns the article with the given ID.
-func (a *ArticleInMemory) GetById(id int) (model.Article, error) {
-	for _, article := range a.Articles {
-		if article.Id == id {
-			return article, nil
-		}
-	}
-	return model.Article{}, nil
-}
-
 // Create adds a new article to the database.
 func (a *ArticleInMemory) Create(article model.Article) (model.Article, error) {
 	article.Id = a.nextID
