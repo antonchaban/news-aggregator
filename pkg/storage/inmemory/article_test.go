@@ -73,13 +73,13 @@ func TestArticleInMemory_Delete(t *testing.T) {
 			name: "Delete article successfully",
 			id:   1,
 			articles: []model.Article{
-				{Id: 1, Title: "Article 1", Description: "Description 1", Link: "http://link1.com", Source: "Source 1", PubDate: time.Now()},
-				{Id: 2, Title: "Article 2", Description: "Description 2", Link: "http://link2.com", Source: "Source 2", PubDate: time.Now()},
-				{Id: 3, Title: "Article 3", Description: "Description 3", Link: "http://link3.com", Source: "Source 3", PubDate: time.Now()},
+				{Id: 1, Title: "Article 1", Description: "Description 1", Link: "http://link1.com", Source: "Source 1", PubDate: time.Date(2023, 6, 15, 0, 0, 0, 0, time.UTC)},
+				{Id: 2, Title: "Article 2", Description: "Description 2", Link: "http://link2.com", Source: "Source 2", PubDate: time.Date(2023, 6, 15, 0, 0, 0, 0, time.UTC)},
+				{Id: 3, Title: "Article 3", Description: "Description 3", Link: "http://link3.com", Source: "Source 3", PubDate: time.Date(2023, 6, 15, 0, 0, 0, 0, time.UTC)},
 			},
 			expected: []model.Article{
-				{Id: 2, Title: "Article 2", Description: "Description 2", Link: "http://link2.com", Source: "Source 2", PubDate: time.Now()},
-				{Id: 3, Title: "Article 3", Description: "Description 3", Link: "http://link3.com", Source: "Source 3", PubDate: time.Now()},
+				{Id: 2, Title: "Article 2", Description: "Description 2", Link: "http://link2.com", Source: "Source 2", PubDate: time.Date(2023, 6, 15, 0, 0, 0, 0, time.UTC)},
+				{Id: 3, Title: "Article 3", Description: "Description 3", Link: "http://link3.com", Source: "Source 3", PubDate: time.Date(2023, 6, 15, 0, 0, 0, 0, time.UTC)},
 			},
 			expectErr: false,
 		},
@@ -115,12 +115,12 @@ func TestArticleInMemory_GetAll(t *testing.T) {
 		{
 			name: "Get all articles successfully",
 			articles: []model.Article{
-				{Id: 1, Title: "Article 1", Description: "Description 1", Link: "http://link1.com", Source: "Source 1", PubDate: time.Now()},
-				{Id: 2, Title: "Article 2", Description: "Description 2", Link: "http://link2.com", Source: "Source 2", PubDate: time.Now()},
+				{Id: 1, Title: "Article 1", Description: "Description 1", Link: "http://link1.com", Source: "Source 1", PubDate: time.Date(2023, 6, 15, 0, 0, 0, 0, time.UTC)},
+				{Id: 2, Title: "Article 2", Description: "Description 2", Link: "http://link2.com", Source: "Source 2", PubDate: time.Date(2023, 7, 15, 0, 0, 0, 0, time.UTC)},
 			},
 			expected: []model.Article{
-				{Id: 1, Title: "Article 1", Description: "Description 1", Link: "http://link1.com", Source: "Source 1", PubDate: time.Now()},
-				{Id: 2, Title: "Article 2", Description: "Description 2", Link: "http://link2.com", Source: "Source 2", PubDate: time.Now()},
+				{Id: 1, Title: "Article 1", Description: "Description 1", Link: "http://link1.com", Source: "Source 1", PubDate: time.Date(2023, 6, 15, 0, 0, 0, 0, time.UTC)},
+				{Id: 2, Title: "Article 2", Description: "Description 2", Link: "http://link2.com", Source: "Source 2", PubDate: time.Date(2023, 7, 15, 0, 0, 0, 0, time.UTC)},
 			},
 			expectErr: false,
 		},
@@ -209,11 +209,11 @@ func TestArticleInMemory_GetByKeyword(t *testing.T) {
 			name:    "Get articles by keyword successfully",
 			keyword: "Article 1",
 			articles: []model.Article{
-				{Id: 1, Title: "Article 1", Description: "Description 1", Link: "http://link1.com", Source: "Source 1", PubDate: time.Now()},
-				{Id: 2, Title: "Another Article", Description: "Description 2", Link: "http://link2.com", Source: "Source 2", PubDate: time.Now()},
+				{Id: 1, Title: "Article 1", Description: "Description 1", Link: "http://link1.com", Source: "Source 1", PubDate: time.Date(2023, 6, 15, 0, 0, 0, 0, time.UTC)},
+				{Id: 2, Title: "Another Article", Description: "Description 2", Link: "http://link2.com", Source: "Source 2", PubDate: time.Date(2023, 6, 15, 0, 0, 0, 0, time.UTC)},
 			},
 			expected: []model.Article{
-				{Id: 1, Title: "Article 1", Description: "Description 1", Link: "http://link1.com", Source: "Source 1", PubDate: time.Now()},
+				{Id: 1, Title: "Article 1", Description: "Description 1", Link: "http://link1.com", Source: "Source 1", PubDate: time.Date(2023, 6, 15, 0, 0, 0, 0, time.UTC)},
 			},
 			expectErr: false,
 		},
@@ -221,7 +221,7 @@ func TestArticleInMemory_GetByKeyword(t *testing.T) {
 			name:    "No articles found with keyword",
 			keyword: "NonExistingKeyword",
 			articles: []model.Article{
-				{Id: 1, Title: "Article 1", Description: "Description 1", Link: "http://link1.com", Source: "Source 1", PubDate: time.Now()},
+				{Id: 1, Title: "Article 1", Description: "Description 1", Link: "http://link1.com", Source: "Source 1", PubDate: time.Date(2023, 6, 15, 0, 0, 0, 0, time.UTC)},
 			},
 			expected:  []model.Article{},
 			expectErr: false,
@@ -255,11 +255,11 @@ func TestArticleInMemory_GetBySource(t *testing.T) {
 			name:   "Get articles by source successfully",
 			source: "Source 1",
 			articles: []model.Article{
-				{Id: 1, Title: "Article 1", Description: "Description 1", Link: "http://link1.com", Source: "Source 1", PubDate: time.Now()},
-				{Id: 2, Title: "Another Article", Description: "Description 2", Link: "http://link2.com", Source: "Source 2", PubDate: time.Now()},
+				{Id: 1, Title: "Article 1", Description: "Description 1", Link: "http://link1.com", Source: "Source 1", PubDate: time.Date(2023, 6, 15, 0, 0, 0, 0, time.UTC)},
+				{Id: 2, Title: "Another Article", Description: "Description 2", Link: "http://link2.com", Source: "Source 2", PubDate: time.Date(2023, 6, 15, 0, 0, 0, 0, time.UTC)},
 			},
 			expected: []model.Article{
-				{Id: 1, Title: "Article 1", Description: "Description 1", Link: "http://link1.com", Source: "Source 1", PubDate: time.Now()},
+				{Id: 1, Title: "Article 1", Description: "Description 1", Link: "http://link1.com", Source: "Source 1", PubDate: time.Date(2023, 6, 15, 0, 0, 0, 0, time.UTC)},
 			},
 			expectErr: false,
 		},
@@ -289,12 +289,12 @@ func TestArticleInMemory_SaveAll(t *testing.T) {
 		{
 			name: "Save all articles successfully",
 			articles: []model.Article{
-				{Id: 1, Title: "Article 1", Description: "Description 1", Link: "http://link1.com", Source: "Source 1", PubDate: time.Now()},
-				{Id: 2, Title: "Article 2", Description: "Description 2", Link: "http://link2.com", Source: "Source 2", PubDate: time.Now()},
+				{Id: 1, Title: "Article 1", Description: "Description 1", Link: "http://link1.com", Source: "Source 1", PubDate: time.Date(2023, 6, 15, 0, 0, 0, 0, time.UTC)},
+				{Id: 2, Title: "Article 2", Description: "Description 2", Link: "http://link2.com", Source: "Source 2", PubDate: time.Date(2023, 6, 15, 0, 0, 0, 0, time.UTC)},
 			},
 			expected: []model.Article{
-				{Id: 1, Title: "Article 1", Description: "Description 1", Link: "http://link1.com", Source: "Source 1", PubDate: time.Now()},
-				{Id: 2, Title: "Article 2", Description: "Description 2", Link: "http://link2.com", Source: "Source 2", PubDate: time.Now()},
+				{Id: 1, Title: "Article 1", Description: "Description 1", Link: "http://link1.com", Source: "Source 1", PubDate: time.Date(2023, 6, 15, 0, 0, 0, 0, time.UTC)},
+				{Id: 2, Title: "Article 2", Description: "Description 2", Link: "http://link2.com", Source: "Source 2", PubDate: time.Date(2023, 6, 15, 0, 0, 0, 0, time.UTC)},
 			},
 			expectErr: false,
 		},
