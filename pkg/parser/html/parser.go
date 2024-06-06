@@ -50,7 +50,7 @@ func (h *Parser) ParseFile(f *os.File) ([]model.Article, error) {
 		}
 		article := model.Article{
 			Title:       title,
-			Link:        url,
+			Link:        "https://www.usatoday.com" + url,
 			PubDate:     parsedDate,
 			Source:      h.config.Source,
 			Description: description,

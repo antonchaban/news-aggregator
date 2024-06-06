@@ -64,7 +64,7 @@ func TestExecute(t *testing.T) {
 	old := os.Stdout
 	r, w, _ := os.Pipe()
 	os.Stdout = w
-	handler.Execute("abcnews", "test", "2023-01-01", "2023-12-31")
+	handler.Execute("abcnews", "test", "2023-01-01", "2023-12-31", "ASC")
 
 	w.Close()
 	os.Stdout = old

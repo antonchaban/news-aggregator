@@ -3,17 +3,18 @@ package cli
 import (
 	"flag"
 	"fmt"
+	"log"
 	"news-aggregator/pkg/service"
 	"os"
 )
 
 // Handler is a struct that holds a reference to the ArticleService.
 type Handler struct {
-	service service.Article
+	Service service.Article
 }
 
 func NewHandler(services service.Article) *Handler {
-	return &Handler{service: services}
+	return &Handler{Service: services}
 }
 
 // InitCommands initializes the command-line interface (CLI) commands and flags.
@@ -24,12 +25,14 @@ func (h *Handler) InitCommands() {
 	keywordsDesc := "Specify the keywords to filter the news by."
 	dateStartDesc := "Specify the start date to filter the news by (format: YYYY-MM-DD)."
 	dateEndDesc := "Specify the end date to filter the news by (format: YYYY-MM-DD)."
+	sortOrderDesc := "Specify the sort order for the news by date (ASC or DESC)."
 
 	help := flag.Bool("help", false, helpDesc)
 	sources := flag.String("sources", "", sourcesDesc)
 	keywords := flag.String("keywords", "", keywordsDesc)
 	dateStart := flag.String("date-start", "", dateStartDesc)
 	dateEnd := flag.String("date-end", "", dateEndDesc)
+	sortOrder := flag.String("sort-order", "DESC", sortOrderDesc)
 
 	flag.Usage = func() {
 		fmt.Printf("Usage of %s:\n", os.Args[0])
@@ -38,6 +41,7 @@ func (h *Handler) InitCommands() {
 		fmt.Printf("  -keywords string\n\t%s\n", keywordsDesc)
 		fmt.Printf("  -date-start string\n\t%s\n", dateStartDesc)
 		fmt.Printf("  -date-end string\n\t%s\n", dateEndDesc)
+		fmt.Printf("  -sort-order string\n\t%s\n", sortOrderDesc)
 	}
 
 	flag.Parse()
@@ -47,13 +51,18 @@ func (h *Handler) InitCommands() {
 		return
 	}
 
-	h.Execute(*sources, *keywords, *dateStart, *dateEnd)
+	h.Execute(*sources, *keywords, *dateStart, *dateEnd, *sortOrder)
 }
 
 // Execute loads the articles, filters them based on the provided sources, keywords, and date range,
 // and then prints the filtered articles.
-func (h *Handler) Execute(sources, keywords, dateStart, dateEnd string) {
-	articles, _ := h.loadData()
+func (h *Handler) Execute(sources, keywords, dateStart, dateEnd, sortOrder string) {
+	articles, err := h.loadData()
+	if err != nil {
+		log.Fatalf("Error loading data: %v", err)
+	}
+
 	filteredArticles := h.filterArticles(articles, sources, keywords, dateStart, dateEnd)
-	h.printArticles(filteredArticles)
+	sortedArticles := h.sortArticles(filteredArticles, sortOrder)
+	h.printArticles(sortedArticles, sources, keywords, dateStart, dateEnd)
 }

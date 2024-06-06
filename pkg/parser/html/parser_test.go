@@ -84,7 +84,7 @@ func TestParser_ParseFile(t *testing.T) {
 			},
 			want: model.Article{
 				Title:       "A Russian escalation. A new front. Is Ukraine losing the war with Russia?",
-				Link:        "/story/news/world/2024/05/19/ukraine-losing-war-with-russia/73730454007/",
+				Link:        "https://www.usatoday.com/story/news/world/2024/05/19/ukraine-losing-war-with-russia/73730454007/",
 				PubDate:     time.Date(2024, 5, 19, 10, 42, 0, 0, time.UTC),
 				Source:      "USA TODAY",
 				Description: "In recent days, Russia's forces have seized territory near Kharkiv in Ukraine. Is Ukraine losing the war with Russia?",
