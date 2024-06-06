@@ -2,13 +2,13 @@ package cli
 
 import (
 	"errors"
-	"fmt"
 	"log"
 	"news-aggregator/pkg/model"
 	"news-aggregator/pkg/parser"
 	"os"
 	"path/filepath"
 	"strings"
+	"text/template"
 )
 
 // loadData loads articles from the specified files and saves them to the service.
@@ -22,11 +22,11 @@ func (h *Handler) loadData() ([]model.Article, error) {
 
 	// Define file paths relative to the executable directory
 	files := []string{
-		filepath.Join(execDir, "../../data/abcnews-international-category-19-05-24.xml"),
-		filepath.Join(execDir, "../../data/bbc-world-category-19-05-24.xml"),
-		filepath.Join(execDir, "../../data/washingtontimes-world-category-19-05-24.xml"),
-		filepath.Join(execDir, "../../data/nbc-news.json"),
-		filepath.Join(execDir, "../../data/usatoday-world-news.html"),
+		filepath.Join(execDir, "../data/abcnews-international-category-19-05-24.xml"),
+		filepath.Join(execDir, "../data/bbc-world-category-19-05-24.xml"),
+		filepath.Join(execDir, "../data/washingtontimes-world-category-19-05-24.xml"),
+		filepath.Join(execDir, "../data/nbc-news.json"),
+		filepath.Join(execDir, "../data/usatoday-world-news.html"),
 	}
 	articles, err = parser.ParseArticlesFromFiles(files)
 	if err != nil {
@@ -94,8 +94,16 @@ func (h *Handler) filterArticles(articles []model.Article, sources, keywords, da
 }
 
 func (h *Handler) printArticles(articles []model.Article) {
-	for _, article := range articles {
-		fmt.Println(article)
+	wd, _ := os.Getwd()
+	tmplPath := filepath.Join("../../templates", "article.tmpl")
+	tmpl, err := template.ParseFiles(filepath.Join(wd, tmplPath))
+	if err != nil {
+		log.Fatalf("Error parsing template: %v", err)
+	}
+
+	err = tmpl.Execute(os.Stdout, articles)
+	if err != nil {
+		log.Fatalf("Error executing template: %v", err)
 	}
 }
 
