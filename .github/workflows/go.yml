@@ -8,10 +8,12 @@ on:
     branches:
       - master
       - feature/testing
+      - feature/go-templates
   pull_request:
     branches:
       - master
       - feature/testing
+      - feature/go-templates
 
 jobs:
 
