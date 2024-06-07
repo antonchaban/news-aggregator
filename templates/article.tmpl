@@ -31,7 +31,6 @@ No news items available.
         {{ $source }} ({{ len $articles }})
       {{- end }}
       {{- range $articles }}
-        -------------------------------
         Title: {{ .Title | highlightKeywords }}
         Description: {{ .Description | highlightKeywords }}
         Link: {{ .Link }}
@@ -41,7 +40,6 @@ No news items available.
     {{- end }}
   {{- else }}
     {{- range .Articles }}
-      -------------------------------
       Title: {{ .Title | highlightKeywords }}
       Description: {{ .Description | highlightKeywords }}
       Link: {{ .Link }}
