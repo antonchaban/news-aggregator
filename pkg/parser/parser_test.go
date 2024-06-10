@@ -90,13 +90,13 @@ func TestParseArticlesFromFiles(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			assert := require.New(t)
-			got, err := ParseArticlesFromFiles(tt.args.files)
+			got, err := ParseArticlesFromFile(tt.args.files)
 			if tt.wantErr {
-				assert.Error(err, "ParseArticlesFromFiles() should return an error")
+				assert.Error(err, "ParseArticlesFromFile() should return an error")
 			} else {
-				assert.NoError(err, "ParseArticlesFromFiles() should not return an error")
+				assert.NoError(err, "ParseArticlesFromFile() should not return an error")
 			}
-			assert.Equal(tt.want, got, "ParseArticlesFromFiles() returned unexpected result")
+			assert.Equal(tt.want, got, "ParseArticlesFromFile() returned unexpected result")
 		})
 	}
 }

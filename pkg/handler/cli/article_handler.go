@@ -24,13 +24,23 @@ func (h *Handler) loadData() error {
 
 	var articles []model.Article
 	files := []string{
-		filepath.Join(execDir, "../../data/abcnews-international-category-19-05-24.xml"),
-		filepath.Join(execDir, "../../data/bbc-world-category-19-05-24.xml"),
-		filepath.Join(execDir, "../../data/washingtontimes-world-category-19-05-24.xml"),
-		filepath.Join(execDir, "../../data/nbc-news.json"),
-		filepath.Join(execDir, "../../data/usatoday-world-news.html"),
+		filepath.Join(execDir, "../../../data/abcnews-international-category-19-05-24.xml"),
+		filepath.Join(execDir, "../../../data/bbc-world-category-19-05-24.xml"),
+		filepath.Join(execDir, "../../../data/washingtontimes-world-category-19-05-24.xml"),
+		filepath.Join(execDir, "../../../data/nbc-news.json"),
+		filepath.Join(execDir, "../../../data/usatoday-world-news.html"),
 	}
-	articles, err = parser.ParseArticlesFromFiles(files)
+	for _, file := range files {
+		go func(file string) {
+			parsedArticles, err := parser.ParseArticlesFromFile(file)
+			if err != nil {
+				log.Fatalf("Error parsing articles from file: %v", err)
+			} else {
+				articles = append(articles, parsedArticles...)
+			}
+		}(file)
+	}
+
 	if err != nil {
 		return errors.New("error parsing articles from files")
 	}
