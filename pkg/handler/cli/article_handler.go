@@ -30,19 +30,42 @@ func (h *Handler) loadData() error {
 		filepath.Join(execDir, "../../../data/nbc-news.json"),
 		filepath.Join(execDir, "../../../data/usatoday-world-news.html"),
 	}
-	for _, file := range files {
-		go func(file string) {
-			parsedArticles, err := parser.ParseArticlesFromFile(file)
-			if err != nil {
-				log.Fatalf("Error parsing articles from file: %v", err)
-			} else {
-				articles = append(articles, parsedArticles...)
-			}
-		}(file)
-	}
 
-	if err != nil {
-		return errors.New("error parsing articles from files")
+	resultsChan := make(chan []model.Article)
+	errorsChan := make(chan error)
+	doneChan := make(chan struct{})
+
+	go func() {
+		for _, file := range files {
+			go func(file string) {
+				articles, err := parser.ParseArticlesFromFile(file)
+				if err != nil {
+					errorsChan <- err
+					return
+				}
+				resultsChan <- articles
+			}(file)
+		}
+		for range files {
+			select {
+			case articlesBatch := <-resultsChan:
+				articles = append(articles, articlesBatch...)
+			case err := <-errorsChan:
+				errorsChan <- err
+				close(doneChan)
+				return
+			}
+		}
+		close(doneChan)
+	}()
+
+	select {
+	case <-doneChan:
+		select {
+		case err := <-errorsChan:
+			return err
+		default:
+		}
 	}
 
 	h.Service.SaveAll(articles)
