@@ -15,6 +15,8 @@ const (
 	USATodaySource        = "USA TODAY"
 )
 
+//go:generate mockgen -destination=../service/mocks/mock_article_service.go -package=mocks news-aggregator/pkg/service Article
+
 type ArticleService struct {
 	articleStorage storage.ArticleStorage
 }
@@ -27,14 +29,15 @@ type Article interface {
 	GetBySource(source string) ([]model.Article, error)
 	GetByKeyword(keyword string) ([]model.Article, error)
 	GetByDateInRange(startDate, endDate string) ([]model.Article, error)
-	SaveAll(articles []model.Article)
+	SaveAll(articles []model.Article) error
 }
 
-func (a *ArticleService) SaveAll(articles []model.Article) {
+func (a *ArticleService) SaveAll(articles []model.Article) error {
 	err := a.articleStorage.SaveAll(articles)
 	if err != nil {
 		fmt.Printf("Failed to save articles: %v", err)
 	}
+	return err
 }
 
 func New(articleRepo storage.ArticleStorage) *ArticleService {

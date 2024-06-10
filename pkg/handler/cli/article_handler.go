@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"news-aggregator/pkg/model"
@@ -11,8 +12,8 @@ import (
 )
 
 // loadData loads articles from the specified files and saves them to the service.
-func (h *Handler) loadData() []model.Article {
-	execDir, err := os.Executable()
+func (h *Handler) loadData() ([]model.Article, error) {
+	execDir, err := os.Getwd()
 	var articles []model.Article
 	if err != nil {
 		log.Fatalf("Error getting executable directory: %v", err)
@@ -29,16 +30,16 @@ func (h *Handler) loadData() []model.Article {
 	}
 	articles, err = parser.ParseArticlesFromFiles(files)
 	if err != nil {
-		log.Fatalf("Error loading articles from files: %v", err)
+		errors.New("error parsing articles from files")
 	}
 
 	h.service.SaveAll(articles)
 
 	allArticles, err := h.service.GetAll()
 	if err != nil {
-		log.Fatalf("Error fetching all articles: %v", err)
+		errors.New("error fetching all articles")
 	}
-	return allArticles
+	return allArticles, nil
 }
 
 // filterArticles filters the provided articles based on the provided sources, keywords, and date range.

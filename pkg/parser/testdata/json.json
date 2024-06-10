@@ -1,0 +1,16 @@
+{
+  "status": "ok",
+  "totalResults": 1,
+  "articles": [
+    {
+      "source": {
+        "name": "Test Source"
+      },
+      "author": "Test Author",
+      "title": "Test Title",
+      "description": "Test Description",
+      "url": "http://testurl.com",
+      "publishedAt": "2023-06-04T12:00:00Z"
+    }
+  ]
+}

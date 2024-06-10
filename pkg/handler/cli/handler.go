@@ -9,10 +9,10 @@ import (
 
 // Handler is a struct that holds a reference to the ArticleService.
 type Handler struct {
-	service *service.ArticleService
+	service service.Article
 }
 
-func NewHandler(services *service.ArticleService) *Handler {
+func NewHandler(services service.Article) *Handler {
 	return &Handler{service: services}
 }
 
@@ -53,7 +53,7 @@ func (h *Handler) InitCommands() {
 // Execute loads the articles, filters them based on the provided sources, keywords, and date range,
 // and then prints the filtered articles.
 func (h *Handler) Execute(sources, keywords, dateStart, dateEnd string) {
-	articles := h.loadData()
+	articles, _ := h.loadData()
 	filteredArticles := h.filterArticles(articles, sources, keywords, dateStart, dateEnd)
 	h.printArticles(filteredArticles)
 }

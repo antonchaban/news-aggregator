@@ -1,6 +1,7 @@
 package inmemory
 
 import (
+	"errors"
 	"github.com/reiver/go-porterstemmer"
 	"news-aggregator/pkg/model"
 	"strings"
@@ -41,12 +42,12 @@ func (a *ArticleInMemory) Delete(id int) error {
 			return nil
 		}
 	}
-	return nil
+	return errors.New("article not found")
 }
 
 // GetByKeyword returns all articles that contain the given keyword in their title or description.
 func (a *ArticleInMemory) GetByKeyword(keyword string) ([]model.Article, error) {
-	var articles []model.Article
+	articles := []model.Article{}
 	for _, article := range a.Articles {
 		normalizedTitle := strings.ToLower(article.Title)
 		normalizedDesc := strings.ToLower(article.Description)
@@ -76,7 +77,7 @@ func (a *ArticleInMemory) GetBySource(source string) ([]model.Article, error) {
 
 // GetByDateInRange returns all articles published between the given start and end dates.
 func (a *ArticleInMemory) GetByDateInRange(startDate, endDate time.Time) ([]model.Article, error) {
-	var articles []model.Article
+	articles := []model.Article{}
 	for _, article := range a.Articles {
 		if article.PubDate.After(startDate) && article.PubDate.Before(endDate) {
 			articles = append(articles, article)
