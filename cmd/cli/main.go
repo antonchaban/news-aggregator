@@ -31,7 +31,7 @@ func main() {
 
 	files := []string{
 		"../../data/abcnews-international-category-19-05-24.xml",
-		"../../data/bbc-news-category-19-05-24.xml",
+		"../../data/bbc-world-category-19-05-24.xml",
 		"../../data/washingtontimes-world-category-19-05-24.xml",
 		"../../data/nbc-news.json",
 		"../../data/usatoday-world-news.html",
@@ -59,7 +59,6 @@ func main() {
 		}
 	}
 
-	// Filter by keywords
 	if *keywords != "" {
 		keywordList := strings.Split(*keywords, ",")
 		var keywordFilteredArticles []model.Article
@@ -92,7 +91,7 @@ func main() {
 }
 
 // intersect returns the common elements between two slices of articles.
-func intersect(a, b []model.Article) []model.Article {
+func intersect(a, b []model.Article) (articles []model.Article) {
 	articleMap := make(map[int]model.Article)
 	for _, article := range a {
 		articleMap[article.Id] = article

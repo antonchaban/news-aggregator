@@ -5,7 +5,7 @@ import (
 )
 
 // DetermineFileFormat determines the file format based on its extension
-func DetermineFileFormat(filename string) string {
+func DetermineFileFormat(filename string) (format string) {
 	if strings.HasSuffix(filename, ".xml") {
 		return "rss"
 	} else if strings.HasSuffix(filename, ".json") {

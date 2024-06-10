@@ -64,7 +64,7 @@ func (h *HtmlParser) parseFile(f *os.File) ([]model.Article, error) {
 }
 
 // parseDate parses the given date string using the provided time formats.
-func parseDate(date string, timeFormats []string) (time.Time, error) {
+func parseDate(date string, timeFormats []string) (parsedDate time.Time, err error) {
 	for _, format := range timeFormats {
 		parsedTime, err := time.Parse(format, date)
 		if err == nil {
