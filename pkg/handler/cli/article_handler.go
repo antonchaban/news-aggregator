@@ -95,6 +95,7 @@ func (h *Handler) filterArticles(articles []model.Article, sources, keywords, da
 	return result
 }
 
+// printArticles prints the provided articles to the console using template.
 func (h *Handler) printArticles(articles []model.Article, sources, keywords, dateStart, dateEnd string) {
 	tmplPath := getTemplatePath()
 	tmpl, err := template.New("article.tmpl").Funcs(sprig.FuncMap()).Funcs(template.FuncMap{
@@ -133,6 +134,7 @@ func (h *Handler) printArticles(articles []model.Article, sources, keywords, dat
 	}
 }
 
+// getTemplatePath returns the path to the template file.
 func getTemplatePath() string {
 	possiblePaths := []string{
 		"../../templates/article.tmpl",
@@ -166,6 +168,7 @@ func intersect(a, b []model.Article) (articles []model.Article) {
 	return intersection
 }
 
+// groupBy groups the provided articles by the specified field.
 func groupBy(articles []model.Article, field string) map[string][]model.Article {
 	groupedArticles := make(map[string][]model.Article)
 	for _, article := range articles {
@@ -181,6 +184,7 @@ func groupBy(articles []model.Article, field string) map[string][]model.Article 
 	return groupedArticles
 }
 
+// sortArticles sorts the provided articles based on the specified sort order.
 func (h *Handler) sortArticles(articles []model.Article, sortOrder string) []model.Article {
 	sort.Slice(articles, func(i, j int) bool {
 		if sortOrder == "ASC" {
@@ -191,6 +195,7 @@ func (h *Handler) sortArticles(articles []model.Article, sortOrder string) []mod
 	return articles
 }
 
+// highlightKeywords highlights with bold text the specified keywords in the provided text.
 func highlightKeywords(text string, keywords string) string {
 	keywordList := strings.Split(keywords, ",")
 	for _, keyword := range keywordList {
