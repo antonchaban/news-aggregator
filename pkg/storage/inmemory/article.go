@@ -1,4 +1,4 @@
-package repository
+package inmemory
 
 import (
 	"github.com/reiver/go-porterstemmer"
@@ -13,37 +13,16 @@ type ArticleInMemory struct {
 	nextID   int
 }
 
-// Article is an interface that defines the methods for interacting with the article repository.
-type Article interface {
-	GetAll() ([]model.Article, error)
-	GetById(id int) (model.Article, error)
-	Create(article model.Article) (model.Article, error)
-	Delete(id int) error
-	GetByKeyword(keyword string) ([]model.Article, error)
-	GetBySource(source string) ([]model.Article, error)
-	GetByDateInRange(startDate, endDate time.Time) ([]model.Article, error)
-}
-
-func NewArticleInMemory(db []model.Article) *ArticleInMemory {
+func New() *ArticleInMemory {
 	return &ArticleInMemory{
-		Articles: db,
-		nextID:   len(db) + 1,
+		Articles: []model.Article{},
+		nextID:   1,
 	}
 }
 
 // GetAll returns all articles in the database.
 func (a *ArticleInMemory) GetAll() ([]model.Article, error) {
 	return a.Articles, nil
-}
-
-// GetById returns the article with the given ID.
-func (a *ArticleInMemory) GetById(id int) (model.Article, error) {
-	for _, article := range a.Articles {
-		if article.Id == id {
-			return article, nil
-		}
-	}
-	return model.Article{}, nil
 }
 
 // Create adds a new article to the database.
@@ -104,4 +83,14 @@ func (a *ArticleInMemory) GetByDateInRange(startDate, endDate time.Time) ([]mode
 		}
 	}
 	return articles, nil
+}
+
+func (a *ArticleInMemory) SaveAll(articles []model.Article) error {
+	for _, article := range articles {
+		_, err := a.Create(article)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }

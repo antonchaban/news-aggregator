@@ -3,13 +3,20 @@ package parser
 import (
 	"fmt"
 	"news-aggregator/pkg/model"
-	"news-aggregator/pkg/service"
+	"news-aggregator/pkg/parser/html"
+	"news-aggregator/pkg/parser/json"
+	"news-aggregator/pkg/parser/rss"
 	"os"
 )
 
-func LoadArticlesFromFiles(files []string, svc *service.ArticleService) error {
-	context := &Context{}
+// Parser is an interface that defines parsing strategy
+type Parser interface {
+	ParseFile(f *os.File) ([]model.Article, error)
+}
 
+func ParseArticlesFromFiles(files []string) ([]model.Article, error) {
+	var parsedArticles []model.Article
+	var parser Parser
 	for _, filePath := range files {
 		file, err := os.Open(filePath)
 		if err != nil {
@@ -20,13 +27,14 @@ func LoadArticlesFromFiles(files []string, svc *service.ArticleService) error {
 		defer file.Close()
 
 		format := DetermineFileFormat(filePath)
+
 		switch format {
 		case "rss":
-			context.SetParser(&RssParser{})
+			parser = &rss.Parser{}
 		case "json":
-			context.SetParser(&JsonParser{})
+			parser = &json.Parser{}
 		case "html":
-			config := HtmlFeedConfig{
+			config := html.FeedConfig{
 				ArticleSelector:     "a.gnt_m_flm_a",
 				LinkSelector:        "",
 				DescriptionSelector: "data-c-br",
@@ -34,39 +42,24 @@ func LoadArticlesFromFiles(files []string, svc *service.ArticleService) error {
 				Source:              "USA TODAY",
 				DateAttribute:       "data-c-dt",
 				TimeFormat: []string{
-					"12:59 p.m. ET May 19 2006",
+					"2006-01-02 15:04",
 					"Jan 02, 2006",
 				},
 			}
-
-			htmlParser := NewHtmlParser(config)
-			context.SetParser(htmlParser)
+			parser = html.NewHtmlParser(config)
 		default:
 			fmt.Println("Unsupported file format:", filePath)
 			continue
 		}
 
-		parsedArticles, err := context.Parse(file)
+		articles, err := parser.ParseFile(file)
+		parsedArticles = append(parsedArticles, articles...)
 		if err != nil {
 			fmt.Println("Error parsing file with", format, "parser:", err)
 			continue
 		}
 
-		for _, item := range parsedArticles {
-			article := model.Article{
-				Title:       item.Title,
-				Link:        item.Link,
-				Description: item.Description,
-				Source:      item.Source,
-				PubDate:     item.PubDate,
-			}
-			_, err := svc.Create(article)
-			if err != nil {
-				fmt.Println("Error creating article:", err)
-				continue
-			}
-		}
 	}
 
-	return nil
+	return parsedArticles, nil
 }

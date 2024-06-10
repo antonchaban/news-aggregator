@@ -3,7 +3,7 @@ package service
 import (
 	"fmt"
 	"news-aggregator/pkg/model"
-	"news-aggregator/pkg/repository"
+	"news-aggregator/pkg/storage"
 	"time"
 )
 
@@ -16,57 +16,59 @@ const (
 )
 
 type ArticleService struct {
-	articleRepoInMem repository.Article
+	articleStorage storage.ArticleStorage
 }
 
-// Article is an interface that defines the methods for interacting with the article repository.
+// Article is an interface that defines the methods for interacting with the article storage.
 type Article interface {
 	GetAll() ([]model.Article, error)
-	GetById(id int) (model.Article, error)
 	Create(article model.Article) (model.Article, error)
 	Delete(id int) error
 	GetBySource(source string) ([]model.Article, error)
 	GetByKeyword(keyword string) ([]model.Article, error)
 	GetByDateInRange(startDate, endDate string) ([]model.Article, error)
+	SaveAll(articles []model.Article)
 }
 
-func NewArticleService(articleRepo repository.Article) *ArticleService {
-	return &ArticleService{articleRepoInMem: articleRepo}
+func (a *ArticleService) SaveAll(articles []model.Article) {
+	err := a.articleStorage.SaveAll(articles)
+	if err != nil {
+		fmt.Printf("Failed to save articles: %v", err)
+	}
+}
+
+func New(articleRepo storage.ArticleStorage) *ArticleService {
+	return &ArticleService{articleStorage: articleRepo}
 }
 
 // GetAll returns all articles in the database.
 func (a *ArticleService) GetAll() ([]model.Article, error) {
-	return a.articleRepoInMem.GetAll()
-}
-
-// GetById returns the article with the given ID.
-func (a *ArticleService) GetById(id int) (model.Article, error) {
-	return a.articleRepoInMem.GetById(id)
+	return a.articleStorage.GetAll()
 }
 
 // Create adds a new article to the database.
 func (a *ArticleService) Create(article model.Article) (model.Article, error) {
-	return a.articleRepoInMem.Create(article)
+	return a.articleStorage.Create(article)
 }
 
 // Delete removes the article with the given ID from the database.
 func (a *ArticleService) Delete(id int) error {
-	return a.articleRepoInMem.Delete(id)
+	return a.articleStorage.Delete(id)
 }
 
 // GetBySource returns all articles from the given source.
 func (a *ArticleService) GetBySource(source string) ([]model.Article, error) {
 	switch source {
 	case "abcnews":
-		return a.articleRepoInMem.GetBySource(ABCNewsSource)
+		return a.articleStorage.GetBySource(ABCNewsSource)
 	case "bbc":
-		return a.articleRepoInMem.GetBySource(BBCNewsSource)
+		return a.articleStorage.GetBySource(BBCNewsSource)
 	case "washingtontimes":
-		return a.articleRepoInMem.GetBySource(WashingtonTimesSource)
+		return a.articleStorage.GetBySource(WashingtonTimesSource)
 	case "nbc":
-		return a.articleRepoInMem.GetBySource(NBCNewsSource)
+		return a.articleStorage.GetBySource(NBCNewsSource)
 	case "usatoday":
-		return a.articleRepoInMem.GetBySource(USATodaySource)
+		return a.articleStorage.GetBySource(USATodaySource)
 	default:
 		return nil, fmt.Errorf("source not found")
 	}
@@ -74,7 +76,7 @@ func (a *ArticleService) GetBySource(source string) ([]model.Article, error) {
 
 // GetByKeyword returns all articles that contain the given keyword.
 func (a *ArticleService) GetByKeyword(keyword string) ([]model.Article, error) {
-	return a.articleRepoInMem.GetByKeyword(keyword)
+	return a.articleStorage.GetByKeyword(keyword)
 }
 
 // GetByDateInRange returns all articles published between the given start and end dates.
@@ -100,5 +102,5 @@ func (a *ArticleService) GetByDateInRange(startDate, endDate string) ([]model.Ar
 	} else {
 		endDateObj = time.Now()
 	}
-	return a.articleRepoInMem.GetByDateInRange(startDateObj, endDateObj)
+	return a.articleStorage.GetByDateInRange(startDateObj, endDateObj)
 }
