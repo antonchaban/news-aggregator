@@ -9,11 +9,13 @@ on:
       - master
       - feature/testing
       - feature/go-templates
+      - feature/go-routines
   pull_request:
     branches:
       - master
       - feature/testing
       - feature/go-templates
+      - feature/go-routines
 
 jobs:
 
