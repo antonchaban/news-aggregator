@@ -1,19 +1,19 @@
 {{ define "header" }}
 Filters Applied:
 {{- if and (not (gt1 .Sources)) (not (gt1 .Keywords)) (not (gt1 .DateStart)) (not (gt1 .DateEnd)) }}
-  No filters applied
+No filters applied
 {{- else }}
   {{- if (gt1 .Sources) }}
-    Sources: {{ .Sources }}
+Sources: {{ .Sources }}
   {{- end }}
   {{- if (gt1 .Keywords) }}
-    Keywords: {{ .Keywords }}
+Keywords: {{ .Keywords }}
   {{- end }}
   {{- if (gt1 .DateStart) }}
-    Date Start: {{ .DateStart }}
+Date Start: {{ .DateStart }}
   {{- end }}
   {{- if (gt1 .DateEnd) }}
-    Date End: {{ .DateEnd }}
+Date End: {{ .DateEnd }}
   {{- end }}
 {{- end }}
 Number of News Items: {{ len .Articles }}
@@ -31,21 +31,21 @@ No news items available.
         {{ $source }} ({{ len $articles }})
       {{- end }}
       {{- range $articles }}
-        Title: {{ .Title | highlightKeywords }}
-        Description: {{ .Description | highlightKeywords }}
-        Link: {{ .Link }}
-        Date: {{ .PubDate | date "2006-01-02 15:04:05 MST" }}
-        -------------------------------
+Title: {{ .Title | highlightKeywords }}
+Description: {{ .Description | highlightKeywords }}
+Link: {{ .Link }}
+Date: {{ .PubDate | date "2006-01-02 15:04:05 MST" }}
+-------------------------------
       {{- end }}
     {{- end }}
   {{- else }}
     {{- range .Articles }}
-      Title: {{ .Title | highlightKeywords }}
-      Description: {{ .Description | highlightKeywords }}
-      Link: {{ .Link }}
-      Source: {{ .Source }}
-      Date: {{ .PubDate | date "2006-01-02 15:04:05 MST" }}
-      -------------------------------
+Title: {{ .Title | highlightKeywords }}
+Description: {{ .Description | highlightKeywords }}
+Link: {{ .Link }}
+Source: {{ .Source }}
+Date: {{ .PubDate | date "2006-01-02 15:04:05 MST" }}
+-------------------------------
     {{- end }}
   {{- end }}
 {{- end }}
