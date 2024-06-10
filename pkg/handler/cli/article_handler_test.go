@@ -26,7 +26,7 @@ func TestHandler_filterArticles(t *testing.T) {
 
 	mockArticleService.EXPECT().GetBySource("abcnews").Return([]model.Article{articles[0]}, nil).Times(1)
 
-	filtered := handler.filterArticles(articles, "abcnews", "", "", "")
+	filtered := handler.filterArticles("abcnews", "", "", "")
 	if len(filtered) != 1 {
 		t.Errorf("Expected 1 article but got %d", len(filtered))
 	}
@@ -41,8 +41,7 @@ func TestHandler_loadData(t *testing.T) {
 	}
 
 	mockArticleService.EXPECT().SaveAll(gomock.Any()).Return(nil).Times(1)
-	mockArticleService.EXPECT().GetAll().Return([]model.Article{}, nil).Times(1)
-	_, err := handler.loadData()
+	err := handler.loadData()
 
 	if err != nil {
 		t.Errorf("Expected to load articles, but got none")

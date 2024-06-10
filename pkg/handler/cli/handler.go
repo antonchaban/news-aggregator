@@ -57,12 +57,12 @@ func (h *Handler) InitCommands() {
 // Execute loads the articles, filters them based on the provided sources, keywords, and date range,
 // and then prints the filtered articles.
 func (h *Handler) Execute(sources, keywords, dateStart, dateEnd, sortOrder string) {
-	articles, err := h.loadData()
+	err := h.loadData()
 	if err != nil {
 		log.Fatalf("Error loading data: %v", err)
 	}
 
-	filteredArticles := h.filterArticles(articles, sources, keywords, dateStart, dateEnd)
+	filteredArticles := h.filterArticles(sources, keywords, dateStart, dateEnd)
 	sortedArticles := h.sortArticles(filteredArticles, sortOrder)
 	h.printArticles(sortedArticles, sources, keywords, dateStart, dateEnd)
 }

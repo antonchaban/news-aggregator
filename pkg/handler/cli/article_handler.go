@@ -15,7 +15,7 @@ import (
 )
 
 // loadData loads articles from the specified files and saves them to the Service.
-func (h *Handler) loadData() ([]model.Article, error) {
+func (h *Handler) loadData() error {
 	execDir, err := os.Getwd()
 	if err != nil {
 		log.Fatalf("Error getting current working directory: %v", err)
@@ -32,22 +32,18 @@ func (h *Handler) loadData() ([]model.Article, error) {
 	}
 	articles, err = parser.ParseArticlesFromFiles(files)
 	if err != nil {
-		return nil, errors.New("error parsing articles from files")
+		return errors.New("error parsing articles from files")
 	}
 
 	h.Service.SaveAll(articles)
-
-	allArticles, err := h.Service.GetAll()
-	if err != nil {
-		return nil, errors.New("error fetching all articles")
-	}
-	return allArticles, nil
+	return nil
 }
 
 // filterArticles filters the provided articles based on the provided sources, keywords, and date range.
 // It returns the filtered articles.
-func (h *Handler) filterArticles(articles []model.Article, sources, keywords, dateStart, dateEnd string) []model.Article {
+func (h *Handler) filterArticles(sources, keywords, dateStart, dateEnd string) []model.Article {
 	var filteredArticles []model.Article
+	var err error
 
 	if sources != "" {
 		sourceList := strings.Split(sources, ",")
@@ -59,7 +55,10 @@ func (h *Handler) filterArticles(articles []model.Article, sources, keywords, da
 			filteredArticles = append(filteredArticles, sourceArticles...)
 		}
 	} else {
-		filteredArticles = articles
+		filteredArticles, err = h.Service.GetAll()
+		if err != nil {
+			errors.New("error fetching all articles")
+		}
 	}
 
 	if keywords != "" {

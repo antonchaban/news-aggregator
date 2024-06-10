@@ -53,7 +53,6 @@ func TestExecute(t *testing.T) {
 		{Id: 2, Source: "bbc", Title: "Title 2", Description: "Description 2", Link: "http://link2.com", PubDate: pubDate2},
 	}
 
-	mockArticleService.EXPECT().GetAll().Return(articles, nil).Times(1)
 	mockArticleService.EXPECT().GetBySource("abcnews").Return([]model.Article{articles[0]}, nil).Times(1)
 	mockArticleService.EXPECT().GetByKeyword("test").Return([]model.Article{articles[0]}, nil).Times(1)
 	mockArticleService.EXPECT().GetByDateInRange("2023-01-01", "2023-12-31").Return(articles, nil).Times(1)
