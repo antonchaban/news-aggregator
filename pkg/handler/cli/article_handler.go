@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/Masterminds/sprig"
 	"log"
+	"news-aggregator/pkg/filter"
 	"news-aggregator/pkg/model"
 	"news-aggregator/pkg/parser"
 	"os"
@@ -15,87 +16,46 @@ import (
 )
 
 // loadData loads articles from the specified files and saves them to the Service.
-func (h *Handler) loadData() error {
+func (h *cliHandler) loadData() error {
 	execDir, err := os.Getwd()
 	if err != nil {
 		log.Fatalf("Error getting current working directory: %v", err)
+		return err
 	}
 	log.Printf("Current working directory: %s\n", execDir)
 
-	var articles []model.Article
-	files := []string{
-		filepath.Join(execDir, "../../../data/abcnews-international-category-19-05-24.xml"),
-		filepath.Join(execDir, "../../../data/bbc-world-category-19-05-24.xml"),
-		filepath.Join(execDir, "../../../data/washingtontimes-world-category-19-05-24.xml"),
-		filepath.Join(execDir, "../../../data/nbc-news.json"),
-		filepath.Join(execDir, "../../../data/usatoday-world-news.html"),
+	// Directory containing the data files
+	dataDir := filepath.Join(execDir, "../../../data")
+
+	// Get all files in the data directory
+	files, err := filepath.Glob(filepath.Join(dataDir, "*"))
+	if err != nil {
+		log.Fatalf("Error reading files from directory: %v", err)
+		return err
 	}
+
+	var articles []model.Article
 	articles, err = parser.ParseArticlesFromFiles(files)
 	if err != nil {
 		return errors.New("error parsing articles from files")
 	}
 
-	h.Service.SaveAll(articles)
-	return nil
+	return h.service.SaveAll(articles)
 }
 
 // filterArticles filters the provided articles based on the provided sources, keywords, and date range.
 // It returns the filtered articles.
-func (h *Handler) filterArticles(sources, keywords, dateStart, dateEnd string) []model.Article {
-	var filteredArticles []model.Article
-	var err error
-
-	if sources != "" {
-		sourceList := strings.Split(sources, ",")
-		for _, source := range sourceList {
-			sourceArticles, err := h.Service.GetBySource(strings.TrimSpace(source))
-			if err != nil {
-				log.Fatalf("Error fetching articles by source: %v", err)
-			}
-			filteredArticles = append(filteredArticles, sourceArticles...)
-		}
-	} else {
-		filteredArticles, err = h.Service.GetAll()
-		if err != nil {
-			errors.New("error fetching all articles")
-		}
+func (h *cliHandler) filterArticles(f filter.Filters) ([]model.Article, error) {
+	articles, err := filter.FilterArticles(h.service, f)
+	if err != nil {
+		log.Fatalf("Error filtering articles: %v", err)
+		return nil, err
 	}
-
-	if keywords != "" {
-		keywordList := strings.Split(keywords, ",")
-		var keywordFilteredArticles []model.Article
-		for _, keyword := range keywordList {
-			keywordArticles, err := h.Service.GetByKeyword(strings.TrimSpace(keyword))
-			if err != nil {
-				log.Fatalf("Error fetching articles by keyword: %v", err)
-			}
-			keywordFilteredArticles = append(keywordFilteredArticles, keywordArticles...)
-		}
-		filteredArticles = intersect(filteredArticles, keywordFilteredArticles)
-	}
-
-	if dateStart != "" || dateEnd != "" {
-		dateRangeArticles, err := h.Service.GetByDateInRange(dateStart, dateEnd)
-		if err != nil {
-			log.Fatalf("Error fetching articles by date range: %v", err)
-		}
-		filteredArticles = intersect(filteredArticles, dateRangeArticles)
-	}
-
-	uniqueArticles := make(map[int]model.Article)
-	for _, article := range filteredArticles {
-		uniqueArticles[article.Id] = article
-	}
-
-	var result []model.Article
-	for _, article := range uniqueArticles {
-		result = append(result, article)
-	}
-	return result
+	return articles, nil
 }
 
 // printArticles prints the provided articles to the console using template.
-func (h *Handler) printArticles(articles []model.Article, sources, keywords, dateStart, dateEnd string) {
+func (h *cliHandler) printArticles(articles []model.Article, filters filter.Filters) {
 	tmplPath := getTemplatePath()
 	tmpl, err := template.New("article.tmpl").Funcs(sprig.FuncMap()).Funcs(template.FuncMap{
 		"groupBy": groupBy,
@@ -103,10 +63,10 @@ func (h *Handler) printArticles(articles []model.Article, sources, keywords, dat
 			return len(s) > 1
 		},
 		"highlightKeywords": func(text string) string {
-			if keywords == "" {
+			if filters.Keyword == "" {
 				return text
 			}
-			return highlightKeywords(text, keywords)
+			return highlightKeywords(text, filters.Keyword)
 		},
 	}).ParseFiles(tmplPath)
 	if err != nil {
@@ -114,17 +74,11 @@ func (h *Handler) printArticles(articles []model.Article, sources, keywords, dat
 	}
 
 	data := struct {
-		Articles  []model.Article
-		Sources   string
-		Keywords  string
-		DateStart string
-		DateEnd   string
+		Articles []model.Article
+		Filters  filter.Filters
 	}{
-		Articles:  articles,
-		Sources:   sources,
-		Keywords:  keywords,
-		DateStart: dateStart,
-		DateEnd:   dateEnd,
+		Articles: articles,
+		Filters:  filters,
 	}
 
 	err = tmpl.ExecuteTemplate(os.Stdout, "page", data)
@@ -151,22 +105,6 @@ func getTemplatePath() string {
 	return ""
 }
 
-// intersect returns the common elements between two slices of articles.
-func intersect(a, b []model.Article) (articles []model.Article) {
-	articleMap := make(map[int]model.Article)
-	for _, article := range a {
-		articleMap[article.Id] = article
-	}
-
-	var intersection []model.Article
-	for _, article := range b {
-		if _, found := articleMap[article.Id]; found {
-			intersection = append(intersection, article)
-		}
-	}
-	return intersection
-}
-
 // groupBy groups the provided articles by the specified field.
 func groupBy(articles []model.Article, field string) map[string][]model.Article {
 	groupedArticles := make(map[string][]model.Article)
@@ -184,7 +122,7 @@ func groupBy(articles []model.Article, field string) map[string][]model.Article 
 }
 
 // sortArticles sorts the provided articles based on the specified sort order.
-func (h *Handler) sortArticles(articles []model.Article, sortOrder string) []model.Article {
+func (h *cliHandler) sortArticles(articles []model.Article, sortOrder string) []model.Article {
 	sort.Slice(articles, func(i, j int) bool {
 		if sortOrder == "ASC" {
 			return articles[i].PubDate.Before(articles[j].PubDate)

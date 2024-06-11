@@ -1,57 +1,54 @@
 {{ define "header" }}
 Filters Applied:
-{{- if and (not (gt1 .Sources)) (not (gt1 .Keywords)) (not (gt1 .DateStart)) (not (gt1 .DateEnd)) }}
+{{- if and (not (gt1 .Filters.Source)) (not (gt1 .Filters.Keyword)) (not (gt1 .Filters.StartDate)) (not (gt1 .Filters.EndDate)) }}
   No filters applied
 {{- else }}
-  {{- if (gt1 .Sources) }}
-    Sources: {{ .Sources }}
+  {{- if (gt1 .Filters.Source) }}
+    Sources: {{ .Filters.Source }}
   {{- end }}
-  {{- if (gt1 .Keywords) }}
-    Keywords: {{ .Keywords }}
+  {{- if (gt1 .Filters.Keyword) }}
+    Keywords: {{ .Filters.Keyword }}
   {{- end }}
-  {{- if (gt1 .DateStart) }}
-    Date Start: {{ .DateStart }}
+  {{- if (gt1 .Filters.StartDate) }}
+    Date Start: {{ .Filters.StartDate }}
   {{- end }}
-  {{- if (gt1 .DateEnd) }}
-    Date End: {{ .DateEnd }}
+  {{- if (gt1 .Filters.EndDate) }}
+    Date End: {{ .Filters.EndDate }}
   {{- end }}
 {{- end }}
 Number of News Items: {{ len .Articles }}
 {{ end }}
-
 
 {{ define "main" }}
 {{- $count := len .Articles }}
 {{- if eq $count 0 }}
 No news items available.
 {{- else }}
-  {{- if (gt1 .Sources) }}
+  {{- if (gt1 .Filters.Source) }}
     {{- range $source, $articles := groupBy .Articles "Source" }}
       {{- if not (eq $source "") }}
-        {{ $source }} ({{ len $articles }})
+{{ $source }} ({{ len $articles }})
       {{- end }}
       {{- range $articles }}
-        Title: {{ .Title | highlightKeywords }}
-        Description: {{ .Description | highlightKeywords }}
-        Link: {{ .Link }}
-        Date: {{ .PubDate | date "2006-01-02 15:04:05 MST" }}
-        -------------------------------
+Title: {{ .Title | highlightKeywords }}
+Description: {{ .Description | highlightKeywords }}
+Link: {{ .Link }}
+Date: {{ .PubDate | date "2006-01-02 15:04:05 MST" }}
+-------------------------------
       {{- end }}
     {{- end }}
   {{- else }}
     {{- range .Articles }}
-      Title: {{ .Title | highlightKeywords }}
-      Description: {{ .Description | highlightKeywords }}
-      Link: {{ .Link }}
-      Source: {{ .Source }}
-      Date: {{ .PubDate | date "2006-01-02 15:04:05 MST" }}
-      -------------------------------
+Title: {{ .Title | highlightKeywords }}
+Description: {{ .Description | highlightKeywords }}
+Link: {{ .Link }}
+Source: {{ .Source }}
+Date: {{ .PubDate | date "2006-01-02 15:04:05 MST" }}
+-------------------------------
     {{- end }}
   {{- end }}
 {{- end }}
 {{ end }}
-
-
 
 {{ define "footer" }}
 Developer: Anton Chaban

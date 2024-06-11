@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"news-aggregator/pkg/filter"
 	"news-aggregator/pkg/service/mocks"
 	"os"
 	"testing"
@@ -56,15 +57,26 @@ func TestExecute(t *testing.T) {
 	mockArticleService.EXPECT().GetByKeyword("test").Return([]model.Article{articles[0]}, nil).Times(1)
 	mockArticleService.EXPECT().GetByDateInRange("2023-01-01", "2023-12-31").Return(articles, nil).Times(1)
 
-	mockArticleService.EXPECT().SaveAll(gomock.Any()).Return(nil).Times(2)
-	mockArticleService.EXPECT().GetAll().Return(articles, nil).Times(1)
-	handler := NewHandler(mockArticleService)
+	mockArticleService.EXPECT().SaveAll(gomock.Any()).Return(nil).Times(1)
+	handler := cliHandler{
+		service: mockArticleService,
+	}
 
 	old := os.Stdout
 	r, w, _ := os.Pipe()
 	os.Stdout = w
 
-	handler.Execute("abcnews", "test", "2023-01-01", "2023-12-31", "ASC")
+	f := filter.Filters{
+		Source:    "abcnews",
+		Keyword:   "test",
+		StartDate: "2023-01-01",
+		EndDate:   "2023-12-31",
+	}
+
+	err := handler.execute(f, "ASC")
+	if err != nil {
+		return
+	}
 
 	w.Close()
 	os.Stdout = old

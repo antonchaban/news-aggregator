@@ -3,25 +3,33 @@ package cli
 import (
 	"flag"
 	"fmt"
-	"log"
+	"news-aggregator/pkg/filter"
 	"news-aggregator/pkg/service"
 	"os"
 )
 
-// Handler is a struct that holds a reference to the articleService.
-type Handler struct {
-	Service service.ArticleService
+type Handler interface {
+	execute(f filter.Filters, sortOrder string) error
+	initCommands() error
 }
 
-func NewHandler(services service.ArticleService) *Handler {
-	h := &Handler{Service: services}
-	h.initCommands()
+// cliHandler is a struct that holds a reference to the articleService.
+type cliHandler struct {
+	service service.ArticleService
+}
+
+func NewHandler(asvc service.ArticleService) Handler {
+	h := &cliHandler{service: asvc}
+	err := h.initCommands()
+	if err != nil {
+		return nil
+	}
 	return h
 }
 
 // initCommands initializes the command-line interface (CLI) commands and flags.
 // It parses the flags and executes the appropriate command based on the provided flags.
-func (h *Handler) initCommands() {
+func (h *cliHandler) initCommands() error {
 	helpDesc := "Show all available arguments and their descriptions."
 	sourcesDesc := "Select the desired news sources to get the news from. Supported sources: abcnews, bbc, washingtontimes, nbc, usatoday"
 	keywordsDesc := "Specify the keywords to filter the news by."
@@ -50,21 +58,34 @@ func (h *Handler) initCommands() {
 
 	if *help {
 		flag.Usage()
-		return
+		return nil
 	}
 
-	h.Execute(*sources, *keywords, *dateStart, *dateEnd, *sortOrder)
+	err := h.execute(filter.Filters{
+		Source:    *sources,
+		Keyword:   *keywords,
+		StartDate: *dateStart,
+		EndDate:   *dateEnd,
+	}, *sortOrder)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
-// Execute loads the articles, filters them based on the provided sources, keywords, and date range,
+// execute loads the articles, filters them based on the provided sources, keywords, and date range,
 // and then prints the filtered articles.
-func (h *Handler) Execute(sources, keywords, dateStart, dateEnd, sortOrder string) {
+func (h *cliHandler) execute(f filter.Filters, sortOrder string) error {
 	err := h.loadData()
 	if err != nil {
-		log.Fatalf("Error loading data: %v", err)
+		return err
 	}
 
-	filteredArticles := h.filterArticles(sources, keywords, dateStart, dateEnd)
+	filteredArticles, err := h.filterArticles(f)
+	if err != nil {
+		return err
+	}
 	sortedArticles := h.sortArticles(filteredArticles, sortOrder)
-	h.printArticles(sortedArticles, sources, keywords, dateStart, dateEnd)
+	h.printArticles(sortedArticles, f)
+	return nil
 }

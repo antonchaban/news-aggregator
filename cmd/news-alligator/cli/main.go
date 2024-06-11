@@ -12,5 +12,8 @@ func main() {
 	svc := service.New(db)
 
 	// Initialize handler and execute CLI commands
-	cli.NewHandler(svc)
+	h := cli.NewHandler(svc)
+	if h == nil {
+		panic("error initializing CLI handler")
+	}
 }
