@@ -7,13 +7,11 @@ on:
   push:
     branches:
       - master
-      - feature/testing
-      - feature/go-templates
+      - feature/**
   pull_request:
     branches:
       - master
-      - feature/testing
-      - feature/go-templates
+      - feature/**
 
 jobs:
 
