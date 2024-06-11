@@ -8,12 +8,12 @@ import (
 	"os"
 )
 
-// Handler is a struct that holds a reference to the ArticleService.
+// Handler is a struct that holds a reference to the articleService.
 type Handler struct {
-	Service service.Article
+	Service service.ArticleService
 }
 
-func NewHandler(services service.Article) *Handler {
+func NewHandler(services service.ArticleService) *Handler {
 	return &Handler{Service: services}
 }
 

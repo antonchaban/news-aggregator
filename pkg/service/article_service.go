@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"fmt"
 	"news-aggregator/pkg/model"
 	"news-aggregator/pkg/storage"
@@ -8,21 +9,17 @@ import (
 )
 
 const (
-	ABCNewsSource         = "ABC News: International"
-	BBCNewsSource         = "BBC News"
-	WashingtonTimesSource = "The Washington Times stories: World"
-	NBCNewsSource         = "NBC News"
-	USATodaySource        = "USA TODAY"
+	abcNewsSource         = "ABC News: International"
+	bbcNewsSource         = "BBC News"
+	washingtonTimesSource = "The Washington Times stories: World"
+	nbcNewsSource         = "NBC News"
+	usaTodaySource        = "USA TODAY"
 )
 
-//go:generate mockgen -destination=../service/mocks/mock_article_service.go -package=mocks news-aggregator/pkg/service Article
+//go:generate mockgen -destination=../service/mocks/mock_article_service.go -package=mocks news-aggregator/pkg/service ArticleService
 
-type ArticleService struct {
-	articleStorage storage.ArticleStorage
-}
-
-// Article is an interface that defines the methods for interacting with the article storage.
-type Article interface {
+// ArticleService is an interface that defines the methods for interacting with the article storage.
+type ArticleService interface {
 	GetAll() ([]model.Article, error)
 	Create(article model.Article) (model.Article, error)
 	Delete(id int) error
@@ -32,58 +29,62 @@ type Article interface {
 	SaveAll(articles []model.Article) error
 }
 
-func (a *ArticleService) SaveAll(articles []model.Article) error {
+type articleService struct {
+	articleStorage storage.ArticleStorage
+}
+
+func New(articleRepo storage.ArticleStorage) ArticleService {
+	return &articleService{articleStorage: articleRepo}
+}
+
+func (a *articleService) SaveAll(articles []model.Article) error {
 	err := a.articleStorage.SaveAll(articles)
 	if err != nil {
-		fmt.Printf("Failed to save articles: %v", err)
+		return errors.New("failed to save articles")
 	}
 	return err
 }
 
-func New(articleRepo storage.ArticleStorage) *ArticleService {
-	return &ArticleService{articleStorage: articleRepo}
-}
-
 // GetAll returns all articles in the database.
-func (a *ArticleService) GetAll() ([]model.Article, error) {
+func (a *articleService) GetAll() ([]model.Article, error) {
 	return a.articleStorage.GetAll()
 }
 
 // Create adds a new article to the database.
-func (a *ArticleService) Create(article model.Article) (model.Article, error) {
+func (a *articleService) Create(article model.Article) (model.Article, error) {
 	return a.articleStorage.Save(article)
 }
 
 // Delete removes the article with the given ID from the database.
-func (a *ArticleService) Delete(id int) error {
+func (a *articleService) Delete(id int) error {
 	return a.articleStorage.Delete(id)
 }
 
 // GetBySource returns all articles from the given source.
-func (a *ArticleService) GetBySource(source string) ([]model.Article, error) {
+func (a *articleService) GetBySource(source string) ([]model.Article, error) {
 	switch source {
 	case "abcnews":
-		return a.articleStorage.GetBySource(ABCNewsSource)
+		return a.articleStorage.GetBySource(abcNewsSource)
 	case "bbc":
-		return a.articleStorage.GetBySource(BBCNewsSource)
+		return a.articleStorage.GetBySource(bbcNewsSource)
 	case "washingtontimes":
-		return a.articleStorage.GetBySource(WashingtonTimesSource)
+		return a.articleStorage.GetBySource(washingtonTimesSource)
 	case "nbc":
-		return a.articleStorage.GetBySource(NBCNewsSource)
+		return a.articleStorage.GetBySource(nbcNewsSource)
 	case "usatoday":
-		return a.articleStorage.GetBySource(USATodaySource)
+		return a.articleStorage.GetBySource(usaTodaySource)
 	default:
 		return nil, fmt.Errorf("source not found")
 	}
 }
 
 // GetByKeyword returns all articles that contain the given keyword.
-func (a *ArticleService) GetByKeyword(keyword string) ([]model.Article, error) {
+func (a *articleService) GetByKeyword(keyword string) ([]model.Article, error) {
 	return a.articleStorage.GetByKeyword(keyword)
 }
 
 // GetByDateInRange returns all articles published between the given start and end dates.
-func (a *ArticleService) GetByDateInRange(startDate, endDate string) ([]model.Article, error) {
+func (a *articleService) GetByDateInRange(startDate, endDate string) ([]model.Article, error) {
 	var startDateObj, endDateObj time.Time
 	var err error
 

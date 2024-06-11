@@ -27,9 +27,7 @@ func TestArticleService_Create(t *testing.T) {
 		Link:        "http://test.com",
 		Source:      "Test Source",
 	}, nil)
-	a := &ArticleService{
-		articleStorage: mockStorage,
-	}
+	a := New(mockStorage)
 	createdArticle, err := a.Create(article)
 	if err != nil {
 		t.Errorf("Save() error = %v", err)
@@ -72,9 +70,7 @@ func TestArticleService_Delete(t *testing.T) {
 			if tt.prepare != nil {
 				tt.prepare(&f)
 			}
-			a := &ArticleService{
-				articleStorage: f.articleStorage,
-			}
+			a := New(f.articleStorage)
 			if err := a.Delete(tt.args.id); (err != nil) != tt.wantErr {
 				t.Errorf("Delete() error = %v, wantErr %v", err, tt.wantErr)
 			}
@@ -124,9 +120,7 @@ func TestArticleService_GetAll(t *testing.T) {
 			if tt.prepare != nil {
 				tt.prepare(&f)
 			}
-			a := &ArticleService{
-				articleStorage: f.articleStorage,
-			}
+			a := New(f.articleStorage)
 			articles, _ := a.GetAll()
 			assert.Equal(t, 2, len(articles))
 		})
@@ -187,9 +181,7 @@ func TestArticleService_GetByDateInRange(t *testing.T) {
 			if tt.prepare != nil {
 				tt.prepare(&f)
 			}
-			a := &ArticleService{
-				articleStorage: f.articleStorage,
-			}
+			a := New(f.articleStorage)
 			articles, _ := a.GetByDateInRange(tt.args.startDate, tt.args.endDate)
 			assert.Equal(t, 2, len(articles))
 		})
@@ -246,9 +238,7 @@ func TestArticleService_GetByKeyword(t *testing.T) {
 			if tt.prepare != nil {
 				tt.prepare(&f)
 			}
-			a := &ArticleService{
-				articleStorage: f.articleStorage,
-			}
+			a := New(f.articleStorage)
 			articles, _ := a.GetByKeyword(tt.args.keyword)
 			assert.Equal(t, 2, len(articles))
 		})
@@ -315,9 +305,7 @@ func TestArticleService_GetBySource(t *testing.T) {
 			if tt.prepare != nil {
 				tt.prepare(&f)
 			}
-			a := &ArticleService{
-				articleStorage: f.articleStorage,
-			}
+			a := New(f.articleStorage)
 			articles, err := a.GetBySource(tt.args.source)
 			if tt.wantErr {
 				assert.Equal(t, "source not found", err.Error())
@@ -379,9 +367,7 @@ func TestArticleService_SaveAll(t *testing.T) {
 				tt.prepare(&f)
 			}
 
-			a := &ArticleService{
-				articleStorage: f.articleStorage,
-			}
+			a := New(f.articleStorage)
 			err := a.SaveAll(tt.args.articles)
 
 			if (err != nil) && tt.wantErr {
@@ -397,17 +383,17 @@ func TestNew(t *testing.T) {
 	tests := []struct {
 		name         string
 		articleRepo  storage.ArticleStorage
-		expectedRepo *ArticleService
+		expectedRepo *articleService
 	}{
 		{
 			name:         "Valid ArticleRepo",
 			articleRepo:  mocks.NewMockArticleStorage(gomock.NewController(t)),
-			expectedRepo: &ArticleService{articleStorage: mocks.NewMockArticleStorage(gomock.NewController(t))},
+			expectedRepo: &articleService{articleStorage: mocks.NewMockArticleStorage(gomock.NewController(t))},
 		},
 		{
 			name:         "Nil ArticleRepo",
 			articleRepo:  nil,
-			expectedRepo: &ArticleService{articleStorage: nil},
+			expectedRepo: &articleService{articleStorage: nil},
 		},
 	}
 
