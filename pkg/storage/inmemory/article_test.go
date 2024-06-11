@@ -3,7 +3,6 @@ package inmemory
 import (
 	"github.com/stretchr/testify/assert"
 	"news-aggregator/pkg/model"
-	"reflect"
 	"testing"
 	"time"
 )
@@ -316,22 +315,6 @@ func TestArticleInMemory_SaveAll(t *testing.T) {
 			} else {
 				assert.NoError(t, err)
 				assert.Equal(t, tt.expected, storage.Articles)
-			}
-		})
-	}
-}
-
-func TestNew(t *testing.T) {
-	tests := []struct {
-		name string
-		want *ArticleInMemory
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := New(); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("New() = %v, want %v", got, tt.want)
 			}
 		})
 	}
