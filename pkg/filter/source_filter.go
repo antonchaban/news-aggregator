@@ -1,10 +1,18 @@
 package filter
 
 import (
+	"fmt"
 	"strings"
 
 	"news-aggregator/pkg/model"
-	"news-aggregator/pkg/service"
+)
+
+const (
+	abcNewsSource         = "ABC News: International"
+	bbcNewsSource         = "BBC News"
+	washingtonTimesSource = "The Washington Times stories: World"
+	nbcNewsSource         = "NBC News"
+	usaTodaySource        = "USA TODAY"
 )
 
 type SourceFilter struct {
@@ -16,26 +24,44 @@ func (h *SourceFilter) SetNext(handler ArticleFilter) ArticleFilter {
 	return handler
 }
 
-func (h *SourceFilter) Filter(svc service.ArticleService, _ []model.Article, f Filters) ([]model.Article, error) {
-	var filteredArticles []model.Article
+func (h *SourceFilter) Filter(articles []model.Article, f Filters) ([]model.Article, error) {
 	if f.Source != "" {
 		sourceList := strings.Split(f.Source, ",")
-		for _, source := range sourceList {
-			sourceArticles, err := svc.GetBySource(strings.TrimSpace(source))
-			if err != nil {
-				return nil, err
+		var filteredArticles []model.Article
+		for _, article := range articles {
+			for _, source := range sourceList {
+				switch source {
+				case "abcnews":
+					if article.Source == abcNewsSource {
+						filteredArticles = append(filteredArticles, article)
+					}
+				case "bbc":
+					if article.Source == bbcNewsSource {
+						filteredArticles = append(filteredArticles, article)
+
+					}
+				case "washingtontimes":
+					if article.Source == washingtonTimesSource {
+						filteredArticles = append(filteredArticles, article)
+					}
+				case "nbc":
+					if article.Source == nbcNewsSource {
+						filteredArticles = append(filteredArticles, article)
+					}
+				case "usatoday":
+					if article.Source == usaTodaySource {
+						filteredArticles = append(filteredArticles, article)
+					}
+				default:
+					return nil, fmt.Errorf("source not found")
+				}
 			}
-			filteredArticles = append(filteredArticles, sourceArticles...)
+			articles = filteredArticles
 		}
-	} else {
-		var err error
-		filteredArticles, err = svc.GetAll()
-		if err != nil {
-			return nil, err
-		}
+
 	}
 	if h.next != nil {
-		return h.next.Filter(svc, filteredArticles, f)
+		return h.next.Filter(articles, f)
 	}
-	return filteredArticles, nil
+	return articles, nil
 }

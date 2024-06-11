@@ -5,6 +5,7 @@
 package mocks
 
 import (
+	filter "news-aggregator/pkg/filter"
 	model "news-aggregator/pkg/model"
 	reflect "reflect"
 
@@ -78,49 +79,19 @@ func (mr *MockArticleServiceMockRecorder) GetAll() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAll", reflect.TypeOf((*MockArticleService)(nil).GetAll))
 }
 
-// GetByDateInRange mocks base method.
-func (m *MockArticleService) GetByDateInRange(arg0, arg1 string) ([]model.Article, error) {
+// GetByFilter mocks base method.
+func (m *MockArticleService) GetByFilter(arg0 filter.Filters) ([]model.Article, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetByDateInRange", arg0, arg1)
+	ret := m.ctrl.Call(m, "GetByFilter", arg0)
 	ret0, _ := ret[0].([]model.Article)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetByDateInRange indicates an expected call of GetByDateInRange.
-func (mr *MockArticleServiceMockRecorder) GetByDateInRange(arg0, arg1 interface{}) *gomock.Call {
+// GetByFilter indicates an expected call of GetByFilter.
+func (mr *MockArticleServiceMockRecorder) GetByFilter(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByDateInRange", reflect.TypeOf((*MockArticleService)(nil).GetByDateInRange), arg0, arg1)
-}
-
-// GetByKeyword mocks base method.
-func (m *MockArticleService) GetByKeyword(arg0 string) ([]model.Article, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetByKeyword", arg0)
-	ret0, _ := ret[0].([]model.Article)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// GetByKeyword indicates an expected call of GetByKeyword.
-func (mr *MockArticleServiceMockRecorder) GetByKeyword(arg0 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByKeyword", reflect.TypeOf((*MockArticleService)(nil).GetByKeyword), arg0)
-}
-
-// GetBySource mocks base method.
-func (m *MockArticleService) GetBySource(arg0 string) ([]model.Article, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetBySource", arg0)
-	ret0, _ := ret[0].([]model.Article)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// GetBySource indicates an expected call of GetBySource.
-func (mr *MockArticleServiceMockRecorder) GetBySource(arg0 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetBySource", reflect.TypeOf((*MockArticleService)(nil).GetBySource), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByFilter", reflect.TypeOf((*MockArticleService)(nil).GetByFilter), arg0)
 }
 
 // SaveAll mocks base method.

@@ -2,18 +2,9 @@ package service
 
 import (
 	"errors"
-	"fmt"
+	"news-aggregator/pkg/filter"
 	"news-aggregator/pkg/model"
 	"news-aggregator/pkg/storage"
-	"time"
-)
-
-const (
-	abcNewsSource         = "ABC News: International"
-	bbcNewsSource         = "BBC News"
-	washingtonTimesSource = "The Washington Times stories: World"
-	nbcNewsSource         = "NBC News"
-	usaTodaySource        = "USA TODAY"
 )
 
 //go:generate mockgen -destination=../service/mocks/mock_article_service.go -package=mocks news-aggregator/pkg/service ArticleService
@@ -23,10 +14,8 @@ type ArticleService interface {
 	GetAll() ([]model.Article, error)
 	Create(article model.Article) (model.Article, error)
 	Delete(id int) error
-	GetBySource(source string) ([]model.Article, error)
-	GetByKeyword(keyword string) ([]model.Article, error)
-	GetByDateInRange(startDate, endDate string) ([]model.Article, error)
 	SaveAll(articles []model.Article) error
+	GetByFilter(f filter.Filters) ([]model.Article, error)
 }
 
 type articleService struct {
@@ -60,51 +49,22 @@ func (a *articleService) Delete(id int) error {
 	return a.articleStorage.Delete(id)
 }
 
-// GetBySource returns all articles from the given source.
-func (a *articleService) GetBySource(source string) ([]model.Article, error) {
-	switch source {
-	case "abcnews":
-		return a.articleStorage.GetBySource(abcNewsSource)
-	case "bbc":
-		return a.articleStorage.GetBySource(bbcNewsSource)
-	case "washingtontimes":
-		return a.articleStorage.GetBySource(washingtonTimesSource)
-	case "nbc":
-		return a.articleStorage.GetBySource(nbcNewsSource)
-	case "usatoday":
-		return a.articleStorage.GetBySource(usaTodaySource)
-	default:
-		return nil, fmt.Errorf("source not found")
-	}
-}
-
-// GetByKeyword returns all articles that contain the given keyword.
-func (a *articleService) GetByKeyword(keyword string) ([]model.Article, error) {
-	return a.articleStorage.GetByKeyword(keyword)
-}
-
-// GetByDateInRange returns all articles published between the given start and end dates.
-func (a *articleService) GetByDateInRange(startDate, endDate string) ([]model.Article, error) {
-	var startDateObj, endDateObj time.Time
-	var err error
-
-	if startDate != "" {
-		startDateObj, err = time.Parse("2006-01-02", startDate)
-		if err != nil {
-			return nil, fmt.Errorf("failed to parse start date: %v", err)
-		}
-	} else {
-		startDateObj = time.Date(1, 1, 1, 0, 0, 0, 0, time.UTC)
-
+// GetByFilter returns all articles that match the given filters.
+func (a *articleService) GetByFilter(f filter.Filters) ([]model.Article, error) {
+	// Fetch all articles initially
+	articles, err := a.GetAll()
+	if err != nil {
+		return nil, err
 	}
 
-	if endDate != "" {
-		endDateObj, err = time.Parse("2006-01-02", endDate)
-		if err != nil {
-			return nil, fmt.Errorf("failed to parse end date: %v", err)
-		}
-	} else {
-		endDateObj = time.Now()
-	}
-	return a.articleStorage.GetByDateInRange(startDateObj, endDateObj)
+	// Create filter handlers
+	sourceFilter := &filter.SourceFilter{}
+	keywordFilter := &filter.KeywordFilter{}
+	dateRangeFilter := &filter.DateRangeFilter{}
+
+	// Create the chain
+	sourceFilter.SetNext(keywordFilter).SetNext(dateRangeFilter)
+
+	// Start filtering
+	return sourceFilter.Filter(articles, f)
 }

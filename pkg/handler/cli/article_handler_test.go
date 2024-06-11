@@ -24,7 +24,7 @@ func TestHandler_filterArticles(t *testing.T) {
 		{Id: 2, Source: "bbc", Title: "Title 2", Description: "Description 2", Link: "http://link2.com", PubDate: pubDate2},
 	}
 
-	mockArticleService.EXPECT().GetBySource("abcnews").Return([]model.Article{articles[0]}, nil).Times(1)
+	mockArticleService.EXPECT().GetByFilter(filter.Filters{Source: "abcnews"}).Return([]model.Article{articles[0]}, nil).Times(1)
 
 	f := filter.Filters{
 		Source: "abcnews",

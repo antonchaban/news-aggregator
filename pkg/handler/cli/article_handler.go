@@ -46,7 +46,8 @@ func (h *cliHandler) loadData() error {
 // filterArticles filters the provided articles based on the provided sources, keywords, and date range.
 // It returns the filtered articles.
 func (h *cliHandler) filterArticles(f filter.Filters) ([]model.Article, error) {
-	articles, err := filter.FilterArticles(h.service, f)
+	//articles, err := filter.FilterArticles(h.service, f)
+	articles, err := h.service.GetByFilter(f)
 	if err != nil {
 		log.Fatalf("Error filtering articles: %v", err)
 		return nil, err
