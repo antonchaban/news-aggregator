@@ -54,7 +54,8 @@ func TestArticleInMemory_Create(t *testing.T) {
 				assert.Error(t, err)
 			} else {
 				assert.NoError(t, err)
-				assert.Equal(t, tt.expected, storage.Articles)
+				articles, _ := storage.GetAll()
+				assert.Equal(t, tt.expected, articles)
 			}
 		})
 	}
@@ -91,14 +92,19 @@ func TestArticleInMemory_Delete(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			storage := &MemoryArticleStorage{Articles: tt.articles}
-			err := storage.Delete(tt.id)
+			storage := New()
+			err := storage.SaveAll(tt.articles)
+			if err != nil {
+				return
+			}
+			err = storage.Delete(tt.id)
 
 			if tt.expectErr {
 				assert.Error(t, err)
 			} else {
 				assert.NoError(t, err)
-				assert.Equal(t, tt.expected, storage.Articles)
+				articles, _ := storage.GetAll()
+				assert.Equal(t, tt.expected, articles)
 			}
 		})
 	}
@@ -134,7 +140,8 @@ func TestArticleInMemory_GetAll(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 
-			storage := &MemoryArticleStorage{Articles: tt.articles}
+			storage := New()
+			storage.SaveAll(tt.articles)
 			articles, err := storage.GetAll()
 
 			if tt.expectErr {
@@ -183,7 +190,8 @@ func TestArticleInMemory_GetByDateInRange(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			storage := &MemoryArticleStorage{Articles: tt.articles}
+			storage := New()
+			storage.SaveAll(tt.articles)
 			articles, err := storage.GetByDateInRange(tt.startDate, tt.endDate)
 
 			if tt.expectErr {
@@ -229,7 +237,8 @@ func TestArticleInMemory_GetByKeyword(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			storage := &MemoryArticleStorage{Articles: tt.articles}
+			storage := New()
+			storage.SaveAll(tt.articles)
 			articles, err := storage.GetByKeyword(tt.keyword)
 
 			if tt.expectErr {
@@ -265,7 +274,8 @@ func TestArticleInMemory_GetBySource(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			storage := &MemoryArticleStorage{Articles: tt.articles}
+			storage := New()
+			storage.SaveAll(tt.articles)
 			articles, err := storage.GetBySource(tt.source)
 
 			if tt.expectErr {
@@ -314,7 +324,8 @@ func TestArticleInMemory_SaveAll(t *testing.T) {
 				assert.Error(t, err)
 			} else {
 				assert.NoError(t, err)
-				assert.Equal(t, tt.expected, storage.Articles)
+				articles, _ := storage.GetAll()
+				assert.Equal(t, tt.expected, articles)
 			}
 		})
 	}
