@@ -12,6 +12,5 @@ func main() {
 	svc := service.New(db)
 
 	// Initialize handler and execute CLI commands
-	handler := cli.NewHandler(svc)
-	handler.InitCommands()
+	cli.NewHandler(svc)
 }

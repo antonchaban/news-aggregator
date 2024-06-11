@@ -14,12 +14,14 @@ type Handler struct {
 }
 
 func NewHandler(services service.ArticleService) *Handler {
-	return &Handler{Service: services}
+	h := &Handler{Service: services}
+	h.initCommands()
+	return h
 }
 
-// InitCommands initializes the command-line interface (CLI) commands and flags.
+// initCommands initializes the command-line interface (CLI) commands and flags.
 // It parses the flags and executes the appropriate command based on the provided flags.
-func (h *Handler) InitCommands() {
+func (h *Handler) initCommands() {
 	helpDesc := "Show all available arguments and their descriptions."
 	sourcesDesc := "Select the desired news sources to get the news from. Supported sources: abcnews, bbc, washingtontimes, nbc, usatoday"
 	keywordsDesc := "Specify the keywords to filter the news by."

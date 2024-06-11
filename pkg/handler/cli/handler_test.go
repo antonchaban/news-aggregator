@@ -21,9 +21,8 @@ func TestInitCommands_Help(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	mockArticleService := mocks.NewMockArticle(ctrl)
-	handler := NewHandler(mockArticleService)
-	handler.InitCommands()
+	mockArticleService := mocks.NewMockArticleService(ctrl)
+	NewHandler(mockArticleService)
 
 	w.Close()
 	os.Stdout = old
@@ -44,7 +43,7 @@ func TestExecute(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	mockArticleService := mocks.NewMockArticle(ctrl)
+	mockArticleService := mocks.NewMockArticleService(ctrl)
 
 	pubDate1 := time.Date(2023, 6, 1, 0, 0, 0, 0, time.UTC)
 	pubDate2 := time.Date(2023, 7, 1, 0, 0, 0, 0, time.UTC)
@@ -57,12 +56,14 @@ func TestExecute(t *testing.T) {
 	mockArticleService.EXPECT().GetByKeyword("test").Return([]model.Article{articles[0]}, nil).Times(1)
 	mockArticleService.EXPECT().GetByDateInRange("2023-01-01", "2023-12-31").Return(articles, nil).Times(1)
 
-	mockArticleService.EXPECT().SaveAll(gomock.Any()).Return(nil).Times(1)
+	mockArticleService.EXPECT().SaveAll(gomock.Any()).Return(nil).Times(2)
+	mockArticleService.EXPECT().GetAll().Return(articles, nil).Times(1)
 	handler := NewHandler(mockArticleService)
 
 	old := os.Stdout
 	r, w, _ := os.Pipe()
 	os.Stdout = w
+
 	handler.Execute("abcnews", "test", "2023-01-01", "2023-12-31", "ASC")
 
 	w.Close()

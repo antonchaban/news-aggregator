@@ -12,7 +12,7 @@ import (
 func TestHandler_filterArticles(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	mockArticleService := mocks.NewMockArticle(ctrl)
+	mockArticleService := mocks.NewMockArticleService(ctrl)
 	handler := Handler{
 		Service: mockArticleService,
 	}
@@ -35,7 +35,7 @@ func TestHandler_filterArticles(t *testing.T) {
 func TestHandler_loadData(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	mockArticleService := mocks.NewMockArticle(ctrl)
+	mockArticleService := mocks.NewMockArticleService(ctrl)
 	handler := Handler{
 		Service: mockArticleService,
 	}
