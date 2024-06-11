@@ -32,7 +32,7 @@ func TestArticleService_Create(t *testing.T) {
 	}
 	createdArticle, err := a.Create(article)
 	if err != nil {
-		t.Errorf("Create() error = %v", err)
+		t.Errorf("Save() error = %v", err)
 		return
 	}
 	assert.Equal(t, 1, createdArticle.Id)

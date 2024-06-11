@@ -37,7 +37,7 @@ func (m *MockArticle) EXPECT() *MockArticleMockRecorder {
 // Create mocks base method.
 func (m *MockArticle) Create(arg0 model.Article) (model.Article, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Create", arg0)
+	ret := m.ctrl.Call(m, "Save", arg0)
 	ret0, _ := ret[0].(model.Article)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
@@ -46,7 +46,7 @@ func (m *MockArticle) Create(arg0 model.Article) (model.Article, error) {
 // Create indicates an expected call of Create.
 func (mr *MockArticleMockRecorder) Create(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockArticle)(nil).Create), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockArticle)(nil).Create), arg0)
 }
 
 // Delete mocks base method.

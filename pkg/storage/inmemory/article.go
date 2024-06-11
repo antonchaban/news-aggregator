@@ -4,30 +4,31 @@ import (
 	"errors"
 	"github.com/reiver/go-porterstemmer"
 	"news-aggregator/pkg/model"
+	"news-aggregator/pkg/storage"
 	"strings"
 	"time"
 )
 
-// ArticleInMemory is a struct that contains the in-memory database for articles.
-type ArticleInMemory struct {
+// MemoryArticleStorage is a struct that contains the in-memory database for articles.
+type memoryArticleStorage struct {
 	Articles []model.Article
 	nextID   int
 }
 
-func New() *ArticleInMemory {
-	return &ArticleInMemory{
+func New() storage.ArticleStorage {
+	return &memoryArticleStorage{
 		Articles: []model.Article{},
 		nextID:   1,
 	}
 }
 
 // GetAll returns all articles in the database.
-func (a *ArticleInMemory) GetAll() ([]model.Article, error) {
+func (a *memoryArticleStorage) GetAll() ([]model.Article, error) {
 	return a.Articles, nil
 }
 
 // Create adds a new article to the database.
-func (a *ArticleInMemory) Create(article model.Article) (model.Article, error) {
+func (a *memoryArticleStorage) Save(article model.Article) (model.Article, error) {
 	article.Id = a.nextID
 	a.nextID++
 	a.Articles = append(a.Articles, article)
@@ -35,7 +36,7 @@ func (a *ArticleInMemory) Create(article model.Article) (model.Article, error) {
 }
 
 // Delete removes the article with the given ID from the database.
-func (a *ArticleInMemory) Delete(id int) error {
+func (a *memoryArticleStorage) Delete(id int) error {
 	for i, article := range a.Articles {
 		if article.Id == id {
 			a.Articles = append(a.Articles[:i], a.Articles[i+1:]...)
@@ -46,7 +47,7 @@ func (a *ArticleInMemory) Delete(id int) error {
 }
 
 // GetByKeyword returns all articles that contain the given keyword in their title or description.
-func (a *ArticleInMemory) GetByKeyword(keyword string) ([]model.Article, error) {
+func (a *memoryArticleStorage) GetByKeyword(keyword string) ([]model.Article, error) {
 	articles := []model.Article{}
 	for _, article := range a.Articles {
 		normalizedTitle := strings.ToLower(article.Title)
@@ -65,7 +66,7 @@ func (a *ArticleInMemory) GetByKeyword(keyword string) ([]model.Article, error) 
 }
 
 // GetBySource returns all articles from the given source.
-func (a *ArticleInMemory) GetBySource(source string) ([]model.Article, error) {
+func (a *memoryArticleStorage) GetBySource(source string) ([]model.Article, error) {
 	var articles []model.Article
 	for _, article := range a.Articles {
 		if article.Source == source {
@@ -76,7 +77,7 @@ func (a *ArticleInMemory) GetBySource(source string) ([]model.Article, error) {
 }
 
 // GetByDateInRange returns all articles published between the given start and end dates.
-func (a *ArticleInMemory) GetByDateInRange(startDate, endDate time.Time) ([]model.Article, error) {
+func (a *memoryArticleStorage) GetByDateInRange(startDate, endDate time.Time) ([]model.Article, error) {
 	articles := []model.Article{}
 	for _, article := range a.Articles {
 		if article.PubDate.After(startDate) && article.PubDate.Before(endDate) {
@@ -86,9 +87,9 @@ func (a *ArticleInMemory) GetByDateInRange(startDate, endDate time.Time) ([]mode
 	return articles, nil
 }
 
-func (a *ArticleInMemory) SaveAll(articles []model.Article) error {
+func (a *memoryArticleStorage) SaveAll(articles []model.Article) error {
 	for _, article := range articles {
-		_, err := a.Create(article)
+		_, err := a.Save(article)
 		if err != nil {
 			return err
 		}

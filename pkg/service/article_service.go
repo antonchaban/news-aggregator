@@ -51,7 +51,7 @@ func (a *ArticleService) GetAll() ([]model.Article, error) {
 
 // Create adds a new article to the database.
 func (a *ArticleService) Create(article model.Article) (model.Article, error) {
-	return a.articleStorage.Create(article)
+	return a.articleStorage.Save(article)
 }
 
 // Delete removes the article with the given ID from the database.

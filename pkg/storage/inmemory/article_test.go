@@ -48,7 +48,7 @@ func TestArticleInMemory_Create(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			_, err := storage.Create(tt.articles)
+			_, err := storage.Save(tt.articles)
 
 			if tt.expectErr {
 				assert.Error(t, err)
@@ -91,7 +91,7 @@ func TestArticleInMemory_Delete(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			storage := &ArticleInMemory{Articles: tt.articles}
+			storage := &MemoryArticleStorage{Articles: tt.articles}
 			err := storage.Delete(tt.id)
 
 			if tt.expectErr {
@@ -134,7 +134,7 @@ func TestArticleInMemory_GetAll(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 
-			storage := &ArticleInMemory{Articles: tt.articles}
+			storage := &MemoryArticleStorage{Articles: tt.articles}
 			articles, err := storage.GetAll()
 
 			if tt.expectErr {
@@ -183,7 +183,7 @@ func TestArticleInMemory_GetByDateInRange(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			storage := &ArticleInMemory{Articles: tt.articles}
+			storage := &MemoryArticleStorage{Articles: tt.articles}
 			articles, err := storage.GetByDateInRange(tt.startDate, tt.endDate)
 
 			if tt.expectErr {
@@ -229,7 +229,7 @@ func TestArticleInMemory_GetByKeyword(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			storage := &ArticleInMemory{Articles: tt.articles}
+			storage := &MemoryArticleStorage{Articles: tt.articles}
 			articles, err := storage.GetByKeyword(tt.keyword)
 
 			if tt.expectErr {
@@ -265,7 +265,7 @@ func TestArticleInMemory_GetBySource(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			storage := &ArticleInMemory{Articles: tt.articles}
+			storage := &MemoryArticleStorage{Articles: tt.articles}
 			articles, err := storage.GetBySource(tt.source)
 
 			if tt.expectErr {
