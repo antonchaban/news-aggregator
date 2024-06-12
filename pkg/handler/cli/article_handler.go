@@ -56,7 +56,11 @@ func (h *cliHandler) filterArticles(f filter.Filters) ([]model.Article, error) {
 
 // printArticles prints the provided articles to the console using template.
 func (h *cliHandler) printArticles(articles []model.Article, filters filter.Filters) {
-	tmplPath := getTemplatePath()
+	tmplPath, err := getTemplatePath()
+	if err != nil {
+		log.Fatalf("Error getting template path: %v", err)
+		return
+	}
 	tmpl, err := template.New("article.tmpl").Funcs(sprig.FuncMap()).Funcs(template.FuncMap{
 		"groupBy": groupBy,
 		"gt1": func(s string) bool {
@@ -88,21 +92,20 @@ func (h *cliHandler) printArticles(articles []model.Article, filters filter.Filt
 }
 
 // getTemplatePath returns the path to the template file.
-func getTemplatePath() string {
-	possiblePaths := []string{
-		"../../templates/article.tmpl",
-		"templates/article.tmpl",
-		"../../../templates/article.tmpl",
+func getTemplatePath() (string, error) {
+	execDir, err := os.Getwd()
+	if err != nil {
+		log.Fatalf("Error getting current working directory: %v", err)
+		return "", err
 	}
 
-	for _, path := range possiblePaths {
-		if _, err := os.Stat(path); err == nil {
-			return path
-		}
-	}
+	tmplPath := filepath.Join(execDir, "../../../templates", "article.tmpl")
 
-	log.Fatalf("Template file not found in any of the expected paths")
-	return ""
+	if _, err := os.Stat(tmplPath); os.IsNotExist(err) {
+		log.Fatalf("Template file not found: %s", tmplPath)
+		return "", err
+	}
+	return tmplPath, nil
 }
 
 // groupBy groups the provided articles by the specified field.
