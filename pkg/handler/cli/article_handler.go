@@ -1,7 +1,6 @@
 package cli
 
 import (
-	"errors"
 	"fmt"
 	"github.com/Masterminds/sprig"
 	"log"
@@ -17,27 +16,47 @@ import (
 
 // loadData loads articles from the specified files and saves them to the Service.
 func (h *cliHandler) loadData() error {
-	execDir, err := os.Getwd()
+	files, err := getDataFiles()
 	if err != nil {
-		log.Fatalf("Error getting current working directory: %v", err)
-		return err
-	}
-	log.Printf("Current working directory: %s\n", execDir)
-
-	// Directory containing the data files
-	dataDir := filepath.Join(execDir, "../../../data")
-
-	// Get all files in the data directory
-	files, err := filepath.Glob(filepath.Join(dataDir, "*"))
-	if err != nil {
-		log.Fatalf("Error reading files from directory: %v", err)
 		return err
 	}
 
 	var articles []model.Article
-	articles, err = parser.ParseArticlesFromFiles(files)
-	if err != nil {
-		return errors.New("error parsing articles from files")
+	resultsChan := make(chan []model.Article)
+	errorsChan := make(chan error)
+	doneChan := make(chan struct{})
+
+	go func() {
+		for _, file := range files {
+			go func(file string) {
+				articles, err := parser.ParseArticlesFromFile(file)
+				if err != nil {
+					errorsChan <- err
+					return
+				}
+				resultsChan <- articles
+			}(file)
+		}
+		for range files {
+			select {
+			case articlesBatch := <-resultsChan:
+				articles = append(articles, articlesBatch...)
+			case err := <-errorsChan:
+				errorsChan <- err
+				close(doneChan)
+				return
+			}
+		}
+		close(doneChan)
+	}()
+
+	select {
+	case <-doneChan:
+		select {
+		case err := <-errorsChan:
+			return err
+		default:
+		}
 	}
 
 	return h.service.SaveAll(articles)
@@ -106,6 +125,27 @@ func getTemplatePath() (string, error) {
 		return "", err
 	}
 	return tmplPath, nil
+}
+
+// getDataFiles returns the list of files in the data directory.
+func getDataFiles() ([]string, error) {
+	execDir, err := os.Getwd()
+	if err != nil {
+		log.Fatalf("Error getting current working directory: %v", err)
+		return nil, err
+	}
+	log.Printf("Current working directory: %s\n", execDir)
+
+	// Directory containing the data files
+	dataDir := filepath.Join(execDir, "../../../data")
+
+	// Get all files in the data directory
+	files, err := filepath.Glob(filepath.Join(dataDir, "*"))
+	if err != nil {
+		log.Fatalf("Error reading files from directory: %v", err)
+		return nil, err
+	}
+	return files, nil
 }
 
 // groupBy groups the provided articles by the specified field.
