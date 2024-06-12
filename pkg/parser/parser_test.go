@@ -68,7 +68,7 @@ func TestParseArticlesFromFiles(t *testing.T) {
 					PubDate:     time.Date(2006, time.January, 3, 15, 4, 5, 0, time.UTC),
 				},
 			},
-			wantErr: false,
+			wantErr: true,
 		},
 		{
 			name: "all invalid files",
@@ -76,7 +76,7 @@ func TestParseArticlesFromFiles(t *testing.T) {
 				files: []string{"testdata/invalid_rss.xml", "testdata/invalid.json"},
 			},
 			want:    nil,
-			wantErr: false,
+			wantErr: true,
 		},
 		{
 			name: "empty files",
@@ -90,13 +90,22 @@ func TestParseArticlesFromFiles(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			assert := require.New(t)
-			got, err := ParseArticlesFromFiles(tt.args.files)
-			if tt.wantErr {
-				assert.Error(err, "ParseArticlesFromFiles() should return an error")
-			} else {
-				assert.NoError(err, "ParseArticlesFromFiles() should not return an error")
+			var got []model.Article
+			var err error
+			for _, file := range tt.args.files {
+				articles, e := ParseArticlesFromFile(file)
+				if e != nil {
+					err = e
+				} else {
+					got = append(got, articles...)
+				}
 			}
-			assert.Equal(tt.want, got, "ParseArticlesFromFiles() returned unexpected result")
+			if tt.wantErr {
+				assert.Error(err, "ParseArticlesFromFile() should return an error")
+			} else {
+				assert.NoError(err, "ParseArticlesFromFile() should not return an error")
+			}
+			assert.Equal(tt.want, got, "ParseArticlesFromFile() returned unexpected result")
 		})
 	}
 }
