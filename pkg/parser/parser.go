@@ -24,7 +24,12 @@ func ParseArticlesFromFiles(files []string) ([]model.Article, error) {
 			continue
 		}
 
-		defer file.Close()
+		defer func(file *os.File) {
+			err := file.Close()
+			if err != nil {
+				panic(err)
+			}
+		}(file)
 
 		format := DetermineFileFormat(filePath)
 

@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-// Parser is a struct that implements the ParsingAlgorithm interface
+// Parser is a struct that implements the Parser interface
 type Parser struct {
 }
 

@@ -1,6 +1,7 @@
 package html
 
 import (
+	"errors"
 	"fmt"
 	"github.com/PuerkitoBio/goquery"
 	"news-aggregator/pkg/model"
@@ -10,7 +11,7 @@ import (
 )
 
 // Parser is a struct that contains the configuration for parsing HTML feeds
-// and implements the ParsingAlgorithm interface.
+// and implements the Parser interface.
 type Parser struct {
 	config FeedConfig
 }
@@ -44,10 +45,7 @@ func (h *Parser) ParseFile(f *os.File) ([]model.Article, error) {
 		url, _ := s.Attr("href")
 		description := strings.TrimSpace(s.AttrOr(h.config.DescriptionSelector, ""))
 		date := strings.TrimSpace(s.Find(h.config.PubDateSelector).AttrOr(h.config.DateAttribute, ""))
-		parsedDate, err := parseDate(date, h.config.TimeFormat)
-		if err != nil {
-			//fmt.Println("Setting current date because of error parsing date:", err)
-		}
+		parsedDate, _ := parseDate(date, h.config.TimeFormat)
 		article := model.Article{
 			Title:       title,
 			Link:        "https://www.usatoday.com" + url,
@@ -72,5 +70,5 @@ func parseDate(date string, timeFormats []string) (parsedDate time.Time, err err
 			return parsedTime, nil
 		}
 	}
-	return time.Now().UTC(), fmt.Errorf("no matching format for date: %s", date)
+	return time.Now().UTC(), errors.New(fmt.Sprintf("error parsing date: %s", date))
 }
