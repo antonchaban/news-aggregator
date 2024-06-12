@@ -2,7 +2,6 @@ package storage
 
 import (
 	"news-aggregator/pkg/model"
-	"time"
 )
 
 //go:generate mockgen -destination=mocks/mock_article.go -package=mocks news-aggregator/pkg/storage ArticleStorage
@@ -44,7 +43,4 @@ type ArticleStorage interface {
 	Save(article model.Article) (model.Article, error)
 	SaveAll(articles []model.Article) error
 	Delete(id int) error
-	GetByKeyword(keyword string) ([]model.Article, error)
-	GetBySource(source string) ([]model.Article, error)
-	GetByDateInRange(startDate, endDate time.Time) ([]model.Article, error)
 }

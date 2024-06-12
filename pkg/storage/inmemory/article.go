@@ -2,11 +2,8 @@ package inmemory
 
 import (
 	"errors"
-	"github.com/reiver/go-porterstemmer"
 	"news-aggregator/pkg/model"
 	"news-aggregator/pkg/storage"
-	"strings"
-	"time"
 )
 
 // MemoryArticleStorage is a struct that contains the in-memory database for articles.
@@ -44,47 +41,6 @@ func (a *memoryArticleStorage) Delete(id int) error {
 		}
 	}
 	return errors.New("article not found")
-}
-
-// GetByKeyword returns all articles that contain the given keyword in their title or description.
-func (a *memoryArticleStorage) GetByKeyword(keyword string) ([]model.Article, error) {
-	articles := []model.Article{}
-	for _, article := range a.Articles {
-		normalizedTitle := strings.ToLower(article.Title)
-		normalizedDesc := strings.ToLower(article.Description)
-
-		stemmedKeyword := porterstemmer.StemString(keyword)
-		stemmedTitle := porterstemmer.StemString(normalizedTitle)
-		stemmedDesc := porterstemmer.StemString(normalizedDesc)
-
-		if strings.Contains(stemmedTitle, stemmedKeyword) ||
-			strings.Contains(stemmedDesc, stemmedKeyword) {
-			articles = append(articles, article)
-		}
-	}
-	return articles, nil
-}
-
-// GetBySource returns all articles from the given source.
-func (a *memoryArticleStorage) GetBySource(source string) ([]model.Article, error) {
-	var articles []model.Article
-	for _, article := range a.Articles {
-		if article.Source == source {
-			articles = append(articles, article)
-		}
-	}
-	return articles, nil
-}
-
-// GetByDateInRange returns all articles published between the given start and end dates.
-func (a *memoryArticleStorage) GetByDateInRange(startDate, endDate time.Time) ([]model.Article, error) {
-	articles := []model.Article{}
-	for _, article := range a.Articles {
-		if article.PubDate.After(startDate) && article.PubDate.Before(endDate) {
-			articles = append(articles, article)
-		}
-	}
-	return articles, nil
 }
 
 func (a *memoryArticleStorage) SaveAll(articles []model.Article) error {
