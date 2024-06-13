@@ -23,7 +23,7 @@ filter, and deliver news articles efficiently based on user preferences.
 
 The following diagram illustrates how elements collaborate at runtime:
 
-<img height="600" src="https://i.imgur.com/m19hE4k.jpeg" width="800"/>
+<img height="600" src="c4model/c4model-Dynamic.jpg" width="800"/>
 
 ## Use cases
 
