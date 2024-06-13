@@ -55,7 +55,8 @@ func TestExecute(t *testing.T) {
 
 	mockArticleService.EXPECT().GetByFilter(filter.Filters{Source: "abcnews", Keyword: "test", StartDate: "2023-01-01", EndDate: "2023-12-31"}).Return([]model.Article{articles[0]}, nil).Times(1)
 
-	mockArticleService.EXPECT().SaveAll(gomock.Any()).Return(nil).Times(1)
+	files, err := getDataFiles()
+	mockArticleService.EXPECT().LoadDataFromFiles(files).Return(nil).Times(1)
 	handler := cliHandler{
 		service: mockArticleService,
 	}
@@ -71,7 +72,7 @@ func TestExecute(t *testing.T) {
 		EndDate:   "2023-12-31",
 	}
 
-	err := handler.execute(f, "ASC")
+	err = handler.execute(f, "ASC")
 	if err != nil {
 		return
 	}

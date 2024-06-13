@@ -47,7 +47,7 @@ func TestHandler_loadData(t *testing.T) {
 		service: mockArticleService,
 	}
 
-	mockArticleService.EXPECT().SaveAll(gomock.Any()).Return(nil).Times(1)
+	mockArticleService.EXPECT().LoadDataFromFiles(gomock.Any()).Return(nil).Times(1)
 	err := handler.loadData()
 
 	if err != nil {

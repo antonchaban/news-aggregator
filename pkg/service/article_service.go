@@ -4,6 +4,7 @@ import (
 	"errors"
 	"news-aggregator/pkg/filter"
 	"news-aggregator/pkg/model"
+	"news-aggregator/pkg/parser"
 	"news-aggregator/pkg/storage"
 )
 
@@ -16,6 +17,7 @@ type ArticleService interface {
 	Delete(id int) error
 	SaveAll(articles []model.Article) error
 	GetByFilter(f filter.Filters) ([]model.Article, error)
+	LoadDataFromFiles(files []string) error
 }
 
 type articleService struct {
@@ -24,6 +26,51 @@ type articleService struct {
 
 func New(articleRepo storage.ArticleStorage) ArticleService {
 	return &articleService{articleStorage: articleRepo}
+}
+
+func (a *articleService) LoadDataFromFiles(files []string) error {
+	var articles []model.Article
+	var err error
+	resultsChan := make(chan []model.Article)
+	errorsChan := make(chan error)
+	doneChan := make(chan struct{})
+
+	go func() {
+		for _, file := range files {
+			go func(file string) {
+				articles, err := parser.ParseArticlesFromFile(file)
+				if err != nil {
+					errorsChan <- err
+					return
+				}
+				resultsChan <- articles
+			}(file)
+		}
+		for range files {
+			select {
+			case articlesBatch := <-resultsChan:
+				articles = append(articles, articlesBatch...)
+			case err := <-errorsChan:
+				errorsChan <- err
+				close(doneChan)
+				return
+			}
+		}
+		close(doneChan)
+	}()
+
+	select {
+	case <-doneChan:
+		select {
+		case err := <-errorsChan:
+			return err
+		default:
+		}
+	}
+	if err != nil {
+		return errors.New("error parsing articles from files")
+	}
+	return a.SaveAll(articles)
 }
 
 func (a *articleService) SaveAll(articles []model.Article) error {

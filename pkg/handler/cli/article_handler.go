@@ -6,7 +6,6 @@ import (
 	"log"
 	"news-aggregator/pkg/filter"
 	"news-aggregator/pkg/model"
-	"news-aggregator/pkg/parser"
 	"os"
 	"path/filepath"
 	"sort"
@@ -21,45 +20,7 @@ func (h *cliHandler) loadData() error {
 		return err
 	}
 
-	var articles []model.Article
-	resultsChan := make(chan []model.Article)
-	errorsChan := make(chan error)
-	doneChan := make(chan struct{})
-
-	go func() {
-		for _, file := range files {
-			go func(file string) {
-				articles, err := parser.ParseArticlesFromFile(file)
-				if err != nil {
-					errorsChan <- err
-					return
-				}
-				resultsChan <- articles
-			}(file)
-		}
-		for range files {
-			select {
-			case articlesBatch := <-resultsChan:
-				articles = append(articles, articlesBatch...)
-			case err := <-errorsChan:
-				errorsChan <- err
-				close(doneChan)
-				return
-			}
-		}
-		close(doneChan)
-	}()
-
-	select {
-	case <-doneChan:
-		select {
-		case err := <-errorsChan:
-			return err
-		default:
-		}
-	}
-
-	return h.service.SaveAll(articles)
+	return h.service.LoadDataFromFiles(files)
 }
 
 // filterArticles filters the provided articles based on the provided sources, keywords, and date range.
