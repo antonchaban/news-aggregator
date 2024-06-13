@@ -94,6 +94,20 @@ func (mr *MockArticleServiceMockRecorder) GetByFilter(arg0 interface{}) *gomock.
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByFilter", reflect.TypeOf((*MockArticleService)(nil).GetByFilter), arg0)
 }
 
+// LoadDataFromFiles mocks base method.
+func (m *MockArticleService) LoadDataFromFiles(arg0 []string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "LoadDataFromFiles", arg0)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// LoadDataFromFiles indicates an expected call of LoadDataFromFiles.
+func (mr *MockArticleServiceMockRecorder) LoadDataFromFiles(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LoadDataFromFiles", reflect.TypeOf((*MockArticleService)(nil).LoadDataFromFiles), arg0)
+}
+
 // SaveAll mocks base method.
 func (m *MockArticleService) SaveAll(arg0 []model.Article) error {
 	m.ctrl.T.Helper()

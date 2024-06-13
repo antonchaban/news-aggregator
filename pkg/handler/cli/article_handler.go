@@ -1,13 +1,11 @@
 package cli
 
 import (
-	"errors"
 	"fmt"
 	"github.com/Masterminds/sprig"
 	"log"
 	"news-aggregator/pkg/filter"
 	"news-aggregator/pkg/model"
-	"news-aggregator/pkg/parser"
 	"os"
 	"path/filepath"
 	"sort"
@@ -17,30 +15,11 @@ import (
 
 // loadData loads articles from the specified files and saves them to the Service.
 func (h *cliHandler) loadData() error {
-	execDir, err := os.Getwd()
+	files, err := getFilesInDir()
 	if err != nil {
-		log.Fatalf("Error getting current working directory: %v", err)
 		return err
 	}
-	log.Printf("Current working directory: %s\n", execDir)
-
-	// Directory containing the data files
-	dataDir := filepath.Join(execDir, "../../../data")
-
-	// Get all files in the data directory
-	files, err := filepath.Glob(filepath.Join(dataDir, "*"))
-	if err != nil {
-		log.Fatalf("Error reading files from directory: %v", err)
-		return err
-	}
-
-	var articles []model.Article
-	articles, err = parser.ParseArticlesFromFiles(files)
-	if err != nil {
-		return errors.New("error parsing articles from files")
-	}
-
-	return h.service.SaveAll(articles)
+	return h.service.LoadDataFromFiles(files)
 }
 
 // filterArticles filters the provided articles based on the provided sources, keywords, and date range.
@@ -89,6 +68,26 @@ func (h *cliHandler) printArticles(articles []model.Article, filters filter.Filt
 	if err != nil {
 		log.Fatalf("Error executing template: %v", err)
 	}
+}
+
+func getFilesInDir() ([]string, error) {
+	execDir, err := os.Getwd()
+	if err != nil {
+		log.Fatalf("Error getting current working directory: %v", err)
+		return nil, err
+	}
+	log.Printf("Current working directory: %s\n", execDir)
+
+	// Directory containing the data files
+	dataDir := filepath.Join(execDir, "../../../data")
+
+	// Get all files in the data directory
+	files, err := filepath.Glob(filepath.Join(dataDir, "*"))
+	if err != nil {
+		log.Fatalf("Error reading files from directory: %v", err)
+		return nil, err
+	}
+	return files, nil
 }
 
 // getTemplatePath returns the path to the template file.

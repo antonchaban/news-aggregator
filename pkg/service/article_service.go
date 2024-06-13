@@ -4,6 +4,7 @@ import (
 	"errors"
 	"news-aggregator/pkg/filter"
 	"news-aggregator/pkg/model"
+	"news-aggregator/pkg/parser"
 	"news-aggregator/pkg/storage"
 )
 
@@ -16,6 +17,7 @@ type ArticleService interface {
 	Delete(id int) error
 	SaveAll(articles []model.Article) error
 	GetByFilter(f filter.Filters) ([]model.Article, error)
+	LoadDataFromFiles(files []string) error
 }
 
 type articleService struct {
@@ -24,6 +26,14 @@ type articleService struct {
 
 func New(articleRepo storage.ArticleStorage) ArticleService {
 	return &articleService{articleStorage: articleRepo}
+}
+
+func (a *articleService) LoadDataFromFiles(files []string) error {
+	articles, err := parser.ParseArticlesFromFiles(files)
+	if err != nil {
+		return errors.New("error parsing articles from files")
+	}
+	return a.SaveAll(articles)
 }
 
 func (a *articleService) SaveAll(articles []model.Article) error {
