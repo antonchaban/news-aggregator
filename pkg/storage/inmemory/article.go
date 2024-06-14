@@ -15,7 +15,7 @@ type memoryArticleStorage struct {
 func New() storage.ArticleStorage {
 	return &memoryArticleStorage{
 		Articles: []model.Article{},
-		nextID:   1,
+		nextID:   1, // Initializing IDs for inmemory storage, and then auto-incrementing it after saving an article
 	}
 }
 
@@ -24,7 +24,7 @@ func (a *memoryArticleStorage) GetAll() ([]model.Article, error) {
 	return a.Articles, nil
 }
 
-// Create adds a new article to the database.
+// Save adds a new article to the database.
 func (a *memoryArticleStorage) Save(article model.Article) (model.Article, error) {
 	article.Id = a.nextID
 	a.nextID++
