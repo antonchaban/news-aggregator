@@ -76,7 +76,6 @@ func getFilesInDir() ([]string, error) {
 		log.Fatalf("Error getting current working directory: %v", err)
 		return nil, err
 	}
-	log.Printf("Current working directory: %s\n", execDir)
 
 	// Directory containing the data files
 	dataDir := filepath.Join(execDir, "../../../data")

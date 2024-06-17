@@ -16,28 +16,28 @@ func TestDetermineFileFormat(t *testing.T) {
 			args: args{
 				filename: "file.xml",
 			},
-			wantFormat: "rss",
+			wantFormat: rssFormat,
 		},
 		{
 			name: "json",
 			args: args{
 				filename: "file.json",
 			},
-			wantFormat: "json",
+			wantFormat: jsonFormat,
 		},
 		{
 			name: "html",
 			args: args{
 				filename: "file.html",
 			},
-			wantFormat: "html",
+			wantFormat: htmlFormat,
 		},
 		{
 			name: "unknown",
 			args: args{
 				filename: "file.txt",
 			},
-			wantFormat: "unknown",
+			wantFormat: unknownFormat,
 		},
 	}
 	for _, tt := range tests {

@@ -29,10 +29,16 @@ func New(articleRepo storage.ArticleStorage) ArticleService {
 }
 
 func (a *articleService) LoadDataFromFiles(files []string) error {
-	articles, err := parser.ParseArticlesFromFiles(files)
-	if err != nil {
-		return errors.New("error parsing articles from files")
+	var articles []model.Article
+	for _, file := range files {
+		parsedArticles, err := parser.ParseArticlesFromFile(file)
+		if err != nil {
+			return err
+		}
+		articles = append(articles, parsedArticles...)
+
 	}
+
 	return a.SaveAll(articles)
 }
 
