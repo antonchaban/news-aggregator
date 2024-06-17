@@ -26,40 +26,31 @@ func (h *SourceFilter) SetNext(handler ArticleFilter) ArticleFilter {
 
 func (h *SourceFilter) Filter(articles []model.Article, f Filters) ([]model.Article, error) {
 	if f.Source != "" {
+		sourceMap := map[string]string{
+			"abcnews":         abcNewsSource,
+			"bbc":             bbcNewsSource,
+			"washingtontimes": washingtonTimesSource,
+			"nbc":             nbcNewsSource,
+			"usatoday":        usaTodaySource,
+		}
+
 		sourceList := strings.Split(f.Source, ",")
 		var filteredArticles []model.Article
 		for _, article := range articles {
 			for _, source := range sourceList {
-				switch source {
-				case "abcnews":
-					if article.Source == abcNewsSource {
+				if sourceName, ok := sourceMap[source]; ok {
+					if article.Source == sourceName {
 						filteredArticles = append(filteredArticles, article)
+						break
 					}
-				case "bbc":
-					if article.Source == bbcNewsSource {
-						filteredArticles = append(filteredArticles, article)
-
-					}
-				case "washingtontimes":
-					if article.Source == washingtonTimesSource {
-						filteredArticles = append(filteredArticles, article)
-					}
-				case "nbc":
-					if article.Source == nbcNewsSource {
-						filteredArticles = append(filteredArticles, article)
-					}
-				case "usatoday":
-					if article.Source == usaTodaySource {
-						filteredArticles = append(filteredArticles, article)
-					}
-				default:
-					return nil, fmt.Errorf("source not found")
+				} else {
+					return nil, fmt.Errorf("source not found: %s", source)
 				}
 			}
-			articles = filteredArticles
 		}
-
+		articles = filteredArticles
 	}
+
 	if h.next != nil {
 		return h.next.Filter(articles, f)
 	}
