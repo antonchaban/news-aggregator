@@ -1,22 +1,38 @@
+{{ define "filter" }}
+  {{- if gt (len .Value) 0 }}
+    {{ .Label }}: {{ .Value }}
+  {{- end }}
+{{ end }}
+
+{{ define "article" }}
+Title: {{ .Article.Title | highlightKeywords }}
+Description: {{ .Article.Description | highlightKeywords }}
+Link: {{ .Article.Link }}
+Date: {{ .Article.PubDate | date "2006-01-02 15:04:05 MST" }}
+{{- if not (gt (len .Filters.Source) 0) }}
+Source: {{ .Article.Source }}
+{{- end }}
+-------------------------------
+{{ end }}
+
 {{ define "header" }}
 Filters Applied:
-{{- if and (not (gt1 .Filters.Source)) (not (gt1 .Filters.Keyword)) (not (gt1 .Filters.StartDate)) (not (gt1 .Filters.EndDate)) }}
+{{- $noFilters := and (eq (len .Filters.Source) 0) (eq (len .Filters.Keyword) 0) (eq (len .Filters.StartDate) 0) (eq (len .Filters.EndDate) 0) }}
+{{- if $noFilters }}
   No filters applied
 {{- else }}
-  {{- if (gt1 .Filters.Source) }}
-    Sources: {{ .Filters.Source }}
-  {{- end }}
-  {{- if (gt1 .Filters.Keyword) }}
-    Keywords: {{ .Filters.Keyword }}
-  {{- end }}
-  {{- if (gt1 .Filters.StartDate) }}
-    Date Start: {{ .Filters.StartDate }}
-  {{- end }}
-  {{- if (gt1 .Filters.EndDate) }}
-    Date End: {{ .Filters.EndDate }}
-  {{- end }}
+  {{- template "filter" (dict "Label" "Sources" "Value" .Filters.Source) }}
+  {{- template "filter" (dict "Label" "Keywords" "Value" .Filters.Keyword) }}
+  {{- template "filter" (dict "Label" "Date Start" "Value" .Filters.StartDate) }}
+  {{- template "filter" (dict "Label" "Date End" "Value" .Filters.EndDate) }}
 {{- end }}
 Number of News Items: {{ len .Articles }}
+{{ end }}
+
+{{ define "renderArticles" }}
+  {{- range .Articles }}
+    {{ template "article" (dict "Article" . "Filters" $.Filters) }}
+  {{- end }}
 {{ end }}
 
 {{ define "main" }}
@@ -24,28 +40,15 @@ Number of News Items: {{ len .Articles }}
 {{- if eq $count 0 }}
 No news items available.
 {{- else }}
-  {{- if (gt1 .Filters.Source) }}
+  {{- if gt (len .Filters.Source) 0 }}
     {{- range $source, $articles := groupBy .Articles "Source" }}
-      {{- if not (eq $source "") }}
+      {{- if $source }}
 {{ $source }} ({{ len $articles }})
       {{- end }}
-      {{- range $articles }}
-Title: {{ .Title | highlightKeywords }}
-Description: {{ .Description | highlightKeywords }}
-Link: {{ .Link }}
-Date: {{ .PubDate | date "2006-01-02 15:04:05 MST" }}
--------------------------------
-      {{- end }}
+      {{ template "renderArticles" (dict "Articles" $articles "Filters" $.Filters) }}
     {{- end }}
   {{- else }}
-    {{- range .Articles }}
-Title: {{ .Title | highlightKeywords }}
-Description: {{ .Description | highlightKeywords }}
-Link: {{ .Link }}
-Source: {{ .Source }}
-Date: {{ .PubDate | date "2006-01-02 15:04:05 MST" }}
--------------------------------
-    {{- end }}
+    {{ template "renderArticles" . }}
   {{- end }}
 {{- end }}
 {{ end }}
