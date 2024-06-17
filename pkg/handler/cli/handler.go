@@ -18,13 +18,13 @@ type cliHandler struct {
 	service service.ArticleService
 }
 
-func NewHandler(asvc service.ArticleService) Handler {
+func NewHandler(asvc service.ArticleService) (Handler, error) {
 	h := &cliHandler{service: asvc}
 	err := h.initCommands()
 	if err != nil {
-		return nil
+		return nil, err
 	}
-	return h
+	return h, nil
 }
 
 // initCommands initializes the command-line interface (CLI) commands and flags.

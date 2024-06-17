@@ -23,7 +23,10 @@ func TestInitCommands_Help(t *testing.T) {
 	defer ctrl.Finish()
 
 	mockArticleService := mocks.NewMockArticleService(ctrl)
-	NewHandler(mockArticleService)
+	_, err := NewHandler(mockArticleService)
+	if err != nil {
+		return
+	}
 
 	w.Close()
 	os.Stdout = old
