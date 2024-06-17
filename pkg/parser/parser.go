@@ -14,29 +14,42 @@ type Parser interface {
 	ParseFile(f *os.File) ([]model.Article, error)
 }
 
+// ParseArticlesFromFile Parse function takes a file and returns a slice of parsed articles
 func ParseArticlesFromFile(file string) ([]model.Article, error) {
-	var parsedArticles []model.Article
-	var parser Parser
 	f, err := os.Open(file)
 	if err != nil {
 		fmt.Println("Error opening file:", err)
 		return nil, err
 	}
-
-	defer func(file *os.File) {
-		err := file.Close()
+	defer func(f *os.File) {
+		err := f.Close()
 		if err != nil {
 			panic(err)
 		}
 	}(f)
 
 	format := DetermineFileFormat(file)
+	parser, err := createParser(format)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
 
+	articles, err := parser.ParseFile(f)
+	if err != nil {
+		fmt.Println("Error parsing file with", format, "parser:", err)
+		return nil, err
+	}
+
+	return articles, nil
+}
+
+func createParser(format string) (Parser, error) {
 	switch format {
 	case rssFormat:
-		parser = &rss.Parser{}
+		return &rss.Parser{}, nil
 	case jsonFormat:
-		parser = &json.Parser{}
+		return &json.Parser{}, nil
 	case htmlFormat:
 		config := html.FeedConfig{
 			ArticleSelector:     "a.gnt_m_flm_a",
@@ -50,19 +63,8 @@ func ParseArticlesFromFile(file string) ([]model.Article, error) {
 				"Jan 02, 2006",
 			},
 		}
-		parser = html.NewHtmlParser(config)
+		return html.NewHtmlParser(config), nil
 	default:
-		fmt.Println("Unsupported file format:")
-		return nil, err
+		return nil, fmt.Errorf("unsupported file format: %s", format)
 	}
-
-	articles, err := parser.ParseFile(f)
-	if err != nil {
-		fmt.Println("Error parsing file with", format, "parser:", err)
-		return nil, err
-	} else {
-		parsedArticles = append(parsedArticles, articles...)
-	}
-
-	return parsedArticles, nil
 }
