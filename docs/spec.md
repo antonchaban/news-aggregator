@@ -125,7 +125,8 @@ And then we just need to add required repositories to the service and run the ap
           Specify the keywords to filter the news by.
     -sources string
           Select the desired news sources to get the news from. Supported sources: abcnews, bbc, washingtontimes, nbc, usatoday
-  
+    -sort-order string
+	      Specify the sort order for the news by date (ASC or DESC).
   ```
 
 2. `-date-end <string>` - Specify the end date to filter the news by (format: YYYY-MM-DD).
@@ -212,6 +213,26 @@ And then we just need to add required repositories to the service and run the ap
      Source: string
     
    ```
+6. `-sort-order <string>` - Specify the sort order for the news by date (ASC or DESC).
+
+   * Name: ```-sort-order <string>```
+   * Input: Sort order (string) - ASC or DESC
+   * Response: List of articles sorted by date in the specified order
+   * Possible errors: Incorrect sort order, data access errors
+
+   Expected output:
+
+   ```
+     List of articles:
+  
+     ID: int
+     Title: string
+     Date: time
+     Description: string
+     Link: string
+     Source: string
+    
+   ```
 
 ## Service Layer
 
@@ -223,27 +244,27 @@ business logic and interaction with the repository.
 Article service is a struct that works with ArticleRepository
 
 ```go
-type ArticleService struct {
-	articleRepoInMem repository.Article
+type articleService struct {
+articleStorage storage.ArticleStorage
 }
+
 ```
 
 Article is an interface that defines the methods for interacting with the article repository.
 ```go
-type Article interface {
-	GetAll() ([]model.Article, error)
-	GetById(id int) (model.Article, error)
-	Create(article model.Article) (model.Article, error)
-	Delete(id int) error
-	GetBySource(source string) ([]model.Article, error)
-	GetByKeyword(keyword string) ([]model.Article, error)
-	GetByDateInRange(startDate, endDate string) ([]model.Article, error)
+type ArticleService interface {
+GetAll() ([]model.Article, error)
+Create(article model.Article) (model.Article, error)
+Delete(id int) error
+SaveAll(articles []model.Article) error
+GetByFilter(f filter.Filters) ([]model.Article, error)
+LoadDataFromFiles() error
 }
 ```
 
 ```go
-func NewArticleService(articleRepo repository.Article) *ArticleService {
-    return &ArticleService{articleRepoInMem: articleRepo}
+func New(articleRepo storage.ArticleStorage) ArticleService {
+return &articleService{articleStorage: articleRepo}
 }
 ```
 
@@ -273,52 +294,35 @@ func NewArticleService(articleRepo repository.Article) *ArticleService {
   - Possible errors: Article not found, data access errors
 
 
-- GetBySource
+- GetByFilter
 
-  - Input data: Source (string)
-  - Output data: List of articles ([], error)
-  - Possible errors: Source not found, data access errors
-
-- GetByKeyword
-
-  - Input data: Keyword (string)
+  - Input data: Filter (filter.Filters)
   - Output data: List of articles ([], error)
   - Possible errors: Data access errors
 
 
-- GetByDateInRange
+## Storage Layer
 
-  - Input data: Start date (string), end date (string)
-  - Output data: List of articles ([], error)
-  - Possible errors: Invalid date format, data access errors
-
-
-
-## Repository Layer
-
-### In Memory Repository
+### In Memory Storage
 
 This level of abstraction stores data in memory and provides methods for retrieving,
 creating, deleting articles, and searching for articles by different parameters.
 
 ```go
-type ArticleInMemory struct {
-    Articles []model.Article
-    nextID   int
+type memoryArticleStorage struct {
+Articles []model.Article
+nextID   int
 }
 ```
 
 Article is an interface that defines the methods for interacting
 with the article storage.
 ```go
-type Article interface {
-	GetAll() ([]model.Article, error)
-	GetById(id int) (model.Article, error)
-	Create(article model.Article) (model.Article, error)
-	Delete(id int) error
-	GetByKeyword(keyword string) ([]model.Article, error)
-	GetBySource(source string) ([]model.Article, error)
-	GetByDateInRange(startDate, endDate time.Time) ([]model.Article, error)
+type ArticleStorage interface {
+GetAll() ([]model.Article, error)
+Save(article model.Article) (model.Article, error)
+SaveAll(articles []model.Article) error
+Delete(id int) error
 }
 ```
 
@@ -328,14 +332,8 @@ type Article interface {
   - Output data: List of all articles ([]model.Article, error)
   - Possible errors: Connection errors, data access errors
 
-- GetById
 
-  - Input data: ID (int)
-  -  Output data: The corresponding article (model.Article, error)
-  -  Possible errors: Article not found, data access errors
-
-
-- Create
+- Save
 
   - Input data: Article (model.Article)
   - Output data: Created article (model.Article, error)
@@ -349,25 +347,11 @@ type Article interface {
   - Possible errors: Article not found, data access errors
 
 
-- GetBySource
+- SaveAll
 
-  - Input data: Source (string)
-  - Output data: List of articles ([], error)
-  - Possible errors: Source not found, data access errors
-
-- GetByKeyword
-
-  - Input data: Keyword (string)
-  - Output data: List of articles ([], error)
-  - Possible errors: Data access errors
-
-
-- GetByDateInRange
-
-  - Input data: Start date (string), end date (string)
-  - Output data: List of articles ([], error)
-  - Possible errors: Invalid date format, data access errors
-
+  - Input data: List of articles ([]model.Article)
+  - Output data: None
+  - Possible errors: Invalid data, data access errors
 
 ## Entities
 
