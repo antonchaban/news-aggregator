@@ -26,7 +26,7 @@ func (h *KeywordFilter) Filter(articles []model.Article, f Filters) ([]model.Art
 				}
 			}
 		}
-		articles = intersect(articles, keywordFilteredArticles)
+		articles = keywordFilteredArticles
 	}
 	if h.next != nil {
 		return h.next.Filter(articles, f)

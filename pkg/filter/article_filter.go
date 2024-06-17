@@ -15,19 +15,3 @@ type Filters struct {
 	StartDate string
 	EndDate   string
 }
-
-// intersect function to get the intersection of two slices of articles
-func intersect(slice1, slice2 []model.Article) []model.Article {
-	articleMap := make(map[int]model.Article)
-	for _, article := range slice1 {
-		articleMap[article.Id] = article
-	}
-
-	var intersection []model.Article
-	for _, article := range slice2 {
-		if _, exists := articleMap[article.Id]; exists {
-			intersection = append(intersection, article)
-		}
-	}
-	return intersection
-}
