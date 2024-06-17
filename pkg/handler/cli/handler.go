@@ -76,7 +76,7 @@ func (h *cliHandler) initCommands() error {
 // execute loads the articles, filters them based on the provided sources, keywords, and date range,
 // and then prints the filtered articles.
 func (h *cliHandler) execute(f filter.Filters, sortOrder string) error {
-	err := h.loadData()
+	err := h.service.LoadDataFromFiles()
 	if err != nil {
 		return err
 	}

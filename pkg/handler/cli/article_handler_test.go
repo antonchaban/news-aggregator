@@ -38,19 +38,3 @@ func TestHandler_filterArticles(t *testing.T) {
 		t.Errorf("Expected 1 article but got %d", len(filtered))
 	}
 }
-
-func TestHandler_loadData(t *testing.T) {
-	ctrl := gomock.NewController(t)
-	defer ctrl.Finish()
-	mockArticleService := mocks.NewMockArticleService(ctrl)
-	handler := cliHandler{
-		service: mockArticleService,
-	}
-
-	mockArticleService.EXPECT().LoadDataFromFiles(gomock.Any()).Return(nil).Times(1)
-	err := handler.loadData()
-
-	if err != nil {
-		t.Errorf("Expected to load articles, but got none")
-	}
-}

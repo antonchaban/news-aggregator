@@ -2,10 +2,13 @@ package service
 
 import (
 	"errors"
+	"log"
 	"news-aggregator/pkg/filter"
 	"news-aggregator/pkg/model"
 	"news-aggregator/pkg/parser"
 	"news-aggregator/pkg/storage"
+	"os"
+	"path/filepath"
 )
 
 //go:generate mockgen -destination=../service/mocks/mock_article_service.go -package=mocks news-aggregator/pkg/service ArticleService
@@ -17,7 +20,7 @@ type ArticleService interface {
 	Delete(id int) error
 	SaveAll(articles []model.Article) error
 	GetByFilter(f filter.Filters) ([]model.Article, error)
-	LoadDataFromFiles(files []string) error
+	LoadDataFromFiles() error
 }
 
 type articleService struct {
@@ -28,7 +31,11 @@ func New(articleRepo storage.ArticleStorage) ArticleService {
 	return &articleService{articleStorage: articleRepo}
 }
 
-func (a *articleService) LoadDataFromFiles(files []string) error {
+func (a *articleService) LoadDataFromFiles() error {
+	files, err := getFilesInDir()
+	if err != nil {
+		return err
+	}
 	var articles []model.Article
 	for _, file := range files {
 		parsedArticles, err := parser.ParseArticlesFromFile(file)
@@ -83,4 +90,23 @@ func (a *articleService) GetByFilter(f filter.Filters) ([]model.Article, error) 
 
 	// Start filtering
 	return sourceFilter.Filter(articles, f)
+}
+
+func getFilesInDir() ([]string, error) {
+	execDir, err := os.Getwd()
+	if err != nil {
+		log.Fatalf("Error getting current working directory: %v", err)
+		return nil, err
+	}
+
+	// Directory containing the data files
+	dataDir := filepath.Join(execDir, "../../../data")
+
+	// Get all files in the data directory
+	files, err := filepath.Glob(filepath.Join(dataDir, "*"))
+	if err != nil {
+		log.Fatalf("Error reading files from directory: %v", err)
+		return nil, err
+	}
+	return files, nil
 }
