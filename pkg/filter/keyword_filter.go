@@ -1,9 +1,9 @@
 package filter
 
 import (
-	"strings"
-
+	"github.com/reiver/go-porterstemmer"
 	"news-aggregator/pkg/model"
+	"strings"
 )
 
 type KeywordFilter struct {
@@ -21,7 +21,13 @@ func (h *KeywordFilter) Filter(articles []model.Article, f Filters) ([]model.Art
 		var keywordFilteredArticles []model.Article
 		for _, article := range articles {
 			for _, keyword := range keywordList {
-				if strings.Contains(article.Title, strings.TrimSpace(keyword)) || strings.Contains(article.Description, strings.TrimSpace(keyword)) {
+				normalizedTitle := strings.ToLower(article.Title)
+				normalizedDesc := strings.ToLower(article.Description)
+				stemmedKeyword := porterstemmer.StemString(keyword)
+				stemmedTitle := porterstemmer.StemString(normalizedTitle)
+				stemmedDesc := porterstemmer.StemString(normalizedDesc)
+				if strings.Contains(stemmedTitle, stemmedKeyword) ||
+					strings.Contains(stemmedDesc, stemmedKeyword) {
 					keywordFilteredArticles = append(keywordFilteredArticles, article)
 				}
 			}
