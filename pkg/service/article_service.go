@@ -93,14 +93,10 @@ func (a *articleService) GetByFilter(f filter.Filters) ([]model.Article, error) 
 }
 
 func getFilesInDir() ([]string, error) {
-	execDir, err := os.Getwd()
-	if err != nil {
-		log.Fatalf("Error getting current working directory: %v", err)
-		return nil, err
+	dataDir := os.Getenv("DATA_DIR")
+	if dataDir == "" {
+		return nil, errors.New("environment variable DATA_DIR not set")
 	}
-
-	// Directory containing the data files
-	dataDir := filepath.Join(execDir, "../../../data")
 
 	// Get all files in the data directory
 	files, err := filepath.Glob(filepath.Join(dataDir, "*"))

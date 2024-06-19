@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"errors"
 	"fmt"
 	"github.com/Masterminds/sprig"
 	"github.com/antonchaban/news-aggregator/pkg/filter"
@@ -63,13 +64,12 @@ func (h *cliHandler) printArticles(articles []model.Article, filters filter.Filt
 
 // getTemplatePath returns the path to the template file.
 func getTemplatePath() (string, error) {
-	execDir, err := os.Getwd()
-	if err != nil {
-		log.Fatalf("Error getting current working directory: %v", err)
-		return "", err
+	tmplDir := os.Getenv("TMPL_DIR")
+	if tmplDir == "" {
+		return "", errors.New("environment variable DATA_DIR not set")
 	}
 
-	tmplPath := filepath.Join(execDir, "../../../templates", "article.tmpl")
+	tmplPath := filepath.Join(tmplDir, "article.tmpl")
 
 	if _, err := os.Stat(tmplPath); os.IsNotExist(err) {
 		log.Fatalf("Template file not found: %s", tmplPath)
