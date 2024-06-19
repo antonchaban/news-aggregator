@@ -2,11 +2,11 @@ package service
 
 import (
 	"errors"
+	"github.com/antonchaban/news-aggregator/pkg/filter"
+	"github.com/antonchaban/news-aggregator/pkg/model"
+	"github.com/antonchaban/news-aggregator/pkg/parser"
+	"github.com/antonchaban/news-aggregator/pkg/storage"
 	"log"
-	"news-aggregator/pkg/filter"
-	"news-aggregator/pkg/model"
-	"news-aggregator/pkg/parser"
-	"news-aggregator/pkg/storage"
 	"os"
 	"path/filepath"
 )

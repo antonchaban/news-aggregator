@@ -1,4 +1,4 @@
-module news-aggregator
+module github.com/antonchaban/news-aggregator
 
 go 1.22
 

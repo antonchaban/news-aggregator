@@ -2,8 +2,8 @@ package filter
 
 import (
 	"fmt"
+	"github.com/antonchaban/news-aggregator/pkg/model"
 	"github.com/stretchr/testify/assert"
-	"news-aggregator/pkg/model"
 	"testing"
 	"time"
 )

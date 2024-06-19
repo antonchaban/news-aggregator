@@ -2,7 +2,7 @@ package filter
 
 import (
 	"fmt"
-	"news-aggregator/pkg/model"
+	"github.com/antonchaban/news-aggregator/pkg/model"
 	"time"
 )
 

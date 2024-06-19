@@ -1,8 +1,8 @@
 package parser
 
 import (
+	"github.com/antonchaban/news-aggregator/pkg/model"
 	"github.com/stretchr/testify/require"
-	"news-aggregator/pkg/model"
 	"testing"
 	"time"
 )

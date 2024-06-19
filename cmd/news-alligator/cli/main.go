@@ -1,9 +1,9 @@
 package main
 
 import (
-	"news-aggregator/pkg/handler/cli"
-	"news-aggregator/pkg/service"
-	"news-aggregator/pkg/storage/inmemory"
+	"github.com/antonchaban/news-aggregator/pkg/handler/cli"
+	"github.com/antonchaban/news-aggregator/pkg/service"
+	"github.com/antonchaban/news-aggregator/pkg/storage/inmemory"
 )
 
 // The main function in CLI package initializes the storage and service and creates a new CLI handler

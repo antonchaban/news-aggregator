@@ -1,11 +1,11 @@
 package service
 
 import (
+	"github.com/antonchaban/news-aggregator/pkg/model"
+	"github.com/antonchaban/news-aggregator/pkg/storage"
+	"github.com/antonchaban/news-aggregator/pkg/storage/mocks"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
-	"news-aggregator/pkg/model"
-	"news-aggregator/pkg/storage"
-	"news-aggregator/pkg/storage/mocks"
 	"testing"
 )
 

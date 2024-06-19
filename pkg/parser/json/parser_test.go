@@ -1,7 +1,7 @@
 package json
 
 import (
-	"news-aggregator/pkg/model"
+	"github.com/antonchaban/news-aggregator/pkg/model"
 	"os"
 	"reflect"
 	"testing"

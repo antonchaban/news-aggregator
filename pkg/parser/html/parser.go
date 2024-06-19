@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/PuerkitoBio/goquery"
-	"news-aggregator/pkg/model"
+	"github.com/antonchaban/news-aggregator/pkg/model"
 	"os"
 	"strings"
 	"time"

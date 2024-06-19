@@ -1,15 +1,15 @@
 package cli
 
 import (
-	"news-aggregator/pkg/filter"
-	"news-aggregator/pkg/service/mocks"
+	"github.com/antonchaban/news-aggregator/pkg/filter"
+	"github.com/antonchaban/news-aggregator/pkg/service/mocks"
 	"os"
 	"testing"
 	"time"
 
+	"github.com/antonchaban/news-aggregator/pkg/model"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
-	"news-aggregator/pkg/model"
 )
 
 func TestInitCommands_Help(t *testing.T) {

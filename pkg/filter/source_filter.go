@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"news-aggregator/pkg/model"
+	"github.com/antonchaban/news-aggregator/pkg/model"
 )
 
 const (

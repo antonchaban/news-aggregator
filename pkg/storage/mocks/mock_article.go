@@ -5,7 +5,7 @@
 package mocks
 
 import (
-	model "news-aggregator/pkg/model"
+	model "github.com/antonchaban/news-aggregator/pkg/model"
 	reflect "reflect"
 	time "time"
 

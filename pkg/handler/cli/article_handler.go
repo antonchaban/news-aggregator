@@ -3,9 +3,9 @@ package cli
 import (
 	"fmt"
 	"github.com/Masterminds/sprig"
+	"github.com/antonchaban/news-aggregator/pkg/filter"
+	"github.com/antonchaban/news-aggregator/pkg/model"
 	"log"
-	"news-aggregator/pkg/filter"
-	"news-aggregator/pkg/model"
 	"os"
 	"path/filepath"
 	"sort"

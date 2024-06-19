@@ -1,8 +1,8 @@
 package rss
 
 import (
+	"github.com/antonchaban/news-aggregator/pkg/model"
 	"github.com/mmcdole/gofeed"
-	"news-aggregator/pkg/model"
 	"os"
 )
 

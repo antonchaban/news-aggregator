@@ -2,8 +2,8 @@ package json
 
 import (
 	"encoding/json"
+	"github.com/antonchaban/news-aggregator/pkg/model"
 	"io"
-	"news-aggregator/pkg/model"
 	"os"
 	"time"
 )

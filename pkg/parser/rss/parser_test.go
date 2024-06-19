@@ -1,7 +1,7 @@
 package rss
 
 import (
-	"news-aggregator/pkg/model"
+	"github.com/antonchaban/news-aggregator/pkg/model"
 	"os"
 	"reflect"
 	"testing"

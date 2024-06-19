@@ -2,10 +2,10 @@ package parser
 
 import (
 	"fmt"
-	"news-aggregator/pkg/model"
-	"news-aggregator/pkg/parser/html"
-	"news-aggregator/pkg/parser/json"
-	"news-aggregator/pkg/parser/rss"
+	"github.com/antonchaban/news-aggregator/pkg/model"
+	"github.com/antonchaban/news-aggregator/pkg/parser/html"
+	"github.com/antonchaban/news-aggregator/pkg/parser/json"
+	"github.com/antonchaban/news-aggregator/pkg/parser/rss"
 	"os"
 )
 

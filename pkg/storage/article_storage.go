@@ -1,7 +1,7 @@
 package storage
 
 import (
-	"news-aggregator/pkg/model"
+	"github.com/antonchaban/news-aggregator/pkg/model"
 )
 
 //go:generate mockgen -destination=mocks/mock_article.go -package=mocks news-aggregator/pkg/storage ArticleStorage

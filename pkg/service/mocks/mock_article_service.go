@@ -5,8 +5,8 @@
 package mocks
 
 import (
-	filter "news-aggregator/pkg/filter"
-	model "news-aggregator/pkg/model"
+	filter "github.com/antonchaban/news-aggregator/pkg/filter"
+	model "github.com/antonchaban/news-aggregator/pkg/model"
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"

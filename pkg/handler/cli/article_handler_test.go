@@ -1,10 +1,10 @@
 package cli
 
 import (
+	"github.com/antonchaban/news-aggregator/pkg/filter"
+	"github.com/antonchaban/news-aggregator/pkg/model"
+	"github.com/antonchaban/news-aggregator/pkg/service/mocks"
 	"github.com/golang/mock/gomock"
-	"news-aggregator/pkg/filter"
-	"news-aggregator/pkg/model"
-	"news-aggregator/pkg/service/mocks"
 	"testing"
 	"time"
 )

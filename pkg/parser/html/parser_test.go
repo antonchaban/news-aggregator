@@ -1,8 +1,8 @@
 package html
 
 import (
+	"github.com/antonchaban/news-aggregator/pkg/model"
 	"github.com/stretchr/testify/assert"
-	"news-aggregator/pkg/model"
 	"os"
 	"path/filepath"
 	"testing"

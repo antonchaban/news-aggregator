@@ -1,7 +1,7 @@
 package filter
 
 import (
-	"news-aggregator/pkg/model"
+	"github.com/antonchaban/news-aggregator/pkg/model"
 )
 
 type ArticleFilter interface {

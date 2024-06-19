@@ -2,8 +2,8 @@ package inmemory
 
 import (
 	"errors"
-	"news-aggregator/pkg/model"
-	"news-aggregator/pkg/storage"
+	"github.com/antonchaban/news-aggregator/pkg/model"
+	"github.com/antonchaban/news-aggregator/pkg/storage"
 )
 
 // MemoryArticleStorage is a struct that contains the in-memory database for articles.

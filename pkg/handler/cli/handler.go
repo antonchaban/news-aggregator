@@ -3,8 +3,8 @@ package cli
 import (
 	"flag"
 	"fmt"
-	"news-aggregator/pkg/filter"
-	"news-aggregator/pkg/service"
+	"github.com/antonchaban/news-aggregator/pkg/filter"
+	"github.com/antonchaban/news-aggregator/pkg/service"
 	"os"
 )
 

@@ -1,8 +1,8 @@
 package filter
 
 import (
+	"github.com/antonchaban/news-aggregator/pkg/model"
 	"github.com/reiver/go-porterstemmer"
-	"news-aggregator/pkg/model"
 	"strings"
 )
 
