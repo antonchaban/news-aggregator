@@ -3,11 +3,22 @@ package rss
 import (
 	"github.com/antonchaban/news-aggregator/pkg/model"
 	"github.com/mmcdole/gofeed"
+	"net/url"
 	"os"
 )
 
 // Parser is a struct that implements the ParsingAlgorithm interface
 type Parser struct{}
+
+// ParseFeed parses the given URL and returns a slice of articles.
+func (r *Parser) ParseFeed(url url.URL) ([]model.Article, error) {
+	parser := gofeed.NewParser()
+	feed, err := parser.ParseURL(url.String())
+	if err != nil {
+		return nil, err
+	}
+	return r.parseFeed(feed), nil
+}
 
 // ParseFile parses the given file and returns a slice of articles.
 func (r *Parser) ParseFile(f *os.File) ([]model.Article, error) {
@@ -16,6 +27,11 @@ func (r *Parser) ParseFile(f *os.File) ([]model.Article, error) {
 	if err != nil {
 		return nil, err
 	}
+	return r.parseFeed(feed), nil
+}
+
+// parseFeed is a helper method that processes the parsed feed and returns articles.
+func (r *Parser) parseFeed(feed *gofeed.Feed) []model.Article {
 	articles := make([]model.Article, 0)
 	for _, item := range feed.Items {
 		article := model.Article{
@@ -29,5 +45,5 @@ func (r *Parser) ParseFile(f *os.File) ([]model.Article, error) {
 		}
 		articles = append(articles, article)
 	}
-	return articles, nil
+	return articles
 }

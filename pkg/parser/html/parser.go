@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/PuerkitoBio/goquery"
 	"github.com/antonchaban/news-aggregator/pkg/model"
+	"net/url"
 	"os"
 	"strings"
 	"time"
@@ -14,6 +15,11 @@ import (
 // and implements the Parser interface.
 type Parser struct {
 	config FeedConfig
+}
+
+func (h *Parser) ParseFeed(url url.URL) ([]model.Article, error) {
+	//TODO implement me
+	panic("implement me")
 }
 
 // FeedConfig is a struct that contains the configuration for parsing HTML feeds.

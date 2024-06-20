@@ -4,12 +4,18 @@ import (
 	"encoding/json"
 	"github.com/antonchaban/news-aggregator/pkg/model"
 	"io"
+	"net/url"
 	"os"
 	"time"
 )
 
 // Parser is a struct that implements the Parser interface
 type Parser struct {
+}
+
+func (j *Parser) ParseFeed(url url.URL) ([]model.Article, error) {
+	//TODO implement me
+	panic("implement me")
 }
 
 // Feed is a struct that represents the JSON feed

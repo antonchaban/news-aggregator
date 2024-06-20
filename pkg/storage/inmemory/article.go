@@ -26,6 +26,11 @@ func (a *memoryArticleStorage) GetAll() ([]model.Article, error) {
 
 // Save adds a new article to the database.
 func (a *memoryArticleStorage) Save(article model.Article) (model.Article, error) {
+	for _, art := range a.Articles {
+		if art.Link == article.Link {
+			return model.Article{}, errors.New("article already exists")
+		}
+	}
 	article.Id = a.nextID
 	a.nextID++
 	a.Articles = append(a.Articles, article)
@@ -46,8 +51,8 @@ func (a *memoryArticleStorage) Delete(id int) error {
 func (a *memoryArticleStorage) SaveAll(articles []model.Article) error {
 	for _, article := range articles {
 		_, err := a.Save(article)
-		if err != nil {
-			return err
+		if errors.Is(err, errors.New("article already exists")) {
+			continue
 		}
 	}
 	return nil

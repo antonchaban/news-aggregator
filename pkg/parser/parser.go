@@ -6,12 +6,24 @@ import (
 	"github.com/antonchaban/news-aggregator/pkg/parser/html"
 	"github.com/antonchaban/news-aggregator/pkg/parser/json"
 	"github.com/antonchaban/news-aggregator/pkg/parser/rss"
+	"github.com/sirupsen/logrus"
+	"net/url"
 	"os"
 )
 
 // Parser is an interface that defines parsing strategy
 type Parser interface {
 	ParseFile(f *os.File) ([]model.Article, error)
+	ParseFeed(urlPath url.URL) ([]model.Article, error)
+}
+
+func ParseArticlesFromFeed(urlPath url.URL) ([]model.Article, error) {
+	parser, err := createParser(rssFormat)
+	feed, err := parser.ParseFeed(urlPath)
+	if err != nil {
+		logrus.Errorf("error occurred while parsing feed: %s", err.Error())
+	}
+	return feed, err
 }
 
 // ParseArticlesFromFile Parse function takes a file and returns a slice of parsed articles

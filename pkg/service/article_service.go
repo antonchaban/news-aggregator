@@ -7,6 +7,7 @@ import (
 	"github.com/antonchaban/news-aggregator/pkg/parser"
 	"github.com/antonchaban/news-aggregator/pkg/storage"
 	"log"
+	"net/url"
 	"os"
 	"path/filepath"
 )
@@ -21,6 +22,7 @@ type ArticleService interface {
 	SaveAll(articles []model.Article) error
 	GetByFilter(f filter.Filters) ([]model.Article, error)
 	LoadDataFromFiles() ([]model.Article, error)
+	LoadFromFeed(urlPath string) ([]model.Article, error)
 }
 
 type articleService struct {
@@ -29,6 +31,26 @@ type articleService struct {
 
 func New(articleRepo storage.ArticleStorage) ArticleService {
 	return &articleService{articleStorage: articleRepo}
+}
+
+func (a *articleService) LoadFromFeed(urlPath string) ([]model.Article, error) {
+	urlParsed, err := url.Parse(urlPath)
+	if err != nil {
+		return nil, err
+	}
+	// Get all articles from the feed
+	articles, err := parser.ParseArticlesFromFeed(*urlParsed)
+	if err != nil {
+		return nil, err
+	}
+
+	// Save all articles to the database
+	err = a.SaveAll(articles)
+	if err != nil {
+		return nil, err
+	}
+
+	return articles, nil
 }
 
 func (a *articleService) LoadDataFromFiles() ([]model.Article, error) {

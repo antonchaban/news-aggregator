@@ -11,10 +11,21 @@ import (
 
 type Loader interface {
 	LoadAllFromFile() ([]model.Article, error)
+	UpdateFromFeed(urlPath string) ([]model.Article, error)
 }
 
 type newsLoader struct {
 	articleService service.ArticleService
+}
+
+func (n newsLoader) UpdateFromFeed(urlPath string) ([]model.Article, error) {
+	// Get all articles from the feed
+	articles, err := n.articleService.LoadFromFeed(urlPath)
+	if err != nil {
+		return nil, err
+	}
+
+	return articles, nil
 }
 
 func (n newsLoader) LoadAllFromFile() ([]model.Article, error) {
