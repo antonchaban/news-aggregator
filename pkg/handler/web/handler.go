@@ -12,7 +12,7 @@ type Handler struct {
 
 func NewHandler(asvc service.ArticleService) *Handler {
 	h := &Handler{articleService: asvc}
-	articles, err := saver.NewLoader().LoadAllFromFile()
+	articles, err := saver.NewLoader(asvc).LoadAllFromFile()
 	if err != nil {
 		return nil
 	}

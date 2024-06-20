@@ -5,7 +5,6 @@ import (
 	"errors"
 	"github.com/antonchaban/news-aggregator/pkg/model"
 	"github.com/antonchaban/news-aggregator/pkg/service"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 )
@@ -36,7 +35,7 @@ func (n newsLoader) LoadAllFromFile() ([]model.Article, error) {
 	}
 
 	// Read the file contents
-	fileData, err := ioutil.ReadFile(filePath)
+	fileData, err := os.ReadFile(filePath)
 	if err != nil {
 		return nil, err
 	}
@@ -51,6 +50,8 @@ func (n newsLoader) LoadAllFromFile() ([]model.Article, error) {
 	return articles, nil
 }
 
-func NewLoader() Loader {
-	return &newsLoader{}
+func NewLoader(artSvc service.ArticleService) Loader {
+	return &newsLoader{
+		articleService: artSvc,
+	}
 }
