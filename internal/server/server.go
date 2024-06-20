@@ -3,8 +3,8 @@ package server
 import (
 	"context"
 	"fmt"
+	"github.com/antonchaban/news-aggregator/pkg/backuper"
 	"github.com/antonchaban/news-aggregator/pkg/model"
-	"github.com/antonchaban/news-aggregator/pkg/saver"
 	"net/http"
 	"time"
 )
@@ -27,7 +27,7 @@ func (s *Server) Run(port string, handler http.Handler) error {
 
 func (s *Server) Shutdown(ctx context.Context, articles []model.Article) error {
 	fmt.Println("Shutting down the server...")
-	err := saver.NewSaver(articles).SaveAllToFile()
+	err := backuper.NewSaver(articles).SaveAllToFile()
 	if err != nil {
 		return err
 	}
