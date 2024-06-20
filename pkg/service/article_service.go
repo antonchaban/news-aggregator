@@ -20,7 +20,7 @@ type ArticleService interface {
 	Delete(id int) error
 	SaveAll(articles []model.Article) error
 	GetByFilter(f filter.Filters) ([]model.Article, error)
-	LoadDataFromFiles() error
+	LoadDataFromFiles() ([]model.Article, error)
 }
 
 type articleService struct {
@@ -31,22 +31,22 @@ func New(articleRepo storage.ArticleStorage) ArticleService {
 	return &articleService{articleStorage: articleRepo}
 }
 
-func (a *articleService) LoadDataFromFiles() error {
+func (a *articleService) LoadDataFromFiles() ([]model.Article, error) {
 	files, err := getFilesInDir()
 	if err != nil {
-		return err
+		return nil, err
 	}
 	var articles []model.Article
 	for _, file := range files {
 		parsedArticles, err := parser.ParseArticlesFromFile(file)
 		if err != nil {
-			return err
+			return nil, err
 		}
 		articles = append(articles, parsedArticles...)
 
 	}
 
-	return a.SaveAll(articles)
+	return articles, nil
 }
 
 func (a *articleService) SaveAll(articles []model.Article) error {

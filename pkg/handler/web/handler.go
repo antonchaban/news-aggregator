@@ -1,6 +1,7 @@
 package web
 
 import (
+	"github.com/antonchaban/news-aggregator/pkg/saver"
 	"github.com/antonchaban/news-aggregator/pkg/service"
 	"github.com/gin-gonic/gin"
 )
@@ -11,10 +12,11 @@ type Handler struct {
 
 func NewHandler(asvc service.ArticleService) *Handler {
 	h := &Handler{articleService: asvc}
-	err := h.articleService.LoadDataFromFiles()
+	articles, err := saver.NewLoader().LoadAllFromFile()
 	if err != nil {
-		panic(err)
+		return nil
 	}
+	err = asvc.SaveAll(articles)
 	return h
 }
 

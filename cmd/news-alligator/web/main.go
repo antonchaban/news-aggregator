@@ -38,7 +38,11 @@ func main() {
 
 	logrus.Print("news-alligator 🐊 shutting down")
 
-	if err := srv.Shutdown(context.Background()); err != nil {
+	articles, err := svc.GetAll()
+	if err != nil {
+		logrus.Errorf("error occurred on getting all articles: %s", err.Error())
+	}
+	if err := srv.Shutdown(context.Background(), articles); err != nil {
 		logrus.Errorf("error occurred on server shutting down: %s", err.Error())
 	}
 }
