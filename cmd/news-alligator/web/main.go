@@ -17,13 +17,14 @@ const dotenvPath = "../../../.env"
 
 func main() {
 	db := inmemory.New()
+	srcDb := inmemory.NewSrc()
 	svc := service.New(db)
 
 	if err := godotenv.Load(dotenvPath); err != nil {
 		logrus.Fatal("error occurred while loading env variables: ", err.Error())
 	}
 
-	h := web.NewHandler(svc)
+	h := web.NewHandler(svc, srcDb)
 	srv := new(server.Server)
 	go func() {
 		if err := srv.Run(os.Getenv("PORT"), h.InitRoutes(), *h); err != nil {
