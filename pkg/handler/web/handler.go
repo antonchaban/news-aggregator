@@ -4,6 +4,7 @@ import (
 	"github.com/antonchaban/news-aggregator/pkg/backuper"
 	"github.com/antonchaban/news-aggregator/pkg/service"
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 )
 
 type Handler struct {
@@ -13,9 +14,14 @@ type Handler struct {
 func NewHandler(asvc service.ArticleService) *Handler {
 	h := &Handler{articleService: asvc}
 	articles, err := backuper.NewLoader(asvc).LoadAllFromFile()
-	//https://abcnews.go.com/abcnews/internationalheadlines
-	articlesFeed, err := backuper.NewLoader(asvc).UpdateFromFeed("https://feeds.bbci.co.uk/news/rss.xml")
-	articles = append(articles, articlesFeed...)
+	for _, feed := range getSupportedFeeds() {
+		articlesFeed, err := backuper.NewLoader(asvc).UpdateFromFeed(feed)
+		if err != nil {
+			logrus.Fatalf("error occurred while updating articles from feed: %s", err.Error())
+		}
+		articles = append(articles, articlesFeed...)
+
+	}
 	if err != nil {
 		return nil
 	}
@@ -31,4 +37,12 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		articles.GET("", h.getArticlesByFilter)
 	}
 	return router
+}
+
+func getSupportedFeeds() []string {
+	return []string{
+		"https://feeds.bbci.co.uk/news/rss.xml",
+		"https://abcnews.go.com/abcnews/internationalheadlines",
+		"https://www.washingtontimes.com/rss/headlines/news/world/",
+	}
 }

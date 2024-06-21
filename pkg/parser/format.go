@@ -41,11 +41,11 @@ func DetermineFeedFormat(urlPath url.URL) (format string, err error) {
 
 	contentType := resp.Header.Get("Content-Type")
 	switch {
-	case strings.Contains(contentType, "text/xml"):
+	case strings.Contains(contentType, "xml"):
 		return rssFormat, nil
-	case strings.Contains(contentType, "application/json"):
+	case strings.Contains(contentType, "json"):
 		return jsonFormat, nil
-	case strings.Contains(contentType, "text/html"):
+	case strings.Contains(contentType, "html"):
 		return htmlFormat, nil
 	default:
 		return unknownFormat, nil
