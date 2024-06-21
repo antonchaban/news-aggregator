@@ -26,7 +26,7 @@ func main() {
 	h := web.NewHandler(svc)
 	srv := new(server.Server)
 	go func() {
-		if err := srv.Run(os.Getenv("PORT"), h.InitRoutes()); err != nil {
+		if err := srv.Run(os.Getenv("PORT"), h.InitRoutes(), *h); err != nil {
 			logrus.Fatal("error occurred while running http server: ", err.Error())
 		}
 	}()
