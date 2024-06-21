@@ -29,7 +29,7 @@ func (n newsSaver) SaveAllToFile() error {
 		return err
 	}
 
-	file, err := os.Create(filepath.Join(os.Getenv("DATA_DIR"), "articles.json"))
+	file, err := os.Create(filepath.Join(os.Getenv("SAVES_DIR"), "articles.json"))
 	if err != nil {
 		return err
 	}

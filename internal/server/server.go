@@ -54,5 +54,6 @@ func getSupportedFeeds() []string {
 		"https://feeds.bbci.co.uk/news/rss.xml",
 		"https://abcnews.go.com/abcnews/internationalheadlines",
 		"https://www.washingtontimes.com/rss/headlines/news/world/",
+		"https://www.usatoday.com/news/world/",
 	}
 }

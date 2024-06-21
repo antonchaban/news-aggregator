@@ -1,22 +1,30 @@
 [
   {
     "Id": 1,
-    "Title": "Chief constable who lied about naval rank dismissed",
+    "Title": "Chris Mason: Election betting claims put focus on who knew what and when",
+    "Description": "Allegations around some of those who might have known the date in advance are still making headlines.\n \n",
+    "Link": "https://www.bbc.com/news/articles/c066lmkr33po",
+    "Source": "BBC News",
+    "PubDate": "2024-06-21T11:30:03Z"
+  },
+  {
+    "Id": 2,
+    "Title": "Chief constable who lied about navy career sacked",
     "Description": "Nick Adderley says the decision brings an “end to my career of over 32 years as a police officer”.",
     "Link": "https://www.bbc.com/news/articles/ceqq74pg1evo",
     "Source": "BBC News",
     "PubDate": "2024-06-21T10:26:16Z"
   },
   {
-    "Id": 2,
-    "Title": "Top sunscreens fail protection tests, Which? says",
-    "Description": "Some cheaper lotions from supermarkets Aldi and Lidl outperformed more expensive brands, Which? said.",
-    "Link": "https://www.bbc.com/news/articles/cgeevnvj997o",
+    "Id": 3,
+    "Title": "Jay Slater: Search for missing Brit focuses on village",
+    "Description": "Jay Slater, 19, has not been heard from since Monday when he said he needed water and had 1% battery. ",
+    "Link": "https://www.bbc.com/news/articles/cpdd3l84zk0o",
     "Source": "BBC News",
-    "PubDate": "2024-06-21T01:53:45Z"
+    "PubDate": "2024-06-21T14:07:42Z"
   },
   {
-    "Id": 3,
+    "Id": 4,
     "Title": "'We all love you so much' - Kate's birthday tribute to William",
     "Description": "The image was posted online by the Princess of Wales to mark her husband's 42nd birthday. ",
     "Link": "https://www.bbc.com/news/articles/clwwe80dwpeo",
@@ -24,15 +32,15 @@
     "PubDate": "2024-06-21T10:04:54Z"
   },
   {
-    "Id": 4,
-    "Title": "Jay Slater: Search for missing Brit focuses on ravine",
-    "Description": "Jay Slater has been missing since shortly before 09:00 BST on Monday.",
-    "Link": "https://www.bbc.com/news/articles/cpdd3l84zk0o",
+    "Id": 5,
+    "Title": "Top sunscreens fail protection tests, Which? says",
+    "Description": "Some cheaper lotions from supermarkets Aldi and Lidl outperformed more expensive brands, Which? said.",
+    "Link": "https://www.bbc.com/news/articles/cgeevnvj997o",
     "Source": "BBC News",
-    "PubDate": "2024-06-21T10:15:08Z"
+    "PubDate": "2024-06-21T12:03:16Z"
   },
   {
-    "Id": 5,
+    "Id": 6,
     "Title": "London hospitals hackers publish stolen blood test data",
     "Description": "The gang shared almost 400GB of the private information on their darknet site and Telegram channel.",
     "Link": "https://www.bbc.com/news/articles/c9ww90j9dj8o",
@@ -40,7 +48,15 @@
     "PubDate": "2024-06-21T07:15:16Z"
   },
   {
-    "Id": 6,
+    "Id": 7,
+    "Title": "Tata workers call first strike in 40 years",
+    "Description": "The strike action is the first time in over 40 years that steel workers in the UK have taken strike action.",
+    "Link": "https://www.bbc.com/news/articles/cjeexwzdrepo",
+    "Source": "BBC News",
+    "PubDate": "2024-06-21T14:09:12Z"
+  },
+  {
+    "Id": 8,
     "Title": "Rob Burrow recorded video messages to be played as children grow up",
     "Description": "The MND campaigner's messages are for his children in the future, his wife told BBC Breakfast.",
     "Link": "https://www.bbc.com/news/articles/cw00z7wdnwro",
@@ -48,7 +64,7 @@
     "PubDate": "2024-06-21T02:23:09Z"
   },
   {
-    "Id": 7,
+    "Id": 9,
     "Title": "Thousands of naked swimmers mark Australia's winter solstice",
     "Description": "Around 3,000 people took the plunge in the River Derwent in Hobart to mark the winter solstice.",
     "Link": "https://www.bbc.com/news/videos/c4nn7y74m2po",
@@ -56,36 +72,20 @@
     "PubDate": "2024-06-21T09:23:00Z"
   },
   {
-    "Id": 8,
-    "Title": "Body found in search for missing teacher",
-    "Description": "Police searching for a missing 37-year-old say they have spoken to his family.",
-    "Link": "https://www.bbc.com/news/articles/c3ggj0lz20go",
-    "Source": "BBC News",
-    "PubDate": "2024-06-21T10:37:52Z"
-  },
-  {
-    "Id": 9,
-    "Title": "Ex-footballer Roberto Baggio injured in armed robbery",
-    "Description": "The veteran footballer received stitches to his head after an armed robbery at his villa in northern Italy.",
-    "Link": "https://www.bbc.com/news/articles/c99942qkny4o",
-    "Source": "BBC News",
-    "PubDate": "2024-06-21T10:01:06Z"
-  },
-  {
     "Id": 10,
-    "Title": "North Korea building border ‘wall’, satellite images reveal",
-    "Description": "North Korea is building sections of what appears to be a wall in several places near its border with South Korea, new satellite images show.",
-    "Link": "https://www.bbc.com/news/articles/c2qq7x594vqo",
+    "Title": "Post Office system not a scandal, insists ex-union boss",
+    "Description": "George Thomson tells an inquiry that Horizon is \"robust\", provoking anger from sub-postmasters. ",
+    "Link": "https://www.bbc.com/news/articles/cyxxz799vxko",
     "Source": "BBC News",
-    "PubDate": "2024-06-20T23:59:34Z"
+    "PubDate": "2024-06-21T13:27:41Z"
   },
   {
     "Id": 11,
-    "Title": "Government borrowing in May is highest since Covid",
-    "Description": "Borrowing reaches £15bn, less than forecast but lays bare challenges facing the next government. ",
-    "Link": "https://www.bbc.com/news/articles/cmll7k8pl2xo",
+    "Title": "Teenager detained for life for murdering boy, 15",
+    "Description": "Bardia Shojaeifard, 15, is detained for life with a minimum term of 13 years for killing Alfie Lewis.",
+    "Link": "https://www.bbc.com/news/articles/c6ppezr3lw5o",
     "Source": "BBC News",
-    "PubDate": "2024-06-21T09:34:50Z"
+    "PubDate": "2024-06-21T13:13:30Z"
   },
   {
     "Id": 12,
@@ -98,10 +98,10 @@
   {
     "Id": 13,
     "Title": "Who should I vote for and what are the parties promising?",
-    "Description": "Explore parties’ 2024 election manifestos and compare their policies on issues from housing to immigration with this interactive guide from BBC News.",
+    "Description": "Explore the manifestos of the main parties in England, Scotland, Wales and Northern Ireland and compare their policies on key issues with this interactive guide. ",
     "Link": "https://www.bbc.com/news/articles/cxeez8271nvo",
     "Source": "BBC News",
-    "PubDate": "2024-06-21T09:57:37Z"
+    "PubDate": "2024-06-21T13:59:16Z"
   },
   {
     "Id": 14,
@@ -113,6 +113,14 @@
   },
   {
     "Id": 15,
+    "Title": "Labour would pass law to end rental 'bidding wars'",
+    "Description": "Keir Starmer says he wants to stop landlords encouraging higher rent offers to secure properties. ",
+    "Link": "https://www.bbc.com/news/articles/cx00zj59pj8o",
+    "Source": "BBC News",
+    "PubDate": "2024-06-21T10:34:55Z"
+  },
+  {
+    "Id": 16,
     "Title": "What are the parties saying about housing? - Your questions",
     "Description": "Our cost of living correspondent answers your questions about housing and personal finance.",
     "Link": "https://www.bbc.com/news/articles/cpdd30xk04ko",
@@ -120,7 +128,7 @@
     "PubDate": "2024-06-20T16:50:50Z"
   },
   {
-    "Id": 16,
+    "Id": 17,
     "Title": "BBC Question Time election debate fact-checked",
     "Description": "BBC Verify examines claims on spending, migration, Brexit, and the NHS, among other issues.",
     "Link": "https://www.bbc.com/news/articles/c844dp1yg1lo",
@@ -128,7 +136,7 @@
     "PubDate": "2024-06-20T21:47:02Z"
   },
   {
-    "Id": 17,
+    "Id": 18,
     "Title": "Corbyn would have been better PM than Johnson - Keir Starmer",
     "Description": "Sir Keir Starmer was among four leaders to face a grilling from a BBC Question Time audience. ",
     "Link": "https://www.bbc.com/news/articles/cn00dlzexevo",
@@ -136,7 +144,7 @@
     "PubDate": "2024-06-20T22:57:02Z"
   },
   {
-    "Id": 18,
+    "Id": 19,
     "Title": "Key takeaways from BBC Question Time election special",
     "Description": "Just two weeks from election day, party leaders face tough questions from a BBC Question Time audience.",
     "Link": "https://www.bbc.com/news/articles/c6ppe90y9rgo",
@@ -144,7 +152,7 @@
     "PubDate": "2024-06-20T22:24:31Z"
   },
   {
-    "Id": 19,
+    "Id": 20,
     "Title": "Newscast",
     "Description": "Adam, Chris and Alex unpack the Leaders’ Question Time performance",
     "Link": "https://www.bbc.co.uk/sounds/play/p0j5k6tw",
@@ -152,7 +160,7 @@
     "PubDate": "2024-06-20T22:32:00Z"
   },
   {
-    "Id": 20,
+    "Id": 21,
     "Title": "Who can I vote for in the general election?",
     "Description": "Find out which constituency you are in, who you can vote for and where you can vote using our postcode search.",
     "Link": "https://www.bbc.com/news/articles/cw55nk6yn01o",
@@ -160,7 +168,7 @@
     "PubDate": "2024-06-10T14:53:49Z"
   },
   {
-    "Id": 21,
+    "Id": 22,
     "Title": "Sir John Curtice: Can we trust polls predicting a Tory ‘wipeout'?",
     "Description": "Are the Conservatives really on course for an election 'wipeout'? Or should we be sceptical about the polls?",
     "Link": "https://www.bbc.com/news/articles/cv22y07ggy6o",
@@ -168,7 +176,7 @@
     "PubDate": "2024-06-20T18:34:31Z"
   },
   {
-    "Id": 22,
+    "Id": 23,
     "Title": "Election poll tracker: How do the parties compare?",
     "Description": "How do people say they will vote in the UK general election? Our poll tracker measures the trends.",
     "Link": "https://www.bbc.co.uk/news/uk-politics-68079726",
@@ -176,7 +184,7 @@
     "PubDate": "2024-06-21T09:27:05Z"
   },
   {
-    "Id": 23,
+    "Id": 24,
     "Title": "What photo ID will you need to vote in the general election?",
     "Description": "Everyone voting in person at the general election on 4 July will have to show valid photo ID.",
     "Link": "https://www.bbc.co.uk/news/explainers-64877005",
@@ -184,7 +192,7 @@
     "PubDate": "2024-06-20T11:38:08Z"
   },
   {
-    "Id": 24,
+    "Id": 25,
     "Title": "Which battleground seats are Labour targeting?",
     "Description": "The places Labour is aiming to win at the general election.",
     "Link": "https://www.bbc.com/news/articles/c133p016pg4o",
@@ -192,7 +200,7 @@
     "PubDate": "2024-06-20T12:35:55Z"
   },
   {
-    "Id": 25,
+    "Id": 26,
     "Title": "Scottish Greens manifesto: Key policies analysed",
     "Description": "The Scottish Greens promise to \"turbo charge\" Scotland's journey to net zero.",
     "Link": "https://www.bbc.com/news/articles/cevv9dkwekeo",
@@ -200,7 +208,7 @@
     "PubDate": "2024-06-20T18:09:20Z"
   },
   {
-    "Id": 26,
+    "Id": 27,
     "Title": "Alliance Party manifesto: Key policies analysed",
     "Description": "The Alliance Party launches its 2024 election manifesto, setting out the party's plans.",
     "Link": "https://www.bbc.com/news/articles/cmll7epxy3xo",
@@ -208,7 +216,7 @@
     "PubDate": "2024-06-20T11:04:37Z"
   },
   {
-    "Id": 27,
+    "Id": 28,
     "Title": "SNP manifesto: 11 key policies analysed",
     "Description": "BBC correspondents analyse key policies in the SNP manifesto.",
     "Link": "https://www.bbc.com/news/articles/c3ggl375nn7o",
@@ -216,7 +224,7 @@
     "PubDate": "2024-06-19T21:53:42Z"
   },
   {
-    "Id": 28,
+    "Id": 29,
     "Title": "Muslim millionaire gives major donation to Reform UK",
     "Description": "As well as being a donor, Zia Yusuf will also have a public role for Reform UK during the campaign.",
     "Link": "https://www.bbc.com/news/articles/cd11xxn833yo",
@@ -224,7 +232,7 @@
     "PubDate": "2024-06-20T01:33:29Z"
   },
   {
-    "Id": 29,
+    "Id": 30,
     "Title": "Henry Zeffman: Will falling inflation change minds on the campaign trail?",
     "Description": "Henry Zeffman: Will falling inflation change minds on the campaign trail?",
     "Link": "https://www.bbc.com/news/videos/ck7794dygzxo",
@@ -232,20 +240,12 @@
     "PubDate": "2024-06-19T16:04:01Z"
   },
   {
-    "Id": 30,
+    "Id": 31,
     "Title": "Sinn Féin manifesto: Key policies analysed",
     "Description": "BBC News NI correspondents examine the detail of Sinn Féin's manifesto for the general election.",
     "Link": "https://www.bbc.com/news/articles/cz99e3gk6l9o",
     "Source": "BBC News",
     "PubDate": "2024-06-19T15:52:46Z"
-  },
-  {
-    "Id": 31,
-    "Title": "Sinn Féin: Election must bring 'change' in NI funding",
-    "Description": "Mary Lou McDonald was speaking at the launch of Sinn Féin's manifesto for the UK general election.\n\n",
-    "Link": "https://www.bbc.com/news/articles/cpww78ywq8eo",
-    "Source": "BBC News",
-    "PubDate": "2024-06-19T16:08:28Z"
   },
   {
     "Id": 32,
@@ -257,6 +257,22 @@
   },
   {
     "Id": 33,
+    "Title": "Gaza's water system, destroyed by war, is sickening its children",
+    "Description": "Palestinian children are ending up severely ill from dehydration and drinking contaminated water.",
+    "Link": "https://www.bbc.com/news/articles/cd119dz515wo",
+    "Source": "BBC News",
+    "PubDate": "2024-06-21T12:33:34Z"
+  },
+  {
+    "Id": 34,
+    "Title": "North Korea building border ‘wall’, satellite images reveal",
+    "Description": "North Korea is building sections of what appears to be a wall in several places near its border with South Korea, new satellite images show.",
+    "Link": "https://www.bbc.com/news/articles/c2qq7x594vqo",
+    "Source": "BBC News",
+    "PubDate": "2024-06-20T23:59:34Z"
+  },
+  {
+    "Id": 35,
     "Title": "If a university goes bust, which students lose most?",
     "Description": "Whoever forms the next government is going to find it hard to ignore the issue of university funding",
     "Link": "https://www.bbc.com/news/articles/cv22y7zl18po",
@@ -264,7 +280,7 @@
     "PubDate": "2024-06-20T23:19:40Z"
   },
   {
-    "Id": 34,
+    "Id": 36,
     "Title": "Weekly quiz: Which troops turned out for Catherine on the King's birthday?",
     "Description": "Test how closely you have been paying attention to what has been going on over the past seven days.",
     "Link": "https://www.bbc.co.uk/news/world-69135286",
@@ -272,7 +288,7 @@
     "PubDate": "2024-06-20T17:33:02Z"
   },
   {
-    "Id": 35,
+    "Id": 37,
     "Title": "Macron's hometown voters look set to shun the president",
     "Description": "Residents of Mr Macron's hometown have turned their back on him ahead of France's snap elections.",
     "Link": "https://www.bbc.com/news/articles/cy77z0xjvjjo",
@@ -280,28 +296,12 @@
     "PubDate": "2024-06-21T05:00:51Z"
   },
   {
-    "Id": 36,
-    "Title": "Egyptian pilgrims 'totally abandoned' in Hajj heat",
-    "Description": "With hundreds thought dead, one victim's family say unregistered pilgrims have been failed by travel agents.",
-    "Link": "https://www.bbc.com/news/articles/cxrrzp479r4o",
-    "Source": "BBC News",
-    "PubDate": "2024-06-20T19:14:14Z"
-  },
-  {
-    "Id": 37,
+    "Id": 38,
     "Title": "Marvel star Karen Gillan is not scared of being cancelled ",
     "Description": "Scots actress Karen Gillan's new role made her face up to the pitfalls of social media.",
     "Link": "https://www.bbc.com/news/articles/c9rr5ewl73lo",
     "Source": "BBC News",
     "PubDate": "2024-06-21T05:10:45Z"
-  },
-  {
-    "Id": 38,
-    "Title": "When is the first debate between Biden and Trump?",
-    "Description": "The Democratic president and his Republican predecessor will meet  on a debate stage for the first time in four years.",
-    "Link": "https://www.bbc.com/news/articles/cekke335z9ko",
-    "Source": "BBC News",
-    "PubDate": "2024-06-20T21:59:33Z"
   },
   {
     "Id": 39,
@@ -369,14 +369,30 @@
   },
   {
     "Id": 47,
-    "Title": "Pope told off by student for using anti-LGBTQ language",
-    "Description": "It comes after reports that the Pope used extremely offensive language against gay men in a meeting.",
-    "Link": "https://www.bbc.com/news/articles/c7220y9jx04o",
+    "Title": "Watch: Taylor Swift remix played at Changing of the Guard",
+    "Description": "The orchestral version of the song was played to mark the first London dates of Taylor Swift's Eras tour at Wembley.",
+    "Link": "https://www.bbc.com/news/videos/c4nnmm6y2njo",
     "Source": "BBC News",
-    "PubDate": "2024-06-21T09:19:18Z"
+    "PubDate": "2024-06-21T12:31:42Z"
   },
   {
     "Id": 48,
+    "Title": "Aer Lingus customers to find out if flights cancelled",
+    "Description": "Aer Lingus customers are due to find out if their summer plans are set to change.",
+    "Link": "https://www.bbc.com/news/articles/cw99ze79d58o",
+    "Source": "BBC News",
+    "PubDate": "2024-06-21T13:08:51Z"
+  },
+  {
+    "Id": 49,
+    "Title": "Octopus to repay £3bn to taxpayers for Bulb rescue",
+    "Description": "The government will recover almost all the cost of temporarily nationalising Bulb in 2021.",
+    "Link": "https://www.bbc.com/news/articles/ce997mj3qm8o",
+    "Source": "BBC News",
+    "PubDate": "2024-06-21T11:08:05Z"
+  },
+  {
+    "Id": 50,
     "Title": "Stonehenge solstice sunrise attracts 15,000 people",
     "Description": "People have gathered at the ancient site in Wiltshire on the longest day of the year.",
     "Link": "https://www.bbc.com/news/articles/c7224qlenmeo",
@@ -384,79 +400,47 @@
     "PubDate": "2024-06-21T07:40:56Z"
   },
   {
-    "Id": 49,
-    "Title": "Chimpanzees ‘self-medicate’ with healing plants",
-    "Description": "Wild chimpanzees seek out medicinal plants to eat when they are sick or injured, a study says.",
-    "Link": "https://www.bbc.com/news/articles/ce994dv9q4eo",
-    "Source": "BBC News",
-    "PubDate": "2024-06-20T23:59:17Z"
-  },
-  {
-    "Id": 50,
-    "Title": "NZ woman sues partner for not taking her to airport",
-    "Description": "New Zealand's Disputes Tribunal dismissed the claim, saying the promises did not constitute a contract.",
-    "Link": "https://www.bbc.com/news/articles/c3ggk2k1eppo",
-    "Source": "BBC News",
-    "PubDate": "2024-06-21T08:51:42Z"
-  },
-  {
     "Id": 51,
-    "Title": "Wales sack manager Page",
-    "Description": "Wales sack manager Rob Page following the team's failure to qualify for Euro 2024 and recent poor performances.",
-    "Link": "https://www.bbc.com/sport/football/articles/c877mp1852po",
+    "Title": "Body found in search for missing teacher",
+    "Description": "Police searching for a missing 37-year-old say they have spoken to his family.",
+    "Link": "https://www.bbc.com/news/articles/c3ggj0lz20go",
     "Source": "BBC News",
-    "PubDate": "2024-06-21T09:14:56Z"
+    "PubDate": "2024-06-21T13:06:05Z"
   },
   {
     "Id": 52,
-    "Title": "Passion, pilots and panache: Africa's top shots",
-    "Description": "A selection of the week's best photos from across the African continent.",
-    "Link": "https://www.bbc.com/news/articles/czrrz33z70jo",
+    "Title": "British editor backs out of top Washington Post job ",
+    "Description": "The news comes amid turmoil at the storied US newspaper after leadership changes made by British publisher Will Lewis.",
+    "Link": "https://www.bbc.com/news/articles/c3gg44v0ww3o",
     "Source": "BBC News",
-    "PubDate": "2024-06-20T23:43:26Z"
+    "PubDate": "2024-06-21T13:43:00Z"
   },
   {
     "Id": 53,
-    "Title": "Warning over tax being paid on state pension",
-    "Description": "Tax on pensions is a key issue raised by you through the BBC's Your Voice, Your Vote project.",
-    "Link": "https://www.bbc.com/news/articles/ckdd40vdg5zo",
+    "Title": "Pope told off by student for using anti-LGBTQ language",
+    "Description": "It comes after reports that the Pope used extremely offensive language against gay men in a meeting.",
+    "Link": "https://www.bbc.com/news/articles/c7220y9jx04o",
     "Source": "BBC News",
-    "PubDate": "2024-06-20T23:11:46Z"
+    "PubDate": "2024-06-21T09:19:18Z"
   },
   {
     "Id": 54,
-    "Title": "'England are about to really feel the pressure'",
-    "Description": "Ex-England captain Alan Shearer explains why it is better for Three Lions players to stay in the bubble at their team camp to deal with criticism over their performances at Euro 2024.",
-    "Link": "https://www.bbc.com/sport/football/articles/c4nnm8550jro",
+    "Title": "The inside story of Page's rise and fall as Wales boss",
+    "Description": "From World Cup highs to crushing lows and off-field disharmony, BBC Sport Wales delves into Rob Page's exit as Wales boss.",
+    "Link": "https://www.bbc.com/sport/football/articles/cprr898dnz0o",
     "Source": "BBC News",
-    "PubDate": "2024-06-21T06:01:03Z"
+    "PubDate": "2024-06-21T10:09:20Z"
   },
   {
     "Id": 55,
-    "Title": "Child star, social media icon - time to shine at Euro 2024?",
-    "Description": "Child star, teen social media icon and now wanted by Europe's top clubs, is it tim for Xavi Simons to star for Netherlands at Euro 2024?",
-    "Link": "https://www.bbc.com/sport/football/articles/c3gg9lyn7q9o",
+    "Title": "Schranz heads Slovakia in front against Ukraine",
+    "Description": "Watch as Ivan Schranz heads home to give Slovakia the lead against Ukraine during their Group E game in Dusseldorf.",
+    "Link": "https://www.bbc.com/sport/football/videos/cz77z48gn20o",
     "Source": "BBC News",
-    "PubDate": "2024-06-21T06:54:10Z"
+    "PubDate": "2024-06-21T13:34:38Z"
   },
   {
     "Id": 56,
-    "Title": "Scouting with Moyes - 'Here as a fan, but I think like a manager'",
-    "Description": "Former West Ham manager David Moyes on watching new players at Euro 2024 and how the latest generation of coaches means the game is always evolving.",
-    "Link": "https://www.bbc.com/sport/football/articles/c6ppe1yr59wo",
-    "Source": "BBC News",
-    "PubDate": "2024-06-21T10:15:10Z"
-  },
-  {
-    "Id": 57,
-    "Title": "Cummins takes hat-trick at T20 World Cup",
-    "Description": "Australia bowler Pat Cummins takes a hat-trick of wickets against Bangladesh in the Super 8 stage of the T20 World Cup.",
-    "Link": "https://www.bbc.com/sport/cricket/videos/cy00zdgmy7mo",
-    "Source": "BBC News",
-    "PubDate": "2024-06-21T08:24:37Z"
-  },
-  {
-    "Id": 58,
     "Title": "Download now",
     "Description": "Top stories, breaking news, live reporting, and follow news topics that match your interests",
     "Link": "https://www.bbc.co.uk/news/10628994",
@@ -464,7 +448,7 @@
     "PubDate": "2023-06-13T10:25:22Z"
   },
   {
-    "Id": 59,
+    "Id": 57,
     "Title": "Ukraine war: The men avoiding conscription",
     "Description": "Many draft-eligible Ukrainians are hiding from mobilisation squads",
     "Link": "https://www.bbc.co.uk/sounds/play/w3ct6dt2",
@@ -472,15 +456,15 @@
     "PubDate": "2024-06-20T08:50:00Z"
   },
   {
-    "Id": 60,
+    "Id": 58,
     "Title": "How does government borrowing work?",
     "Description": "How does government borrowing work, and how and when is the money paid back?",
     "Link": "https://www.bbc.co.uk/news/business-50504151",
     "Source": "BBC News",
-    "PubDate": "2024-04-23T09:17:23Z"
+    "PubDate": "2024-06-21T10:57:30Z"
   },
   {
-    "Id": 61,
+    "Id": 59,
     "Title": "When will mortgage rates come down?",
     "Description": "Bank of England interest rates affect mortgage, loan and savings rates for millions of people.",
     "Link": "https://www.bbc.co.uk/news/business-57764601",
@@ -488,7 +472,7 @@
     "PubDate": "2024-06-20T13:58:41Z"
   },
   {
-    "Id": 62,
+    "Id": 60,
     "Title": "How quickly are prices rising in the UK?",
     "Description": "The rate at which prices are rising has fallen from record highs, meeting the 2% target.",
     "Link": "https://www.bbc.co.uk/news/business-12196322",
@@ -496,7 +480,7 @@
     "PubDate": "2024-06-20T11:17:36Z"
   },
   {
-    "Id": 63,
+    "Id": 61,
     "Title": "Five ways to save money on your mortgage",
     "Description": "Experts give advice for those who might be worried about their monthly mortgage payments.",
     "Link": "https://www.bbc.co.uk/news/business-65984415",
@@ -504,15 +488,7 @@
     "PubDate": "2024-01-08T09:53:55Z"
   },
   {
-    "Id": 64,
-    "Title": "Five hacks to help save money on your food shop",
-    "Description": "The cost-of-living crisis continues to bite. Here are some things that can reduce the impact.",
-    "Link": "https://www.bbc.co.uk/news/uk-61798003",
-    "Source": "BBC News",
-    "PubDate": "2023-11-29T15:53:08Z"
-  },
-  {
-    "Id": 65,
+    "Id": 62,
     "Title": "Three ways to win the rental property race",
     "Description": "From being first in the queue to being more flexible, here are some tips on how to get ahead in the rental race.",
     "Link": "https://www.bbc.co.uk/news/business-65089308",
@@ -520,7 +496,15 @@
     "PubDate": "2024-05-14T23:30:47Z"
   },
   {
-    "Id": 66,
+    "Id": 63,
+    "Title": "Five hacks to help save money on your food shop",
+    "Description": "The cost-of-living crisis continues to bite. Here are some things that can reduce the impact.",
+    "Link": "https://www.bbc.co.uk/news/uk-61798003",
+    "Source": "BBC News",
+    "PubDate": "2023-11-29T15:53:08Z"
+  },
+  {
+    "Id": 64,
     "Title": "Fact v fiction: Five tips for saving petrol money examined",
     "Description": "With weak competition adding to fuel prices, are drivers doing the right things to save money?",
     "Link": "https://www.bbc.co.uk/news/business-61745697",
@@ -528,7 +512,15 @@
     "PubDate": "2023-07-03T13:01:34Z"
   },
   {
-    "Id": 67,
+    "Id": 65,
+    "Title": "Hammer attack schoolboy guilty of attempted murder",
+    "Description": "A Devon private school boy who claimed he was sleepwalking is found guilty of three counts of attempted murder.",
+    "Link": "https://www.bbc.com/news/articles/cw99z474j93o",
+    "Source": "BBC News",
+    "PubDate": "2024-06-21T14:04:06Z"
+  },
+  {
+    "Id": 66,
     "Title": "'Brave' surfer praised for helping to save swimmers",
     "Description": "Daniel McAleese was out walking when he heard screaming from one of two women swimming near rocks.",
     "Link": "https://www.bbc.com/news/articles/c1vvlq5kp2vo",
@@ -536,15 +528,15 @@
     "PubDate": "2024-06-21T09:06:15Z"
   },
   {
-    "Id": 68,
-    "Title": "Why are devolved issues dominating a UK election?",
-    "Description": "The vote is a UK general election, and thus will not directly affect how some services are delivered here.",
-    "Link": "https://www.bbc.com/news/articles/cjrr1z51y0jo",
+    "Id": 67,
+    "Title": "Euro 2024 organisers: We can cope with Tartan Army numbers",
+    "Description": "A viewing area for 25,000 Scotland fans is being set up in Stuttgart for Sunday's game against Hungary.",
+    "Link": "https://www.bbc.com/news/articles/c1ee81822v2o",
     "Source": "BBC News",
-    "PubDate": "2024-06-21T05:09:45Z"
+    "PubDate": "2024-06-21T11:26:09Z"
   },
   {
-    "Id": 69,
+    "Id": 68,
     "Title": " French prime minister seeks to step out from Macron's shadow in the upcoming early election",
     "Description": "France\u0026rsquo;s prime minister hopes to emerge from the campaign for the early legislative election not only still holding the job that President Emmanuel Macron gave him less than six months ago but also as more of his own person",
     "Link": "https://abcnews.go.com/International/wireStory/french-prime-minister-seeks-step-macrons-shadow-upcoming-111275346",
@@ -552,7 +544,7 @@
     "PubDate": "2024-06-20T13:58:34Z"
   },
   {
-    "Id": 70,
+    "Id": 69,
     "Title": " Russia obliterates front-line Ukraine towns by retrofitting bombs",
     "Description": "Russia is intensifying its use of cheap glide bombs to lay waste to cities in eastern Ukraine",
     "Link": "https://abcnews.go.com/International/wireStory/russia-obliterates-front-line-ukraine-towns-retrofitting-bombs-111266262",
@@ -560,15 +552,31 @@
     "PubDate": "2024-06-20T16:06:16Z"
   },
   {
-    "Id": 71,
+    "Id": 70,
     "Title": " UK fans wonder if Taylor Swift will say 'So long, London' after Eras Tour",
     "Description": "Taylor Swift fans enjoy parsing the singer-songwriter\u0026rsquo;s lyrics for references to her romantic life and insights into her state of her mind",
     "Link": "https://abcnews.go.com/International/wireStory/uk-fans-taylor-swift-long-london-after-eras-111302402",
     "Source": "ABC News: International",
-    "PubDate": "2024-06-21T04:54:16Z"
+    "PubDate": "2024-06-21T13:02:15Z"
+  },
+  {
+    "Id": 71,
+    "Title": " US tourist killed in Zambia elephant attack, the second this year",
+    "Description": "Zambian officials say a U.S. tourist has been killed by an elephant in the city of Livingstone, the second such attack in the country this year",
+    "Link": "https://abcnews.go.com/International/wireStory/us-tourist-killed-zambia-elephant-attack-year-111307405",
+    "Source": "ABC News: International",
+    "PubDate": "2024-06-21T13:01:59Z"
   },
   {
     "Id": 72,
+    "Title": " AP Week in Pictures: Latin America and Caribbean",
+    "Description": "\nJune 14-20, 2024\n\nIndigenous women in Ecuador take on soccer by inventing a sport: handball in traditional skirts.\n\nThousands of demonstrators took to the streets of Sao Paulo as protests sweep across Brazil in opposition to a bill that would further criminalize abortions. If passed, the law would equate the termination of a pregnancy after 22 weeks with homicide.\n\nPanama Canal authorities reported they will increase vessel transits through the interoceanic waterway following drought-related restrictions.\n\nTropical Storm Alberto formed in the southwestern Gulf of Mexico, the first named storm of what is forecast to be a busy hurricane season.\n\nThis gallery highlights some of the most compelling images made or published in the past week by The Associated Press from Latin America and the Caribbean. \n\nThe selection was curated by AP photo editor Anita Baca, based in Mexico City.\n\n___\n\nFollow AP visual journalism:\n\nAP Images blog: http://apimagesblog.com\n\nInstagram:...",
+    "Link": "https://abcnews.go.com/International/wireStory/ap-week-pictures-latin-america-caribbean-111302122",
+    "Source": "ABC News: International",
+    "PubDate": "2024-06-21T04:22:28Z"
+  },
+  {
+    "Id": 73,
     "Title": " 2 people killed when police clash with locals protesting pork processing plant in Mexico",
     "Description": "Two people have been killed when locals protesting alleged water contamination by a pork processing plant clashed with police in the Mexican gulf coast state of Veracruz",
     "Link": "https://abcnews.go.com/International/wireStory/2-people-killed-police-clash-locals-protesting-pork-111302520",
@@ -576,20 +584,12 @@
     "PubDate": "2024-06-21T05:01:48Z"
   },
   {
-    "Id": 73,
+    "Id": 74,
     "Title": " Ukraine’s emergency blackouts return after Russia pounds infrastructure",
     "Description": "Ukraine is experiencing rolling blackouts as Russia intensified strikes targeting energy infrastructure over the past three months",
     "Link": "https://abcnews.go.com/International/wireStory/navigating-darkness-ukraines-emergency-blackouts-return-after-russia-111303051",
     "Source": "ABC News: International",
     "PubDate": "2024-06-21T06:32:01Z"
-  },
-  {
-    "Id": 74,
-    "Title": " AP Week in Pictures: Latin America and Caribbean",
-    "Description": "\nJune 14-20, 2024\n\nIndigenous women in Ecuador take on soccer by inventing a sport: handball in traditional skirts.\n\nThousands of demonstrators took to the streets of Sao Paulo as protests sweep across Brazil in opposition to a bill that would further criminalize abortions. If passed, the law would equate the termination of a pregnancy after 22 weeks with homicide.\n\nPanama Canal authorities reported they will increase vessel transits through the interoceanic waterway following drought-related restrictions.\n\nTropical Storm Alberto formed in the southwestern Gulf of Mexico, the first named storm of what is forecast to be a busy hurricane season.\n\nThis gallery highlights some of the most compelling images made or published in the past week by The Associated Press from Latin America and the Caribbean. \n\nThe selection was curated by AP photo editor Anita Baca, based in Mexico City.\n\n___\n\nFollow AP visual journalism:\n\nAP Images blog: http://apimagesblog.com\n\nInstagram:...",
-    "Link": "https://abcnews.go.com/International/wireStory/ap-week-pictures-latin-america-caribbean-111302122",
-    "Source": "ABC News: International",
-    "PubDate": "2024-06-21T04:22:28Z"
   },
   {
     "Id": 75,
@@ -601,11 +601,11 @@
   },
   {
     "Id": 76,
-    "Title": " EU nations approve opening of enlargement talks with Ukraine and Moldova next week",
-    "Description": "European Union countries have formally approved the launch of accession negotiations with Ukraine and Moldova next week, another step in the two nations\u0026rsquo; long journey to join the 27-nation bloc",
+    "Title": " EU nations agree to start membership negotiations next week with Ukraine and Moldova",
+    "Description": "The European Union has agreed to start membership negotiations with embattled Ukraine and Moldova",
     "Link": "https://abcnews.go.com/International/wireStory/eu-nations-approve-opening-enlargement-talks-ukraine-moldova-111304756",
     "Source": "ABC News: International",
-    "PubDate": "2024-06-21T10:45:59Z"
+    "PubDate": "2024-06-21T13:58:19Z"
   },
   {
     "Id": 77,
@@ -657,11 +657,11 @@
   },
   {
     "Id": 83,
-    "Title": " As France reels from the rape of a Jewish girl, antisemitism comes to the fore in election campaign",
-    "Description": "The alleged rape of a 12-year-old Jewish girl in a suspected antisemitic attack has sent shockwaves throughout France, and thrust concerns about antisemitism to the forefront of campaigning for the country\u0026rsquo;s legislative elections",
+    "Title": " As France reels from alleged rape of a Jewish girl, antisemitism comes to fore in election campaign",
+    "Description": "The alleged rape of a 12-year-old Jewish girl in a suspected antisemitic attack has sent shockwaves throughout France and thrust concerns about antisemitism to the forefront of campaigning for the country\u0026rsquo;s legislative elections",
     "Link": "https://abcnews.go.com/International/wireStory/france-reels-rape-jewish-girl-antisemitism-fore-election-111282569",
     "Source": "ABC News: International",
-    "PubDate": "2024-06-21T09:26:30Z"
+    "PubDate": "2024-06-21T12:46:21Z"
   },
   {
     "Id": 84,
@@ -697,22 +697,14 @@
   },
   {
     "Id": 88,
-    "Title": " The Latest | Armenia recognizes a Palestinian state, and Israel summons its ambassador",
-    "Description": "The U.S. military says a floating pier it built in Gaza has been reattached to the shore and is unloading humanitarian aid again",
+    "Title": " The Latest | Armenia recognizes a Palestinian state, as malnutrition spreads among children in Gaza",
+    "Description": "Armenia said it would recognize a Palestinian state, prompting Israel to summon its ambassador for what the Foreign Ministry described as a \u0026ldquo;severe reprimand.\u0026rdquo;",
     "Link": "https://abcnews.go.com/International/wireStory/latest-armenia-recognizes-palestinian-state-israel-summons-ambassador-111304599",
     "Source": "ABC News: International",
-    "PubDate": "2024-06-21T10:46:25Z"
+    "PubDate": "2024-06-21T14:06:17Z"
   },
   {
     "Id": 89,
-    "Title": " Germany and Dutch-owned operator end talks on grid sale because of budget constraints",
-    "Description": "A state-owned Dutch company that is the biggest electricity grid operator in Germany says talks on selling its German business to the government in Berlin have been terminated due to the administration\u0026rsquo;s budget constraints",
-    "Link": "https://abcnews.go.com/International/wireStory/germany-dutch-owned-operator-end-talks-grid-sale-111267240",
-    "Source": "ABC News: International",
-    "PubDate": "2024-06-20T10:22:14Z"
-  },
-  {
-    "Id": 90,
     "Title": " Illegally brewed liquor kills at least 34 with dozens hospitalized in southern India",
     "Description": "Officials say at least 34 people have died and dozens are hospitalized after drinking illegally brewed liquor tainted with methanol in the southern Indian state of Tamil Nadu",
     "Link": "https://abcnews.go.com/International/wireStory/illegally-brewed-liquor-kills-29-dozens-hospitalized-southern-111265781",
@@ -720,12 +712,20 @@
     "PubDate": "2024-06-20T20:06:28Z"
   },
   {
-    "Id": 91,
+    "Id": 90,
     "Title": " Darfur sees an increase in much needed food aid, but it’s still not enough to avert famine, UN says",
     "Description": "The U.N.'s food agency says families in Sudan\u0026rsquo;s embattled western Darfur region have received an emergency increase in food aid that is needed to help avert looming famine",
     "Link": "https://abcnews.go.com/International/wireStory/darfur-sees-increase-needed-food-aid-avert-famine-111294190",
     "Source": "ABC News: International",
     "PubDate": "2024-06-20T21:18:47Z"
+  },
+  {
+    "Id": 91,
+    "Title": " Germany and Dutch-owned operator end talks on grid sale because of budget constraints",
+    "Description": "A state-owned Dutch company that is the biggest electricity grid operator in Germany says talks on selling its German business to the government in Berlin have been terminated due to the administration\u0026rsquo;s budget constraints",
+    "Link": "https://abcnews.go.com/International/wireStory/germany-dutch-owned-operator-end-talks-grid-sale-111267240",
+    "Source": "ABC News: International",
+    "PubDate": "2024-06-20T10:22:14Z"
   },
   {
     "Id": 92,
@@ -737,14 +737,54 @@
   },
   {
     "Id": 93,
-    "Title": " Czech man arrested in Croatia after explosion kills his 9-year-old child",
-    "Description": "A Czech man has been detained in Croatia for allegedly allowing his 9-year-old child to take an explosive device from a military zone which later killed him",
-    "Link": "https://abcnews.go.com/International/wireStory/czech-man-arrested-croatia-after-explosion-kills-9-111304387",
-    "Source": "ABC News: International",
-    "PubDate": "2024-06-21T10:21:59Z"
+    "Title": "Russia-North Korea pact could dent China's influence, but Beijing still holds sway over both",
+    "Description": "China appears to be keeping its distance as Russia and North Korea move closer to each other with a new defense pact that could tilt the balance of power among the three authoritarian states.",
+    "Link": "https://www.washingtontimes.com/news/2024/jun/21/russia-north-korea-deal-could-dent-chinas-influenc/?utm_source=RSS_Feed\u0026utm_medium=RSS",
+    "Source": "The Washington Times stories: World",
+    "PubDate": "2024-06-21T10:43:25Z"
   },
   {
     "Id": 94,
+    "Title": "Armenia recognizes a Palestinian state, and Israel summons its ambassador",
+    "Description": "Armenia said it would recognize a Palestinian state on Friday, prompting Israel to summon its ambassador for what the Foreign Ministry described as a \"severe reprimand.\"",
+    "Link": "https://www.washingtontimes.com/news/2024/jun/21/armenia-recognizes-palestinian-state-and-israel-su/?utm_source=RSS_Feed\u0026utm_medium=RSS",
+    "Source": "The Washington Times stories: World",
+    "PubDate": "2024-06-21T10:40:37Z"
+  },
+  {
+    "Id": 95,
+    "Title": "Japan's space agency was hit by multiple cyberattacks, but officials say no sensitive data was taken",
+    "Description": "Japan's space agency has suffered a series of cyberattacks since last year, but sensitive information related to rockets and satellites was not affected and it is continuing to investigate and take preventive measures, officials said Friday.",
+    "Link": "https://www.washingtontimes.com/news/2024/jun/21/japans-space-agency-struck-by-multiple-cyberattack/?utm_source=RSS_Feed\u0026utm_medium=RSS",
+    "Source": "The Washington Times stories: World",
+    "PubDate": "2024-06-21T10:37:46Z"
+  },
+  {
+    "Id": 96,
+    "Title": "South Sudan's vice president expresses concerns over ongoing peace talks",
+    "Description": "South Sudan's vice president said Thursday that peace talks in neighboring Kenya have failed to acknowledge the country's peace agreement established in 2018, alleging a new draft agreement is aimed at replacing the original peace deal.",
+    "Link": "https://www.washingtontimes.com/news/2024/jun/21/south-sudans-vp-riek-machar-expresses-concerns-ove/?utm_source=RSS_Feed\u0026utm_medium=RSS",
+    "Source": "The Washington Times stories: World",
+    "PubDate": "2024-06-21T10:34:37Z"
+  },
+  {
+    "Id": 97,
+    "Title": "South Korea summons Russian ambassador as tensions rise with North Korea",
+    "Description": "South Korea summoned the Russian ambassador to protest the country's new defense pact with North Korea on Friday, as border tensions continued to rise with vague threats and brief, seemingly accidental incursions by North Korean troops.",
+    "Link": "https://www.washingtontimes.com/news/2024/jun/21/south-korea-summons-russian-ambassador-georgy-zino/?utm_source=RSS_Feed\u0026utm_medium=RSS",
+    "Source": "The Washington Times stories: World",
+    "PubDate": "2024-06-21T09:01:08Z"
+  },
+  {
+    "Id": 98,
+    "Title": "Bather, beware: British beaches and rivers have a sewage problem. It has seeped into election talk",
+    "Description": "Endurance swimmer Joan Fennelly is undaunted by frigid water and long distances, swimming year-round in the wild. But she takes extra precautions in her own backyard. The River Thames is one of Britain's many waterways contaminated with sewage and agricultural pollution.",
+    "Link": "https://www.washingtontimes.com/news/2024/jun/21/british-beaches-and-rivers-have-sewage-problem-it-/?utm_source=RSS_Feed\u0026utm_medium=RSS",
+    "Source": "The Washington Times stories: World",
+    "PubDate": "2024-06-21T08:01:24Z"
+  },
+  {
+    "Id": 99,
     "Title": "South Korea fires warning shots after North Korean soldiers make 3rd incursion, Seoul says",
     "Description": "South Korea's military said Friday that it had fired warnings shots the previous day to repel North Korean soldiers who temporarily crossed the rivals' land border for the third time this month.",
     "Link": "https://www.washingtontimes.com/news/2024/jun/20/south-korea-fires-warning-shots-after-north-korean/?utm_source=RSS_Feed\u0026utm_medium=RSS",
@@ -752,7 +792,7 @@
     "PubDate": "2024-06-21T02:39:49Z"
   },
   {
-    "Id": 95,
+    "Id": 100,
     "Title": "Chinese farmland purchases near U.S. military bases raise national security concerns",
     "Description": "China's acquisition of farmland near critical U.S. military bases has sparked significant national security concerns, with fears of potential espionage or sabotage growing.",
     "Link": "https://www.washingtontimes.com/news/2024/jun/20/chinese-farmland-purchases-near-us-military-bases-/?utm_source=RSS_Feed\u0026utm_medium=RSS",
@@ -760,7 +800,7 @@
     "PubDate": "2024-06-20T21:51:47Z"
   },
   {
-    "Id": 96,
+    "Id": 101,
     "Title": "New Cuban Missile Crisis? Potential Russian nukes in space threaten U.S., House Intel chair warns",
     "Description": "The U.S. is facing a new Cuban Missile Crisis. But instead of Russian nuclear warheads parked just 90 miles from Florida, the Kremlin now wants to put them in low-earth orbit, where they could threaten critical American satellites.",
     "Link": "https://www.washingtontimes.com/news/2024/jun/20/new-cuban-missile-crisis-potential-russian-nukes-s/?utm_source=RSS_Feed\u0026utm_medium=RSS",
@@ -768,7 +808,7 @@
     "PubDate": "2024-06-20T21:18:49Z"
   },
   {
-    "Id": 97,
+    "Id": 102,
     "Title": "Chinese triads linked to Mexico's Sinaloa cartel",
     "Description": "The Justice Department on Wednesday released a federal indictment outlining the ties between Chinese organized crime groups and Mexico's Sinaloa drug cartel.",
     "Link": "https://www.washingtontimes.com/news/2024/jun/20/chinese-triads-linked-mexicos-sinaloa-cartel/?utm_source=RSS_Feed\u0026utm_medium=RSS",
@@ -776,7 +816,7 @@
     "PubDate": "2024-06-20T20:45:04Z"
   },
   {
-    "Id": 98,
+    "Id": 103,
     "Title": "Xi echoes Mao in urging communist political control over PLA 'guns'",
     "Description": "China's supreme leader this week urged the People's Liberation Army to maintain Chinese Communist Party political control over the \"guns\" of the nation, an echo of the country's late ruler, Mao Zedong.",
     "Link": "https://www.washingtontimes.com/news/2024/jun/20/xi-echoes-mao-urging-communist-political-control-o/?utm_source=RSS_Feed\u0026utm_medium=RSS",
@@ -784,7 +824,7 @@
     "PubDate": "2024-06-20T17:59:00Z"
   },
   {
-    "Id": 99,
+    "Id": 104,
     "Title": "Senators want to designate Russia as a state sponsor of terror after Putin's pact with North Korea",
     "Description": "Two senators announced legislation Thursday that would designate Russia as a state sponsor of terror, a move that would put Moscow in a small and notorious group that includes North Korea and Iran, in the wake of Russia's mutual defense pact with Pyongyang.",
     "Link": "https://www.washingtontimes.com/news/2024/jun/20/senators-want-to-designate-russia-as-state-sponsor/?utm_source=RSS_Feed\u0026utm_medium=RSS",
@@ -792,7 +832,7 @@
     "PubDate": "2024-06-20T17:53:10Z"
   },
   {
-    "Id": 100,
+    "Id": 105,
     "Title": "'Vexing' and 'perplexing': White House chastises Netanyahu over video",
     "Description": "The White House criticized Israeli Prime Minister Benjamin Netanyahu on Thursday for blindsiding it with a video that accuses the U.S. of withholding weapons from his country.",
     "Link": "https://www.washingtontimes.com/news/2024/jun/20/vexing-and-perplexing-white-house-chastises-netany/?utm_source=RSS_Feed\u0026utm_medium=RSS",
@@ -800,7 +840,7 @@
     "PubDate": "2024-06-20T17:12:04Z"
   },
   {
-    "Id": 101,
+    "Id": 106,
     "Title": "Kim-Putin agreement: Real military alliance or paper partnership?",
     "Description": "The flag-waving optics of this week's historic meeting between Russian President Vladimir Putin and North Korean leader Kim Jong-un have given way to a key question: Is the \"comprehensive strategic partnership\" signed by the two men the start of a true bilateral military partnership?",
     "Link": "https://www.washingtontimes.com/news/2024/jun/20/kim-putin-agreement-real-military-alliance-or-pape/?utm_source=RSS_Feed\u0026utm_medium=RSS",
@@ -808,7 +848,7 @@
     "PubDate": "2024-06-20T16:52:35Z"
   },
   {
-    "Id": 102,
+    "Id": 107,
     "Title": "U.S. redirects interceptor missile deliveries to Ukraine",
     "Description": "The U.S. has made the \"difficult but necessary\" decision to prioritize the delivery of certain air-defense missiles to Ukraine, meaning other countries expecting shipments must wait, the White House said Thursday.",
     "Link": "https://www.washingtontimes.com/news/2024/jun/20/us-redirects-interceptor-missile-deliveries-to-ukr/?utm_source=RSS_Feed\u0026utm_medium=RSS",
@@ -816,7 +856,7 @@
     "PubDate": "2024-06-20T16:01:34Z"
   },
   {
-    "Id": 103,
+    "Id": 108,
     "Title": "Shipping industry calls for greater action to stop Houthis' Red Sea attacks",
     "Description": "The global shipping industry sounded the alarm this week about the safety of merchant vessels operating in the Red Sea after a second ship was sunk by Yemen's Iranian-backed Houthi rebels earlier this week.",
     "Link": "https://www.washingtontimes.com/news/2024/jun/20/shipping-industry-calls-greater-action-stop-houthi/?utm_source=RSS_Feed\u0026utm_medium=RSS",
@@ -824,7 +864,7 @@
     "PubDate": "2024-06-20T15:10:00Z"
   },
   {
-    "Id": 104,
+    "Id": 109,
     "Title": "Rifts seem to appear between Israel's political and military leadership over conduct of the Gaza war",
     "Description": "The Israeli army's chief spokesman on Wednesday appeared to question the stated goal of destroying the Hamas militant group in Gaza in a rare public rift between the country's political and military leadership.",
     "Link": "https://www.washingtontimes.com/news/2024/jun/20/public-rifts-appear-between-israels-political-and-/?utm_source=RSS_Feed\u0026utm_medium=RSS",
@@ -832,7 +872,7 @@
     "PubDate": "2024-06-20T14:39:17Z"
   },
   {
-    "Id": 105,
+    "Id": 110,
     "Title": "Thousands protest in Jerusalem to call for immediate elections and release of hostages in Gaza",
     "Description": "Thousands of people held a protest in Jerusalem for a second day on Tuesday, calling for fresh elections and an end to the war in Gaza.",
     "Link": "https://www.washingtontimes.com/news/2024/jun/20/thousands-protest-jerusalem-call-immediate-electio/?utm_source=RSS_Feed\u0026utm_medium=RSS",
@@ -840,7 +880,7 @@
     "PubDate": "2024-06-20T14:20:02Z"
   },
   {
-    "Id": 106,
+    "Id": 111,
     "Title": "U.S.-built pier in Gaza up and running again after setbacks",
     "Description": "The U.S. military-built pier in Gaza is up and running again after being detached for a second time last week because of rough seas, according to Cyprus officials Thursday.",
     "Link": "https://www.washingtontimes.com/news/2024/jun/20/us-built-pier-in-gaza-up-and-running-again-after-s/?utm_source=RSS_Feed\u0026utm_medium=RSS",
@@ -848,7 +888,7 @@
     "PubDate": "2024-06-20T13:33:18Z"
   },
   {
-    "Id": 107,
+    "Id": 112,
     "Title": "French prime minister seeks to step out from Macron's shadow in the upcoming early election",
     "Description": "Thrust into an early election sprung by his boss, France's prime minister hopes to emerge from the campaign not only still holding the job that President Emmanuel Macron gave him less than six months ago but also as more of his own person.",
     "Link": "https://www.washingtontimes.com/news/2024/jun/20/french-prime-minister-looks-to-step-out-from-macro/?utm_source=RSS_Feed\u0026utm_medium=RSS",
@@ -856,263 +896,271 @@
     "PubDate": "2024-06-20T13:31:30Z"
   },
   {
-    "Id": 108,
-    "Title": "Train collision in Chile kills at least 2 people and injures 9 others",
-    "Description": "At least two people were killed and nine others injured Thursday when a train full of passengers collided head-on with another train on a test run just outside the capital of Chile, where fatal railway crashes remain rare.",
-    "Link": "https://www.washingtontimes.com/news/2024/jun/20/train-collision-in-chile-kills-at-least-two-people/?utm_source=RSS_Feed\u0026utm_medium=RSS",
-    "Source": "The Washington Times stories: World",
-    "PubDate": "2024-06-20T13:31:21Z"
-  },
-  {
-    "Id": 109,
-    "Title": "Serbia FA threatens to quit Euros if UEFA does not punish Croats and Albanians over chants",
-    "Description": "Serbia soccer officials threatened to quit the European Championship after they were offended by fan chants reportedly heard during the Albania-Croatia match.",
-    "Link": "https://www.washingtontimes.com/news/2024/jun/20/serbia-threatens-to-quit-euros-if-uefa-does-not-pu/?utm_source=RSS_Feed\u0026utm_medium=RSS",
-    "Source": "The Washington Times stories: World",
-    "PubDate": "2024-06-20T13:26:15Z"
-  },
-  {
-    "Id": 110,
-    "Title": "And then there was one: Mark Rutte. Romania's president withdraws from the race for NATO chief",
-    "Description": "Romania's president has withdrawn from the race to become NATO's next secretary general, leaving outgoing Dutch Prime Minister Mark Rutte all but certain to head the world's biggest military organization from October.",
-    "Link": "https://www.washingtontimes.com/news/2024/jun/20/romanias-president-exits-race-for-nato-chief-leavi/?utm_source=RSS_Feed\u0026utm_medium=RSS",
-    "Source": "The Washington Times stories: World",
-    "PubDate": "2024-06-20T13:25:12Z"
-  },
-  {
-    "Id": 111,
-    "Title": "France's Macron and African leaders push for vaccines for Africa after COVID exposed inequalities",
-    "Description": "French President Emmanuel Macron is joining several African leaders on Thursday to kick off a planned $1 billion project to accelerate the rollout of vaccines in Africa, after the coronavirus pandemic exposed gaping inequalities in access to them.",
-    "Link": "https://www.washingtontimes.com/news/2024/jun/20/frances-macron-and-african-leaders-push-for-vaccin/?utm_source=RSS_Feed\u0026utm_medium=RSS",
-    "Source": "The Washington Times stories: World",
-    "PubDate": "2024-06-20T13:09:42Z"
-  },
-  {
-    "Id": 112,
-    "Title": "Defendant in Vatican trial takes case to U.N., accuses pope of violating rights with surveillance",
-    "Description": "One of the defendants in the Vatican's big financial trial has filed a formal complaint with the United Nations, alleging that Pope Francis violated his human rights by authorizing wide-ranging surveillance during the investigation.",
-    "Link": "https://www.washingtontimes.com/news/2024/jun/20/defendant-in-vatican-trial-takes-case-to-un-says-p/?utm_source=RSS_Feed\u0026utm_medium=RSS",
-    "Source": "The Washington Times stories: World",
-    "PubDate": "2024-06-20T12:59:27Z"
-  },
-  {
     "Id": 113,
-    "Title": "Illegally brewed liquor kills at least 34 with dozens hospitalized in southern India",
-    "Description": "At least 34 people have died and dozens hospitalized after drinking illegally brewed liquor in the southern Indian state of Tamil Nadu, local media reported on Thursday.",
-    "Link": "https://www.washingtontimes.com/news/2024/jun/20/illegally-brewed-liquor-in-southern-india-kills-at/?utm_source=RSS_Feed\u0026utm_medium=RSS",
-    "Source": "The Washington Times stories: World",
-    "PubDate": "2024-06-20T12:46:24Z"
+    "Title": "U.S., Italy, and more under global heat wave",
+    "Description": "Hundreds making the Hajj pilgrimage have perished in the dangerous heat.",
+    "Link": "https://www.usatoday.com/videos/news/world/2024/06/20/us-italy-saudi-arabia-hajj-global-heat-wave/74157686007/",
+    "Source": "USA TODAY",
+    "PubDate": "2024-06-21T14:09:46.4565972Z"
   },
   {
     "Id": 114,
-    "Title": "Labour would need an effective opposition, says Hunt",
-    "Description": "The chancellor is the latest senior Tory to acknowledge his party could be on course for defeat. ",
-    "Link": "https://www.bbc.com/news/articles/c033qqme69po",
-    "Source": "BBC News",
-    "PubDate": "2024-06-19T17:34:23Z"
+    "Title": "Watch: Climate activists spray paint jets, wanted to target Taylor Swift's jet",
+    "Description": "Two climate activists were arrested after private jets were vandalized at the same London airfield where Taylor Swift's jet is believed to be parked.",
+    "Link": "https://www.usatoday.com/story/news/world/2024/06/20/climate-activists-vandalize-jets-taylor-swift-video/74155222007/",
+    "Source": "USA TODAY",
+    "PubDate": "2024-06-21T14:09:46.4565972Z"
   },
   {
     "Id": 115,
-    "Title": "DUP leader plays down fears over parade",
-    "Description": "DUP leader Gavin Robinson said he did not detect an “appetite” for trouble and hoped a resolution could be found.",
-    "Link": "https://www.bbc.com/news/articles/c9xx6e8lp1wo",
-    "Source": "BBC News",
-    "PubDate": "2024-06-20T23:05:56Z"
+    "Title": "Head of Hezbollah threatens Cyprus, Israel",
+    "Description": "Hezbollah chief Sayyed Hassan Nasrallah accused Cyprus of allowing Israel to use its airports and bases for military exercises.",
+    "Link": "https://www.usatoday.com/videos/news/world/israel-hamas/2024/06/20/hezbollah-accuses-cyprus-taking-sides-israel-hamas-conflict/74156299007/",
+    "Source": "USA TODAY",
+    "PubDate": "2024-06-21T14:09:46.4565972Z"
   },
   {
     "Id": 116,
-    "Title": " Germany arrests a man accused of standing by to carry out attacks for IS",
-    "Description": "Prosecutors say an Iraqi man who is accused of standing by to carry out attacks for the Islamic State group after he arrived in Germany in 2022 has been arrested",
-    "Link": "https://abcnews.go.com/International/wireStory/germany-arrests-man-accused-standing-carry-attacks-islamic-111267720",
-    "Source": "ABC News: International",
-    "PubDate": "2024-06-20T10:26:19Z"
+    "Title": "Putin gets a pair of hunting dogs with North Korea defense pact",
+    "Description": "Russia and North Korea signed a deal Wednesday promising mutual defense and cooperation on nuclear energy, space exploration and food.",
+    "Link": "https://www.usatoday.com/story/news/world/2024/06/20/putin-dogs-gift-north-korea-kim/74154490007/",
+    "Source": "USA TODAY",
+    "PubDate": "2024-06-21T14:09:46.4565972Z"
   },
   {
     "Id": 117,
-    "Title": " Russia hammers Ukraine's power grid again and Kyiv's drones target more enemy oil depots",
-    "Description": "Russia has resumed its aerial attacks on Ukraine\u0026rsquo;s power grid and Kyiv\u0026rsquo;s forces again targeted Russian oil storage depots with drone strikes across the border",
-    "Link": "https://abcnews.go.com/International/wireStory/russia-hammers-ukraines-power-grid-kyivs-drones-target-111267333",
-    "Source": "ABC News: International",
-    "PubDate": "2024-06-20T12:06:18Z"
+    "Title": "Head of Lebanon's Hezbollah threatens Israel and Cyprus",
+    "Description": "Hezbollah chief Sayyed Hassan Nasrallah said 'there will be no place safe from our missiles and our drones' in Israel in the event of a broader war.",
+    "Link": "https://www.usatoday.com/story/news/world/2024/06/20/hezbollah-lebanon-cyprus/74154339007/",
+    "Source": "USA TODAY",
+    "PubDate": "2024-06-21T14:09:46.4565972Z"
   },
   {
     "Id": 118,
-    "Title": "Sunak 'incredibly angry' over alleged election betting",
-    "Description": "The prime minister promises to \"boot out\" anyone found to have broken gambling laws from the Conservatives.",
-    "Link": "https://www.bbc.com/news/articles/c844je9nq89o",
-    "Source": "BBC News",
-    "PubDate": "2024-06-20T21:03:01Z"
+    "Title": "UN officials accuse Israel of attempting 'extermination' of Palestinians",
+    "Description": "Israel dismissed as 'inherently flawed' a UN report saying the military may have commited multiple war crimes in Gaza.",
+    "Link": "https://www.usatoday.com/story/news/world/israel-hamas/2024/06/19/israel-war-updates-gaza-hamas/74148042007/",
+    "Source": "USA TODAY",
+    "PubDate": "2024-06-21T14:09:46.4565972Z"
   },
   {
     "Id": 119,
-    "Title": "Actor Donald Sutherland dies aged 88",
-    "Description": "The star of films including The Hunger Games and Animal House has died after a long illness. ",
-    "Link": "https://www.bbc.com/news/articles/c9rrvdq3g9zo",
-    "Source": "BBC News",
-    "PubDate": "2024-06-20T18:56:38Z"
+    "Title": "Avocado shipments to US could slow over Mexican crime wave",
+    "Description": "The governor of western Michoacan state said inspections could resume by Thursday.",
+    "Link": "https://www.usatoday.com/story/news/world/2024/06/18/mexico-avocado-crime-inspections/74137117007/",
+    "Source": "USA TODAY",
+    "PubDate": "2024-06-21T14:09:46.4565972Z"
   },
   {
     "Id": 120,
-    "Title": "Organisations warn parties against social care 'betrayal'",
-    "Description": "Organisations including Age UK and Carers UK say social care provision \"has slipped far below an acceptable level\". ",
-    "Link": "https://www.bbc.com/news/articles/crgg97pylpxo",
-    "Source": "BBC News",
-    "PubDate": "2024-06-21T01:59:17Z"
+    "Title": "Putin vows trade, security beyond West for North Korea",
+    "Description": "Russian President Vladimir Putin, in a letter published by North Korean state media, pledged his unwavering support of the isolated state.",
+    "Link": "https://www.usatoday.com/videos/news/world/2024/06/18/putin-vows-trade-security-beyond-west-north-korea/74133023007/",
+    "Source": "USA TODAY",
+    "PubDate": "2024-06-21T14:09:46.4565972Z"
   },
   {
     "Id": 121,
-    "Title": "BBC visits mountain area where Jay Slater vanished",
-    "Description": "The 19-year-old from Lancashire went missing on Tenerife in the early hours of Monday.",
-    "Link": "https://www.bbc.com/news/videos/cv22yxzlj31o",
-    "Source": "BBC News",
-    "PubDate": "2024-06-21T01:21:16Z"
+    "Title": "Kim Jong Un gives Russia's Putin 'full support' for Ukraine war",
+    "Description": "Vladimir Putin makes his first trip to North Korea since Russia's full-scale invasion of Ukraine as the two nuclear-armed states deepen ties.",
+    "Link": "https://www.usatoday.com/story/news/world/2024/06/18/putin-north-korea-kim-jong-un-visit/74133118007/",
+    "Source": "USA TODAY",
+    "PubDate": "2024-06-21T14:09:46.4565972Z"
   },
   {
     "Id": 122,
-    "Title": "Your Voice, Your Vote - Ros Atkins takes questions on boundary changes",
-    "Description": "The BBC's analysis editor answers some of your questions about constituency \nboundary changes.",
-    "Link": "https://www.bbc.com/news/videos/cw44mdmyez2o",
-    "Source": "BBC News",
-    "PubDate": "2024-06-19T12:10:45Z"
+    "Title": "Extreme heat stretches around the globe",
+    "Description": "A severe heatwave is to blame for deaths in Greece and Saudi Arabia, as billions are bracing for triple digit temperatures around the globe.",
+    "Link": "https://www.usatoday.com/videos/news/world/2024/06/17/severe-heatwave-around-the-globe-responsible-for-over-a-dozen-deaths/74129227007/",
+    "Source": "USA TODAY",
+    "PubDate": "2024-06-21T14:09:46.4565972Z"
   },
   {
     "Id": 123,
-    "Title": "The Papers: 'Flurry of bets' and 'Corbyn better than Johnson'",
-    "Description": "Tory election betting allegations and Keir Starmer's views on Jeremy Corbyn are front and centre of Friday's newspaper headlines.",
-    "Link": "https://www.bbc.com/news/articles/c2558p2852eo",
-    "Source": "BBC News",
-    "PubDate": "2024-06-21T01:30:21Z"
+    "Title": "American tourist found dead on Greek island; 3 people remain missing",
+    "Description": "An American tourist was found dead near Greek island of Corfu amid heat wave in Greece, as the search for three others continue.",
+    "Link": "https://www.usatoday.com/videos/news/world/2024/06/17/american-tourist-found-dead-greek-island-3-people-remain-missing/74122758007/",
+    "Source": "USA TODAY",
+    "PubDate": "2024-06-21T14:09:46.4565972Z"
   },
   {
     "Id": 124,
-    "Title": "First UK Muslim Pride to choose joy over rejection",
-    "Description": "LGBTQ+ Muslims say they are excited for the first UK event dedicated to queer people of their faith.",
-    "Link": "https://www.bbc.com/news/articles/cyjj80pm1m0o",
-    "Source": "BBC News",
-    "PubDate": "2024-06-21T02:14:48Z"
+    "Title": "Israeli prime minister disbands war council",
+    "Description": "As members of Israeli's war council departed over strategy differences, Prime Minister Benjamin Netanyahu disbanded it.",
+    "Link": "https://www.usatoday.com/videos/news/world/2024/06/17/israeli-war-council-advising-hamas-operations-disbanded/74123615007/",
+    "Source": "USA TODAY",
+    "PubDate": "2024-06-21T14:09:46.4565972Z"
   },
   {
     "Id": 125,
-    "Title": "Firm fined for selling China-made cars as Italian",
-    "Description": "Italian officials said DR Automobiles misled customers into thinking its cars were made in Italy.",
-    "Link": "https://www.bbc.com/news/articles/ckrrxj5mvkgo",
-    "Source": "BBC News",
-    "PubDate": "2024-06-21T04:48:39Z"
+    "Title": "Protesters, police clash near Netanyahu's home after War Cabinet dropped",
+    "Description": "Almost 60% of Israelis support the cease-fire plan unveiled by President Joe Biden, a survey by the Jewish People Policy Institute shows.",
+    "Link": "https://www.usatoday.com/story/news/world/israel-hamas/2024/06/17/israel-war-updates-gaza-hamas/74121533007/",
+    "Source": "USA TODAY",
+    "PubDate": "2024-06-21T14:09:46.4565972Z"
   },
   {
     "Id": 126,
-    "Title": "Trump campaign gets $50m boost from single donor",
-    "Description": "Conservative billionaire Timothy Mellon's donation helped Trump campaign to outspend Biden in recent weeks.",
-    "Link": "https://www.bbc.com/news/articles/ce448zzwp2go",
-    "Source": "BBC News",
-    "PubDate": "2024-06-21T01:28:50Z"
+    "Title": "Brawl breaks out in Italian parliament",
+    "Description": "One Italian lawmaker was injured after a brawl in the country's parliament.",
+    "Link": "https://www.usatoday.com/videos/news/world/2024/06/17/italian-lawmaker-hospitalized-following-parliament-brawl/74092348007/",
+    "Source": "USA TODAY",
+    "PubDate": "2024-06-21T14:09:46.4565972Z"
   },
   {
     "Id": 127,
-    "Title": "Microsoft back as most valuable firm as Nvidia slips",
-    "Description": "The artificial intelligence chip giant briefly took the top spot from the software company this week.",
-    "Link": "https://www.bbc.com/news/articles/c8884389l35o",
-    "Source": "BBC News",
-    "PubDate": "2024-06-21T00:06:36Z"
+    "Title": "China accuses Philippine supply ship of hitting Chinese vessel in South China Sea",
+    "Description": "China and the Philippines traded accusations over a maritime collision in the South China Sea on Monday, the latest in an increasingly testy series of confrontations over the disputed waters.",
+    "Link": "https://www.usatoday.com/story/news/world/2024/06/17/china-philippines-south-sea-collision/74122138007/",
+    "Source": "USA TODAY",
+    "PubDate": "2024-06-21T14:09:46.4565972Z"
   },
   {
     "Id": 128,
-    "Title": "Who is participating in BBC Wales' election debate?",
-    "Description": "Five parties are set to go head to head in Friday's live televised debate.",
-    "Link": "https://www.bbc.com/news/articles/cw88j9jy3ego",
-    "Source": "BBC News",
-    "PubDate": "2024-06-21T05:04:13Z"
+    "Title": "Russian President Vladimir Putin to visit North Korean leader Kim Jong Un",
+    "Description": "Russian President Vladimir Putin will visit North Korea on Tuesday and Wednesday, the Kremlin said, a rare trip that underscores Moscow's burgeoning partnership with the reclusive nuclear-armed state.",
+    "Link": "https://www.usatoday.com/story/news/world/ukraine/2024/06/17/vladimir-putin-kim-jong-un-russia/74122000007/",
+    "Source": "USA TODAY",
+    "PubDate": "2024-06-21T14:09:46.4565972Z"
   },
   {
     "Id": 129,
-    "Title": "E. coli outbreak put at least 86 people in hospital",
-    "Description": "Cases have been linked to pre-packed sandwiches containing lettuce - but investigations continue.",
-    "Link": "https://www.bbc.com/news/articles/cedd0947e73o",
-    "Source": "BBC News",
-    "PubDate": "2024-06-20T15:32:26Z"
+    "Title": "Israel pauses military activity along main road in Gaza to facilitate aid",
+    "Description": "The Israeli military said on Sunday it would hold daily tactical pauses in military activity along a main road in southern Gaza to allow more aid to flow into the enclave.",
+    "Link": "https://www.usatoday.com/story/news/world/israel-hamas/2024/06/16/israel-pauses-military-activity-gaza-road/74116901007/",
+    "Source": "USA TODAY",
+    "PubDate": "2024-06-21T14:09:46.4565972Z"
   },
   {
     "Id": 130,
-    "Title": "Cummins takes hat-trick as Australia beat Bangladesh",
-    "Description": "Pat Cummins takes a hat-trick as Australia beat Bangladesh by 28 runs on the DLS method to start their Super 8s campaign with a win.",
-    "Link": "https://www.bbc.com/sport/cricket/articles/c4nn7pdpy2lo",
-    "Source": "BBC News",
-    "PubDate": "2024-06-21T05:05:07Z"
+    "Title": "8 Israeli soldiers killed during fighting in Gaza",
+    "Description": "Eight Israeli soldiers were killed in Gaza on Saturday, the military said, as forces continued to push in and around the southern city of Rafah.",
+    "Link": "https://www.usatoday.com/story/news/world/israel-hamas/2024/06/15/8-israeli-soldiers-killed-as-fighting-continues-in-southern-gaza/74111490007/",
+    "Source": "USA TODAY",
+    "PubDate": "2024-06-21T14:09:46.4565972Z"
   },
   {
     "Id": 131,
-    "Title": "'Alexander-Arnold experiment is surely over for Southgate'",
-    "Description": "Gareth Southgate's \"experiment\" of playing Trent Alexander-Arnold in England's midfield is surely over, writes Phil McNulty.",
-    "Link": "https://www.bbc.com/sport/football/articles/c4nn5k2l81go",
-    "Source": "BBC News",
-    "PubDate": "2024-06-20T21:21:11Z"
+    "Title": "See elephant welcome rare twin calves after surprise second birth",
+    "Description": "Caretakers at the Ayutthaya Elephant Palace and Royal Kraal only planned on Chamchuri giving birth to one calf one June 7. Then another calf emerged.",
+    "Link": "https://www.usatoday.com/story/news/world/2024/06/15/twin-elephants-thailand/74105208007/",
+    "Source": "USA TODAY",
+    "PubDate": "2024-06-21T14:09:46.4565972Z"
   },
   {
     "Id": 132,
-    "Title": "Draper beats defending champion Alcaraz at Queen's ",
-    "Description": "New British men's number one Jack Draper continues his memorable week with a notable win over Wimbledon champion Carlos Alcaraz at Queen's.",
-    "Link": "https://www.bbc.com/sport/tennis/articles/cprr07q47q0o",
-    "Source": "BBC News",
-    "PubDate": "2024-06-20T16:40:05Z"
+    "Title": "Pentagon ran secret anti-vax campaign to undermine China during pandemic",
+    "Description": "Reuters identified at least 300 accounts on X, formerly Twitter, that matched descriptions shared by former U.S. military officials.",
+    "Link": "https://www.usatoday.com/story/news/world/2024/06/14/pentagon-vaccine-china-covid/74096177007/",
+    "Source": "USA TODAY",
+    "PubDate": "2024-06-21T14:09:46.4565972Z"
   },
   {
     "Id": 133,
-    "Title": "North Korea: Why Putin and Xi are courting Kim",
-    "Description": "The war in Ukraine has shifted the balance of power between Moscow, Pyongyang and Beijing",
-    "Link": "https://www.bbc.co.uk/sounds/play/w3ct6dl9",
-    "Source": "BBC News",
-    "PubDate": "2024-06-17T08:50:00Z"
+    "Title": "Comedians share laughs with the Pope",
+    "Description": "The Pope hosted comedians from around the world, including Chris Rock, Jimmy Fallon and Whoopi Goldberg at the Vatican.",
+    "Link": "https://www.usatoday.com/videos/news/world/2024/06/14/pope-says-its-not-blasphemy-to-laugh-at-god-while-hosting-comedians/74097700007/",
+    "Source": "USA TODAY",
+    "PubDate": "2024-06-21T14:09:46.4565972Z"
   },
   {
     "Id": 134,
-    "Title": "Friend of missing Jay Slater fears he is in danger",
-    "Description": "Jay Slater who is missing in Tenerife told a friend he was lost and thirsty before his phone cut off.  ",
-    "Link": "https://www.bbc.com/news/articles/c3ggj8zv62zo",
-    "Source": "BBC News",
-    "PubDate": "2024-06-20T19:36:18Z"
+    "Title": "Children play near massive piles of waste in Gaza",
+    "Description": "More than half of the buildings in Gaza have been destroyed, while agriculture has deteriorated across the territory, leaving its citizens starving.",
+    "Link": "https://www.usatoday.com/videos/news/world/israel-hamas/2024/06/13/solid-waste-gaza-causes-hygiene-sanitation-issues/74086790007/",
+    "Source": "USA TODAY",
+    "PubDate": "2024-06-21T14:09:46.4565972Z"
   },
   {
     "Id": 135,
-    "Title": "SNP investigated over 'misuse' of  election mail stamps",
-    "Description": "A Holyrood complaint claims that stamps bought on MSPs' expenses were passed to UK election candidates.",
-    "Link": "https://www.bbc.com/news/articles/cg334q4z0npo",
-    "Source": "BBC News",
-    "PubDate": "2024-06-20T17:46:51Z"
+    "Title": "Heroes or villains? Netanyahu honors hostage rescue in which hundreds died",
+    "Description": "The Gaza Health Ministry said more than 270 Palestinians perished in Israel's hostage rescue mission, most of them civilians.",
+    "Link": "https://www.usatoday.com/story/news/world/israel-hamas/2024/06/13/israel-war-updates-hamas-gaza/74081662007/",
+    "Source": "USA TODAY",
+    "PubDate": "2024-06-21T14:09:46.4565972Z"
   },
   {
     "Id": 136,
-    "Title": " NATO member Romania to send a Patriot missile system to neighboring Ukraine",
-    "Description": "NATO member Romania\u0026rsquo;s top defense body says the country will donate a Patriot missile system to neighboring Ukraine to help Kyiv in its war against Russia as Moscow\u0026rsquo;s forces continue to bombard civilian areas and energy infrastructure",
-    "Link": "https://abcnews.go.com/International/wireStory/nato-member-romania-send-patriot-missile-system-neighboring-111276470",
-    "Source": "ABC News: International",
-    "PubDate": "2024-06-20T14:22:27Z"
+    "Title": "Russian warships sail near U.S. to Cuba",
+    "Description": "The port visit of the ships comes amid heightened tensions between Russia, the United States and its western allies over the war in Ukraine.",
+    "Link": "https://www.usatoday.com/story/news/world/2024/06/12/russian-warships-cuba-caribbean-2024/74073971007/",
+    "Source": "USA TODAY",
+    "PubDate": "2024-06-21T14:09:46.4565972Z"
   },
   {
     "Id": 137,
-    "Title": " Indian opposition leader Arvind Kejriwal granted bail after arrest in bribery case",
-    "Description": "Indian opposition leader and New Delhi chief minister Arvind Kejriwal has been granted bail by a court in the capital after he was arrested in a bribery case in March",
-    "Link": "https://abcnews.go.com/International/wireStory/indian-opposition-leader-arvind-kejriwal-granted-bail-months-111279959",
-    "Source": "ABC News: International",
-    "PubDate": "2024-06-20T16:46:27Z"
+    "Title": "Israel and Hezbollah exchange strikes",
+    "Description": "Over 200 rockets launched from Lebanon by Hezbollah pounded northern Israel in retaliation for an airstrike that killed a Hezbollah leader.",
+    "Link": "https://www.usatoday.com/videos/news/world/israel-hamas/2024/06/12/israel-strike-kills-hezbollah-leader-group-responds-rockets/74072718007/",
+    "Source": "USA TODAY",
+    "PubDate": "2024-06-21T14:09:46.4565972Z"
   },
   {
     "Id": 138,
-    "Title": " South Korea will consider supplying arms to Ukraine after Russia and North Korea sign strategic pact",
-    "Description": "South Korea says it will consider sending arms to Ukraine after Russia and North Korea rattled the region and beyond by signing a pact to come to each other\u0026rsquo;s defense in the event of war",
-    "Link": "https://abcnews.go.com/International/wireStory/north-korea-deal-putin-kim-requires-immediate-military-111264225",
-    "Source": "ABC News: International",
-    "PubDate": "2024-06-21T01:42:26Z"
+    "Title": "Pope Francis repeats gay slur in closed-door meeting, report says",
+    "Description": "The pontiff apologized last month after reports emerged that he had used an insulting term for gays in a previous meeting.",
+    "Link": "https://www.usatoday.com/story/news/world/2024/06/12/pope-francis-gay-priests-vatican-slur/74071671007/",
+    "Source": "USA TODAY",
+    "PubDate": "2024-06-21T14:09:46.4565972Z"
   },
   {
     "Id": 139,
-    "Title": " Guatemalan President Bernardo Arévalo says he found a 'semi-destroyed country' on taking office",
-    "Description": "Nearly six months into his administration Guatemala President Bernardo Ar\u0026eacute;valo says opposition in the Congress and the Attorney General\u0026rsquo;s Office have made it difficult to implement the change he seeks for the Central American nation that he says he fou...",
-    "Link": "https://abcnews.go.com/International/wireStory/guatemalan-president-bernardo-arvalo-found-semi-destroyed-country-111300918",
-    "Source": "ABC News: International",
-    "PubDate": "2024-06-21T03:26:27Z"
+    "Title": "Dozens killed in Kuwait building fire",
+    "Description": "At least 41 people died in a fire that destroyed a building in Kuwait that had been housing workers, authorities say.",
+    "Link": "https://www.usatoday.com/videos/news/world/2024/06/12/kuwait-fire-building-housing-workers-killed-41-people/74069954007/",
+    "Source": "USA TODAY",
+    "PubDate": "2024-06-21T14:09:46.4565972Z"
   },
   {
     "Id": 140,
+    "Title": "'The time for haggling is over,' US says as Hamas demands guarantees",
+    "Description": "Hamas official Osama Hamdan said the U.S.-backed truce plan would merely allow Israel to regroup its forces and then continue the war.",
+    "Link": "https://www.usatoday.com/story/news/world/israel-hamas/2024/06/12/israel-war-updates-hezbollah-gaza/74068046007/",
+    "Source": "USA TODAY",
+    "PubDate": "2024-06-21T14:09:46.4565972Z"
+  },
+  {
+    "Id": 141,
+    "Title": "Video shows King Charles' royal portrait vandalized with Gromit face",
+    "Description": "The \"Wallace and Gromit\" themed demonstration was designed to catch the king's attention, an animal activist group said Tuesday.",
+    "Link": "https://www.usatoday.com/story/news/world/2024/06/11/king-charles-portrait-vandalized/74056728007/",
+    "Source": "USA TODAY",
+    "PubDate": "2024-06-21T14:09:46.4565972Z"
+  },
+  {
+    "Id": 142,
+    "Title": "Migrant boat capsizes off the coast of Yemen, at least 49 dead",
+    "Description": "The International Organization for Migration said a boat carrying 260 migrants capsized Monday off the coast of Yemen.",
+    "Link": "https://www.usatoday.com/story/news/world/2024/06/11/migrant-boat-capsizes-yemen/74056961007/",
+    "Source": "USA TODAY",
+    "PubDate": "2024-06-21T14:09:46.4565972Z"
+  },
+  {
+    "Id": 143,
+    "Title": "Israeli official says Hamas changed, 'rejected' latest cease-fire deal",
+    "Description": "Biden's proposal calls for an immediate truce, withdrawal of Israeli troops from Gaza and an exchange of Palestinian prisoners for hostages.",
+    "Link": "https://www.usatoday.com/story/news/world/israel-hamas/2024/06/11/israeli-war-updates-blinken-hostages-gaza/74055272007/",
+    "Source": "USA TODAY",
+    "PubDate": "2024-06-21T14:09:46.4565972Z"
+  },
+  {
+    "Id": 144,
+    "Title": "US proposal for cease-fire in Gaza gets UN backing | The Excerpt",
+    "Description": "Plus: US soldiers are more likely to die from suicide than in battle. | Chronic absenteeism is plaguing America's schools. | It's all on The Excerpt.",
+    "Link": "https://www.usatoday.com/story/news/world/2024/06/11/us-proposal-cease-fire-gaza-united-nations-backing-the-excerpt/74056397007/",
+    "Source": "USA TODAY",
+    "PubDate": "2024-06-21T14:09:46.4565972Z"
+  },
+  {
+    "Id": 145,
+    "Title": "Police met with smoke bombs while dispersing pro-Palestinian protest at Israeli embassy in Mexico City",
+    "Description": "Pro-Palestinian protesters in Mexico City were seen pulling on security fencing outside the Embassy of Israel before being dispersed by police.",
+    "Link": "https://www.usatoday.com/videos/news/world/2024/06/11/pro-palestinian-protest-israel-embassy-mexico-city/73894002007/",
+    "Source": "USA TODAY",
+    "PubDate": "2024-06-21T14:09:46.4565972Z"
+  },
+  {
+    "Id": 146,
     "Title": " Georgia's president vetoes the so-called 'Russian law' targeting the media that has sparked weeks of mass protests",
     "Description": "Georgia's president vetoes the so-called 'Russian law' targeting the media that has sparked weeks of mass protests",
     "Link": "https://abcnews.go.com/International/wireStory/georgias-president-vetoes-called-russian-law-targeting-media-110362621",
@@ -1120,7 +1168,7 @@
     "PubDate": "2024-05-18T15:01:59Z"
   },
   {
-    "Id": 141,
+    "Id": 147,
     "Title": " Militia clashes rock western Libyan town. At least 1 civilian was killed, officials say",
     "Description": "Libyan health authorities say clashes between government-allied militias rocked the western town of Zawiya, killing at least one civilian man and wounding 22 others",
     "Link": "https://abcnews.go.com/International/wireStory/militia-clashes-rock-western-libyan-town-1-civilian-110365810",
@@ -1128,7 +1176,7 @@
     "PubDate": "2024-05-18T20:46:27Z"
   },
   {
-    "Id": 142,
+    "Id": 148,
     "Title": " Tunisians stage anti-migrant protest as the number of stranded in transit to Europe grows",
     "Description": "Hundreds of anti-migrant protestors have marched through the streets of a Tunisian town where many migrants are living while waiting to try and travel by boat to Europe",
     "Link": "https://abcnews.go.com/International/wireStory/tunisians-stage-anti-migrant-protest-number-stranded-transit-110367433",
@@ -1136,7 +1184,7 @@
     "PubDate": "2024-05-19T03:34:20Z"
   },
   {
-    "Id": 143,
+    "Id": 149,
     "Title": " Chinese ambassador promises 'friendship' as 2 Chinese warships dock in Cambodia",
     "Description": "Two Chinese warships have docked at a commercial port in Cambodia, in preparation for joint naval exercises between the two countries",
     "Link": "https://abcnews.go.com/International/wireStory/chinese-ambassador-promises-friendship-cooperation-2-chinese-warships-110371208",
@@ -1144,7 +1192,7 @@
     "PubDate": "2024-05-19T08:05:56Z"
   },
   {
-    "Id": 144,
+    "Id": 150,
     "Title": " An ultimatum raises pressure on Netanyahu to make postwar plans for Gaza",
     "Description": "Pressure is coming from his own War Cabinet and his country\u0026rsquo;s closest ally.",
     "Link": "https://abcnews.go.com/International/wireStory/ultimatum-raises-pressure-netanyahu-make-postwar-plans-gaza-110366002",
@@ -1152,7 +1200,7 @@
     "PubDate": "2024-05-19T09:58:29Z"
   },
   {
-    "Id": 145,
+    "Id": 151,
     "Title": " It was once a center of Islamic learning. Now Mali's historic city of Djenné mourns lack of visitors",
     "Description": "Mali\u0026rsquo;s historic city of Djenn\u0026eacute; was once a center of Islamic learning, known for its sprawling mud-brick mosque that has been on the UNESCO World Heritage in Danger list since 2016",
     "Link": "https://abcnews.go.com/International/wireStory/center-islamic-learning-now-malis-historic-city-djenn-110358948",
@@ -1160,7 +1208,7 @@
     "PubDate": "2024-05-18T10:14:32Z"
   },
   {
-    "Id": 146,
+    "Id": 152,
     "Title": " Malaysia minister says terror suspect who killed 2 police officers acted on his own",
     "Description": "Malaysia says the man who attacked a police station and killed two officers is believed to have acted on his own despite suspected links to the Jemaah Islamiyah extremist group",
     "Link": "https://abcnews.go.com/International/wireStory/malaysia-minister-terror-suspect-killed-2-police-officers-110359039",
@@ -1168,7 +1216,7 @@
     "PubDate": "2024-05-18T11:26:19Z"
   },
   {
-    "Id": 147,
+    "Id": 153,
     "Title": " Parts of northern India scorched by extreme heat with New Delhi on high alert",
     "Description": "On Friday, parts of New Delhi reported up to 116 degrees Fahrenheit.",
     "Link": "https://abcnews.go.com/International/wireStory/parts-northern-india-scorched-extreme-heat-new-delhi-110359738",
@@ -1176,7 +1224,7 @@
     "PubDate": "2024-05-18T17:10:29Z"
   },
   {
-    "Id": 148,
+    "Id": 154,
     "Title": " US national security adviser, Saudi Arabia's crown prince meet to discuss 'semi-final' security deal",
     "Description": "President Joe Biden\u0026rsquo;s national security adviser Jake Sullivan has met with Saudi Arabia\u0026rsquo;s Crown Prince Mohammed bin Salman to discuss what the kingdom described as the \u0026ldquo;semi-final\u0026rdquo; version of a wide-ranging security agreement between the countries",
     "Link": "https://abcnews.go.com/International/wireStory/us-national-security-adviser-saudi-arabias-crown-prince-110370667",
@@ -1184,7 +1232,7 @@
     "PubDate": "2024-05-19T11:10:21Z"
   },
   {
-    "Id": 149,
+    "Id": 155,
     "Title": " Ukraine and Russia exchange drone attacks while Russia continues its push in the east",
     "Description": "At least 10 people were reported killed in attacks in Ukraine\u0026rsquo;s war-ravaged northeast on Sunday, as Russia pushed ahead with its renewed offensive",
     "Link": "https://abcnews.go.com/International/wireStory/ukraine-russia-exchange-drone-attacks-russia-continues-push-110371770",
@@ -1192,7 +1240,7 @@
     "PubDate": "2024-05-19T13:02:27Z"
   },
   {
-    "Id": 150,
+    "Id": 156,
     "Title": " Member of Israel's War Cabinet says he'll quit the government June 8 unless there's a new war plan",
     "Description": "A popular centrist member of Israel\u0026rsquo;s three-man War Cabinet has threatened to resign from the government if it doesn\u0026rsquo;t adopt a new plan for the war in Gaza in the next three weeks",
     "Link": "https://abcnews.go.com/International/wireStory/aid-new-pier-off-gaza-distributed-weekend-pressure-110363213",
@@ -1200,7 +1248,7 @@
     "PubDate": "2024-05-18T21:18:22Z"
   },
   {
-    "Id": 151,
+    "Id": 157,
     "Title": " Argentine president begins unusual visit to Spain, snubbing officials and courting the far-right",
     "Description": "Even before kicking off a three-day visit to Madrid, Argentina\u0026rsquo;s libertarian President Javier Milei has stirred controversy, accusing the socialist government of bringing \u0026ldquo;poverty and death\u0026rdquo; to Spain and weighing in on corruption allegations against th...",
     "Link": "https://abcnews.go.com/International/wireStory/argentine-president-begins-unusual-visit-spain-snubbing-officials-110355562",
@@ -1208,7 +1256,7 @@
     "PubDate": "2024-05-18T02:22:17Z"
   },
   {
-    "Id": 152,
+    "Id": 158,
     "Title": " Water, water everywhere ... most is now safe to drink in an English village after parasite outbreak",
     "Description": "Most residents near a scenic fishing village in southwestern England were told their tap water is safe to drink again after a parasite sickened more than 45 people",
     "Link": "https://abcnews.go.com/International/wireStory/water-water-now-safe-drink-english-village-after-110363674",
@@ -1216,7 +1264,7 @@
     "PubDate": "2024-05-18T19:02:17Z"
   },
   {
-    "Id": 153,
+    "Id": 159,
     "Title": " Dead or alive? Parents of children gone in Sri Lanka's civil war have spent 15 years seeking answers",
     "Description": "It has been 15 years since the end of Sri Lanka's civil war, which pitted government forces against Tamil Tiger separatists",
     "Link": "https://abcnews.go.com/International/wireStory/dead-alive-parents-children-sri-lankas-civil-war-110360414",
@@ -1224,7 +1272,7 @@
     "PubDate": "2024-05-18T19:34:20Z"
   },
   {
-    "Id": 154,
+    "Id": 160,
     "Title": " As killings surge, Haitians struggle to bury loved ones and find closure in violent capital",
     "Description": "Finding closure for loved ones killed by gangs on a relentless rampage through Haiti\u0026rsquo;s capital and beyond is growing harder day by day in a country where burial rituals are sacred and the dead venerated",
     "Link": "https://abcnews.go.com/International/wireStory/killings-surge-haitians-struggle-bury-loved-find-closure-110370571",
@@ -1232,7 +1280,7 @@
     "PubDate": "2024-05-19T05:26:32Z"
   },
   {
-    "Id": 155,
+    "Id": 161,
     "Title": " Taiwan's new president inherits a strong foreign policy position but political gridlock at home",
     "Description": "He inherits a strong foreign policy position but political gridlock at home.",
     "Link": "https://abcnews.go.com/International/wireStory/taiwans-new-president-inherits-strong-foreign-policy-position-110369018",
@@ -1240,7 +1288,7 @@
     "PubDate": "2024-05-19T11:42:27Z"
   },
   {
-    "Id": 156,
+    "Id": 162,
     "Title": " Flash floods due to unusually heavy rains kill at least 50 people in Afghanistan",
     "Description": "Taliban officials say flash floods from heavy seasonal rains have killed at least 68 people in Afghanistan, adding the death toll was based on preliminary reports",
     "Link": "https://abcnews.go.com/International/wireStory/flash-floods-due-unusually-heavy-seasonal-rains-kill-110359327",
@@ -1248,7 +1296,7 @@
     "PubDate": "2024-05-18T17:50:17Z"
   },
   {
-    "Id": 157,
+    "Id": 163,
     "Title": " Venezuelan opposition presidential candidate Gonzalez seeks unity in first rally",
     "Description": "The presidential candidate of Venezuela\u0026rsquo;s chief opposition coalition has sought to cultivate a mood of hope and possibility in a large rally that marked the start of a campaign he admittedly never imagined leading",
     "Link": "https://abcnews.go.com/International/wireStory/venezuelan-opposition-presidential-candidate-gonzalez-seeks-unity-rally-110364312",
@@ -1256,7 +1304,7 @@
     "PubDate": "2024-05-18T19:58:21Z"
   },
   {
-    "Id": 158,
+    "Id": 164,
     "Title": " WikiLeaks founder facing pivotal moment in long fight to stay out of US court",
     "Description": "WikiLeaks founder Julian Assange faces what could be his final court hearing in England over whether he should be extradited to the United States to face spying charges",
     "Link": "https://abcnews.go.com/International/wireStory/wikileaks-founder-julian-assange-facing-pivotal-moment-long-110371673",
@@ -1264,7 +1312,7 @@
     "PubDate": "2024-05-19T09:26:20Z"
   },
   {
-    "Id": 159,
+    "Id": 165,
     "Title": " Police say 2 people are dead and 5 are missing in Hungary after a boat collision on the Danube River",
     "Description": "Police say 2 people are dead and 5 are missing in Hungary after a boat collision on the Danube River",
     "Link": "https://abcnews.go.com/International/wireStory/police-2-people-dead-5-missing-hungary-after-110371899",
@@ -1272,7 +1320,7 @@
     "PubDate": "2024-05-19T11:34:03Z"
   },
   {
-    "Id": 160,
+    "Id": 166,
     "Title": " Gunfire in Congo’s capital as men in military uniform clash with politician's guards",
     "Description": "Congo\u0026rsquo;s army says it has \u0026ldquo;foiled a coup\u0026rdquo; and arrested the perpetrators, including several foreigners, following a shootout between armed men in military uniform and guards of a close ally of Congo\u0026rsquo;s president that left three people dead in the capital,...",
     "Link": "https://abcnews.go.com/International/wireStory/gunfire-rings-congos-capital-men-military-uniform-clash-110371681",
@@ -1280,7 +1328,7 @@
     "PubDate": "2024-05-19T12:53:53Z"
   },
   {
-    "Id": 161,
+    "Id": 167,
     "Title": " Protesters rally in Peru against decree classifying seven gender identities as “mental illness”",
     "Description": "Sexual diversity activists have protested in Peru\u0026rsquo;s capital in front of the health ministry to demand that the government repeal a decree that characterizes seven gender identities, including transgenderism, as \u0026ldquo;mental illnesses.\u0026rdquo;",
     "Link": "https://abcnews.go.com/International/wireStory/protesters-rally-peru-decree-classifying-gender-identities-mental-110356415",
@@ -1288,7 +1336,7 @@
     "PubDate": "2024-05-18T01:58:40Z"
   },
   {
-    "Id": 162,
+    "Id": 168,
     "Title": " Slovak PM's condition remains serious but prognosis positive after assassination bid",
     "Description": "Slovakia\u0026rsquo;s defense minister says the country's populist prime minister, Robert Fico, remains in serious condition but now has a positive prognosis, four days after he was shot multiple times in an assassination attempt that sent shockwaves across the d...",
     "Link": "https://abcnews.go.com/International/wireStory/slovak-prime-ministers-condition-remains-prognosis-positive-after-110372185",
@@ -1296,7 +1344,7 @@
     "PubDate": "2024-05-19T12:14:18Z"
   },
   {
-    "Id": 163,
+    "Id": 169,
     "Title": " Dominicans vote in general elections with eyes on crisis in neighboring Haiti",
     "Description": "Voters in the Dominican Republic are casting ballots in general elections likely to reinforce the government\u0026rsquo;s crackdown on its shared border with crisis-stricken Haiti",
     "Link": "https://abcnews.go.com/International/wireStory/dominicans-vote-general-elections-eyes-crisis-neighboring-haiti-110370572",
@@ -1304,7 +1352,7 @@
     "PubDate": "2024-05-19T12:14:28Z"
   },
   {
-    "Id": 164,
+    "Id": 170,
     "Title": " A court in Slovakia says a suspect charged with attempting to assassinate Prime Minister Fico will remain in detention",
     "Description": "A court in Slovakia says a suspect charged with attempting to assassinate Prime Minister Fico will remain in detention",
     "Link": "https://abcnews.go.com/International/wireStory/court-slovakia-suspect-charged-attempting-assassinate-prime-minister-110360324",
@@ -1312,7 +1360,7 @@
     "PubDate": "2024-05-18T13:34:04Z"
   },
   {
-    "Id": 165,
+    "Id": 171,
     "Title": "Boy's body found in river as second teen 'critical'",
     "Description": "The 14-year-old's body was found in the River Tyne and the younger boy was rescued and taken to hospital.",
     "Link": "https://www.bbc.com/news/articles/cnee7lp7mgdo",
@@ -1320,7 +1368,7 @@
     "PubDate": "2024-05-19T12:20:49Z"
   },
   {
-    "Id": 166,
+    "Id": 172,
     "Title": "Su and Steve fought for justice, but didn't live to see it",
     "Description": "Su Gorman and Steve Dymond helped to expose an NHS scandal - but they died without seeing justice.",
     "Link": "https://www.bbc.co.uk/news/health-69018125",
@@ -1328,7 +1376,7 @@
     "PubDate": "2024-05-18T23:05:19Z"
   },
   {
-    "Id": 167,
+    "Id": 173,
     "Title": "Infected blood victims have waited too long - Shapps",
     "Description": "Families have been let down over decades, says minister, ahead of a long-awaited inquiry report.",
     "Link": "https://www.bbc.co.uk/news/uk-politics-69034451",
@@ -1336,7 +1384,7 @@
     "PubDate": "2024-05-19T11:33:38Z"
   },
   {
-    "Id": 168,
+    "Id": 174,
     "Title": "Israel war cabinet minister vows to quit if there is no post-war plan for Gaza",
     "Description": "Recent weeks have seen an increasingly public rift over how Gaza should be governed after the war.",
     "Link": "https://www.bbc.com/news/articles/cekkz82gnzgo",
@@ -1344,7 +1392,7 @@
     "PubDate": "2024-05-18T23:22:26Z"
   },
   {
-    "Id": 169,
+    "Id": 175,
     "Title": "Scam callers targeting parasite outbreak victims",
     "Description": "South West Water customers impacted by the outbreak will automatically be paid £215 in compensation.",
     "Link": "https://www.bbc.com/news/articles/cp448vp8k88o",
@@ -1352,7 +1400,7 @@
     "PubDate": "2024-05-19T09:56:27Z"
   },
   {
-    "Id": 170,
+    "Id": 176,
     "Title": "Inside the museums averaging fewer than one visitor a day",
     "Description": "What is it like for the volunteers who keep England's smallest attractions going?",
     "Link": "https://www.bbc.co.uk/news/uk-england-68779540",
@@ -1360,7 +1408,7 @@
     "PubDate": "2024-05-19T01:09:42Z"
   },
   {
-    "Id": 171,
+    "Id": 177,
     "Title": "'I fluffed it': Labour's Streeting caught out on party pledges",
     "Description": "The BBC's Laura Kuenssberg finds out if her Conservative and Labour guests know their parties' policies.",
     "Link": "https://www.bbc.co.uk/news/uk-politics-69034413",
@@ -1368,7 +1416,7 @@
     "PubDate": "2024-05-19T08:35:03Z"
   },
   {
-    "Id": 172,
+    "Id": 178,
     "Title": "'I will be paying my mortgage until I’m 68'",
     "Description": "With more young homebuyers opting for ultra-long mortgages, we hear from people about their personal experiences.",
     "Link": "https://www.bbc.com/news/articles/cn3dded32j2o",
@@ -1376,7 +1424,7 @@
     "PubDate": "2024-05-19T00:47:54Z"
   },
   {
-    "Id": 173,
+    "Id": 179,
     "Title": "Watch: Blue fireball lights up skies over Spain",
     "Description": "The suspected meteorite was also seen in Portugal, with many sharing their videos on social media.",
     "Link": "https://www.bbc.co.uk/news/world-europe-69034415",
@@ -1384,7 +1432,7 @@
     "PubDate": "2024-05-19T11:24:13Z"
   },
   {
-    "Id": 174,
+    "Id": 180,
     "Title": "Taiwan's steely leader rewrote the book on how to deal with China",
     "Description": "Taiwan's outgoing president says boosting her country's military was the only way to defy China's threat.",
     "Link": "https://www.bbc.com/news/articles/ceklk794102o",
@@ -1392,7 +1440,7 @@
     "PubDate": "2024-05-18T22:24:57Z"
   },
   {
-    "Id": 175,
+    "Id": 181,
     "Title": "Assassin's Creed director: The right time to take series to Japan",
     "Description": "Assassin’s Creed: Shadows is a long-awaited pivot for the franchise into the country’s feudal 16th Century.",
     "Link": "https://www.bbc.com/news/articles/c163jexl7rxo",
@@ -1400,7 +1448,7 @@
     "PubDate": "2024-05-19T08:02:58Z"
   },
   {
-    "Id": 176,
+    "Id": 182,
     "Title": "Hepatitis C tests spike after blood scandal news",
     "Description": "More than 12,000 people asked for tests in England after the BBC found 1,700 cases are undiagnosed.",
     "Link": "https://www.bbc.co.uk/news/health-69027421",
@@ -1408,7 +1456,7 @@
     "PubDate": "2024-05-19T07:26:25Z"
   },
   {
-    "Id": 177,
+    "Id": 183,
     "Title": "Police injured and 19 arrested in Celtic celebrations",
     "Description": "An estimated 25,000 fans filled the city centre after their team brought the Premiership trophy home. ",
     "Link": "https://www.bbc.com/news/articles/c3ggk77ggvzo",
@@ -1416,7 +1464,7 @@
     "PubDate": "2024-05-19T12:07:26Z"
   },
   {
-    "Id": 178,
+    "Id": 184,
     "Title": "Raducanu withdraws from French Open qualifying",
     "Description": "Britain's Emma Raducanu withdraws from French Open qualifying, which starts on Monday.",
     "Link": "https://www.bbc.com/sport/tennis/articles/c288dpgrjvro",
@@ -1424,7 +1472,7 @@
     "PubDate": "2024-05-19T09:42:54Z"
   },
   {
-    "Id": 179,
+    "Id": 185,
     "Title": "Why the BBC could track down a people-smuggling kingpin before the police",
     "Description": "Barzan Majeed is believed to have controlled the trade across the English Channel yet remained free.",
     "Link": "https://www.bbc.com/news/articles/c2qv0grgy7yo",
@@ -1432,7 +1480,7 @@
     "PubDate": "2024-05-17T23:01:37Z"
   },
   {
-    "Id": 180,
+    "Id": 186,
     "Title": "Putin and Xi no longer have a partnership of equals",
     "Description": "Vladimir Putin’s visit to China was a show of strength, but in reality he needs Beijing's support for his war in Ukraine. ",
     "Link": "https://www.bbc.com/news/articles/c2lekp48n78o",
@@ -1440,7 +1488,7 @@
     "PubDate": "2024-05-17T15:41:03Z"
   },
   {
-    "Id": 181,
+    "Id": 187,
     "Title": "Is the move to electric cars running out of power?",
     "Description": "There has been an unexpected slowdown in sales of electric cars. Could this be more than a blip?",
     "Link": "https://www.bbc.co.uk/news/business-69022771",
@@ -1448,7 +1496,7 @@
     "PubDate": "2024-05-16T23:10:34Z"
   },
   {
-    "Id": 182,
+    "Id": 188,
     "Title": "Faisal Islam: Is the US economy doing too well?",
     "Description": "The US economic boom has consequences for the global balance of power - and for the UK.",
     "Link": "https://www.bbc.com/news/articles/cd131v26dneo",
@@ -1456,7 +1504,7 @@
     "PubDate": "2024-05-16T01:18:01Z"
   },
   {
-    "Id": 183,
+    "Id": 189,
     "Title": "Have Trump prosecutors made their case at hush-money trial?",
     "Description": "As their final witness testifies, legal experts assess the evidence so far and chances of a conviction.",
     "Link": "https://www.bbc.co.uk/news/world-us-canada-69030047",
@@ -1464,7 +1512,7 @@
     "PubDate": "2024-05-19T11:17:08Z"
   },
   {
-    "Id": 184,
+    "Id": 190,
     "Title": "'All-round mastermind Usyk reaches boxing's summit'",
     "Description": "Oleksandr Usyk was already a boxing superstar, but he transcended the sport with his historic heavyweight title win over Tyson Fury, writes Kal Sajad.",
     "Link": "https://www.bbc.com/sport/boxing/articles/cg33drqdd2no",
@@ -1472,7 +1520,7 @@
     "PubDate": "2024-05-19T06:28:17Z"
   },
   {
-    "Id": 185,
+    "Id": 191,
     "Title": "Russia's glide bombs devastating Ukraine's cities on the cheap",
     "Description": "Russia is increasingly using budget \"glide bombs\" to advance its offensive in Ukraine.",
     "Link": "https://www.bbc.com/news/articles/cz5drkr8l1ko",
@@ -1480,7 +1528,7 @@
     "PubDate": "2024-05-19T07:05:28Z"
   },
   {
-    "Id": 186,
+    "Id": 192,
     "Title": "The mystery of the man embroiled in a gold scam",
     "Description": "Questions remain around the disappearance of a man mixed up in one of the biggest gold scams in history.",
     "Link": "https://www.bbc.co.uk/news/world-us-canada-68987824",
@@ -1488,7 +1536,7 @@
     "PubDate": "2024-05-19T01:05:41Z"
   },
   {
-    "Id": 187,
+    "Id": 193,
     "Title": "What's the future for Aberfan chapel with tragic past?",
     "Description": "Some of the 116 children killed in the Aberfan disaster were taken to the now derelict Capel Aberfan.",
     "Link": "https://www.bbc.com/news/articles/cv2rj0k6dkgo",
@@ -1496,7 +1544,7 @@
     "PubDate": "2024-05-19T06:57:05Z"
   },
   {
-    "Id": 188,
+    "Id": 194,
     "Title": "Stories of the hostages taken by Hamas from Israel",
     "Description": "It is thought more than 100 Israelis are still being held hostage in Gaza after the 7 October attacks.",
     "Link": "https://www.bbc.co.uk/news/world-middle-east-67053011",
@@ -1504,7 +1552,7 @@
     "PubDate": "2024-05-18T22:30:16Z"
   },
   {
-    "Id": 189,
+    "Id": 195,
     "Title": "Singer Libianca on the pressure to take sides in Cameroon war",
     "Description": "The star of viral hit People talks to the BBC about getting death threats for waving a Cameroonian flag.",
     "Link": "https://www.bbc.com/news/articles/c8vz35911r9o",
@@ -1512,7 +1560,7 @@
     "PubDate": "2024-05-19T01:04:14Z"
   },
   {
-    "Id": 190,
+    "Id": 196,
     "Title": "‘My heart still hurts’: The personal sacrifice of revealing a K-pop scandal",
     "Description": "Two journalists reveal how they bore the brunt of fans' anger after exposing K-pop's dark underbelly.",
     "Link": "https://www.bbc.co.uk/news/world-asia-69020490",
@@ -1520,7 +1568,7 @@
     "PubDate": "2024-05-19T00:54:12Z"
   },
   {
-    "Id": 191,
+    "Id": 197,
     "Title": "Fury was boxing like he had won the fight - Lewis",
     "Description": "Tyson Fury was wrong to assume he was ahead on the scorecards during his heavyweight title defeat by Oleksandr Usyk, says former undisputed champion Lennox Lewis.",
     "Link": "https://www.bbc.com/sport/boxing/articles/cnll2q0y9lxo",
@@ -1528,7 +1576,7 @@
     "PubDate": "2024-05-19T05:26:28Z"
   },
   {
-    "Id": 192,
+    "Id": 198,
     "Title": "New Caledonia 'under siege' from rioting, says capital's mayor",
     "Description": "Hundreds of French gendarmes are trying to secure the road from Nouméa to the airport, officials say.",
     "Link": "https://www.bbc.com/news/articles/crggl7zxzd1o",
@@ -1536,7 +1584,7 @@
     "PubDate": "2024-05-19T06:21:10Z"
   },
   {
-    "Id": 193,
+    "Id": 199,
     "Title": "Fujitsu sacked boss at height of Horizon scandal",
     "Description": "Global president Rod Vawdrey then returned to Australia and made millions in a \"train wreck\" float.",
     "Link": "https://www.bbc.co.uk/news/business-68936973",
@@ -1544,7 +1592,7 @@
     "PubDate": "2024-05-19T00:41:54Z"
   },
   {
-    "Id": 194,
+    "Id": 200,
     "Title": "Woman left homeless after canal boat stolen",
     "Description": "Jolita Velickiene, who was forced to live in her car, wants those responsible to be arrested.",
     "Link": "https://www.bbc.com/news/articles/c84zzkdjk91o",
@@ -1552,7 +1600,7 @@
     "PubDate": "2024-05-19T06:30:13Z"
   },
   {
-    "Id": 195,
+    "Id": 201,
     "Title": "Hunt continues for missing Viking hoard artefacts",
     "Description": "Police have recovered some items but the whereabouts of most still remain unknown.",
     "Link": "https://www.bbc.com/news/articles/cx9ww41ee9ko",
@@ -1560,7 +1608,7 @@
     "PubDate": "2024-05-19T06:18:20Z"
   },
   {
-    "Id": 196,
+    "Id": 202,
     "Title": "Businessman and Lions rugby player Tony O'Reilly dies after short illness",
     "Description": "He built an international media business which at one stage owned more than 100 newspapers.",
     "Link": "https://www.bbc.com/news/articles/c7225dy596eo",
@@ -1568,7 +1616,7 @@
     "PubDate": "2024-05-19T07:44:58Z"
   },
   {
-    "Id": 197,
+    "Id": 203,
     "Title": "Wyatt-inspired England accelerate against Pakistan",
     "Description": "Follow text and radio commentary from the third and final T20 between England and Pakistan at Headingley.",
     "Link": "https://www.bbc.co.uk/sport/live/cricket/68966673",
@@ -1576,7 +1624,7 @@
     "PubDate": "2024-05-18T17:15:44Z"
   },
   {
-    "Id": 198,
+    "Id": 204,
     "Title": "Emilia Romagna GP: Verstappen on pole from Norris and Ferraris",
     "Description": "Follow live text updates and BBC Radio 5 Sports Live commentary from the Emilia Romagna Grand Prix at Imola.",
     "Link": "https://www.bbc.co.uk/sport/live/formula1/69020348",
@@ -1584,7 +1632,7 @@
     "PubDate": "2024-05-18T16:17:48Z"
   },
   {
-    "Id": 199,
+    "Id": 205,
     "Title": "Can Rishi Sunak turn it around?",
     "Description": "What was Project Sunak? And what is life like in Number 10?",
     "Link": "https://www.bbc.co.uk/sounds/play/p0hywbw0",
@@ -1592,7 +1640,7 @@
     "PubDate": "2024-05-18T17:08:00Z"
   },
   {
-    "Id": 200,
+    "Id": 206,
     "Title": "Mike Pompeo: How could Trump end the war in 24 hours?",
     "Description": "The former secretary of state on his old boss, and US support.",
     "Link": "https://www.bbc.co.uk/sounds/play/p0hyqyjt",
@@ -1600,7 +1648,7 @@
     "PubDate": "2024-05-17T17:27:00Z"
   },
   {
-    "Id": 201,
+    "Id": 207,
     "Title": "Watch the official Season 1 trailer",
     "Description": "Ready to rock through time with the Doctor and Ruby?",
     "Link": "https://www.bbc.co.uk/iplayer/episode/p0ht5tct/doctor-who-trailer-doctor-who-season-1?at_mid=sEbc3rIEIH\u0026at_campaign=Doctor_Who_Takeover_Trailer\u0026at_medium=display_ad\u0026at_campaign_type=owned\u0026at_audience_id=default\u0026at_product=iplayer\u0026at_brand=p0gglvqn\u0026at_ptr_name=bbc\u0026at_ptr_type=media\u0026at_format=image\u0026at_objective=consumption\u0026at_link_title=Doctor_Who_Takeover\u0026at_bbc_team=BBC",
@@ -1608,7 +1656,7 @@
     "PubDate": "2024-05-10T23:01:00Z"
   },
   {
-    "Id": 202,
+    "Id": 208,
     "Title": "Take a trip to the far future in Episode 1",
     "Description": "Ruby learns the Doctor's secrets when he takes her to a future with babies and a bogeyman.",
     "Link": "https://www.bbc.co.uk/iplayer/episode/m001z8bz/doctor-who-season-1-1-space-babies?seriesId=m001z8c2\u0026at_mid=nx21Ww1BAn\u0026at_campaign=Doctor_Who_Takeover_Ep1\u0026at_medium=display_ad\u0026at_campaign_type=owned\u0026at_audience_id=default\u0026at_product=iplayer\u0026at_brand=p0gglvqn\u0026at_ptr_name=bbc\u0026at_ptr_type=media\u0026at_format=image\u0026at_objective=consumption\u0026at_link_title=Doctor_Who_Takeover\u0026at_bbc_team=BBC",
@@ -1616,7 +1664,7 @@
     "PubDate": "2024-05-10T22:57:00Z"
   },
   {
-    "Id": 203,
+    "Id": 209,
     "Title": "How have the child benefit rules changed?",
     "Description": "Changes announced in the Budget mean people earning up to £80,000 can get the benefit.",
     "Link": "https://www.bbc.co.uk/news/business-68500022",
@@ -1624,7 +1672,7 @@
     "PubDate": "2024-04-05T23:01:51Z"
   },
   {
-    "Id": 204,
+    "Id": 210,
     "Title": "How to save money even when the budget is tight",
     "Description": "The interest paid on savings is better than anything seen for years, so how can you save when bills are rising?",
     "Link": "https://www.bbc.co.uk/news/business-66855566",
@@ -1632,7 +1680,7 @@
     "PubDate": "2024-01-08T10:01:58Z"
   },
   {
-    "Id": 205,
+    "Id": 211,
     "Title": "How are universal credit rules changing?",
     "Description": "People claiming universal credit and working under 18 hours a week will have to look for more work.",
     "Link": "https://www.bbc.co.uk/news/uk-41487126",
@@ -1640,7 +1688,7 @@
     "PubDate": "2024-05-13T13:44:48Z"
   },
   {
-    "Id": 206,
+    "Id": 212,
     "Title": "Who gets 15 hours of free childcare and how do I apply?",
     "Description": "Parents in England can now access 15 hours of free weekly childcare for their two-year-olds.",
     "Link": "https://www.bbc.co.uk/news/education-62036045",
@@ -1648,7 +1696,7 @@
     "PubDate": "2024-05-13T09:06:26Z"
   },
   {
-    "Id": 207,
+    "Id": 213,
     "Title": "What to do if you are in debt and need help",
     "Description": "What help and options are available to people struggling with debt repayments?",
     "Link": "https://www.bbc.co.uk/news/business-64291327",
@@ -1656,7 +1704,7 @@
     "PubDate": "2024-04-03T10:30:38Z"
   },
   {
-    "Id": 208,
+    "Id": 214,
     "Title": "Five tips when asking for a pay rise",
     "Description": "Recruiters, a manager and a workplace psychologist give their advice on how to negotiate for more money.",
     "Link": "https://www.bbc.co.uk/news/business-64288791",
@@ -1664,7 +1712,7 @@
     "PubDate": "2024-02-12T15:39:38Z"
   },
   {
-    "Id": 209,
+    "Id": 215,
     "Title": "What is a recession and how could one affect me?",
     "Description": "A recession means the UK economy has shrunk for two three-month periods - or quarters - in a row.",
     "Link": "https://www.bbc.co.uk/news/business-52986863",
@@ -1672,7 +1720,7 @@
     "PubDate": "2024-05-10T08:11:34Z"
   },
   {
-    "Id": 210,
+    "Id": 216,
     "Title": "Man charged with murder of woman in east Belfast",
     "Description": "A 43-year-old woman and a 22-year-old man also face charges related to Kathryn Parton's death.",
     "Link": "https://www.bbc.co.uk/news/uk-northern-ireland-69033997",
@@ -1680,7 +1728,7 @@
     "PubDate": "2024-05-19T06:02:44Z"
   },
   {
-    "Id": 211,
+    "Id": 217,
     "Title": "Inmate not checked before cell death, says sister",
     "Description": "Justin Lewis, who had a history of mental illness, was found dead in his cell at HMP Parc in March. ",
     "Link": "https://www.bbc.com/news/articles/c2vwv9pgqw6o",
@@ -1688,7 +1736,7 @@
     "PubDate": "2024-05-19T06:47:15Z"
   },
   {
-    "Id": 212,
+    "Id": 218,
     "Title": "Container ship that struck Baltimore bridge will be removed from the site 'within days,' Maryland governor says",
     "Description": "Ship that struck Francis Scott Key Bridge in Baltimore will be removed \"within days,\" Maryland Gov. Wes Moore says",
     "Link": "https://www.nbcnews.com/politics/politics-news/francis-scott-key-bridge-ship-removal-wes-moore-baltimore-rcna152955",
@@ -1696,7 +1744,7 @@
     "PubDate": "2024-05-19T14:06:47Z"
   },
   {
-    "Id": 213,
+    "Id": 219,
     "Title": "The lunch rush is dead as Americans live for the weekend",
     "Description": "More consumers are saving their workday lunch money to burn when they’re off the clock.",
     "Link": "https://www.nbcnews.com/business/consumer/lunch-rush-dead-americans-live-weekend-rcna151652",
@@ -1704,7 +1752,7 @@
     "PubDate": "2024-05-19T14:00:00Z"
   },
   {
-    "Id": 214,
+    "Id": 220,
     "Title": "706 people named Kyle got together in Texas, but it wasn’t enough for a world record",
     "Description": "KYLE, Texas — How many people named Kyle can fit in one place?",
     "Link": "https://www.nbcnews.com/news/us-news/706-people-named-kyle-got-together-texas-wasnt-enough-world-record-rcna152964",
@@ -1712,7 +1760,7 @@
     "PubDate": "2024-05-19T13:48:28Z"
   },
   {
-    "Id": 215,
+    "Id": 221,
     "Title": "Helicopter carrying Iran’s president suffers a ‘hard landing,’ state TV says without further details",
     "Description": "A helicopter carrying Iranian President Ebrahim Raisi suffered a “hard landing” on Sunday, Iranian state television reported, without immediately elaborating.",
     "Link": "https://www.nbcnews.com/news/world/helicopter-carrying-irans-president-suffers-hard-landing-state-tv-says-rcna152961",
@@ -1720,7 +1768,7 @@
     "PubDate": "2024-05-19T13:19:00Z"
   },
   {
-    "Id": 216,
+    "Id": 222,
     "Title": "Airbnb carbon monoxide detector mandate would be ‘very hard,’ CEO says, despite deaths",
     "Description": "Airbnb CEO Brian Chesky said the company is working to address customer complaints and safety issues but that there are limitations on what it can do to keep customers safe from issues like carbon monoxide poisoning.",
     "Link": "https://www.nbcnews.com/tech/tech-news/airbnb-carbon-monoxide-detector-mandate-hard-ceo-says-deaths-rcna152745",
@@ -1728,7 +1776,7 @@
     "PubDate": "2024-05-19T11:48:35Z"
   },
   {
-    "Id": 217,
+    "Id": 223,
     "Title": "Israel's Netanyahu faces growing pressure over Gaza plan from his own war cabinet",
     "Description": "Pressure is mounting on Benjamin Netanyahu to change course in the seven-month war on Hamas, after a key member of his war cabinet threatened to quit on Saturday, adding to weeks of foreign criticism.",
     "Link": "https://www.nbcnews.com/news/world/israels-netanyahu-faces-growing-pressure-gaza-plan-war-cabinet-rcna152953",
@@ -1736,7 +1784,7 @@
     "PubDate": "2024-05-19T11:17:56Z"
   },
   {
-    "Id": 218,
+    "Id": 224,
     "Title": "China promises 'friendship' as two warships dock in Cambodia",
     "Description": "Two Chinese warships docked Sunday at a commercial port in Cambodia, in preparation for joint naval exercises between the two countries.",
     "Link": "https://www.nbcnews.com/news/world/china-promises-friendship-two-warships-dock-cambodia-rcna152952",
@@ -1744,7 +1792,7 @@
     "PubDate": "2024-05-19T10:15:51Z"
   },
   {
-    "Id": 219,
+    "Id": 225,
     "Title": "ADHD drug shortage shows signs of letting up, but some patients still struggle",
     "Description": "ADHD medication shortages have largely been resolved, says the FDA. However, some doctors and patients still report difficulties in obtaining prescriptions.",
     "Link": "https://www.nbcnews.com/health/health-news/adhd-drug-shortages-fda-easing-affecting-patients-rcna152570",
@@ -1752,7 +1800,7 @@
     "PubDate": "2024-05-19T10:00:00Z"
   },
   {
-    "Id": 220,
+    "Id": 226,
     "Title": "Biden to deliver Morehouse graduation speech amid concerns from faculty and students",
     "Description": "President Joe Biden will deliver the Morehouse College commencement address Sunday, his most direct engagement with college students since the start of the Israel-Hamas war and a key opportunity for him to engage with a group of voters that data suggests is s…",
     "Link": "https://www.nbcnews.com/politics/joe-biden/biden-morehouse-graduation-speech-concerns-faculty-students-rcna151991",
@@ -1760,7 +1808,7 @@
     "PubDate": "2024-05-19T09:00:00Z"
   },
   {
-    "Id": 221,
+    "Id": 227,
     "Title": "WikiLeaks’ Julian Assange faces U.S. extradition judgment day",
     "Description": "LONDON — A British court could give a final decision on Monday on whether WikiLeaks’ founder Julian Assange should be extradited to the United States over the mass leak of secret U.S. documents, the culmination of 13 years of legal battles and detentions.",
     "Link": "https://www.nbcnews.com/news/world/wikileaks-julian-assange-faces-us-extradition-judgment-day-rcna152951",
@@ -1768,7 +1816,7 @@
     "PubDate": "2024-05-19T08:26:33Z"
   },
   {
-    "Id": 222,
+    "Id": 228,
     "Title": "‘How do you get hypothermia in a prison?’ Records show hospitalizations among Virginia inmates",
     "Description": "A lawsuit has raised broader questions about conditions at the southwest Virginia prison, which the grand jury described as “inhumane and deplorable.”",
     "Link": "https://www.nbcnews.com/news/us-news/-get-hypothermia-prison-records-show-hospitalizations-virginia-inmates-rcna152950",
@@ -1776,7 +1824,7 @@
     "PubDate": "2024-05-19T08:05:46Z"
   },
   {
-    "Id": 223,
+    "Id": 229,
     "Title": "Disneyland character and parade performers in California vote to join labor union",
     "Description": "Disneyland performers who help bring beloved characters to life at the Southern California resort chose to unionize following a three-day vote.",
     "Link": "https://www.nbcnews.com/news/us-news/disneyland-character-parade-performers-california-vote-join-labor-unio-rcna152949",
@@ -1784,7 +1832,7 @@
     "PubDate": "2024-05-19T06:43:49Z"
   },
   {
-    "Id": 224,
+    "Id": 230,
     "Title": "How 'Bridgerton' Season 3 puts a new spin on the 'makeover' trope",
     "Description": "Penelope Featherington — and actor Nicola Coughlan in turn — is stepping “out of the shadows” and into the center of the dance floor.",
     "Link": "https://www.nbcnews.com/pop-culture/pop-culture-news/bridgerton-season-3-puts-new-spin-makeover-trope-rcna152947",
@@ -1792,7 +1840,7 @@
     "PubDate": "2024-05-19T02:28:47Z"
   },
   {
-    "Id": 225,
+    "Id": 231,
     "Title": "Missouri judge allows former 'honorary' member of KKK to remain on state's GOP primary ballot",
     "Description": "A Missouri judge ruled that a former \"honorary\" member of the Ku Klux Klan can remain on the state's Republican primary ballot for governor.",
     "Link": "https://www.nbcnews.com/politics/2024-election/missouri-judge-allows-former-honorary-member-kkk-remain-states-gop-pri-rcna152933",
@@ -1800,7 +1848,7 @@
     "PubDate": "2024-05-19T01:55:20Z"
   },
   {
-    "Id": 226,
+    "Id": 232,
     "Title": "Schauffele and Morikawa tied at the PGA Championship; Scheffler not a contender",
     "Description": "The cheers were endless Saturday in the PGA Championship, and when another record day of scoring finally ended at vulnerable Valhalla, so were the possibilities.",
     "Link": "https://www.nbcnews.com/news/sports/schauffele-morikawa-tied-pga-championship-scheffler-not-contender-rcna152944",
@@ -1808,7 +1856,7 @@
     "PubDate": "2024-05-19T01:45:32Z"
   },
   {
-    "Id": 227,
+    "Id": 233,
     "Title": "John Stamos shares rare picture with Olsen twins and ‘Full House’ cast for Bob Saget’s birthday tribute",
     "Description": "John Stamos paid tribute to Bob Saget on what would’ve been his 68th birthday.",
     "Link": "https://www.nbcnews.com/pop-culture/celebrity/john-stamos-shares-rare-picture-olsen-twins-full-house-cast-bob-sagets-rcna152943",
@@ -1816,7 +1864,7 @@
     "PubDate": "2024-05-19T01:16:42Z"
   },
   {
-    "Id": 228,
+    "Id": 234,
     "Title": "6 dead, 10 hurt as wrong-way pickup hits van packed with passengers in Idaho",
     "Description": "Six people died and 10 others were injured when a pickup truck veered into oncoming traffic and hit a passenger van filled with people in Idaho Falls, Idaho, on Saturday morning.",
     "Link": "https://www.nbcnews.com/news/us-news/dead-hurt-wrong-way-pickup-van-passengers-idaho-rcna152934",
@@ -1824,7 +1872,7 @@
     "PubDate": "2024-05-19T01:11:39Z"
   },
   {
-    "Id": 229,
+    "Id": 235,
     "Title": "Simone Biles wins Core Hydration Classic to kick off road to Paris; Gabby Douglas withdraws",
     "Description": "2024 is looking golden so far for Simone Biles.",
     "Link": "https://www.nbcnews.com/news/sports/simone-biles-wins-core-hydration-classic-gabby-douglas-withdraws-rcna152859",
@@ -1832,7 +1880,7 @@
     "PubDate": "2024-05-19T01:03:59Z"
   },
   {
-    "Id": 230,
+    "Id": 236,
     "Title": "Alice Stewart, CNN political commentator, dies at 58",
     "Description": "Alice Stewart, a CNN political commentator and veteran political adviser who worked on a number of GOP presidential campaigns, has died at age 58, the news network reported Saturday.",
     "Link": "https://www.nbcnews.com/news/us-news/alice-stewart-cnn-political-commentator-dies-58-rcna152941",
@@ -1840,7 +1888,7 @@
     "PubDate": "2024-05-19T00:27:07Z"
   },
   {
-    "Id": 231,
+    "Id": 237,
     "Title": "Oleksandr Usyk beats Tyson Fury by split decision to become the undisputed heavyweight champion",
     "Description": "Oleksandr Usyk defeated Tyson Fury by split decision to become the first undisputed heavyweight boxing champion in 24 years.",
     "Link": "https://www.nbcnews.com/news/sports/oleksandr-usyk-beats-tyson-fury-split-decision-become-undisputed-heavy-rcna152940",
@@ -1848,7 +1896,7 @@
     "PubDate": "2024-05-19T00:16:21Z"
   },
   {
-    "Id": 232,
+    "Id": 238,
     "Title": "Trump accepts NRA endorsement, urges gun owners to turn out to vote",
     "Description": "The National Rifle Association is supporting former President Donald Trump, an expected endorsement as the Republican nominee urged gun owners to vote in 2024.",
     "Link": "https://www.nbcnews.com/politics/donald-trump/trump-accepts-nra-endorsement-urges-gun-owners-vote-2024-rcna152938",
@@ -1856,7 +1904,7 @@
     "PubDate": "2024-05-19T00:13:24Z"
   },
   {
-    "Id": 233,
+    "Id": 239,
     "Title": "Seize the Grey wins the Preakness Stakes, ruining Mystik Dan’s Triple Crown odds",
     "Description": "Dark horse Seize the Grey galloped to a Preakness Stakes victory in Baltimore on Saturday, denying Mystik Dan a place in history and delivering another garland of Black-Eyed Susans to legendary trainer D. Wayne Lukas.",
     "Link": "https://www.nbcnews.com/news/sports/preakness-winner-2024-horse-race-rcna151757",
@@ -1864,7 +1912,7 @@
     "PubDate": "2024-05-18T23:13:33Z"
   },
   {
-    "Id": 234,
+    "Id": 240,
     "Title": "How to watch as Manchester City, Arsenal vie for Premier League title on Championship Sunday",
     "Description": "The English Premier League title will be on the line for two clubs, Manchester City and Arsenal, based on Sunday’s final matches of the season.",
     "Link": "https://www.nbcnews.com/news/sports/premier-league-title-arsenal-manchester-city-how-watch-rcna152502",
@@ -1872,7 +1920,7 @@
     "PubDate": "2024-05-18T22:19:09Z"
   },
   {
-    "Id": 235,
+    "Id": 241,
     "Title": "Mystik Dan enters the Preakness Stakes as the favorite after winning Kentucky Derby",
     "Description": "Latest news and live updates as Preakness 2024 kicks off. Learn more about what horses are racing, when it is, what time it starts, what the stakes look like and more.",
     "Link": "https://www.nbcnews.com/news/sports/live-blog/preakness-2024-live-updates-rcna152498",
@@ -1880,7 +1928,7 @@
     "PubDate": "2024-05-18T21:28:21Z"
   },
   {
-    "Id": 236,
+    "Id": 242,
     "Title": "Police arrest suspect in 1989 cold case killing of 78-year-old Pennsylvania woman",
     "Description": "More than 30 years after an elderly woman was stabbed to death inside her Lehigh Valley home, an arrest has been made in her murder.",
     "Link": "https://www.nbcnews.com/news/us-news/police-arrest-suspect-1989-cold-case-killing-78-year-old-pennsylvania-rcna152929",
@@ -1888,7 +1936,7 @@
     "PubDate": "2024-05-18T20:32:05Z"
   },
   {
-    "Id": 237,
+    "Id": 243,
     "Title": "Sex offender arrested after faking death to avoid registering, Arizona sheriff says",
     "Description": "A convicted sex offender tried to fake his own death to avoid registering, an Arizona sheriff said this week.",
     "Link": "https://www.nbcnews.com/news/us-news/sex-offender-arrested-faking-death-avoid-registering-arizona-sheriff-s-rcna152919",
@@ -1896,7 +1944,7 @@
     "PubDate": "2024-05-18T19:23:46Z"
   },
   {
-    "Id": 238,
+    "Id": 244,
     "Title": "Israel recovers another slain hostage; pushes into new parts of northern Gaza",
     "Description": "CAIRO/JERUSALEM — Israeli troops and tanks pushed on Saturday into parts of a congested northern Gaza Strip district that they had previously skirted in the more than seven-month-old war, killing and wounding dozens of Palestinians, medics and residents said.",
     "Link": "https://www.nbcnews.com/news/world/israel-recovers-another-slain-hostage-pushes-new-parts-northern-gaza-rcna152920",
@@ -1904,7 +1952,7 @@
     "PubDate": "2024-05-18T18:36:06Z"
   },
   {
-    "Id": 239,
+    "Id": 245,
     "Title": "L.A. County investigating reported hepatitis A case at Beverly Hills Whole Foods",
     "Description": "Los Angeles County public health officials are investigating a reported case of hepatitis A in an employee at a Whole Foods supermarket in Beverly Hills.",
     "Link": "https://www.nbcnews.com/news/us-news/l-county-investigating-reported-hepatitis-case-beverly-hills-whole-foo-rcna152914",
@@ -1912,7 +1960,7 @@
     "PubDate": "2024-05-18T18:33:53Z"
   },
   {
-    "Id": 240,
+    "Id": 246,
     "Title": "Netanyahu rival Benny Gantz says he’ll quit Israel’s War Cabinet on June 8 unless new Gaza plan devised",
     "Description": "DEIR AL-BALAH, Gaza Strip — Benny Gantz, a member of Israel’s three-man War Cabinet, has threatened to resign from the government if it doesn’t adopt a new plan for the war in Gaza, a move that would leave Prime Minister Benjamin Netanyahu more reliant on his…",
     "Link": "https://www.nbcnews.com/news/world/netanyahu-rival-benny-gantz-says-ll-quit-israels-war-cabinet-june-8-un-rcna152916",
@@ -1920,7 +1968,7 @@
     "PubDate": "2024-05-18T18:29:20Z"
   },
   {
-    "Id": 241,
+    "Id": 247,
     "Title": "Imprisoned Oregon man charged in deaths of three women found in Portland area last year",
     "Description": "An imprisoned Oregon man was indicted Friday in connection with the deaths of three women whose bodies were found “under suspicious circumstances” last year in the Portland area, authorities announced Friday.",
     "Link": "https://www.nbcnews.com/news/us-news/imprisoned-oregon-man-charged-deaths-three-women-found-portland-area-l-rcna152889",
@@ -1928,7 +1976,7 @@
     "PubDate": "2024-05-18T18:24:36Z"
   },
   {
-    "Id": 242,
+    "Id": 248,
     "Title": "Some consumers are punting big purchases like pools and mattresses",
     "Description": "Americans are kicking the can down the road on some more-costly, traditionally financed purchases as elevated inflation and interest rates bite.",
     "Link": "https://www.nbcnews.com/business/business-news/consumers-are-punting-big-purchases-pools-mattresses-rcna152909",
@@ -1936,7 +1984,7 @@
     "PubDate": "2024-05-18T18:17:28Z"
   },
   {
-    "Id": 243,
+    "Id": 249,
     "Title": "Arizona police rescue 6-month-old who had been shot during hostage standoff",
     "Description": "Arizona police officers burst into a house to rescue a 6-month-old who had been shot multiple times after the child's father took the infant and its mother hostage.",
     "Link": "https://www.nbcnews.com/news/us-news/arizona-police-rescue-6-month-old-shot-hostage-standoff-rcna152907",
@@ -1944,7 +1992,7 @@
     "PubDate": "2024-05-18T17:11:41Z"
   },
   {
-    "Id": 244,
+    "Id": 250,
     "Title": "Houston distributes water as more than 500,000 remain without power after devastating storms",
     "Description": "The city of Houston on Saturday opened new distribution centers to give out water as around 500,000 customers remained without power following severe storms blamed in the deaths of seven people in the region.",
     "Link": "https://www.nbcnews.com/news/weather/houston-distributes-water-500000-remain-power-devastating-storms-rcna152908",
@@ -1952,7 +2000,7 @@
     "PubDate": "2024-05-18T17:02:11Z"
   },
   {
-    "Id": 245,
+    "Id": 251,
     "Title": "Two hours after mocking Arizona’s Attorney General, Rudy Giuliani is served at his own birthday party",
     "Description": "PHOENIX — Arizona’s Democratic Attorney General Kris Mayes on Friday announced that Rudy Giuliani had been served with the notice of his indictment on charges related to a conspiracy to overturn the 2020 election results in Arizona.",
     "Link": "https://www.nbcnews.com/politics/politics-news/two-hours-mocking-arizonas-attorney-general-rudy-giuliani-served-birth-rcna152905",
@@ -1960,7 +2008,7 @@
     "PubDate": "2024-05-18T16:37:27Z"
   },
   {
-    "Id": 246,
+    "Id": 252,
     "Title": "Country star Zac Brown sues estranged wife Kelly Yazdi over Instagram post",
     "Description": "Zac Brown filed a lawsuit against his estranged wife Friday demanding she take down an Instagram post, arguing what she put online has tarnished his public image.",
     "Link": "https://www.nbcnews.com/pop-culture/celebrity/country-star-zac-brown-sues-estranged-wife-kelly-yazdi-instagram-post-rcna152901",
@@ -1968,7 +2016,7 @@
     "PubDate": "2024-05-18T15:27:35Z"
   },
   {
-    "Id": 247,
+    "Id": 253,
     "Title": "Flash floods due to unusually heavy seasonal rains kill at least 68 people in Afghanistan",
     "Description": "ISLAMABAD — Flash floods from heavy seasonal rains have killed at least 68 people in Afghanistan, Taliban officials said Saturday, adding the death toll was based on preliminary reports.",
     "Link": "https://www.nbcnews.com/news/world/flash-floods-due-unusually-heavy-seasonal-rains-kill-least-68-people-a-rcna152900",
@@ -1976,7 +2024,7 @@
     "PubDate": "2024-05-18T14:46:45Z"
   },
   {
-    "Id": 248,
+    "Id": 254,
     "Title": "Man who sought revenge for a stolen phone pleads guilty to fire that killed a Senegalese family of 5",
     "Description": "DENVER — A Colorado man pleaded guilty to murder charges on Friday for starting a 2020 house fire that killed five members of a Senegalese family out of misplaced revenge for a stolen iPhone that he mistakenly tracked to the house.",
     "Link": "https://www.nbcnews.com/news/crime-courts/man-sought-revenge-stolen-phone-pleads-guilty-fire-killed-senegalese-f-rcna152897",
@@ -1984,7 +2032,7 @@
     "PubDate": "2024-05-18T13:27:02Z"
   },
   {
-    "Id": 249,
+    "Id": 255,
     "Title": "Phoenix is beating the rest of the country on inflation — on paper anyway",
     "Description": "Phoenix is closer to winning the war on inflation than most other cities.",
     "Link": "https://www.nbcnews.com/business/economy/phoenix-beating-rest-us-inflation-largely-due-rents-rcna151110",
@@ -1992,7 +2040,7 @@
     "PubDate": "2024-05-18T13:00:00Z"
   },
   {
-    "Id": 250,
+    "Id": 256,
     "Title": "College students who protested and those who didn't share in disappointment at response from schools",
     "Description": "After a semester marked by sweeping protests on college campuses across the nation that raised questions about freedom of speech, how universities confront allegations of antisemitism and Islamophobia and how they invest, some students who experienced the dem…",
     "Link": "https://www.nbcnews.com/news/us-news/college-students-protested-didnt-share-disappointment-response-schools-rcna152638",
@@ -2000,7 +2048,7 @@
     "PubDate": "2024-05-18T11:00:00Z"
   },
   {
-    "Id": 251,
+    "Id": 257,
     "Title": "Study links talc use to ovarian cancer — a potential boon for thousands suing J\u0026J",
     "Description": "Ongoing lawsuits against J\u0026J allege that its talc-based baby powder caused ovarian cancer. A new study lends credence to the claims.",
     "Link": "https://www.nbcnews.com/health/cancer/talc-baby-powder-linked-ovarian-cancer-jj-lawsuit-rcna152493",
@@ -2008,7 +2056,7 @@
     "PubDate": "2024-05-18T11:00:00Z"
   },
   {
-    "Id": 252,
+    "Id": 258,
     "Title": "Alabama Republicans pledged to revisit IVF in hopes of a long-term fix. They never did.",
     "Description": "When Republicans in Alabama enacted a law earlier this year to protect in vitro fertilization following a court decision that halted the treatment in the deeply conservative state, they pitched it as a temporary fix.",
     "Link": "https://www.nbcnews.com/politics/alabama-republicans-ivf-long-term-fix-rcna152834",
@@ -2016,7 +2064,7 @@
     "PubDate": "2024-05-18T11:00:00Z"
   },
   {
-    "Id": 253,
+    "Id": 259,
     "Title": "Slovak PM still in serious condition after shooting as suspect appears in court",
     "Description": "Slovak Prime Minister Robert Fico’s condition was stable but serious Saturday as the man accused of trying to assassinate him faced his first court appearance.",
     "Link": "https://www.nbcnews.com/news/world/slovak-pm-fico-serious-condition-shooting-suspect-appears-court-rcna152892",
@@ -2024,7 +2072,7 @@
     "PubDate": "2024-05-18T10:54:42Z"
   },
   {
-    "Id": 254,
+    "Id": 260,
     "Title": "Four minors found working at Alabama poultry plant run by same firm found responsible for Mississippi teen's death",
     "Description": "Four minors were allegedly found working at an Alabama slaughterhouse run by the same firm found responsible for the death of a Mississippi 16-year-old in 2023.",
     "Link": "https://www.nbcnews.com/business/business-news/four-minors-found-working-mar-jac-alabama-poultry-plant-rcna152448",
@@ -2032,7 +2080,7 @@
     "PubDate": "2024-05-18T10:30:00Z"
   },
   {
-    "Id": 255,
+    "Id": 261,
     "Title": "Kamala Harris to speak at SEIU convention set to elect the union's first Black president",
     "Description": "April Verrett is poised to become the first Black president of the Service Employees International Union, which represents nearly 2 million workers.",
     "Link": "https://www.nbcnews.com/politics/2024-election/kamala-harris-seiu-union-first-black-president-rcna152823",
@@ -2040,7 +2088,7 @@
     "PubDate": "2024-05-18T10:00:00Z"
   },
   {
-    "Id": 256,
+    "Id": 262,
     "Title": "Ex-military surgeons embrace new mission: stop Americans from bleeding to death",
     "Description": "A movement to revolutionize the treatment of trauma patients in the U.S. can be traced to an infamous battle fought in East Africa more than 30 years ago.",
     "Link": "https://www.nbcnews.com/news/investigations/ex-military-surgeons-embrace-new-mission-stop-americans-bleeding-death-rcna151034",
@@ -2048,7 +2096,7 @@
     "PubDate": "2024-05-18T10:00:00Z"
   },
   {
-    "Id": 257,
+    "Id": 263,
     "Title": "Trump's hush money trial makes big money for professional line-standers",
     "Description": "The hottest ticket in New York City is Trump's hush money trial and some are willing to pay big to get to see testimony from Stormy Daniels, Michael Cohen, and more.",
     "Link": "https://www.nbcnews.com/politics/donald-trump/donald-trumps-hush-money-trial-big-money-line-standers-rcna152809",
@@ -2056,7 +2104,7 @@
     "PubDate": "2024-05-18T10:00:00Z"
   },
   {
-    "Id": 258,
+    "Id": 264,
     "Title": "Ukraine fears new Russian offensive is only ‘the first wave’ of a brutal summer",
     "Description": "President Volodymr Zelenskyy has warned that Russia's new offensive in the northeastern Kharkiv region could be just the first wave while U.S. aid delays hurt Kyiv.",
     "Link": "https://www.nbcnews.com/news/world/ukraine-russia-kharkiv-offensive-first-wave-zelenskyy-west-rcna152890",
@@ -2064,7 +2112,7 @@
     "PubDate": "2024-05-18T09:28:14Z"
   },
   {
-    "Id": 259,
+    "Id": 265,
     "Title": "Amid signs of waning enthusiasm, Biden reaches out to Black voters",
     "Description": "This weekend, President Joe Biden will hold events in cities like Detroit, where Black turnout is critical to efforts in two of the closest battleground states.",
     "Link": "https://www.nbcnews.com/politics/2024-election/joe-biden-reaches-black-voters-waning-enthusiasm-rcna152741",
@@ -2072,7 +2120,7 @@
     "PubDate": "2024-05-18T09:00:00Z"
   },
   {
-    "Id": 260,
+    "Id": 266,
     "Title": "Gunmen kill three Spanish tourists in Afghanistan’s central Bamyan province",
     "Description": "Three Spanish tourists were killed and at least one Spaniard was injured in an attack by gunmen in Afghanistan’s central Bamyan province, Spain’s foreign ministry said on Friday.",
     "Link": "https://www.nbcnews.com/news/world/gunmen-kill-three-spanish-tourists-afghanistans-central-bamyan-provinc-rcna152891",
@@ -2080,7 +2128,7 @@
     "PubDate": "2024-05-18T08:34:31Z"
   },
   {
-    "Id": 261,
+    "Id": 267,
     "Title": "John Oates talks ‘Reunion’ and the likelihood of one with Daryl Hall",
     "Description": "It was 1974 when John Oates and Daryl Hall first landed on the Billboard Hot 100 with their hit single “She’s Gone.”",
     "Link": "https://www.nbcnews.com/pop-culture/pop-culture-news/john-oates-talks-reunion-likelihood-one-daryl-hall-rcna152888",
@@ -2088,7 +2136,7 @@
     "PubDate": "2024-05-18T03:59:18Z"
   },
   {
-    "Id": 262,
+    "Id": 268,
     "Title": "Trump falsely claims he won Minnesota in 2020",
     "Description": "Former President Donald Trump reiterated a false claim on Friday that he won Minnesota in 2020, despite Democratic candidates carrying it for over 40 years.",
     "Link": "https://www.nbcnews.com/politics/2020-election/donald-trump-falsely-claims-won-minnesota-2020-presidential-election-rcna152884",
@@ -2096,7 +2144,7 @@
     "PubDate": "2024-05-18T03:18:15Z"
   },
   {
-    "Id": 263,
+    "Id": 269,
     "Title": "113-year-old tower in Death Valley National Park felled by traveler trying to get vehicle out of mud",
     "Description": "A historic wooden tower was inadvertently felled by a traveler who used it to winch a vehicle stuck in mud in California's Death Valley National Park, federal officials said.",
     "Link": "https://www.nbcnews.com/news/us-news/113-year-old-tower-death-valley-national-park-felled-traveler-trying-g-rcna152876",
@@ -2104,7 +2152,7 @@
     "PubDate": "2024-05-18T02:41:47Z"
   },
   {
-    "Id": 264,
+    "Id": 270,
     "Title": "7 dead in Houston area after storms, 100 mph winds",
     "Description": "Seven people have died in Houston, Texas, and the surrounding county after severe weather that ripped down power lines and trees and toppled brick walls, officials said Friday.",
     "Link": "https://www.nbcnews.com/news/us-news/7-dead-texas-harris-county-storms-100-mph-winds-rcna152874",
@@ -2112,7 +2160,7 @@
     "PubDate": "2024-05-18T01:04:45Z"
   },
   {
-    "Id": 265,
+    "Id": 271,
     "Title": "New talk of creating a Hunter Biden legal defense fund as main benefactor retreats",
     "Description": "The financing crunch comes at a precarious time for President Joe Biden's son, whose two criminal trials are set to begin in June.",
     "Link": "https://www.nbcnews.com/politics/politics-news/hunter-biden-legal-defense-fund-discussion-main-benefactor-retreats-rcna152849",
@@ -2120,7 +2168,7 @@
     "PubDate": "2024-05-18T00:49:20Z"
   },
   {
-    "Id": 266,
+    "Id": 272,
     "Title": "Newly released photos depict cash and gold bars seized from Sen. Bob Menendez's home",
     "Description": "The pictures were entered as evidence by prosecutors, who accuse the high-profile New Jersey Democrat of accepting “hundreds of thousands of dollars” in bribes.",
     "Link": "https://www.nbcnews.com/politics/congress/new-photos-depict-cash-gold-bars-seized-new-jersey-sen-bob-menendezs-h-rcna152856",
@@ -2128,7 +2176,7 @@
     "PubDate": "2024-05-18T00:47:05Z"
   },
   {
-    "Id": 267,
+    "Id": 273,
     "Title": "17 of 20 U.S. doctors stuck in Gaza depart with the help of U.S. officials, source says",
     "Description": "Seventeen of 20 U.S. doctors stuck in Gaza have departed, with the physician known for saving Sen.",
     "Link": "https://www.nbcnews.com/news/world/17-20-us-doctors-stuck-gaza-depart-help-us-officials-source-says-rcna152866",
@@ -2136,7 +2184,7 @@
     "PubDate": "2024-05-18T00:32:04Z"
   },
   {
-    "Id": 268,
+    "Id": 274,
     "Title": "Man accused of sucker-punching Steve Buscemi on NYC street is arrested",
     "Description": "A man has been arrested on suspicion of sucker-punching actor Steve Buscemi in the face earlier this month in Manhattan, police said.",
     "Link": "https://www.nbcnews.com/news/us-news/man-accused-sucker-punching-steve-buscemi-nyc-street-arrested-rcna152871",
@@ -2144,7 +2192,7 @@
     "PubDate": "2024-05-17T23:59:44Z"
   },
   {
-    "Id": 269,
+    "Id": 275,
     "Title": "Dabney Coleman, '9 to 5' actor who specialized in curmudgeons, dies at 92",
     "Description": "Dabney Coleman, the mustachioed character actor who specialized in smarmy villains like the chauvinist boss in “9 to 5” and the nasty TV director in “Tootsie,” has died.",
     "Link": "https://www.nbcnews.com/pop-culture/tv/dabney-coleman-9-5-actor-specialized-curmudgeons-dies-92-rcna152870",
@@ -2152,7 +2200,7 @@
     "PubDate": "2024-05-17T23:27:08Z"
   },
   {
-    "Id": 270,
+    "Id": 276,
     "Title": "11 chef-approved rice cookers",
     "Description": "Rice cookers can cook rice more evenly and make it fluffy delicious. Chefs recommend their favorite rice cookers from brands like Panosonic and Zojirushi.",
     "Link": "https://www.nbcnews.com/select/shopping/best-rice-cookers-ncna1298410",
@@ -2160,7 +2208,7 @@
     "PubDate": "2024-05-17T22:26:51Z"
   },
   {
-    "Id": 271,
+    "Id": 277,
     "Title": "RFK Jr. revs up ballot access campaign in response to sped-up debate criteria",
     "Description": "Robert F. Kennedy Jr. is accelerating plans to get on state ballots after Joe Biden, Donald Trump and CNN agreed on a June debate.",
     "Link": "https://www.nbcnews.com/politics/2024-election/rfk-jr-revs-ballot-access-campaign-response-sped-debate-criteria-rcna152708",
@@ -2168,7 +2216,7 @@
     "PubDate": "2024-05-17T22:23:04Z"
   },
   {
-    "Id": 272,
+    "Id": 278,
     "Title": "Death of teen who ate a spicy chip has experts rethinking capsaicin and its effects",
     "Description": "The tragic death of a Massachusetts teenager who collapsed after eating an extremely spicy tortilla chip last year may prompt both doctors and food manufacturers to take a closer look at the ingredient that provides the punch — capsaicin.",
     "Link": "https://www.nbcnews.com/news/us-news/death-teen-ate-spicy-chip-experts-rethinking-capsaicin-effects-rcna152766",
@@ -2176,7 +2224,7 @@
     "PubDate": "2024-05-17T22:03:30Z"
   },
   {
-    "Id": 273,
+    "Id": 279,
     "Title": "Can Trump put Minnesota in play?: From the Politics Desk",
     "Description": "Donald Trump hopes Minnesota becomes a battleground state in the 2024 election against Joe Biden, who is ramping up his Black voter outreach.",
     "Link": "https://www.nbcnews.com/politics/trump-biden-minnesota-battleground-politics-desk-rcna152825",
@@ -2184,7 +2232,7 @@
     "PubDate": "2024-05-17T21:56:36Z"
   },
   {
-    "Id": 274,
+    "Id": 280,
     "Title": "Chevy Bolt owners to receive settlement checks after successful class-action suit over faulty batteries",
     "Description": "Chevy Bolt owners are eligible for settlement checks as part of a $150 million class-action settlement with General Motors and South Korean industrial group LG over faulty batteries.",
     "Link": "https://www.nbcnews.com/business/consumer/chevy-bolt-settlement-checks-class-action-lawsuit-faulty-batteries-rcna152842",
@@ -2192,7 +2240,7 @@
     "PubDate": "2024-05-17T21:38:02Z"
   },
   {
-    "Id": 275,
+    "Id": 281,
     "Title": "'No more games': Biden rejects additional debates against Trump",
     "Description": "President Joe Biden's campaign rejected two additional debates on Friday that former President Donald Trump's campaign says it agreed to do.",
     "Link": "https://www.nbcnews.com/politics/2024-election/biden-rejects-debates-trump-nbc-telemundo-fox-news-rcna152860",
@@ -2200,7 +2248,7 @@
     "PubDate": "2024-05-17T21:33:41Z"
   },
   {
-    "Id": 276,
+    "Id": 282,
     "Title": "California district to pay $360K to teacher fired for not following transgender policies",
     "Description": "A California school district settled a 2023 lawsuit from a former teacher who refused to adhere to the district’s gender identity-related policies.",
     "Link": "https://www.nbcnews.com/nbc-out/out-news/california-district-pay-360k-teacher-fired-not-transgender-policies-rcna152772",
@@ -2208,7 +2256,7 @@
     "PubDate": "2024-05-17T21:28:37Z"
   },
   {
-    "Id": 277,
+    "Id": 283,
     "Title": "Rei Anniversary sale: The best deals to shop",
     "Description": "Rei is having an anniversary sale from now until May 27th. Get up to 30% off on outdoor gear, fitness essentials and apparel from the retailer.",
     "Link": "https://www.nbcnews.com/select/shopping/rei-anniversary-sale-2024-rcna152845",
@@ -2216,7 +2264,7 @@
     "PubDate": "2024-05-17T21:27:32Z"
   },
   {
-    "Id": 278,
+    "Id": 284,
     "Title": "Frontier Airlines does away with change fees in budget airline pricing overhaul",
     "Description": "Frontier Airlines said it will stop charging customers a fee to change their flights, taking a page from larger competitors as the Biden administration issues stricter rules targeting so-called “junk fees.”",
     "Link": "https://www.nbcnews.com/business/travel/frontier-airlines-away-change-fees-budget-airline-pricing-overhaul-rcna152861",
@@ -2224,7 +2272,7 @@
     "PubDate": "2024-05-17T21:14:55Z"
   },
   {
-    "Id": 279,
+    "Id": 285,
     "Title": "'Not the time and place': Students speak out on Harrison Butker's 'uncomfortable' commencement address",
     "Description": "Harrison Butker’s commencement speech left some at Benedictine College outraged after the Kansas City Chiefs kicker encouraged women to become homemakers.",
     "Link": "https://www.nbcnews.com/news/us-news/students-speak-harrison-butkers-uncomfortable-commencement-speech-rcna152789",
@@ -2232,7 +2280,7 @@
     "PubDate": "2024-05-17T21:08:19Z"
   },
   {
-    "Id": 280,
+    "Id": 286,
     "Title": "Dow closes at record high above 40,000 to cinch a five-week winning streak",
     "Description": "The Dow Jones Industrial Average closed Friday above the key 40,000 level for the first time in history, a day after hitting that benchmark in the previous trading session.",
     "Link": "https://www.nbcnews.com/business/markets/dow-closes-record-high-40000-cinch-five-week-winning-streak-rcna152858",
@@ -2240,7 +2288,7 @@
     "PubDate": "2024-05-17T21:00:35Z"
   },
   {
-    "Id": 281,
+    "Id": 287,
     "Title": "Federal inmate accused of stabbing Derek Chauvin can represent himself at trial",
     "Description": "The federal inmate charged in December with stabbing former Minneapolis police officer Derek Chauvin in an Arizona prison can represent himself in court after a judge agreed to a request to waive his right to legal representation, court documents show.",
     "Link": "https://www.nbcnews.com/news/us-news/federal-inmate-accused-stabbing-derek-chauvin-can-represent-trial-rcna152851",
@@ -2248,7 +2296,7 @@
     "PubDate": "2024-05-17T20:59:57Z"
   },
   {
-    "Id": 282,
+    "Id": 288,
     "Title": "Here's what has driven the Dow rally to 40,000, and why it could keep going",
     "Description": "Passing major milestones such as the 40,000 barrier the Dow Jones Industrial Average eclipsed this week makes for a nice headline, but market experts do not take much else from the move.",
     "Link": "https://www.nbcnews.com/business/markets/driven-dow-rally-40000-keep-going-rcna152853",
@@ -2256,7 +2304,7 @@
     "PubDate": "2024-05-17T20:52:03Z"
   },
   {
-    "Id": 283,
+    "Id": 289,
     "Title": "The mother of a protester whose killer was pardoned says she was robbed of justice",
     "Description": "The mother of a man killed during a Black Lives Matter protest said Friday she was robbed of \"long overdue peace\" when Texas Gov.",
     "Link": "https://www.nbcnews.com/news/us-news/mother-protester-whose-killer-was-pardoned-says-was-robbed-justice-rcna152807",
@@ -2264,7 +2312,7 @@
     "PubDate": "2024-05-17T20:31:51Z"
   },
   {
-    "Id": 284,
+    "Id": 290,
     "Title": "UAW loses Alabama union vote seen as bellwether for organizing auto workers in the South",
     "Description": "Workers at two Mercedes-Benz factories in Alabama have voted against joining the United Auto Workers, the largest auto workers union in the U.S., a blow to an effort to strengthen the presence of organized labor in the South.",
     "Link": "https://www.nbcnews.com/business/business-news/uaw-alabama-mercedes-union-vote-factories-results-rcna152629",
@@ -2272,7 +2320,7 @@
     "PubDate": "2024-05-17T20:06:21Z"
   },
   {
-    "Id": 285,
+    "Id": 291,
     "Title": "Video appears to show Sean 'Diddy' Combs beating ex Cassie in 2016 hotel footage",
     "Description": "Surveillance video shows Sean “Diddy” Combs assaulting ex-girlfriend Cassie in a 2016 hotel attack. Cassie detailed the abuse in a since-settled lawsuit",
     "Link": "https://www.nbcnews.com/news/us-news/diddy-assaults-ex-girlfriend-cassie-2016-hotel-incident-surveillance-v-rcna152822",
@@ -2280,7 +2328,7 @@
     "PubDate": "2024-05-17T19:52:46Z"
   },
   {
-    "Id": 286,
+    "Id": 292,
     "Title": "Authorities are investigating a suspected arson attack that left three lesbians dead in Argentina",
     "Description": "An investigation is ongoing into a suspected arson attack at a Buenos Aires hotel that left three lesbian women dead and another injured last week.",
     "Link": "https://www.nbcnews.com/nbc-out/out-news/suspected-arson-attack-argentina-left-three-lesbians-dead-investigatio-rcna152799",
@@ -2288,7 +2336,7 @@
     "PubDate": "2024-05-17T19:51:40Z"
   },
   {
-    "Id": 287,
+    "Id": 293,
     "Title": "Elle King shares what Dolly Parton told her after controversial tribute performance",
     "Description": "Elle King says she’s “mortified” about how she behaved onstage during a Dolly Parton tribute performance in January.",
     "Link": "https://www.nbcnews.com/pop-culture/pop-culture-news/elle-king-shares-dolly-parton-told-controversial-tribute-performance-rcna152841",
@@ -2296,7 +2344,7 @@
     "PubDate": "2024-05-17T19:49:19Z"
   },
   {
-    "Id": 288,
+    "Id": 294,
     "Title": "Harris says more Indian American representation is needed in government",
     "Description": "Addressing a crowd of Indian Americans this week, Vice President Kamala Harris asserted the importance of voting and running. But Biden and Harris approval among the group has fallen.",
     "Link": "https://www.nbcnews.com/news/asian-america/kamala-harris-more-indian-american-representation-needed-government-rcna152761",
@@ -2304,7 +2352,7 @@
     "PubDate": "2024-05-17T19:48:19Z"
   },
   {
-    "Id": 289,
+    "Id": 295,
     "Title": "'Back to Black' director opens up about 'noise' around Amy Winehouse biopic",
     "Description": "“Back to Black” director Sam Taylor-Johnson is opening up about any criticism she faced while making the movie.",
     "Link": "https://www.nbcnews.com/pop-culture/pop-culture-news/back-black-director-opens-noise-amy-winehouse-biopic-rcna152840",
@@ -2312,7 +2360,7 @@
     "PubDate": "2024-05-17T19:31:58Z"
   },
   {
-    "Id": 290,
+    "Id": 296,
     "Title": "Haitian Flag Day 2024: A guide to events and ways to celebrate Haitian pride",
     "Description": "Food, soccer and Kompa: A guide to the best events and things to do for Haitian Flag Day on Saturday.",
     "Link": "https://www.nbcnews.com/news/nbcblk/haitian-flag-day-2024-best-events-things-to-do-guide-rcna150939",
@@ -2320,7 +2368,7 @@
     "PubDate": "2024-05-17T18:51:26Z"
   },
   {
-    "Id": 291,
+    "Id": 297,
     "Title": "OpenAI dissolves team focused on long-term AI risks less than one year after announcing it",
     "Description": "OpenAI has disbanded its team focused on the long-term risks of artificial intelligence just one year after the company announced the group, a person familiar with the situation confirmed to CNBC on Friday.",
     "Link": "https://www.nbcnews.com/tech/tech-news/openai-dissolves-team-focused-long-term-ai-risks-less-one-year-announc-rcna152824",
@@ -2328,7 +2376,7 @@
     "PubDate": "2024-05-17T18:32:24Z"
   },
   {
-    "Id": 292,
+    "Id": 298,
     "Title": "David DePape, man who attacked Paul Pelosi with a hammer, sentenced to 30 years in prison",
     "Description": "The hammer-wielding man who brutally attacked Paul Pelosi, husband of former House Speaker Nancy Pelosi, in their San Francisco home was sentenced to 30 years in prison on Friday.",
     "Link": "https://www.nbcnews.com/news/us-news/david-depape-man-attacked-paul-pelosi-hammer-sentenced-30-years-prison-rcna152614",
@@ -2336,7 +2384,7 @@
     "PubDate": "2024-05-17T18:12:57Z"
   },
   {
-    "Id": 293,
+    "Id": 299,
     "Title": "Sen. Dick Durbin says Justice Alito should recuse in Trump cases because of upside-down flag",
     "Description": "WASHINGTON — Senate Majority Whip Dick Durbin, D-Ill., said Friday that Supreme Court Justice Samuel Alito should recuse himself from cases related to the 2020 election after a new report said an upside-down American flag flew outside his home in the days aft…",
     "Link": "https://www.nbcnews.com/politics/supreme-court/sen-dick-durbin-says-justice-alito-recuse-trump-cases-upside-flag-rcna152739",
@@ -2344,7 +2392,7 @@
     "PubDate": "2024-05-17T18:01:23Z"
   },
   {
-    "Id": 294,
+    "Id": 300,
     "Title": "North Carolina will revoke license of wilderness camp where boy died",
     "Description": "Trails Carolina, a wilderness camp for troubled adolescents where a 12-year-old boy died in February, is losing its license.",
     "Link": "https://www.nbcnews.com/news/us-news/trails-carolina-wilderness-camp-boy-died-license-revoked-rcna146296",
@@ -2352,7 +2400,7 @@
     "PubDate": "2024-05-17T17:42:41Z"
   },
   {
-    "Id": 295,
+    "Id": 301,
     "Title": "Chris Pratt pays tribute to Tony McFarr, his stunt double who died suddenly at 47",
     "Description": "Chris Pratt paid tribute to his late stunt double Tony McFarr in a heartfelt message on social media in which Pratt remembered their time on several movie sets together.",
     "Link": "https://www.nbcnews.com/news/us-news/chris-pratt-pays-tribute-tony-mcfarr-stunt-double-died-suddenly-47-rcna152811",
@@ -2360,7 +2408,7 @@
     "PubDate": "2024-05-17T17:37:20Z"
   },
   {
-    "Id": 296,
+    "Id": 302,
     "Title": "Viral kids creator Ms. Rachel says she experienced bullying after fundraising for children in Gaza",
     "Description": "Viral kids creator Rachel Griffin Accurso, known as Ms. Rachel, said she’s experienced bullying online following a fundraiser she launched for children in Gaza.",
     "Link": "https://www.nbcnews.com/news/us-news/ms-rachel-bullying-fundraising-children-gaza-rcna152701",
@@ -2368,7 +2416,7 @@
     "PubDate": "2024-05-17T17:35:29Z"
   },
   {
-    "Id": 297,
+    "Id": 303,
     "Title": "See Kevin Costner in new trailer for his Western epic, 'Horizon'",
     "Description": "A new Kevin Costner movie is on the horizon.",
     "Link": "https://www.nbcnews.com/pop-culture/pop-culture-news/see-kevin-costner-new-trailer-western-epic-horizon-rcna152801",
@@ -2376,7 +2424,7 @@
     "PubDate": "2024-05-17T17:18:07Z"
   },
   {
-    "Id": 298,
+    "Id": 304,
     "Title": "Glen Powell says he and Sydney Sweeney are planning to work together again",
     "Description": "Glen Powell and Sydney Sweeney are already planning on starring in another movie again.",
     "Link": "https://www.nbcnews.com/pop-culture/pop-culture-news/glen-powell-says-sydney-sweeney-are-planning-work-together-rcna152800",
@@ -2384,7 +2432,7 @@
     "PubDate": "2024-05-17T17:13:12Z"
   },
   {
-    "Id": 299,
+    "Id": 305,
     "Title": "Former Trump attorney John Eastman pleads not guilty in Arizona election interference case",
     "Description": "John Eastman, a former attorney for former president Donald Trump, pleaded not guilty on Friday to charges related to a conspiracy to overturn the 2020 election results in Arizona.",
     "Link": "https://www.nbcnews.com/politics/politics-news/former-trump-attorney-john-eastman-pleads-not-guilty-arizona-election-rcna152793",
@@ -2392,7 +2440,7 @@
     "PubDate": "2024-05-17T17:04:11Z"
   },
   {
-    "Id": 300,
+    "Id": 306,
     "Title": "2024 Preakness Stakes guide: Date, location, time, TV channels, betting favorites and more",
     "Description": "Mystik Dan shocked the horse racing world by winning the 150th running of the Kentucky Derby this month, and now he will have a chance to take one step closer to the Triple Crown with the Preakness Stakes at Pimlico Race Course in Baltimore.",
     "Link": "https://www.nbcnews.com/news/sports/2024-preakness-stakes-guide-date-location-time-tv-channels-betting-fav-rcna152503",
@@ -2400,7 +2448,7 @@
     "PubDate": "2024-05-17T17:00:00Z"
   },
   {
-    "Id": 301,
+    "Id": 307,
     "Title": "Pa. man accused of killing roommate, dismembering body and scattering remains",
     "Description": "A Lehigh County man is accused of killing his roommate with a hammer, dismembering his body and then scattering his remains in three separate locations.",
     "Link": "https://www.nbcnews.com/news/us-news/pa-man-accused-killing-roommate-dismembering-body-scattering-remains-rcna152782",
@@ -2408,7 +2456,7 @@
     "PubDate": "2024-05-17T16:50:44Z"
   },
   {
-    "Id": 302,
+    "Id": 308,
     "Title": "Deal written on a napkin that sent Lionel Messi to Barcelona sells at auction for $965,000",
     "Description": "The famous napkin that linked a young Lionel Messi to Barcelona sold for 762,400 pounds ($965,000) on Friday, British auction house Bonhams said.",
     "Link": "https://www.nbcnews.com/news/sports/deal-written-napkin-sent-lionel-messi-barcelona-sells-auction-965000-rcna152777",
@@ -2416,7 +2464,7 @@
     "PubDate": "2024-05-17T16:09:23Z"
   },
   {
-    "Id": 303,
+    "Id": 309,
     "Title": "As Tesla layoffs continue, here are 600 jobs the company cut in California",
     "Description": "As part of Tesla’s massive restructuring, the electric-vehicle maker notified the California Employment Development Department this week that it’s cutting approximately 600 more employees at its manufacturing facilities and engineering offices between Fremont…",
     "Link": "https://www.nbcnews.com/business/business-news/tesla-layoffs-continue-are-600-jobs-company-cut-california-rcna152780",
@@ -2424,7 +2472,7 @@
     "PubDate": "2024-05-17T15:52:09Z"
   },
   {
-    "Id": 304,
+    "Id": 310,
     "Title": "Taiwan lawmakers exchange blows in bitter dispute over parliament reforms",
     "Description": "Lawmakers in Taiwan shoved, tackled and hit each other in a bitter dispute about parliamentary reforms, days before President-elect Lai Ching-te takes office/",
     "Link": "https://www.nbcnews.com/news/world/taiwan-lawmakers-exchange-blows-bitter-dispute-parliament-reforms-rcna152763",
@@ -2432,7 +2480,7 @@
     "PubDate": "2024-05-17T15:42:56Z"
   },
   {
-    "Id": 305,
+    "Id": 311,
     "Title": "Israel says it recovers 3 bodies of festivalgoers slain by Hamas on Oct. 7",
     "Description": "Israeli officials on Friday announced their forces in Gaza had recovered the bodies of three revelers killed by Hamas attackers near the Supernova, or Nova, music festival on Oct. 7.",
     "Link": "https://www.nbcnews.com/news/world/israel-says-recovers-3-bodies-festivalgoers-slain-hamas-rcna152775",
@@ -2440,7 +2488,7 @@
     "PubDate": "2024-05-17T15:38:12Z"
   },
   {
-    "Id": 306,
+    "Id": 312,
     "Title": "He feared coming out. Now this pastor wants to help Black churches become as welcoming as his own",
     "Description": "Rev. Brandon Thomas Crowley hopes his new book, \"Queering the Black Church,\" can serve as a guide for other congregations to be “open and affirming” to LGBTQ people.",
     "Link": "https://www.nbcnews.com/nbc-out/out-community-voices/feared-coming-now-pastor-wants-help-black-churches-become-welcoming-rcna152758",
@@ -2448,7 +2496,7 @@
     "PubDate": "2024-05-17T15:29:33Z"
   },
   {
-    "Id": 307,
+    "Id": 313,
     "Title": "The best early Memorial Day 2024 sales",
     "Description": "Shop the best early Memorial Day deals across categories like mattresses, furniture, tech and more from brands like Casper, Burrow, Apple and Roku.",
     "Link": "https://www.nbcnews.com/select/shopping/best-early-memorial-day-sales-2024-rcna152762",
@@ -2456,7 +2504,7 @@
     "PubDate": "2024-05-17T15:19:46Z"
   },
   {
-    "Id": 308,
+    "Id": 314,
     "Title": "Statue weeping blood? Visions of the Virgin Mary? Vatican has new advice on supernatural phenomena",
     "Description": "The Vatican has issued new rules radically reforming its process for evaluating faith-based supernatural phenomena like visions of the Virgin Mary or stigmata.",
     "Link": "https://www.nbcnews.com/news/world/pope-francis-catholic-church-supernatural-phenomena-virgin-mary-rcna152721",
@@ -2464,7 +2512,7 @@
     "PubDate": "2024-05-17T14:58:52Z"
   },
   {
-    "Id": 309,
+    "Id": 315,
     "Title": "Abortion rights amendment qualifies for the South Dakota ballot",
     "Description": "South Dakota officials certified a proposed amendment that would enshrine abortion access in the state’s constitution to appear on the November ballot.",
     "Link": "https://www.nbcnews.com/politics/2024-election/abortion-rights-ballot-measure-south-dakota-rcna152746",
@@ -2472,7 +2520,7 @@
     "PubDate": "2024-05-17T14:43:38Z"
   },
   {
-    "Id": 310,
+    "Id": 316,
     "Title": "Putin concludes China trip by emphasizing ties with Russia",
     "Description": "Russian President Vladimir Putin concluded a visit to China, emphasizing the countries’ strategic ties as well as his relationship with  Xi Jinping.",
     "Link": "https://www.nbcnews.com/news/world/russia-china-vladimir-putin-xi-jingpin-ukraine-rcna152749",
@@ -2480,7 +2528,7 @@
     "PubDate": "2024-05-17T14:42:24Z"
   },
   {
-    "Id": 311,
+    "Id": 317,
     "Title": "Atlanta officer accused of killing Lyft driver allegedly said victim was ‘gay fraternity’ recruiter",
     "Description": "An Atlanta police officer accused of murdering a Lyft driver allegedly said the victim was in a gay fraternity trying to recruit him.",
     "Link": "https://www.nbcnews.com/nbc-out/out-news/atlanta-officer-accused-killing-lyft-driver-allegedly-said-victim-was-rcna152751",
@@ -2488,7 +2536,7 @@
     "PubDate": "2024-05-17T14:29:43Z"
   },
   {
-    "Id": 312,
+    "Id": 318,
     "Title": "Helicopter carrying Iran's president crashes in mountains",
     "Description": "Iran's official news agency said the helicopter was carrying President Ebrahim Raisi, Foreign Minister Hossein Amirabdollahian and local officials.",
     "Link": "https://www.usatoday.com/story/news/world/2024/05/19/iran-president-raisi-helicopter-rough-landing/73760337007/",
@@ -2496,7 +2544,7 @@
     "PubDate": "2024-05-19T12:59:00Z"
   },
   {
-    "Id": 313,
+    "Id": 319,
     "Title": "A Russian escalation. A new front. Is Ukraine losing the war with Russia?",
     "Description": "In recent days, Russia's forces have seized territory near Kharkiv in Ukraine. Is Ukraine losing the war with Russia?",
     "Link": "https://www.usatoday.com/story/news/world/2024/05/19/ukraine-losing-war-with-russia/73730454007/",
@@ -2504,7 +2552,7 @@
     "PubDate": "2024-05-19T10:42:00Z"
   },
   {
-    "Id": 314,
+    "Id": 320,
     "Title": "Israeli forces recover body of hostage Ron Binyamin",
     "Description": "The Israeli military said Saturday its forces recovered the body of Ron Binyamin, who was among 252 people seized by Hamas-led Palestinian gunmen.",
     "Link": "https://www.usatoday.com/story/news/world/2024/05/18/israeli-forces-ron-binyamin/73749430007/",
@@ -2512,7 +2560,7 @@
     "PubDate": "2024-05-19T10:53:00Z"
   },
   {
-    "Id": 315,
+    "Id": 321,
     "Title": "Teen says he faced $580 fine at McDonald's drive-thru for using app",
     "Description": "Mason Prima said he was fined $580 for opening the McDonald's app at a drive-thru in Saskatoon, Canada but police have rejected his story.",
     "Link": "https://www.usatoday.com/story/news/world/2024/05/17/ticket-mcdonalds-drive-thru-app/73737580007/",
@@ -2520,7 +2568,7 @@
     "PubDate": "2024-05-17T20:22:00Z"
   },
   {
-    "Id": 316,
+    "Id": 322,
     "Title": "Video shows bull attack tourist who was feeding the animal on Mexico beach",
     "Description": "Video shows a woman being attacked while on the beach in Los Cabos, Mexico. The tourist was seen giving the bull food.",
     "Link": "https://www.usatoday.com/story/news/world/2024/05/17/bull-attacks-tourist-mexico-beach/73732636007/",
@@ -2528,7 +2576,7 @@
     "PubDate": "2024-05-17T00:00:00Z"
   },
   {
-    "Id": 317,
+    "Id": 323,
     "Title": "White House: Pier is 'in place' for Gaza aid",
     "Description": "A U.S.-built floating pier is \"in place\" to deliver aid to Gaza in coming days, according to the White House.",
     "Link": "https://www.usatoday.com/videos/news/world/israel-hamas/2024/05/17/white-house-gaza-aid-pier-operate-soon/73732917007/",
@@ -2536,7 +2584,7 @@
     "PubDate": "2024-05-17T00:00:00Z"
   },
   {
-    "Id": 318,
+    "Id": 324,
     "Title": "Vatican updates guidelines for vetting supernatural claims",
     "Description": "The Vatican has issued new guidelines for investigating reported supernatural events.",
     "Link": "https://www.usatoday.com/videos/news/world/2024/05/17/vatican-updates-guidelines-vetting-supernatural-claims/73731672007/",
@@ -2544,7 +2592,7 @@
     "PubDate": "2024-05-17T00:00:00Z"
   },
   {
-    "Id": 319,
+    "Id": 325,
     "Title": "Gaza war splits Israel's cabinet as defense minister defies Netanyahu",
     "Description": "Defense Minister Yoav Gallant, backed by two centrist members of the cabinet, said Israel's army will not control Gaza after the war.",
     "Link": "https://www.usatoday.com/story/news/world/2024/05/17/gaza-war-splits-israel-cabinet-netanyahu-gallant/73730071007/",
@@ -2552,7 +2600,7 @@
     "PubDate": "2024-05-17T00:00:00Z"
   },
   {
-    "Id": 320,
+    "Id": 326,
     "Title": "Vatican revamps policy on supernatural claims for first time since 1978",
     "Description": "It's about to become rare for the Vatican to endorse supernatural claims of weeping statues of the Virgin Mary and divine apparitions.",
     "Link": "https://www.usatoday.com/story/news/world/2024/05/17/vatican-apparitions-supernatural-phenomena/73729418007/",
@@ -2560,7 +2608,7 @@
     "PubDate": "2024-05-17T00:00:00Z"
   },
   {
-    "Id": 321,
+    "Id": 327,
     "Title": "Spanish police uncover 1.8 tons of crystal meth from Sinaloa Cartel",
     "Description": "The leader of the cartel's operations in Spain was among the five people arrested. Officials also seized cash, abundant documentation, a detonating weapon and five vehicles.",
     "Link": "https://www.usatoday.com/story/news/world/2024/05/16/spanish-police-uncover-1-8-tons-of-crystal-meth-sinaloa-cartel/73721154007/",
@@ -2568,7 +2616,7 @@
     "PubDate": "2024-05-16T00:00:00Z"
   },
   {
-    "Id": 322,
+    "Id": 328,
     "Title": "Vatican to offer new guidance on supernatural phenomena, apparitions on Friday",
     "Description": "The Vatican is set to discuss apparitions and other supernatural phenomena in a press conference scheduled for Friday.",
     "Link": "https://www.usatoday.com/story/news/world/2024/05/16/vatican-press-conference-apparitions-supernatural-phenomena/73709902007/",
@@ -2576,7 +2624,7 @@
     "PubDate": "2024-05-17T00:00:00Z"
   },
   {
-    "Id": 323,
+    "Id": 329,
     "Title": "Biden to send arms to Israel",
     "Description": "The Biden administration is preparing to send a billion-dollar shipment of weapons and ammunition to Israel. The deal will likely include $700 million in tank ammunition and $500 million in tactical vehicles.",
     "Link": "https://www.usatoday.com/videos/news/world/2024/05/16/biden-to-send-arms-to-israel/73706179007/",
@@ -2584,7 +2632,7 @@
     "PubDate": "2024-05-16T00:00:00Z"
   },
   {
-    "Id": 324,
+    "Id": 330,
     "Title": "Israel accused in world court of trying to 'destroy Palestinian life'",
     "Description": "Israeli officials have denied genocide claims, say they have stepped up efforts to provide humanitarian aid in Gaza.",
     "Link": "https://www.usatoday.com/story/news/world/israel-hamas/2024/05/16/israeli-war-updates-gaza-hamas/73712032007/",
@@ -2592,7 +2640,7 @@
     "PubDate": "2024-05-16T00:00:00Z"
   },
   {
-    "Id": 325,
+    "Id": 331,
     "Title": "Georgia defies West and 'returns to past' with Russian-style law",
     "Description": "A new bill, aimed at stifling dissent, has sparked the biggest protests in the Eastern European country of Georgia since its independence from the Soviet Union.",
     "Link": "https://www.usatoday.com/story/news/world/2024/05/16/georgia-passes-russia-style-foreign-agents-law/73682302007/",
@@ -2600,7 +2648,7 @@
     "PubDate": "2024-05-16T00:00:00Z"
   },
   {
-    "Id": 326,
+    "Id": 332,
     "Title": "Despite religion being on the decline in the U.S. atheism isn’t having the meteoric rise one might expect",
     "Description": "Despite the rise in evangelicalism and its crossover into politics, religion in the United States is actually on the decline.",
     "Link": "https://www.usatoday.com/videos/news/world/2024/05/15/despite-religion-being-on-the-decline-in-the-us-atheism-isnt-having-the-meteoric-rise-one-might-expe/73610917007/",
@@ -2608,7 +2656,7 @@
     "PubDate": "2024-05-15T00:00:00Z"
   },
   {
-    "Id": 327,
+    "Id": 333,
     "Title": "US museum curator detained in Turkey airport with 1,500 scorpions, spiders",
     "Description": "A curator at the American Museum of Natural History was arrested, then released, on suspicions of smuggling valuable poisonous spiders and scorpions.",
     "Link": "https://www.usatoday.com/story/news/world/2024/05/15/museum-curator-istanbul-airport-scorpions-spiders/73698371007/",
@@ -2616,7 +2664,7 @@
     "PubDate": "2024-05-15T00:00:00Z"
   },
   {
-    "Id": 328,
+    "Id": 334,
     "Title": "Slovakia's pro-Russia prime minister shot in apparent assassination attempt",
     "Description": "Slovakia's Prime Minister Robert Fico was shot in an apparent assassination attempt as he made an appearance outside a community center, local media reported.",
     "Link": "https://www.usatoday.com/story/news/world/2024/05/15/slovakias-prime-minister-robert-fico-shooting/73698394007/",
@@ -2624,7 +2672,7 @@
     "PubDate": "2024-05-16T00:00:00Z"
   },
   {
-    "Id": 329,
+    "Id": 335,
     "Title": "There's 'no humanitarian catastrophe' in Rafah, Netanyahu insists",
     "Description": "Israel is \"fulfilling our obligation to (Rafah's) humanitarian needs,\" Prime Minister Benjamin Netanyahu says.",
     "Link": "https://www.usatoday.com/story/news/world/israel-hamas/2024/05/15/israeli-war-updates-gaza-hamas-un/73697196007/",
@@ -2632,7 +2680,7 @@
     "PubDate": "2024-05-16T00:00:00Z"
   },
   {
-    "Id": 330,
+    "Id": 336,
     "Title": "Orcas sink boat with two passengers on board in Strait of Gibraltar",
     "Description": "Two passengers were rescued after their boat was attacked by orcas. The killer whales sank the boat.",
     "Link": "https://www.usatoday.com/story/news/world/2024/05/15/orcas-sink-boat-spain-strait-of-gibraltar/73697037007/",
@@ -2640,7 +2688,7 @@
     "PubDate": "2024-05-15T00:00:00Z"
   },
   {
-    "Id": 331,
+    "Id": 337,
     "Title": "Astronomers discover an enormous planet made of something as light as cotton candy",
     "Description": "Oftentimes when astronomers discover new exoplanets they’re molten hot hellscapes or solid frozen spheres of ice. However, WASP-193b which resides 1,232 light-years is a little different.",
     "Link": "https://www.usatoday.com/videos/news/world/2024/05/15/astronomers-discover-an-enormous-planet-made-of-something-as-light-as-cotton-candy/73697406007/",
@@ -2648,7 +2696,7 @@
     "PubDate": "2024-05-15T00:00:00Z"
   },
   {
-    "Id": 332,
+    "Id": 338,
     "Title": "Ukraine's Zelenskyy cancels all foreign trips as Russian offensive intensifies",
     "Description": "Zelenskyy's cancellation of all foreign trips may indicate that Ukraine is struggling to contain Russia's offensive. The US said it is 'rushing' more weapons.",
     "Link": "https://www.usatoday.com/story/news/world/2024/05/15/ukraine-zelenskyy-cancels-foreign-trips-russian-offensive-blinken-visit/73697239007/",
@@ -2656,7 +2704,7 @@
     "PubDate": "2024-05-15T00:00:00Z"
   },
   {
-    "Id": 333,
+    "Id": 339,
     "Title": "King Charles unveils first official portrait",
     "Description": "The portrait painted by artist Jonathan Yeo depicts King Charles III wearing the uniform of the Welsh Guards military unit, against a red background.",
     "Link": "https://www.usatoday.com/videos/news/world/2024/05/14/king-charles-iii-first-portrait-since-his-coronation-unveiled/73689220007/",
@@ -2664,7 +2712,7 @@
     "PubDate": "2024-05-14T00:00:00Z"
   },
   {
-    "Id": 334,
+    "Id": 340,
     "Title": "Gaza-bound aid trucks attacked by Israelis",
     "Description": "Food aid trucks headed to Gaza from Jordan were attacked by Israeli protesters, preventing them from reaching Gaza.",
     "Link": "https://www.usatoday.com/videos/news/world/2024/05/14/watch-israeli-protesters-attack-gaza-bound-food-trucks/73683464007/",
@@ -2672,7 +2720,7 @@
     "PubDate": "2024-05-14T00:00:00Z"
   },
   {
-    "Id": 335,
+    "Id": 341,
     "Title": "Egypt rips Israel's 'desperate attempts' to deflect blame for Gaza crisis",
     "Description": "Israeli troops drove deeper into the southern Gaza city of Rafah on Tuesday as fighting flared again in the north.",
     "Link": "https://www.usatoday.com/story/news/world/israel-hamas/2024/05/14/israel-war-live-updates-rafah/73682515007/",
@@ -2680,7 +2728,7 @@
     "PubDate": "2024-05-15T00:00:00Z"
   },
   {
-    "Id": 336,
+    "Id": 342,
     "Title": "Biden reaches a turning point on Israel. His next move could be big",
     "Description": "President Joe Biden's pause of an arms shipment and a State Department report on Israel's conduct in Gaza are a turning point for the Democrat.",
     "Link": "https://www.usatoday.com/story/news/world/2024/05/14/biden-at-a-crossroads-on-israel-over-military-aid-civilian-protection/73639859007/",
@@ -2688,7 +2736,7 @@
     "PubDate": "2024-05-14T00:00:00Z"
   },
   {
-    "Id": 337,
+    "Id": 343,
     "Title": "Blinken visits Ukraine as Russia ramps up military offensive",
     "Description": "The State Department said Antony Blinken would get \"battlefield updates\" from Ukraine's leadership and discuss the impact of new U.S. security assistance.",
     "Link": "https://www.usatoday.com/story/news/world/2024/05/14/blinken-in-ukraine-us-aid-package-russian-kharkiv-attacks/73681678007/",
@@ -2696,7 +2744,7 @@
     "PubDate": "2024-05-14T00:00:00Z"
   },
   {
-    "Id": 338,
+    "Id": 344,
     "Title": "Over 300,000 forced to flee Rafah as fighting intensifies across Gaza",
     "Description": "Palestinians packed cars, trucks and carts to flee the violence in Rafah. Aid groups warned the humanitarian crisis could grow more grave.",
     "Link": "https://www.usatoday.com/story/news/world/israel-hamas/2024/05/13/israel-war-updates-rafah-gaza/73668346007/",
@@ -2704,7 +2752,7 @@
     "PubDate": "2024-05-14T00:00:00Z"
   },
   {
-    "Id": 339,
+    "Id": 345,
     "Title": "Vladimir Putin proposes moving Russian defense chief in surprise reshuffle",
     "Description": "Russian President Vladimir Putin has proposed a surprise new defense minister, nominating civilian Andrei Belousov, a former deputy prime minister who specializes in economics, for the job more than two years into the Ukraine war, the Kremlin said.",
     "Link": "https://www.usatoday.com/story/news/world/2024/05/12/vladimir-putin-russian-defense-chief-reshuffle/73665013007/",
@@ -2712,7 +2760,7 @@
     "PubDate": "2024-05-12T00:00:00Z"
   },
   {
-    "Id": 340,
+    "Id": 346,
     "Title": "6.4 magnitude earthquake strikes off the coast of Mexico, Guatemala",
     "Description": "A 6.4 magnitude earthquake struck early Sunday near the border of Mexico and Guatemala.",
     "Link": "https://www.usatoday.com/story/news/world/2024/05/12/mexico-earthquake-guatemala/73664081007/",
@@ -2720,7 +2768,7 @@
     "PubDate": "2024-05-12T00:00:00Z"
   },
   {
-    "Id": 341,
+    "Id": 347,
     "Title": "Secretary of state says US review of Israeli actions in Gaza ongoing",
     "Description": "Secretary of State Antony Blinken made his first public comments on the Biden administration's report on Israel's treatment of civilians in Gaza.",
     "Link": "https://www.usatoday.com/story/news/world/israel-hamas/2024/05/12/blinken-israel-gaza-weapons-review/73662574007/",
@@ -2728,23 +2776,23 @@
     "PubDate": "2024-05-12T00:00:00Z"
   },
   {
-    "Id": 342,
+    "Id": 348,
     "Title": "Israeli military orders Palestinians to evacuate more areas in Rafah",
     "Description": "More than 1 million displaced people have sought refuge in the southern city in the Gaza Strip during the seven-month-old war.",
     "Link": "https://www.usatoday.com/story/news/world/israel-hamas/2024/05/11/israel-orders-palestinians-evacuate-rafah-gaza/73653626007/",
     "Source": "USA TODAY",
-    "PubDate": "2024-06-21T05:12:37.0631733Z"
+    "PubDate": "2024-06-21T14:09:45.7819872Z"
   },
   {
-    "Id": 343,
+    "Id": 349,
     "Title": "Tesla protesters try to break into German factory",
     "Description": "Dozens of protesters clashed with police while attempting to storm a Tesla factory in Germany.",
     "Link": "https://www.usatoday.com/videos/news/world/2024/05/10/protesters-clash-with-police-outside-tesla-factory/73648078007/",
     "Source": "USA TODAY",
-    "PubDate": "2024-06-21T05:12:37.0631733Z"
+    "PubDate": "2024-06-21T14:09:45.7819872Z"
   },
   {
-    "Id": 344,
+    "Id": 350,
     "Title": "Zoo in China criticized for dyeing dogs for 'panda dog' exhibit",
     "Description": "The Taizhou Zoo in Jiangsu, China dyed two chow chow dogs and advertised them as \"panda dogs\" in the exhibit that opened on May 1..",
     "Link": "https://www.usatoday.com/story/news/world/2024/05/10/china-panda-dogs/73645792007/",
@@ -2752,7 +2800,7 @@
     "PubDate": "2024-05-12T00:00:00Z"
   },
   {
-    "Id": 345,
+    "Id": 351,
     "Title": "Residents forced out of Canada's oil sands hub by wildfire cleared to return, officials say",
     "Description": "Residents who were ordered out of Canada's oil sands hub of Fort McMurray, Alberta, due to a\r\n                nearby wildfire are clear to return home, authorities said Saturday.",
     "Link": "https://www.washingtontimes.com/news/2024/may/18/residents-forced-out-of-canadas-oil-sands-hub-by-w/?utm_source=RSS_Feed\u0026utm_medium=RSS",
@@ -2760,7 +2808,7 @@
     "PubDate": "2024-05-18T21:14:40Z"
   },
   {
-    "Id": 346,
+    "Id": 352,
     "Title": "As ethnic armed group claims to have captured a town in western Myanmar, Muslim Rohingyas flee again",
     "Description": "A powerful ethnic armed group fighting Myanmar's military government in the country's western\r\n                state of Rakhine claimed Saturday to have seized a town near the border with Bangladesh, marking the\r\n                latest in a series of victories for foes of the country's military government.",
     "Link": "https://www.washingtontimes.com/news/2024/may/18/as-ethnic-armed-group-claims-to-have-captured-town/?utm_source=RSS_Feed\u0026utm_medium=RSS",
@@ -2768,7 +2816,7 @@
     "PubDate": "2024-05-18T20:40:25Z"
   },
   {
-    "Id": 347,
+    "Id": 353,
     "Title": "Days before a new president is due to be inaugurated, brawl roils Taiwan's unicameral parliament",
     "Description": "The Legislative Yuan, the single body that serves as Taiwan's legislature, was rocked by a\r\n                donnybrook between lawmakers of opposing parties Friday.",
     "Link": "https://www.washingtontimes.com/news/2024/may/18/days-new-president-due-be-inaugurated-brawl-roils-/?utm_source=RSS_Feed\u0026utm_medium=RSS",
@@ -2776,7 +2824,7 @@
     "PubDate": "2024-05-18T20:18:39Z"
   },
   {
-    "Id": 348,
+    "Id": 354,
     "Title": "The German chancellor tours flooded regions in the southwest in a show of solidarity",
     "Description": "German Chancellor Olaf Scholz on Saturday toured flooded regions in the southwest, where rivers\r\n                have swelled and caused flash floods and landslides after heavy rain and severe weather.",
     "Link": "https://www.washingtontimes.com/news/2024/may/18/german-chancellor-tours-flooded-regions-in-southwe/?utm_source=RSS_Feed\u0026utm_medium=RSS",
@@ -2784,7 +2832,7 @@
     "PubDate": "2024-05-18T18:58:09Z"
   },
   {
-    "Id": 349,
+    "Id": 355,
     "Title": "Member of Israel's War Cabinet says he'll quit the government June 8 unless there's a new war plan",
     "Description": "Benny Gantz, a centrist member of Israel's three-member War Cabinet, threatened on Saturday to\r\n                resign from the government if it doesn't adopt a new plan in three weeks' time for the war in Gaza, a\r\n                move that would leave Prime Minister Benjamin Netanyahu more reliant on his far-right allies.",
     "Link": "https://www.washingtontimes.com/news/2024/may/18/member-of-israels-war-cabinet-says-hell-quit-gover/?utm_source=RSS_Feed\u0026utm_medium=RSS",
@@ -2792,7 +2840,7 @@
     "PubDate": "2024-05-18T18:07:43Z"
   },
   {
-    "Id": 350,
+    "Id": 356,
     "Title": "EcoHealth's COVID bat-testing lab upended by feds' spending ban",
     "Description": "When the federal government shut down taxpayer money going to EcoHealth Alliance, the company\r\n                linked to the Wuhan virus lab, it may also doomed the firm's plans to start a bat research lab in the\r\n                U.S.",
     "Link": "https://www.washingtontimes.com/news/2024/may/18/ecohealths-covid-bat-testing-lab-upended-feds-spen/?utm_source=RSS_Feed\u0026utm_medium=RSS",
@@ -2800,7 +2848,7 @@
     "PubDate": "2024-05-18T17:10:13Z"
   },
   {
-    "Id": 351,
+    "Id": 357,
     "Title": "Aid from new pier off Gaza should be distributed this weekend, pressure grows on Netanyahu",
     "Description": "The first distribution of badly needed aid is expected to begin this weekend after rolling off\r\n                a newly built U.S. pier off the coast of Gaza, even as aid workers warn much more access is needed to\r\n                the besieged territory where famine might be under way.",
     "Link": "https://www.washingtontimes.com/news/2024/may/18/aid-from-gaza-pier-should-be-distributed-this-week/?utm_source=RSS_Feed\u0026utm_medium=RSS",
@@ -2808,7 +2856,7 @@
     "PubDate": "2024-05-18T15:07:36Z"
   },
   {
-    "Id": 352,
+    "Id": 358,
     "Title": "Intel suggests American who vanished in Syria in 2017 has died, daughter says she was told",
     "Description": "U.S. officials have developed specific and highly credible intelligence suggesting that an\r\n                American citizen who disappeared seven years ago while traveling in Syria has died, the man's daughter\r\n                said Saturday.",
     "Link": "https://www.washingtontimes.com/news/2024/may/18/intell-suggests-majd-kamalmaz-who-vanished-in-syri/?utm_source=RSS_Feed\u0026utm_medium=RSS",
@@ -2816,7 +2864,7 @@
     "PubDate": "2024-05-18T14:03:05Z"
   },
   {
-    "Id": 353,
+    "Id": 359,
     "Title": "An unusual autumn freeze grips parts of South America, giving Chile its coldest May in 74 years",
     "Description": "Chileans are bundling up for their coldest autumn in more than 70 years mere days after sunning\r\n                in T-shirts - a dramatic change of wardrobe brought on this week by a sudden cold front gripping\r\n                portions of South America unaccustomed to bitter wind chills this time of year.",
     "Link": "https://www.washingtontimes.com/news/2024/may/18/freeze-grips-parts-of-south-america-giving-chile-i/?utm_source=RSS_Feed\u0026utm_medium=RSS",
@@ -2824,7 +2872,7 @@
     "PubDate": "2024-05-18T13:06:57Z"
   },
   {
-    "Id": 354,
+    "Id": 360,
     "Title": "Argentine President Javier Milei on visit to Spain, snubs officials, courts far-right",
     "Description": "Even before kicking off a three-day visit to Madrid on Friday, Argentina's libertarian\r\n                President Javier Milei stirred controversy, accusing the socialist government of bringing \"poverty and\r\n                death\" to Spain and weighing in on corruption allegations against the prime minister's wife.",
     "Link": "https://www.washingtontimes.com/news/2024/may/18/argentine-president-javier-milei-on-visit-to-spain/?utm_source=RSS_Feed\u0026utm_medium=RSS",
@@ -2832,7 +2880,7 @@
     "PubDate": "2024-05-18T13:05:51Z"
   },
   {
-    "Id": 355,
+    "Id": 361,
     "Title": "The German chancellor tours flooded regions in the southwest in a show of solidarity",
     "Description": "German Chancellor Olaf Scholz on Saturday toured flooded regions in the southwest, where rivers\r\n                have swelled and caused flash floods and landslides after heavy rain and severe weather.",
     "Link": "https://www.washingtontimes.com/news/2024/may/18/german-chancellor-olaf-scholz-tours-flooded-region/?utm_source=RSS_Feed\u0026utm_medium=RSS",
@@ -2840,7 +2888,7 @@
     "PubDate": "2024-05-18T12:01:35Z"
   },
   {
-    "Id": 356,
+    "Id": 362,
     "Title": "The Slovak prime minister is stable after 'miracles' in the hospital as suspect appears in court",
     "Description": "Slovak Prime Minister Robert Fico's condition was serious but stable Saturday as the man\r\n                accused of trying to assassinate him faced his first court appearance.",
     "Link": "https://www.washingtontimes.com/news/2024/may/18/slovak-prime-minister-robert-is-stable-after-mirac/?utm_source=RSS_Feed\u0026utm_medium=RSS",
@@ -2848,7 +2896,7 @@
     "PubDate": "2024-05-18T11:27:05Z"
   },
   {
-    "Id": 357,
+    "Id": 363,
     "Title": "French authorities report a sixth fatality in New Caledonia violence",
     "Description": "French security forces reported another death Saturday in armed clashes in the French Pacific\r\n                territory of New Caledonia, the sixth fatality in a nearly a week of violent unrest scorching the\r\n                archipelago whose indigenous population has long sought independence.",
     "Link": "https://www.washingtontimes.com/news/2024/may/18/more-fatalities-reported-in-new-caledonia-violence/?utm_source=RSS_Feed\u0026utm_medium=RSS",
@@ -2856,7 +2904,7 @@
     "PubDate": "2024-05-18T10:59:59Z"
   },
   {
-    "Id": 358,
+    "Id": 364,
     "Title": "Ukraine's divisive mobilization law comes into force as a new Russian push strains front-line troops",
     "Description": "A divisive mobilization law in Ukraine came into force on Saturday, as Kyiv struggles to boost\r\n                troop numbers after Russia launched a new offensive that some fear could close in on Ukraine's\r\n                second-largest city.",
     "Link": "https://www.washingtontimes.com/news/2024/may/18/ukraine-mobilization-law-used-as-russian-push-stra/?utm_source=RSS_Feed\u0026utm_medium=RSS",
@@ -2864,7 +2912,7 @@
     "PubDate": "2024-05-18T10:18:52Z"
   },
   {
-    "Id": 359,
+    "Id": 365,
     "Title": "Climate activists glue themselves at Munich airport to protest pollution caused by flying",
     "Description": "German authorities closed down Munich airport temporarily on Saturday after six climate\r\n                activists broke through a security fence and glued themselves to access routes leading to runways,\r\n                officials and local media reported.",
     "Link": "https://www.washingtontimes.com/news/2024/may/18/in-munich-climate-activists-glue-themselves-to-air/?utm_source=RSS_Feed\u0026utm_medium=RSS",
@@ -2872,7 +2920,7 @@
     "PubDate": "2024-05-18T10:15:39Z"
   },
   {
-    "Id": 360,
+    "Id": 366,
     "Title": "Parts of northern India scorched by extreme heat with New Delhi on high alert",
     "Description": "Parts of northwest India sweltered under scorching temperatures on Saturday, with the capital\r\n                New Delhi under a severe weather alert as extreme temperatures strike parts of the country.",
     "Link": "https://www.washingtontimes.com/news/2024/may/18/northern-india-scorched-by-extreme-heat-with-new-d/?utm_source=RSS_Feed\u0026utm_medium=RSS",
@@ -2880,7 +2928,7 @@
     "PubDate": "2024-05-18T09:48:09Z"
   },
   {
-    "Id": 361,
+    "Id": 367,
     "Title": "About-face on marijuana legalization leaves Thai pot lovers with hazy future",
     "Description": "Two years after Thailand's military-led government decriminalized cannabis, the country's\r\n                elected civilian prime minister abruptly announced last week he wants to end legalized recreational use\r\n                by the end of the year.",
     "Link": "https://www.washingtontimes.com/news/2024/may/17/about-face-on-marijuana-legalization-leaves-thai-p/?utm_source=RSS_Feed\u0026utm_medium=RSS",
@@ -2888,7 +2936,7 @@
     "PubDate": "2024-05-17T19:42:45Z"
   },
   {
-    "Id": 362,
+    "Id": 368,
     "Title": "All-in costs for troubled F-35 fighter jet program price tag likely to top $2 trillion, GAO says",
     "Description": "The F-35 Lightning II Joint Strike Fighter, the Pentagon's most ambitious weapons program ever,\r\n                has been plagued with mounting costs and delays that will result in a price tag of more than $2 trillion\r\n                in the coming decades, according to a recent watchdog report by the Government Accountability Office.",
     "Link": "https://www.washingtontimes.com/news/2024/may/17/all-in-costs-for-troubled-f-35-fighter-jet-program/?utm_source=RSS_Feed\u0026utm_medium=RSS",
@@ -2896,7 +2944,7 @@
     "PubDate": "2024-05-17T18:54:51Z"
   },
   {
-    "Id": 363,
+    "Id": 369,
     "Title": "It's a star: Mexico City taco stand becomes first such restaurant to land Michelin award",
     "Description": "Taqueria El Califa de Leon in Mexico City received a single Michelin star this week, making it\r\n                the first taco stand to receive that distinction.",
     "Link": "https://www.washingtontimes.com/news/2024/may/17/mexico-city-taco-stand-becomes-first-such-restaura/?utm_source=RSS_Feed\u0026utm_medium=RSS",
@@ -2904,7 +2952,7 @@
     "PubDate": "2024-05-17T17:01:27Z"
   },
   {
-    "Id": 364,
+    "Id": 370,
     "Title": "Israeli army finds bodies of 3 hostages in Gaza killed at Oct. 7 music festival",
     "Description": "The Israeli military said Friday its troops in Gaza found the bodies of three Israeli hostages\r\n                killed by Hamas during its Oct. 7 attack, including German-Israeli Shani Louk.",
     "Link": "https://www.washingtontimes.com/news/2024/may/17/israeli-military-bodies-of-3-hostages-in-gaza-incl/?utm_source=RSS_Feed\u0026utm_medium=RSS",

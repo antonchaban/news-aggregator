@@ -30,9 +30,9 @@ func (n newsLoader) UpdateFromFeed(urlPath string) ([]model.Article, error) {
 
 func (n newsLoader) LoadAllFromFile() ([]model.Article, error) {
 	// Construct the file path
-	dataDir := os.Getenv("DATA_DIR")
+	dataDir := os.Getenv("SAVES_DIR")
 	if dataDir == "" {
-		return nil, errors.New("DATA_DIR environment variable is not set")
+		return nil, errors.New("SAVES_DIR environment variable is not set")
 	}
 	filePath := filepath.Join(dataDir, "articles.json")
 
