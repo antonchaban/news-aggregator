@@ -18,13 +18,14 @@ const dotenvPath = "../../../.env"
 func main() {
 	db := inmemory.New()
 	srcDb := inmemory.NewSrc()
-	svc := service.New(db)
+	asvc := service.New(db)
+	ssvc := service.NewSourceService(db, srcDb)
 
 	if err := godotenv.Load(dotenvPath); err != nil {
 		logrus.Fatal("error occurred while loading env variables: ", err.Error())
 	}
 
-	h := web.NewHandler(svc, srcDb)
+	h := web.NewHandler(asvc, ssvc)
 	srv := new(server.Server)
 	go func() {
 		if err := srv.Run(os.Getenv("PORT"), h.InitRoutes(), *h); err != nil {
@@ -39,7 +40,7 @@ func main() {
 
 	logrus.Print("news-alligator 🐊 shutting down")
 
-	articles, err := svc.GetAll()
+	articles, err := asvc.GetAll()
 	if err != nil {
 		logrus.Errorf("error occurred on getting all articles: %s", err.Error())
 	}

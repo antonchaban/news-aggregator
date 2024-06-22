@@ -2,26 +2,25 @@ package web
 
 import (
 	"github.com/antonchaban/news-aggregator/pkg/service"
-	"github.com/antonchaban/news-aggregator/pkg/storage"
 	"github.com/gin-gonic/gin"
 )
 
 type Handler struct {
 	articleService service.ArticleService
-	srcStorage     storage.SourceStorage
+	srcService     service.SourceService
 }
 
-func (h *Handler) SrcStorage() storage.SourceStorage {
-	return h.srcStorage
+func (h *Handler) SrcService() service.SourceService {
+	return h.srcService
 }
 
 func (h *Handler) ArticleService() service.ArticleService {
 	return h.articleService
 }
 
-func NewHandler(asvc service.ArticleService, ss storage.SourceStorage) *Handler {
+func NewHandler(asvc service.ArticleService, ss service.SourceService) *Handler {
 	h := &Handler{articleService: asvc,
-		srcStorage: ss}
+		srcService: ss}
 	return h
 }
 
@@ -34,7 +33,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	}
 	sources := router.Group("/sources")
 	{
-		sources.GET("/:id", h.getSrcById)
+		sources.GET("/:id", h.fetchSrcById)
 		sources.POST("", h.createSource)
 	}
 	return router
