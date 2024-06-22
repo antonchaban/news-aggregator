@@ -33,8 +33,13 @@ func (m *memorySourceStorage) SaveAll(sources []model.Source) error {
 }
 
 func (m *memorySourceStorage) Delete(id int) error {
-	//TODO implement me
-	panic("implement me")
+	for i, s := range m.Sources {
+		if s.Id == id {
+			m.Sources = append(m.Sources[:i], m.Sources[i+1:]...)
+			return nil
+		}
+	}
+	return errors.New("source not found")
 }
 
 func (m *memorySourceStorage) GetByID(id int) (model.Source, error) {

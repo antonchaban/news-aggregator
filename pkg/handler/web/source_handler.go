@@ -30,3 +30,17 @@ func (h *Handler) createSource(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, sources)
 }
+
+func (h *Handler) deleteSource(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+	err = h.SrcService().DeleteSource(id)
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "source deleted"})
+}

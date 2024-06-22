@@ -11,11 +11,16 @@ type SourceService interface {
 	FetchFromAllSources() error
 	FetchSourceByID(id int) ([]model.Article, error)
 	AddSource(source model.Source) (model.Source, error)
+	DeleteSource(id int) error
 }
 
 type sourceService struct {
 	articleStorage storage.ArticleStorage
 	srcStorage     storage.SourceStorage
+}
+
+func (s *sourceService) DeleteSource(id int) error {
+	return s.srcStorage.Delete(id)
 }
 
 func (s *sourceService) AddSource(source model.Source) (model.Source, error) {
