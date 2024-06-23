@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"github.com/antonchaban/news-aggregator/pkg/backuper"
 	"github.com/antonchaban/news-aggregator/pkg/handler/web"
@@ -13,6 +14,8 @@ import (
 
 type Server struct {
 	httpServer *http.Server
+	certFile   string
+	keyFile    string
 }
 
 func (s *Server) Run(port string, handler http.Handler, artHandler web.Handler) error {
@@ -30,14 +33,18 @@ func (s *Server) Run(port string, handler http.Handler, artHandler web.Handler) 
 			logrus.Fatalf("error occurred while updating articles from feed: %s", err.Error())
 		}
 		articles = append(articles, articlesFeed...)
-
 	}
 	if err != nil {
 		return nil
 	}
 	err = artHandler.ArticleService().SaveAll(articles)
 
-	return s.httpServer.ListenAndServe()
+	if err := s.httpServer.ListenAndServeTLS(s.certFile, s.keyFile); err != nil && !errors.Is(err, http.ErrServerClosed) {
+		logrus.Fatalf("Could not listen on %s: %v\n", port, err)
+		return err
+	}
+
+	return nil
 }
 
 func (s *Server) Shutdown(ctx context.Context, articles []model.Article) error {
@@ -55,5 +62,12 @@ func getSupportedFeeds() []string {
 		"https://abcnews.go.com/abcnews/internationalheadlines",
 		"https://www.washingtontimes.com/rss/headlines/news/world/",
 		"https://www.usatoday.com/news/world/",
+	}
+}
+
+func NewServer(certFile, keyFile string) *Server {
+	return &Server{
+		certFile: certFile,
+		keyFile:  keyFile,
 	}
 }
