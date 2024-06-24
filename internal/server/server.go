@@ -27,15 +27,8 @@ func (s *Server) Run(port string, handler http.Handler, artHandler web.Handler) 
 		WriteTimeout:   10 * time.Second,
 	}
 	articles, err := backuper.NewLoader(artHandler.ArticleService()).LoadAllFromFile()
-	for _, feed := range getSupportedFeeds() {
-		articlesFeed, err := backuper.NewLoader(artHandler.ArticleService()).UpdateFromFeed(feed)
-		if err != nil {
-			logrus.Fatalf("error occurred while updating articles from feed: %s", err.Error())
-		}
-		articles = append(articles, articlesFeed...)
-	}
 	if err != nil {
-		return nil
+		return err
 	}
 	err = artHandler.ArticleService().SaveAll(articles)
 
@@ -54,15 +47,6 @@ func (s *Server) Shutdown(ctx context.Context, articles []model.Article) error {
 		return err
 	}
 	return s.httpServer.Shutdown(ctx)
-}
-
-func getSupportedFeeds() []string {
-	return []string{
-		"https://feeds.bbci.co.uk/news/rss.xml",
-		"https://abcnews.go.com/abcnews/internationalheadlines",
-		"https://www.washingtontimes.com/rss/headlines/news/world/",
-		"https://www.usatoday.com/news/world/",
-	}
 }
 
 func NewServer(certFile, keyFile string) *Server {

@@ -38,8 +38,13 @@ func (h *SourceFilter) Filter(articles []model.Article, f Filters) ([]model.Arti
 		var filteredArticles []model.Article
 		for _, article := range articles {
 			for _, source := range sourceList {
-				if sourceName, ok := sourceMap[source]; ok {
-					if article.Source == sourceName {
+				if source == "other" {
+					if findOther(article.Source.Name) {
+						filteredArticles = append(filteredArticles, article)
+						break
+					}
+				} else if sourceName, ok := sourceMap[source]; ok {
+					if article.Source.Name == sourceName {
 						filteredArticles = append(filteredArticles, article)
 						break
 					}
@@ -55,4 +60,11 @@ func (h *SourceFilter) Filter(articles []model.Article, f Filters) ([]model.Arti
 		return h.next.Filter(articles, f)
 	}
 	return articles, nil
+}
+
+// findOther checks if the source name is not one of the predefined sources
+func findOther(sourceName string) bool {
+	return sourceName != abcNewsSource && sourceName != bbcNewsSource &&
+		sourceName != washingtonTimesSource && sourceName != nbcNewsSource &&
+		sourceName != usaTodaySource
 }

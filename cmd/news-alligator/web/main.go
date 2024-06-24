@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/antonchaban/news-aggregator/internal/server"
 	"github.com/antonchaban/news-aggregator/pkg/handler/web"
+	"github.com/antonchaban/news-aggregator/pkg/scheduler"
 	"github.com/antonchaban/news-aggregator/pkg/service"
 	"github.com/antonchaban/news-aggregator/pkg/storage/inmemory"
 	"github.com/joho/godotenv"
@@ -42,12 +43,19 @@ func main() {
 
 	logrus.Print("news-alligator 🐊 started")
 
+	// Start the scheduler for updating articles
+	newScheduler := scheduler.NewScheduler(asvc, ssvc)
+	newScheduler.Start()
+
 	// Wait for a signal to quit
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
 	<-quit
 
 	logrus.Print("news-alligator 🐊 shutting down")
+
+	// Stop the scheduler
+	newScheduler.Stop()
 
 	// Retrieve all articles before shutting down
 	articles, err := asvc.GetAll()

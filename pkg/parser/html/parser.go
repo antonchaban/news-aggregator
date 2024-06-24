@@ -75,7 +75,7 @@ func (h *Parser) parseDocument(doc *goquery.Document) []model.Article {
 			Title:       title,
 			Link:        resolveLink(link, "https://www.usatoday.com"),
 			PubDate:     parsedDate,
-			Source:      h.config.Source,
+			Source:      model.Source{Name: h.config.Source}, // todo think about how to add links too
 			Description: description,
 		}
 		if article.Title != "" || article.Description != "" {

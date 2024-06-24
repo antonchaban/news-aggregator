@@ -52,7 +52,7 @@ func (j *Parser) ParseFile(f *os.File) ([]model.Article, error) {
 			Title:       item.Title,
 			Link:        item.URL,
 			Description: item.Description,
-			Source:      item.Source.Name,
+			Source:      model.Source{Name: item.Source.Name}, //todo think about how to add links too
 			PubDate:     item.PublishedAt,
 		}
 		articles = append(articles, article)
