@@ -49,6 +49,10 @@ func (s *Scheduler) updateArticles() {
 			logrus.Errorf("error occurred while saving updated articles: %s", err.Error())
 		}
 	}
+	err := s.ssvc.FetchFromAllSources()
+	if err != nil {
+		logrus.Errorf("error occurred while fetching articles from sources: %s", err.Error())
+	}
 	logrus.Print("Articles updated successfully")
 }
 
