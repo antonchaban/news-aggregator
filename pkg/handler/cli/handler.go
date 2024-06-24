@@ -15,11 +15,12 @@ type Handler interface {
 
 // cliHandler is a struct that holds a reference to the articleService.
 type cliHandler struct {
-	service service.ArticleService
+	artService service.ArticleService
+	srcService service.SourceService
 }
 
-func NewHandler(asvc service.ArticleService) (Handler, error) {
-	h := &cliHandler{service: asvc}
+func NewHandler(asvc service.ArticleService, ssvc service.SourceService) (Handler, error) {
+	h := &cliHandler{artService: asvc, srcService: ssvc}
 	err := h.initCommands()
 	if err != nil {
 		return nil, err
@@ -76,11 +77,11 @@ func (h *cliHandler) initCommands() error {
 // execute loads the articles, filters them based on the provided sources, keywords, and date range,
 // and then prints the filtered articles.
 func (h *cliHandler) execute(f filter.Filters, sortOrder string) error {
-	articles, err := h.service.LoadDataFromFiles()
+	articles, err := h.srcService.LoadDataFromFiles()
 	if err != nil {
 		return err
 	}
-	err = h.service.SaveAll(articles)
+	err = h.artService.SaveAll(articles)
 	if err != nil {
 		return err
 	}

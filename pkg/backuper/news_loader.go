@@ -11,24 +11,13 @@ import (
 
 type Loader interface {
 	LoadAllFromFile() ([]model.Article, error)
-	UpdateFromFeed(urlPath string) ([]model.Article, error)
 }
 
 type newsLoader struct {
-	articleService service.ArticleService
+	srcService service.SourceService
 }
 
-func (n newsLoader) UpdateFromFeed(urlPath string) ([]model.Article, error) {
-	// Get all articles from the feed
-	articles, err := n.articleService.LoadFromFeed(urlPath)
-	if err != nil {
-		return nil, err
-	}
-
-	return articles, nil
-}
-
-func (n newsLoader) LoadAllFromFile() ([]model.Article, error) {
+func (n *newsLoader) LoadAllFromFile() ([]model.Article, error) {
 	// Construct the file path
 	dataDir := os.Getenv("SAVES_DIR")
 	if dataDir == "" {
@@ -40,7 +29,7 @@ func (n newsLoader) LoadAllFromFile() ([]model.Article, error) {
 	fileInfo, err := os.Stat(filePath)
 	if os.IsNotExist(err) || fileInfo.Size() == 0 {
 		// If the file does not exist or is empty, call LoadDataFromFiles
-		return n.articleService.LoadDataFromFiles()
+		return n.srcService.LoadDataFromFiles()
 	} else if err != nil {
 		return nil, err
 	}
@@ -61,8 +50,8 @@ func (n newsLoader) LoadAllFromFile() ([]model.Article, error) {
 	return articles, nil
 }
 
-func NewLoader(artSvc service.ArticleService) Loader {
+func NewLoader(srcSvc service.SourceService) Loader {
 	return &newsLoader{
-		articleService: artSvc,
+		srcService: srcSvc,
 	}
 }

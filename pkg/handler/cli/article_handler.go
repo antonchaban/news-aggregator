@@ -17,7 +17,7 @@ import (
 // filterArticles filters the provided articles based on the provided sources, keywords, and date range.
 // It returns the filtered articles.
 func (h *cliHandler) filterArticles(f filter.Filters) ([]model.Article, error) {
-	articles, err := h.service.GetByFilter(f)
+	articles, err := h.artService.GetByFilter(f)
 	if err != nil {
 		log.Fatalf("Error filtering articles: %v", err)
 		return nil, err
@@ -85,7 +85,7 @@ func groupBy(articles []model.Article, field string) map[string][]model.Article 
 		var key string
 		switch field {
 		case "Source":
-			key = article.Source
+			key = article.Source.Name
 		default:
 			key = ""
 		}

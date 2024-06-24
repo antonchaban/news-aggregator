@@ -1,15 +1,20 @@
 package service
 
 import (
+	"errors"
 	"github.com/antonchaban/news-aggregator/pkg/model"
 	"github.com/antonchaban/news-aggregator/pkg/parser"
 	"github.com/antonchaban/news-aggregator/pkg/storage"
+	"log"
 	"net/url"
+	"os"
+	"path/filepath"
 )
 
 type SourceService interface {
 	FetchFromAllSources() error
 	FetchSourceByID(id int) ([]model.Article, error)
+	LoadDataFromFiles() ([]model.Article, error)
 	AddSource(source model.Source) (model.Source, error)
 	DeleteSource(id int) error
 }
@@ -17,6 +22,10 @@ type SourceService interface {
 type sourceService struct {
 	articleStorage storage.ArticleStorage
 	srcStorage     storage.SourceStorage
+}
+
+func NewSourceService(articleRepo storage.ArticleStorage, srcRepo storage.SourceStorage) SourceService {
+	return &sourceService{articleStorage: articleRepo, srcStorage: srcRepo}
 }
 
 func (s *sourceService) DeleteSource(id int) error {
@@ -46,6 +55,9 @@ func (s *sourceService) FetchFromAllSources() error {
 		if err != nil {
 			return err
 		}
+		for i := range articles {
+			articles[i].Source = src
+		}
 		err = s.articleStorage.SaveAll(articles)
 		if err != nil {
 			return err
@@ -74,6 +86,35 @@ func (s *sourceService) FetchSourceByID(id int) ([]model.Article, error) {
 	return articles, nil
 }
 
-func NewSourceService(articleRepo storage.ArticleStorage, srcRepo storage.SourceStorage) SourceService {
-	return &sourceService{articleStorage: articleRepo, srcStorage: srcRepo}
+func (s *sourceService) LoadDataFromFiles() ([]model.Article, error) {
+	files, err := getFilesInDir()
+	if err != nil {
+		return nil, err
+	}
+	var articles []model.Article
+	for _, file := range files {
+		parsedArticles, err := parser.ParseArticlesFromFile(file)
+		if err != nil {
+			return nil, err
+		}
+		articles = append(articles, parsedArticles...)
+
+	}
+
+	return articles, nil
+}
+
+func getFilesInDir() ([]string, error) {
+	dataDir := os.Getenv("DATA_DIR")
+	if dataDir == "" {
+		return nil, errors.New("environment variable DATA_DIR not set")
+	}
+
+	// Get all files in the data directory
+	files, err := filepath.Glob(filepath.Join(dataDir, "*"))
+	if err != nil {
+		log.Fatalf("Error reading files from directory: %v", err)
+		return nil, err
+	}
+	return files, nil
 }

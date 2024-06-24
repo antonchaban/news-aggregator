@@ -14,7 +14,7 @@ func TestHandler_filterArticles(t *testing.T) {
 	defer ctrl.Finish()
 	mockArticleService := mocks.NewMockArticleService(ctrl)
 	handler := cliHandler{
-		service: mockArticleService,
+		artService: mockArticleService,
 	}
 
 	pubDate1 := time.Date(2023, 6, 1, 0, 0, 0, 0, time.UTC)

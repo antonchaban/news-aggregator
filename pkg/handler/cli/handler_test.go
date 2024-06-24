@@ -60,7 +60,7 @@ func TestExecute(t *testing.T) {
 
 	mockArticleService.EXPECT().LoadDataFromFiles().Return(nil).Times(1)
 	handler := cliHandler{
-		service: mockArticleService,
+		artService: mockArticleService,
 	}
 
 	old := os.Stdout

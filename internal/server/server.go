@@ -7,6 +7,7 @@ import (
 	"github.com/antonchaban/news-aggregator/pkg/backuper"
 	"github.com/antonchaban/news-aggregator/pkg/handler/web"
 	"github.com/antonchaban/news-aggregator/pkg/model"
+	"github.com/antonchaban/news-aggregator/pkg/service"
 	"github.com/sirupsen/logrus"
 	"net/http"
 	"time"
@@ -26,7 +27,8 @@ func (s *Server) Run(port string, handler http.Handler, artHandler web.Handler) 
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
 	}
-	articles, err := backuper.NewLoader(artHandler.ArticleService()).LoadAllFromFile()
+	initializeSources(artHandler.SrcService())
+	articles, err := backuper.NewLoader(artHandler.SrcService()).LoadAllFromFile()
 	if err != nil {
 		return err
 	}
@@ -53,5 +55,21 @@ func NewServer(certFile, keyFile string) *Server {
 	return &Server{
 		certFile: certFile,
 		keyFile:  keyFile,
+	}
+}
+
+func initializeSources(ssvc service.SourceService) {
+	sources := []model.Source{
+		{Name: "BBC News", Link: "https://feeds.bbci.co.uk/news/rss.xml"},
+		{Name: "ABC News: International", Link: "https://abcnews.go.com/abcnews/internationalheadlines"},
+		{Name: "The Washington Times stories: World", Link: "https://www.washingtontimes.com/rss/headlines/news/world/"},
+		{Name: "USA TODAY", Link: "https://www.usatoday.com/news/world/"},
+	}
+
+	for _, source := range sources {
+		_, err := ssvc.AddSource(source)
+		if err != nil {
+			logrus.Errorf("error occurred while adding source %s: %s", source.Name, err.Error())
+		}
 	}
 }
