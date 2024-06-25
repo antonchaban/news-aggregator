@@ -3,6 +3,7 @@ package json
 import (
 	"encoding/json"
 	"github.com/antonchaban/news-aggregator/pkg/model"
+	"github.com/sirupsen/logrus"
 	"io"
 	"net/url"
 	"os"
@@ -10,11 +11,10 @@ import (
 )
 
 // Parser is a struct that implements the Parser interface
-type Parser struct {
-}
+type Parser struct{}
 
 func (j *Parser) ParseFeed(url url.URL) ([]model.Article, error) {
-	//TODO implement me
+	// TODO: implement me
 	panic("implement me")
 }
 
@@ -36,13 +36,18 @@ type Feed struct {
 
 // ParseFile parses the given file and returns a slice of articles.
 func (j *Parser) ParseFile(f *os.File) ([]model.Article, error) {
+	logrus.WithField("event_id", "parse_json_file_start").Infof("Starting to parse file: %s", f.Name())
+
 	bytes, err := io.ReadAll(f)
 	if err != nil {
+		logrus.WithField("event_id", "read_file_error").Errorf("Error reading file: %s", err.Error())
 		return nil, err
 	}
+
 	var feed Feed
 	err = json.Unmarshal(bytes, &feed)
 	if err != nil {
+		logrus.WithField("event_id", "json_unmarshal_error").Errorf("Error unmarshalling JSON: %s", err.Error())
 		return nil, err
 	}
 
@@ -52,11 +57,12 @@ func (j *Parser) ParseFile(f *os.File) ([]model.Article, error) {
 			Title:       item.Title,
 			Link:        item.URL,
 			Description: item.Description,
-			Source:      model.Source{Name: item.Source.Name}, //todo think about how to add links too
+			Source:      model.Source{Name: item.Source.Name},
 			PubDate:     item.PublishedAt,
 		}
 		articles = append(articles, article)
 	}
 
+	logrus.WithField("event_id", "parse_json_file_success").Infof("File parsing completed, found %d articles", len(articles))
 	return articles, nil
 }

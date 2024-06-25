@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/antonchaban/news-aggregator/pkg/model"
+	"github.com/sirupsen/logrus"
 )
 
 const (
@@ -25,6 +26,8 @@ func (h *SourceFilter) SetNext(handler ArticleFilter) ArticleFilter {
 }
 
 func (h *SourceFilter) Filter(articles []model.Article, f Filters) ([]model.Article, error) {
+	logrus.WithField("event_id", "source_filter_start").Info("Starting SourceFilter")
+
 	if f.Source != "" {
 		sourceMap := map[string]string{
 			"abcnews":         abcNewsSource,
@@ -49,11 +52,13 @@ func (h *SourceFilter) Filter(articles []model.Article, f Filters) ([]model.Arti
 						break
 					}
 				} else {
+					logrus.WithField("event_id", "source_not_found").Errorf("Source not found: %s", source)
 					return nil, fmt.Errorf("source not found: %s", source)
 				}
 			}
 		}
 		articles = filteredArticles
+		logrus.WithField("filtered_count", len(filteredArticles)).Info("Source filtering complete")
 	}
 
 	if h.next != nil {

@@ -14,32 +14,37 @@ type Scheduler struct {
 }
 
 func NewScheduler(asvc service.ArticleService, ssvc service.SourceService) *Scheduler {
-	s := &Scheduler{
+	logrus.WithField("event_id", "scheduler_initialized").Info("Initializing Scheduler")
+	return &Scheduler{
 		scheduler: gocron.NewScheduler(time.UTC),
 		asvc:      asvc,
 		ssvc:      ssvc,
 	}
-	return s
 }
 
 func (s *Scheduler) Start() {
-	// Schedule the updateArticles method to run every minute
+	logrus.WithField("event_id", "scheduler_start").Info("Starting scheduler")
 	_, err := s.scheduler.Every(1).Minute().Do(s.updateArticles)
 	if err != nil {
+		logrus.WithField("event_id", "schedule_error").Errorf("Error scheduling updateArticles job: %s", err.Error())
 		return
 	}
 	s.scheduler.StartAsync()
+	logrus.WithField("event_id", "scheduler_started").Info("Scheduler started successfully")
 }
 
 func (s *Scheduler) Stop() {
+	logrus.WithField("event_id", "scheduler_stop").Info("Stopping scheduler")
 	s.scheduler.Stop()
+	logrus.WithField("event_id", "scheduler_stopped").Info("Scheduler stopped successfully")
 }
 
 func (s *Scheduler) updateArticles() {
-	logrus.Print("Updating articles...")
+	logrus.WithField("event_id", "update_articles_start").Info("Updating articles...")
 	err := s.ssvc.FetchFromAllSources()
 	if err != nil {
-		logrus.Errorf("error occurred while fetching articles from sources: %s", err.Error())
+		logrus.WithField("event_id", "update_articles_error").Errorf("Error occurred while fetching articles from sources: %s", err.Error())
+		return
 	}
-	logrus.Print("Articles updated successfully")
+	logrus.WithField("event_id", "update_articles_success").Info("Articles updated successfully")
 }

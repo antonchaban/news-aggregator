@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/PuerkitoBio/goquery"
 	"github.com/antonchaban/news-aggregator/pkg/model"
+	"github.com/sirupsen/logrus"
 	"net/http"
 	"net/url"
 	"os"
@@ -36,34 +37,47 @@ func NewHtmlParser(config FeedConfig) *Parser {
 }
 
 func (h *Parser) ParseFeed(url url.URL) ([]model.Article, error) {
+	logrus.WithField("event_id", "parse_html_feed_start").Infof("Starting to parse feed from URL: %s", url.String())
+
 	resp, err := http.Get(url.String())
 	if err != nil {
+		logrus.WithField("event_id", "http_get_error").Errorf("Error fetching URL: %s", err.Error())
 		return nil, err
 	}
 	defer resp.Body.Close()
+
 	if resp.StatusCode != http.StatusOK {
+		logrus.WithField("event_id", "http_status_error").Errorf("Failed to fetch URL: %s, Status Code: %d", url.String(), resp.StatusCode)
 		return nil, fmt.Errorf("failed to fetch URL: %s", url.String())
 	}
 
 	doc, err := goquery.NewDocumentFromReader(resp.Body)
 	if err != nil {
+		logrus.WithField("event_id", "parse_html_document_error").Errorf("Error parsing document from URL: %s", err.Error())
 		return nil, err
 	}
 
+	logrus.WithField("event_id", "parse_html_feed_success").Info("Successfully fetched and parsed feed")
 	return h.parseDocument(doc), nil
 }
 
 // ParseFile parses the given file and returns a slice of articles.
 func (h *Parser) ParseFile(f *os.File) ([]model.Article, error) {
+	logrus.WithField("event_id", "parse_html_file_start").Infof("Starting to parse file: %s", f.Name())
+
 	doc, err := goquery.NewDocumentFromReader(f)
 	if err != nil {
+		logrus.WithField("event_id", "parse_html_document_error").Errorf("Error parsing document from file: %s", err.Error())
 		return nil, err
 	}
+
+	logrus.WithField("event_id", "parse_html_file_success").Infof("Successfully parsed file: %s", f.Name())
 	return h.parseDocument(doc), nil
 }
 
 // parseDocument parses the goquery document and returns a slice of articles.
 func (h *Parser) parseDocument(doc *goquery.Document) []model.Article {
+	logrus.WithField("event_id", "parse_html_document_start").Info("Starting to parse document")
 	var articles []model.Article
 	doc.Find(h.config.ArticleSelector).Each(func(i int, s *goquery.Selection) {
 		title := strings.TrimSpace(s.Contents().Not("svg").Text())
@@ -75,7 +89,7 @@ func (h *Parser) parseDocument(doc *goquery.Document) []model.Article {
 			Title:       title,
 			Link:        resolveLink(link, "https://www.usatoday.com"),
 			PubDate:     parsedDate,
-			Source:      model.Source{Name: h.config.Source}, // todo think about how to add links too
+			Source:      model.Source{Name: h.config.Source},
 			Description: description,
 		}
 		if article.Title != "" || article.Description != "" {
@@ -83,6 +97,7 @@ func (h *Parser) parseDocument(doc *goquery.Document) []model.Article {
 		}
 	})
 
+	logrus.WithField("event_id", "parse_html_document_end").Infof("Document parsing completed, found %d articles", len(articles))
 	return articles
 }
 

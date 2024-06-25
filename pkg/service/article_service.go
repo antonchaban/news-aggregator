@@ -5,6 +5,7 @@ import (
 	"github.com/antonchaban/news-aggregator/pkg/filter"
 	"github.com/antonchaban/news-aggregator/pkg/model"
 	"github.com/antonchaban/news-aggregator/pkg/storage"
+	"github.com/sirupsen/logrus"
 )
 
 //go:generate mockgen -destination=../service/mocks/mock_article_service.go -package=mocks news-aggregator/pkg/service ArticleService
@@ -51,20 +52,34 @@ func (a *articleService) Delete(id int) error {
 
 // GetByFilter returns all articles that match the given filters.
 func (a *articleService) GetByFilter(f filter.Filters) ([]model.Article, error) {
+	logrus.WithField("event_id", "get_by_filter_start").Info("Fetching articles with filter")
+
 	// Fetch all articles initially
 	articles, err := a.GetAll()
 	if err != nil {
+		logrus.WithField("event_id", "get_all_articles_error").Error("Error fetching all articles", err)
 		return nil, err
 	}
+	logrus.WithField("event_id", "all_articles_fetched").Info("All articles fetched successfully")
 
 	// Create filter handlers
 	sourceFilter := &filter.SourceFilter{}
 	keywordFilter := &filter.KeywordFilter{}
 	dateRangeFilter := &filter.DateRangeFilter{}
 
+	logrus.WithField("event_id", "filters_created").Info("Filter handlers created")
+
 	// Create the chain
 	sourceFilter.SetNext(keywordFilter).SetNext(dateRangeFilter)
+	logrus.WithField("event_id", "filters_chained").Info("Filters chained together")
 
 	// Start filtering
-	return sourceFilter.Filter(articles, f)
+	filteredArticles, err := sourceFilter.Filter(articles, f)
+	if err != nil {
+		logrus.WithField("event_id", "filtering_error").Error("Error during filtering", err)
+		return nil, err
+	}
+	logrus.WithField("event_id", "filtering_complete").Info("Filtering completed successfully")
+
+	return filteredArticles, nil
 }
