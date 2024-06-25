@@ -5,6 +5,7 @@ import (
 	"errors"
 	"github.com/antonchaban/news-aggregator/pkg/model"
 	"github.com/antonchaban/news-aggregator/pkg/service"
+	"github.com/sirupsen/logrus"
 	"os"
 	"path/filepath"
 )
@@ -28,8 +29,8 @@ func (n *newsLoader) LoadAllFromFile() ([]model.Article, error) {
 	// Check if the file exists
 	fileInfo, err := os.Stat(filePath)
 	if os.IsNotExist(err) || fileInfo.Size() == 0 {
-		// If the file does not exist or is empty, call LoadDataFromFiles
-		return n.srcService.LoadDataFromFiles()
+		logrus.Warn("No articles found in the backup file")
+		return nil, nil
 	} else if err != nil {
 		return nil, err
 	}

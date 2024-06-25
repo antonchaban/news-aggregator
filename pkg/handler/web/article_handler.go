@@ -16,7 +16,7 @@ func (h *Handler) getArticlesByFilter(c *gin.Context) {
 
 	articles, err := h.articleService.GetByFilter(f)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 	c.JSON(http.StatusOK, articles)
