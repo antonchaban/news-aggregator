@@ -6,6 +6,7 @@ import (
 	"net/http"
 )
 
+// getArticlesByFilter fetches articles by filter parameters and returns them in the response.
 func (h *Handler) getArticlesByFilter(c *gin.Context) {
 	f := filter.Filters{
 		Keyword:   c.Query("keywords"),

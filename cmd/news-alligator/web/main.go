@@ -16,6 +16,8 @@ import (
 
 const dotenvPath = "../../../.env"
 
+// The main function initializes the in-memory databases, loads environment variables, and starts the server.
+// It also starts the scheduler for updating articles and waits for a signal to quit.
 func main() {
 	// Initialize in-memory databases
 	db := inmemory.New()

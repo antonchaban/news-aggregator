@@ -7,6 +7,7 @@ import (
 	"strconv"
 )
 
+// fetchSrcById fetches a source by its ID and returns it in the response.
 func (h *Handler) fetchSrcById(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	fetchedArticles, err := h.SrcService().FetchSourceByID(id)
@@ -17,6 +18,7 @@ func (h *Handler) fetchSrcById(c *gin.Context) {
 	c.JSON(http.StatusOK, fetchedArticles)
 }
 
+// createSource creates a new source from the request body and returns it in the response.
 func (h *Handler) createSource(c *gin.Context) {
 	var input model.Source
 	if err := c.BindJSON(&input); err != nil {
@@ -31,6 +33,7 @@ func (h *Handler) createSource(c *gin.Context) {
 	c.JSON(http.StatusOK, sources)
 }
 
+// deleteSource deletes a source by its ID and returns a success message.
 func (h *Handler) deleteSource(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
