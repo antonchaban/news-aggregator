@@ -10,14 +10,26 @@ import (
 	"path/filepath"
 )
 
+// Loader is an interface for loading articles from a file.
 type Loader interface {
 	LoadAllFromFile() ([]model.Article, error)
 }
 
+// newsLoader is an implementation of the Loader interface.
 type newsLoader struct {
 	srcService service.SourceService
 }
 
+// NewLoader creates a new Loader instance.
+func NewLoader(srcSvc service.SourceService) Loader {
+	return &newsLoader{
+		srcService: srcSvc,
+	}
+}
+
+// LoadAllFromFile loads all articles from a JSON file.
+// It reads the file specified by the SAVES_DIR environment variable and unmarshals
+// its contents into a slice of Article structs.
 func (n *newsLoader) LoadAllFromFile() ([]model.Article, error) {
 	// Construct the file path
 	dataDir := os.Getenv("SAVES_DIR")
@@ -49,10 +61,4 @@ func (n *newsLoader) LoadAllFromFile() ([]model.Article, error) {
 	}
 
 	return articles, nil
-}
-
-func NewLoader(srcSvc service.SourceService) Loader {
-	return &newsLoader{
-		srcService: srcSvc,
-	}
 }

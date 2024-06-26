@@ -35,7 +35,7 @@ import (
 // - The methods do not define any constraints on the size or format of the articles being saved.
 //
 // Usage Guidelines or Best Practices:
-// - Use transactions where necessary to ensure data consistency, for example when saving multiple articles with SaveAll.
+// - Use transactions where necessary to ensure data consistency, for example, when saving multiple articles with SaveAll.
 // - Ensure proper error handling and logging to facilitate debugging and monitoring of storage operations.
 // - Validate input data thoroughly before performing any operations to prevent injection attacks or corrupt data.
 type ArticleStorage interface {

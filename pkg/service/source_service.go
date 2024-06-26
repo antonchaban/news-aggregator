@@ -11,6 +11,7 @@ import (
 	"path/filepath"
 )
 
+// SourceService represents the service for sources.
 type SourceService interface {
 	FetchFromAllSources() error
 	FetchSourceByID(id int) ([]model.Article, error)
@@ -19,19 +20,23 @@ type SourceService interface {
 	DeleteSource(id int) error
 }
 
+// sourceService is the implementation of the SourceService interface.
 type sourceService struct {
 	articleStorage storage.ArticleStorage
 	srcStorage     storage.SourceStorage
 }
 
+// NewSourceService creates a new SourceService with the given article and source repositories.
 func NewSourceService(articleRepo storage.ArticleStorage, srcRepo storage.SourceStorage) SourceService {
 	return &sourceService{articleStorage: articleRepo, srcStorage: srcRepo}
 }
 
+// DeleteSource removes the source with the given ID from the database.
 func (s *sourceService) DeleteSource(id int) error {
 	return s.srcStorage.Delete(id)
 }
 
+// AddSource adds a new source to the database.
 func (s *sourceService) AddSource(source model.Source) (model.Source, error) {
 	save, err := s.srcStorage.Save(source)
 	if err != nil {
@@ -40,6 +45,7 @@ func (s *sourceService) AddSource(source model.Source) (model.Source, error) {
 	return save, nil
 }
 
+// FetchFromAllSources fetches articles from all sources.
 func (s *sourceService) FetchFromAllSources() error {
 	allSrcs, err := s.srcStorage.GetAll()
 	if err != nil {
@@ -66,6 +72,7 @@ func (s *sourceService) FetchFromAllSources() error {
 	return nil
 }
 
+// FetchSourceByID fetches articles from the source with the given ID.
 func (s *sourceService) FetchSourceByID(id int) ([]model.Article, error) {
 	src, err := s.srcStorage.GetByID(id)
 	if err != nil {
@@ -86,6 +93,7 @@ func (s *sourceService) FetchSourceByID(id int) ([]model.Article, error) {
 	return articles, nil
 }
 
+// LoadDataFromFiles loads articles from files.
 func (s *sourceService) LoadDataFromFiles() ([]model.Article, error) {
 	files, err := getFilesInDir()
 	if err != nil {

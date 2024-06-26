@@ -7,11 +7,13 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+// memorySourceStorage represents an in-memory storage for sources.
 type memorySourceStorage struct {
 	Sources []model.Source
 	nextID  int
 }
 
+// NewSrc creates a new instance of the in-memory source storage.
 func NewSrc() storage.SourceStorage {
 	logrus.WithField("event_id", "source_storage_initialized").Info("Initializing Source Storage")
 	return &memorySourceStorage{
@@ -20,11 +22,13 @@ func NewSrc() storage.SourceStorage {
 	}
 }
 
+// GetAll returns all sources from the in-memory storage.
 func (m *memorySourceStorage) GetAll() ([]model.Source, error) {
 	logrus.WithField("event_id", "get_all_sources").Info("Fetching all sources")
 	return m.Sources, nil
 }
 
+// Save saves a new source to the in-memory storage, if it is not a duplicate.
 func (m *memorySourceStorage) Save(src model.Source) (model.Source, error) {
 	logrus.WithField("event_id", "save_source").Info("Saving new source", src.Link)
 	for _, s := range m.Sources {
@@ -43,6 +47,7 @@ func (m *memorySourceStorage) Save(src model.Source) (model.Source, error) {
 	return src, nil
 }
 
+// SaveAll saves multiple sources to the in-memory storage.
 func (m *memorySourceStorage) SaveAll(sources []model.Source) error {
 	logrus.WithField("event_id", "save_all_sources").Info("Saving multiple sources")
 	for _, src := range sources {
@@ -60,6 +65,7 @@ func (m *memorySourceStorage) SaveAll(sources []model.Source) error {
 	return nil
 }
 
+// Delete removes a source from the in-memory storage by its ID.
 func (m *memorySourceStorage) Delete(id int) error {
 	logrus.WithField("event_id", "delete_source").Info("Deleting source", id)
 	for i, s := range m.Sources {
@@ -73,6 +79,7 @@ func (m *memorySourceStorage) Delete(id int) error {
 	return errors.New("source not found")
 }
 
+// GetByID retrieves a source from the in-memory storage by its ID.
 func (m *memorySourceStorage) GetByID(id int) (model.Source, error) {
 	logrus.WithField("event_id", "get_source_by_id").Info("Fetching source by ID", id)
 	for _, s := range m.Sources {
