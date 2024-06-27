@@ -66,7 +66,7 @@ func (h *cliHandler) printArticles(articles []model.Article, filters filter.Filt
 func getTemplatePath() (string, error) {
 	tmplDir := os.Getenv("TMPL_DIR")
 	if tmplDir == "" {
-		return "", errors.New("environment variable DATA_DIR not set")
+		return "", errors.New("environment variable TMPL_DIR not set")
 	}
 
 	tmplPath := filepath.Join(tmplDir, "article.tmpl")

@@ -20,8 +20,8 @@ func TestHandler_filterArticles(t *testing.T) {
 	pubDate1 := time.Date(2023, 6, 1, 0, 0, 0, 0, time.UTC)
 	pubDate2 := time.Date(2023, 7, 1, 0, 0, 0, 0, time.UTC)
 	articles := []model.Article{
-		{Id: 1, Source: "abcnews", Title: "Title 1", Description: "Description 1", Link: "http://link1.com", PubDate: pubDate1},
-		{Id: 2, Source: "bbc", Title: "Title 2", Description: "Description 2", Link: "http://link2.com", PubDate: pubDate2},
+		{Id: 1, Source: model.Source{Name: "abcnews"}, Title: "Title 1", Description: "Description 1", Link: "http://link1.com", PubDate: pubDate1},
+		{Id: 2, Source: model.Source{Name: "bbc"}, Title: "Title 2", Description: "Description 2", Link: "http://link2.com", PubDate: pubDate2},
 	}
 
 	mockArticleService.EXPECT().GetByFilter(filter.Filters{Source: "abcnews"}).Return([]model.Article{articles[0]}, nil).Times(1)
