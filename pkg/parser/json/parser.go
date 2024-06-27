@@ -2,6 +2,7 @@ package json
 
 import (
 	"encoding/json"
+	"errors"
 	"github.com/antonchaban/news-aggregator/pkg/model"
 	"github.com/sirupsen/logrus"
 	"io"
@@ -14,8 +15,7 @@ import (
 type Parser struct{}
 
 func (j *Parser) ParseFeed(url url.URL) ([]model.Article, error) {
-	// TODO: implement me
-	panic("implement me")
+	return nil, errors.New("not implemented")
 }
 
 // Feed is a struct that represents the JSON feed

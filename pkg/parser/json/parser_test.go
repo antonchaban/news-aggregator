@@ -2,6 +2,7 @@ package json
 
 import (
 	"github.com/antonchaban/news-aggregator/pkg/model"
+	"net/url"
 	"os"
 	"reflect"
 	"testing"
@@ -24,7 +25,7 @@ func TestParser_ParseFile(t *testing.T) {
 					Title:       "Test Title",
 					Link:        "http://testurl.com",
 					Description: "Test Description",
-					Source:      "Test Source",
+					Source:      model.Source{Name: "Test Source"},
 					PubDate:     time.Date(2023, 6, 4, 12, 0, 0, 0, time.UTC),
 				},
 			},
@@ -84,6 +85,38 @@ func TestParser_ParseFile(t *testing.T) {
 			}
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("ParseFile() got = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestParser_ParseFeed(t *testing.T) {
+	type args struct {
+		url url.URL
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    []model.Article
+		wantErr bool
+	}{
+		{
+			name:    "Not Implemented",
+			args:    args{},
+			want:    nil,
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			j := &Parser{}
+			got, err := j.ParseFeed(tt.args.url)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("ParseFeed() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("ParseFeed() got = %v, want %v", got, tt.want)
 			}
 		})
 	}
