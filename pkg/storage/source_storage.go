@@ -2,6 +2,8 @@ package storage
 
 import "github.com/antonchaban/news-aggregator/pkg/model"
 
+//go:generate mockgen -destination=mocks/mock_source.go -package=mocks github.com/antonchaban/news-aggregator/pkg/storage SourceStorage
+
 // SourceStorage is an interface that defines the methods for interacting with the source storage.
 //
 // Key Responsibilities:

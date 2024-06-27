@@ -4,7 +4,7 @@ import (
 	"github.com/antonchaban/news-aggregator/pkg/model"
 )
 
-//go:generate mockgen -destination=mocks/mock_article.go -package=mocks news-aggregator/pkg/storage ArticleStorage
+//go:generate mockgen -destination=mocks/mock_article.go -package=mocks github.com/antonchaban/news-aggregator/pkg/storage ArticleStorage
 
 // ArticleStorage is an interface that defines the methods for interacting with the article storage.
 //
