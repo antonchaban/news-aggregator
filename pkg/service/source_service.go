@@ -11,6 +11,8 @@ import (
 	"path/filepath"
 )
 
+//go:generate mockgen -destination=../service/mocks/mock_source_service.go -package=mocks github.com/antonchaban/news-aggregator/pkg/service SourceService
+
 // SourceService represents the service for sources.
 type SourceService interface {
 	FetchFromAllSources() error

@@ -8,7 +8,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-//go:generate mockgen -destination=../service/mocks/mock_article_service.go -package=mocks news-aggregator/pkg/service ArticleService
+//go:generate mockgen -destination=../service/mocks/mock_article_service.go -package=mocks github.com/antonchaban/news-aggregator/pkg/service ArticleService
 
 // ArticleService is an interface that defines the methods for interacting with the article storage.
 type ArticleService interface {
