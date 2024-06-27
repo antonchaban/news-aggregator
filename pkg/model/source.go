@@ -9,6 +9,7 @@ type Source struct {
 }
 
 func (s Source) String() string {
-	return fmt.Sprintf(
-		"ID: %s\nName: %s\nLink: %s\n", s.Id, s.Name, s.Link)
+	return fmt.Sprintf("Source{Id: %d,"+
+		" Name: %s,"+
+		" Link: %s}", s.Id, s.Name, s.Link)
 }
