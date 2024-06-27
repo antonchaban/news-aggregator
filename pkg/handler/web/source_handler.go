@@ -10,6 +10,10 @@ import (
 // fetchSrcById fetches a source by its ID and returns it in the response.
 func (h *Handler) fetchSrcById(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
 	fetchedArticles, err := h.SrcService().FetchSourceByID(id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
