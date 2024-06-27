@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/antonchaban/news-aggregator/pkg/filter"
 	"github.com/antonchaban/news-aggregator/pkg/model"
 	"github.com/antonchaban/news-aggregator/pkg/storage"
 	"github.com/antonchaban/news-aggregator/pkg/storage/mocks"
@@ -17,14 +18,14 @@ func TestArticleService_Create(t *testing.T) {
 		Title:       "Test Title",
 		Description: "Test Description",
 		Link:        "http://test.com",
-		Source:      "Test Source",
+		Source:      model.Source{Id: 1, Link: "http://test.com", Name: "Test Source"},
 	}
-	mockStorage.EXPECT().Create(article).Return(model.Article{
+	mockStorage.EXPECT().Save(article).Return(model.Article{
 		Id:          1,
 		Title:       "Test Title",
 		Description: "Test Description",
 		Link:        "http://test.com",
-		Source:      "Test Source",
+		Source:      model.Source{Id: 1, Link: "http://test.com", Name: "Test Source"},
 	}, nil)
 	a := New(mockStorage)
 	createdArticle, err := a.Create(article)
@@ -95,14 +96,14 @@ func TestArticleService_GetAll(t *testing.T) {
 						Title:       "Test Title",
 						Description: "Test Description",
 						Link:        "http://test.com",
-						Source:      "Test Source",
+						Source:      model.Source{Id: 1, Link: "http://test.com", Name: "Test Source"},
 					},
 					{
 						Id:          2,
 						Title:       "Test Title 2",
 						Description: "Test Description 2",
 						Link:        "http://test2.com",
-						Source:      "Test Source 2",
+						Source:      model.Source{Id: 2, Link: "http://test2.com", Name: "Test Source 2"},
 					},
 				}, nil)
 			},
@@ -150,13 +151,13 @@ func TestArticleService_SaveAll(t *testing.T) {
 						Title:       "Test Title",
 						Description: "Test Description",
 						Link:        "http://test.com",
-						Source:      "Test Source",
+						Source:      model.Source{Id: 1, Link: "http://test.com", Name: "Test Source"},
 					},
 					{
 						Title:       "Test Title 2",
 						Description: "Test Description 2",
 						Link:        "http://test2.com",
-						Source:      "Test Source 2",
+						Source:      model.Source{Id: 2, Link: "http://test2.com", Name: "Test Source 2"},
 					},
 				},
 			},
@@ -187,6 +188,73 @@ func TestArticleService_SaveAll(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestArticleService_GetByFilter(t *testing.T) {
+	type fields struct {
+		articleStorage *mocks.MockArticleStorage
+	}
+	type args struct {
+		f filter.Filters
+	}
+	tests := []struct {
+		name    string
+		prepare func(f *fields)
+		args    args
+		wantErr bool
+	}{
+		{
+			name: "success",
+			prepare: func(f *fields) {
+				f.articleStorage.EXPECT().GetAll().Return([]model.Article{
+					{
+						Id:          1,
+						Title:       "Test Title",
+						Description: "Test Description",
+						Link:        "http://test.com",
+						Source:      model.Source{Id: 1, Link: "http://test.com", Name: "Test Source"},
+					},
+					{
+						Id:          2,
+						Title:       "Test Title 2",
+						Description: "Test Description 2",
+						Link:        "http://test2.com",
+						Source:      model.Source{Id: 2, Link: "http://test2.com", Name: "Test Source 2"},
+					},
+				}, nil)
+			},
+			args: args{
+				f: filter.Filters{},
+			},
+			wantErr: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ctrl := gomock.NewController(t)
+			defer ctrl.Finish()
+
+			f := fields{
+				articleStorage: mocks.NewMockArticleStorage(ctrl),
+			}
+
+			if tt.prepare != nil {
+				tt.prepare(&f)
+			}
+
+			a := New(f.articleStorage)
+			articles, err := a.GetByFilter(tt.args.f)
+
+			if (err != nil) && tt.wantErr {
+				assert.Equal(t, "failed to fetch articles", err.Error())
+			} else {
+				assert.Nil(t, err)
+				assert.Equal(t, 2, len(articles))
+			}
+		})
+	}
+
 }
 
 func TestNew(t *testing.T) {
