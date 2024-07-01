@@ -48,4 +48,5 @@ type SourceStorage interface {
 	SaveAll(sources []model.Source) error
 	Delete(id int) error
 	GetByID(id int) (model.Source, error)
+	Update(id int, src model.Source) (model.Source, error)
 }

@@ -106,3 +106,18 @@ func (mr *MockSourceServiceMockRecorder) LoadDataFromFiles() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LoadDataFromFiles", reflect.TypeOf((*MockSourceService)(nil).LoadDataFromFiles))
 }
+
+// UpdateSource mocks base method.
+func (m *MockSourceService) UpdateSource(arg0 int, arg1 model.Source) (model.Source, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateSource", arg0, arg1)
+	ret0, _ := ret[0].(model.Source)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateSource indicates an expected call of UpdateSource.
+func (mr *MockSourceServiceMockRecorder) UpdateSource(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateSource", reflect.TypeOf((*MockSourceService)(nil).UpdateSource), arg0, arg1)
+}

@@ -5,6 +5,7 @@ import (
 	"github.com/antonchaban/news-aggregator/pkg/model"
 	"github.com/antonchaban/news-aggregator/pkg/parser"
 	"github.com/antonchaban/news-aggregator/pkg/storage"
+	"github.com/sirupsen/logrus"
 	"log"
 	"net/url"
 	"os"
@@ -20,6 +21,7 @@ type SourceService interface {
 	LoadDataFromFiles() ([]model.Article, error)
 	AddSource(source model.Source) (model.Source, error)
 	DeleteSource(id int) error
+	UpdateSource(id int, source model.Source) (model.Source, error)
 }
 
 // sourceService is the implementation of the SourceService interface.
@@ -31,6 +33,10 @@ type sourceService struct {
 // NewSourceService creates a new SourceService with the given article and source repositories.
 func NewSourceService(articleRepo storage.ArticleStorage, srcRepo storage.SourceStorage) SourceService {
 	return &sourceService{articleStorage: articleRepo, srcStorage: srcRepo}
+}
+
+func (s *sourceService) UpdateSource(id int, source model.Source) (model.Source, error) {
+	return s.srcStorage.Update(id, source)
 }
 
 // DeleteSource removes the source with the given ID from the database.
@@ -68,7 +74,8 @@ func (s *sourceService) FetchFromAllSources() error {
 		}
 		err = s.articleStorage.SaveAll(articles)
 		if err != nil {
-			return err
+			logrus.Printf("Error saving articles: %v", err)
+			continue
 		}
 	}
 	return nil

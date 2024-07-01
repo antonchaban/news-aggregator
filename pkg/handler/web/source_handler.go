@@ -51,3 +51,22 @@ func (h *Handler) deleteSource(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "source deleted"})
 }
+
+func (h *Handler) updateSource(c *gin.Context) {
+	var input model.Source
+	if err := c.BindJSON(&input); err != nil {
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+	sources, err := h.srcService.UpdateSource(id, input)
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, sources)
+}

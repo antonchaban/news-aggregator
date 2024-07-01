@@ -90,3 +90,17 @@ func (m *memorySourceStorage) GetByID(id int) (model.Source, error) {
 	logrus.WithField("event_id", "get_source_by_id_error").Error("Source not found", id)
 	return model.Source{}, errors.New("source not found")
 }
+
+// Update updates a source in the in-memory storage by its ID.
+func (m *memorySourceStorage) Update(id int, src model.Source) (model.Source, error) {
+	logrus.WithField("event_id", "update_source").Info("Updating source", id)
+	for i, s := range m.Sources {
+		if s.Id == id {
+			m.Sources[i] = src
+			logrus.WithField("event_id", "source_updated").Info("Source updated successfully", id)
+			return src, nil
+		}
+	}
+	logrus.WithField("event_id", "update_source_error").Error("Source not found", id)
+	return model.Source{}, errors.New("source not found")
+}

@@ -106,3 +106,18 @@ func (mr *MockSourceStorageMockRecorder) SaveAll(arg0 interface{}) *gomock.Call 
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SaveAll", reflect.TypeOf((*MockSourceStorage)(nil).SaveAll), arg0)
 }
+
+// Update mocks base method.
+func (m *MockSourceStorage) Update(arg0 int, arg1 model.Source) (model.Source, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Update", arg0, arg1)
+	ret0, _ := ret[0].(model.Source)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Update indicates an expected call of Update.
+func (mr *MockSourceStorageMockRecorder) Update(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockSourceStorage)(nil).Update), arg0, arg1)
+}
