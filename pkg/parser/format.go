@@ -30,6 +30,7 @@ func DetermineFileFormat(filename string) (format string) {
 func DetermineFeedFormat(urlPath url.URL) (format string, err error) {
 	resp, err := http.Head(urlPath.String())
 	if err != nil {
+		logrus.Errorf("error occurred while sending HEAD request: %s", err.Error())
 		return unknownFormat, err
 	}
 	defer func(Body io.ReadCloser) {

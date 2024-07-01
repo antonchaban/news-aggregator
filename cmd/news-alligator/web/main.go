@@ -7,14 +7,13 @@ import (
 	"github.com/antonchaban/news-aggregator/pkg/scheduler"
 	"github.com/antonchaban/news-aggregator/pkg/service"
 	"github.com/antonchaban/news-aggregator/pkg/storage/inmemory"
-	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
 	"os"
 	"os/signal"
 	"syscall"
 )
 
-const dotenvPath = "../../../.env"
+//const dotenvPath = "../../../.env"
 
 // The main function initializes the in-memory databases, loads environment variables, and starts the server.
 // It also starts the scheduler for updating articles and waits for a signal to quit.
@@ -26,9 +25,9 @@ func main() {
 	ssvc := service.NewSourceService(db, srcDb)
 
 	// Load environment variables
-	if err := godotenv.Load(dotenvPath); err != nil {
-		logrus.Fatal("error occurred while loading env variables: ", err.Error())
-	}
+	//if err := godotenv.Load(dotenvPath); err != nil {
+	//	logrus.Fatal("error occurred while loading env variables: ", err.Error())
+	//}
 
 	// Initialize web handler
 	h := web.NewHandler(asvc, ssvc)
