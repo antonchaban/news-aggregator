@@ -290,3 +290,51 @@ func Test_memorySourceStorage_SaveAll(t *testing.T) {
 		})
 	}
 }
+
+func Test_memorySourceStorage_Update(t *testing.T) {
+	type fields struct {
+		Sources []model.Source
+		nextID  int
+	}
+	type args struct {
+		id  int
+		src model.Source
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    model.Source
+		wantErr assert.ErrorAssertionFunc
+	}{
+		{
+			name: "update existing source",
+			fields: fields{
+				Sources: []model.Source{
+					{Id: 1, Link: "http://example.com"},
+				},
+			},
+			args: args{
+				id:  1,
+				src: model.Source{Id: 1, Link: "http://example.org"},
+			},
+			want: model.Source{Id: 1, Link: "http://example.org"},
+			wantErr: func(t assert.TestingT, err error, i ...interface{}) bool {
+				return assert.NoError(t, err)
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			m := &memorySourceStorage{
+				Sources: tt.fields.Sources,
+				nextID:  tt.fields.nextID,
+			}
+			got, err := m.Update(tt.args.id, tt.args.src)
+			if !tt.wantErr(t, err, fmt.Sprintf("Update(%v, %v)", tt.args.id, tt.args.src)) {
+				return
+			}
+			assert.Equalf(t, tt.want, got, "Update(%v, %v)", tt.args.id, tt.args.src)
+		})
+	}
+}

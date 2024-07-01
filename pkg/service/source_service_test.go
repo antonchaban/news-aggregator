@@ -345,3 +345,57 @@ func Test_sourceService_LoadDataFromFiles(t *testing.T) {
 		})
 	}
 }
+
+func Test_sourceService_UpdateSource(t *testing.T) {
+	type fields struct {
+		articleStorage storage.ArticleStorage
+		srcStorage     storage.SourceStorage
+	}
+	type args struct {
+		id     int
+		source model.Source
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    model.Source
+		wantErr assert.ErrorAssertionFunc
+	}{
+		{
+			name: "update source successfully",
+			fields: fields{
+				articleStorage: nil,
+				srcStorage:     mocks.NewMockSourceStorage(gomock.NewController(t)),
+			},
+			args: args{
+				id: 1,
+				source: model.Source{
+					Id:   1,
+					Name: "CNN",
+					Link: "http://rss.cnn.com/rss/cnn_topstories.rss",
+				},
+			},
+			want: model.Source{
+				Id:   1,
+				Name: "CNN",
+				Link: "http://rss.cnn.com/rss/cnn_topstories.rss",
+			},
+			wantErr: assert.NoError,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &sourceService{
+				articleStorage: tt.fields.articleStorage,
+				srcStorage:     tt.fields.srcStorage,
+			}
+			tt.fields.srcStorage.(*mocks.MockSourceStorage).EXPECT().Update(tt.args.id, tt.args.source).Return(tt.want, nil)
+			got, err := s.UpdateSource(tt.args.id, tt.args.source)
+			if !tt.wantErr(t, err, fmt.Sprintf("UpdateSource(%v, %v)", tt.args.id, tt.args.source)) {
+				return
+			}
+			assert.Equalf(t, tt.want, got, "UpdateSource(%v, %v)", tt.args.id, tt.args.source)
+		})
+	}
+}

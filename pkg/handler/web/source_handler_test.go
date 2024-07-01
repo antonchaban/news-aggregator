@@ -200,3 +200,65 @@ func TestHandler_deleteSource(t *testing.T) {
 		})
 	}
 }
+
+func TestHandler_updateSource(t *testing.T) {
+	type mockBehavior func(r *service_mocks.MockSourceService, id int, src model.Source)
+	tests := []struct {
+		name                 string
+		mockBehavior         mockBehavior
+		expectedCode         int
+		expectedResponseBody string
+		inputBody            string
+		inputID              string
+	}{
+		{
+			name: "OK",
+			mockBehavior: func(r *service_mocks.MockSourceService, id int, src model.Source) {
+				r.EXPECT().UpdateSource(id, src).Return(src, nil)
+			},
+			expectedCode:         200,
+			expectedResponseBody: `{"id":1,"name":"CNN","link":"http://cnn.com"}`,
+			inputBody:            `{"id":1,"name":"CNN","link":"http://cnn.com"}`,
+			inputID:              "1",
+		},
+		{
+			name:                 "BadRequest",
+			mockBehavior:         func(r *service_mocks.MockSourceService, id int, src model.Source) {},
+			expectedCode:         400,
+			expectedResponseBody: `{"message":"EOF"}`,
+			inputBody:            ``,
+			inputID:              "1",
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			// Init Dependencies
+			c := gomock.NewController(t)
+			defer c.Finish()
+
+			srcSvc := service_mocks.NewMockSourceService(c)
+			var src model.Source
+			if test.inputBody != "" {
+				src = model.Source{Id: 1, Name: "CNN", Link: "http://cnn.com"}
+			}
+			id, _ := strconv.Atoi(test.inputID)
+			test.mockBehavior(srcSvc, id, src)
+
+			// Init Endpoint
+			r := gin.New()
+			r.PUT("/source/:id", NewHandler(nil, srcSvc).updateSource)
+
+			// Create Request
+			w := httptest.NewRecorder()
+			req := httptest.NewRequest("PUT", "/source/"+test.inputID, strings.NewReader(test.inputBody))
+			req.Header.Set("Content-Type", "application/json")
+
+			// Make Request
+			r.ServeHTTP(w, req)
+
+			// Assert
+			assert.Equal(t, w.Code, test.expectedCode)
+			assert.JSONEq(t, w.Body.String(), test.expectedResponseBody)
+		})
+	}
+}
