@@ -57,8 +57,13 @@ func main() {
 		logrus.Errorf("error occurred on getting all articles: %s", err.Error())
 	}
 
+	sources, err := ssvc.GetAll()
+	if err != nil {
+		logrus.Errorf("error occurred on getting all sources: %s", err.Error())
+	}
+
 	// Shutdown the server
-	if err := srv.Shutdown(context.Background(), articles); err != nil {
+	if err := srv.Shutdown(context.Background(), articles, sources); err != nil {
 		logrus.Errorf("error occurred on server shutting down: %s", err.Error())
 	}
 }

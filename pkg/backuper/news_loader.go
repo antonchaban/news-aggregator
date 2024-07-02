@@ -10,9 +10,10 @@ import (
 	"path/filepath"
 )
 
-// Loader is an interface for loading articles from a file.
+// Loader is an interface for loading articles and sources from a file.
 type Loader interface {
 	LoadAllFromFile() ([]model.Article, error)
+	LoadSrcsFromFile() ([]model.Source, error)
 }
 
 // newsLoader is an implementation of the Loader interface.
@@ -61,4 +62,40 @@ func (n *newsLoader) LoadAllFromFile() ([]model.Article, error) {
 	}
 
 	return articles, nil
+}
+
+// LoadSrcsFromFile loads all sources from a JSON file.
+// It reads the file specified by the SAVES_DIR environment variable and unmarshals
+// its contents into a slice of Source structs.
+func (n *newsLoader) LoadSrcsFromFile() ([]model.Source, error) {
+	// Construct the file path
+	dataDir := os.Getenv("SAVES_DIR")
+	if dataDir == "" {
+		return nil, errors.New("SAVES_DIR environment variable is not set")
+	}
+	filePath := filepath.Join(dataDir, "sources.json")
+
+	// Check if the file exists
+	fileInfo, err := os.Stat(filePath)
+	if os.IsNotExist(err) || fileInfo.Size() == 0 {
+		logrus.Warn("No sources found in the backup file")
+		return nil, nil
+	} else if err != nil {
+		return nil, err
+	}
+
+	// Read the file contents
+	fileData, err := os.ReadFile(filePath)
+	if err != nil {
+		return nil, err
+	}
+
+	// Unmarshal the JSON data
+	var sources []model.Source
+	err = json.Unmarshal(fileData, &sources)
+	if err != nil {
+		return nil, err
+	}
+
+	return sources, nil
 }

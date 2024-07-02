@@ -22,6 +22,7 @@ type SourceService interface {
 	AddSource(source model.Source) (model.Source, error)
 	DeleteSource(id int) error
 	UpdateSource(id int, source model.Source) (model.Source, error)
+	GetAll() ([]model.Source, error)
 }
 
 // sourceService is the implementation of the SourceService interface.
@@ -35,6 +36,12 @@ func NewSourceService(articleRepo storage.ArticleStorage, srcRepo storage.Source
 	return &sourceService{articleStorage: articleRepo, srcStorage: srcRepo}
 }
 
+// GetAll returns all sources from the database.
+func (s *sourceService) GetAll() ([]model.Source, error) {
+	return s.srcStorage.GetAll()
+}
+
+// UpdateSource updates the source with the given ID in the database.
 func (s *sourceService) UpdateSource(id int, source model.Source) (model.Source, error) {
 	return s.srcStorage.Update(id, source)
 }

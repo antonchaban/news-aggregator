@@ -40,7 +40,20 @@ func (s *Server) Run(port string, handler http.Handler, artHandler web.Handler) 
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
 	}
-	initializeSources(artHandler.SrcService())
+	srcs, err := backuper.NewLoader(artHandler.SrcService()).LoadSrcsFromFile()
+	if err != nil {
+		return err
+	}
+	if len(srcs) == 0 {
+		initializeSources(artHandler.SrcService())
+	} else {
+		for _, src := range srcs {
+			_, err := artHandler.SrcService().AddSource(src)
+			if err != nil {
+				logrus.Errorf("error occurred while adding source %s: %s", src.Name, err.Error())
+			}
+		}
+	}
 	articles, err := backuper.NewLoader(artHandler.SrcService()).LoadAllFromFile()
 	if err != nil {
 		return err
@@ -63,9 +76,10 @@ func (s *Server) Run(port string, handler http.Handler, artHandler web.Handler) 
 // - articles: The list of articles to save to the backup file.
 //
 // Returns an error if saving the articles or shutting down the server fails.
-func (s *Server) Shutdown(ctx context.Context, articles []model.Article) error {
+func (s *Server) Shutdown(ctx context.Context, articles []model.Article, sources []model.Source) error {
 	fmt.Println("Shutting down the server...")
-	err := backuper.NewSaver(articles).SaveAllToFile()
+	err := backuper.NewSaver(articles, sources).SaveAllToFile()
+	err = backuper.NewSaver(articles, sources).SaveSrcsToFile()
 	if err != nil {
 		return err
 	}
