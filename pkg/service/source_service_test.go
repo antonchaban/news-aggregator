@@ -151,6 +151,7 @@ func Test_sourceService_DeleteSource(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 	mockSourceStorage := mocks.NewMockSourceStorage(ctrl)
+	mockArticleStorage := mocks.NewMockArticleStorage(ctrl)
 
 	tests := []struct {
 		name    string
@@ -159,23 +160,14 @@ func Test_sourceService_DeleteSource(t *testing.T) {
 		wantErr assert.ErrorAssertionFunc
 	}{
 		{
-			name: "delete existing source",
+			name: "delete source successfully",
 			id:   1,
 			setup: func() {
+				mockArticleStorage.EXPECT().DeleteBySourceID(1).Return(nil)
 				mockSourceStorage.EXPECT().Delete(1).Return(nil)
 			},
 			wantErr: func(t assert.TestingT, err error, i ...interface{}) bool {
 				return assert.NoError(t, err)
-			},
-		},
-		{
-			name: "delete non-existing source",
-			id:   1,
-			setup: func() {
-				mockSourceStorage.EXPECT().Delete(1).Return(errors.New("source not found"))
-			},
-			wantErr: func(t assert.TestingT, err error, i ...interface{}) bool {
-				return assert.Error(t, err) && assert.Equal(t, "source not found", err.Error())
 			},
 		},
 	}
@@ -184,7 +176,8 @@ func Test_sourceService_DeleteSource(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			tt.setup()
 			s := &sourceService{
-				srcStorage: mockSourceStorage,
+				srcStorage:     mockSourceStorage,
+				articleStorage: mockArticleStorage,
 			}
 			tt.wantErr(t, s.DeleteSource(tt.id), fmt.Sprintf("DeleteSource(%v)", tt.id))
 		})

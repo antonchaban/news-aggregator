@@ -43,4 +43,5 @@ type ArticleStorage interface {
 	Save(article model.Article) (model.Article, error)
 	SaveAll(articles []model.Article) error
 	Delete(id int) error
+	DeleteBySourceID(id int) error
 }

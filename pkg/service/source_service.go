@@ -41,6 +41,10 @@ func (s *sourceService) UpdateSource(id int, source model.Source) (model.Source,
 
 // DeleteSource removes the source with the given ID from the database.
 func (s *sourceService) DeleteSource(id int) error {
+	err := s.articleStorage.DeleteBySourceID(id)
+	if err != nil {
+		return err
+	}
 	return s.srcStorage.Delete(id)
 }
 

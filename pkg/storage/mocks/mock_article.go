@@ -48,6 +48,20 @@ func (mr *MockArticleStorageMockRecorder) Delete(arg0 interface{}) *gomock.Call 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockArticleStorage)(nil).Delete), arg0)
 }
 
+// DeleteBySourceID mocks base method.
+func (m *MockArticleStorage) DeleteBySourceID(arg0 int) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteBySourceID", arg0)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteBySourceID indicates an expected call of DeleteBySourceID.
+func (mr *MockArticleStorageMockRecorder) DeleteBySourceID(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteBySourceID", reflect.TypeOf((*MockArticleStorage)(nil).DeleteBySourceID), arg0)
+}
+
 // GetAll mocks base method.
 func (m *MockArticleStorage) GetAll() ([]model.Article, error) {
 	m.ctrl.T.Helper()

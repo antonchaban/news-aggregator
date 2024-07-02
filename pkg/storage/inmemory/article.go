@@ -21,6 +21,22 @@ func New() storage.ArticleStorage {
 	}
 }
 
+// DeleteBySourceID removes all articles with the given source ID from the database.
+func (a *memoryArticleStorage) DeleteBySourceID(id int) error {
+	logrus.WithField("event_id", "delete_articles_by_source_id").Info("Deleting articles by source ID", id)
+
+	// New slice to store articles that don't match the source ID
+	newArticles := a.Articles[:0] // create a zero-length slice with the same capacity
+
+	for _, article := range a.Articles {
+		if article.Source.Id != id {
+			newArticles = append(newArticles, article)
+		}
+	}
+	a.Articles = newArticles
+	return nil
+}
+
 // GetAll returns all articles in the database.
 func (a *memoryArticleStorage) GetAll() ([]model.Article, error) {
 	logrus.WithField("event_id", "get_all_articles").Info("Fetching all articles")

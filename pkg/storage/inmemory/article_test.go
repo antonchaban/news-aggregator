@@ -1,6 +1,7 @@
 package inmemory
 
 import (
+	"fmt"
 	"github.com/antonchaban/news-aggregator/pkg/model"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -193,6 +194,44 @@ func TestArticleInMemory_SaveAll(t *testing.T) {
 				articles, _ := storage.GetAll()
 				assert.Equal(t, tt.expected, articles)
 			}
+		})
+	}
+}
+
+func Test_memoryArticleStorage_DeleteBySourceID(t *testing.T) {
+	type fields struct {
+		Articles []model.Article
+		nextID   int
+	}
+	type args struct {
+		id int
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr assert.ErrorAssertionFunc
+	}{
+		{
+			name: "Delete articles by source ID successfully",
+			fields: fields{
+				Articles: []model.Article{
+					{Id: 1, Title: "Article 1", Description: "Description 1", Link: "http://link1.com", Source: model.Source{Id: 1, Name: "Source 1", Link: "http://source1.com"}, PubDate: time.Date(2023, 6, 15, 0, 0, 0, 0, time.UTC)},
+					{Id: 2, Title: "Article 2", Description: "Description 2", Link: "http://link2.com", Source: model.Source{Id: 2, Name: "Source 2", Link: "http://source2.com"}, PubDate: time.Date(2023, 6, 15, 0, 0, 0, 0, time.UTC)},
+					{Id: 3, Title: "Article 3", Description: "Description 3", Link: "http://link3.com", Source: model.Source{Id: 1, Name: "Source 1", Link: "http://source1.com"}, PubDate: time.Date(2023, 6, 15, 0, 0, 0, 0, time.UTC)},
+				},
+			},
+			args:    args{id: 1},
+			wantErr: assert.NoError,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			a := &memoryArticleStorage{
+				Articles: tt.fields.Articles,
+				nextID:   tt.fields.nextID,
+			}
+			tt.wantErr(t, a.DeleteBySourceID(tt.args.id), fmt.Sprintf("DeleteBySourceID(%v)", tt.args.id))
 		})
 	}
 }

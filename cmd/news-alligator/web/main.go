@@ -13,8 +13,6 @@ import (
 	"syscall"
 )
 
-//const dotenvPath = "../../../.env"
-
 // The main function initializes the in-memory databases, loads environment variables, and starts the server.
 // It also starts the scheduler for updating articles and waits for a signal to quit.
 func main() {
@@ -23,11 +21,6 @@ func main() {
 	srcDb := inmemory.NewSrc()
 	asvc := service.New(db)
 	ssvc := service.NewSourceService(db, srcDb)
-
-	// Load environment variables
-	//if err := godotenv.Load(dotenvPath); err != nil {
-	//	logrus.Fatal("error occurred while loading env variables: ", err.Error())
-	//}
 
 	// Initialize web handler
 	h := web.NewHandler(asvc, ssvc)
