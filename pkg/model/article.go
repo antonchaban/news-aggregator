@@ -14,12 +14,12 @@ import (
 // - Source: a string that represents the source of the article
 // - PubDate: a time.Time that represents the publication date of the article
 type Article struct {
-	Id          int
-	Title       string
-	Description string
-	Link        string
-	Source      Source
-	PubDate     time.Time
+	Id          int       `db:"id"`
+	Title       string    `db:"title"`
+	Description string    `db:"description"`
+	Link        string    `db:"link"`
+	Source      Source    `db:"source_id"`
+	PubDate     time.Time `db:"pub_date"`
 }
 
 // String method returns a string representation of the Article struct

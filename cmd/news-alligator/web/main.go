@@ -7,7 +7,8 @@ import (
 	"github.com/antonchaban/news-aggregator/pkg/handler/web"
 	"github.com/antonchaban/news-aggregator/pkg/scheduler"
 	"github.com/antonchaban/news-aggregator/pkg/service"
-	"github.com/antonchaban/news-aggregator/pkg/storage/inmemory"
+	"github.com/antonchaban/news-aggregator/pkg/storage"
+	"github.com/antonchaban/news-aggregator/pkg/storage/postgres"
 	"github.com/sirupsen/logrus"
 	"os"
 	"os/signal"
@@ -21,11 +22,28 @@ import (
 // @BasePath /articles
 
 func main() {
+	os.Setenv("DB_HOST", "localhost")
+	os.Setenv("DB_PORT", "5436")
+	os.Setenv("DB_USERNAME", "postgres")
+	os.Setenv("DB_PASSWORD", "qwerty")
+	os.Setenv("DB_NAME", "postgres")
+	os.Setenv("DB_SSLMODE", "disable")
 	// Initialize in-memory databases
-	db := inmemory.New()
-	srcDb := inmemory.NewSrc()
-	asvc := service.New(db)
-	ssvc := service.NewSourceService(db, srcDb)
+	db, err := storage.NewPostgresDB(storage.Config{
+		Host:     os.Getenv("DB_HOST"),
+		Port:     os.Getenv("DB_PORT"),
+		Username: os.Getenv("DB_USERNAME"),
+		Password: os.Getenv("DB_PASSWORD"),
+		DBName:   os.Getenv("DB_NAME"),
+		SSLMode:  os.Getenv("DB_SSLMODE"),
+	})
+
+	//artDb := inmemory.New()
+	//srcDb := inmemory.NewSrc()
+	artDb := postgres.New(db)
+	srcDb := postgres.NewSrc(db)
+	asvc := service.New(artDb)
+	ssvc := service.NewSourceService(artDb, srcDb)
 
 	// Initialize web handler
 	h := web.NewHandler(asvc, ssvc)

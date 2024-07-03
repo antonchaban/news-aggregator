@@ -3,9 +3,9 @@ package model
 import "fmt"
 
 type Source struct {
-	Id   int    `json:"id"`
-	Name string `json:"name"`
-	Link string `json:"link"`
+	Id   int    `json:"id" db:"id"`
+	Name string `json:"name" db:"name"`
+	Link string `json:"link" db:"link"`
 }
 
 func (s Source) String() string {
