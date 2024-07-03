@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	_ "github.com/antonchaban/news-aggregator/cmd/news-alligator/web/docs"
 	"github.com/antonchaban/news-aggregator/internal/server"
 	"github.com/antonchaban/news-aggregator/pkg/handler/web"
 	"github.com/antonchaban/news-aggregator/pkg/scheduler"
@@ -13,8 +14,12 @@ import (
 	"syscall"
 )
 
-// The main function initializes the in-memory databases, loads environment variables, and starts the server.
-// It also starts the scheduler for updating articles and waits for a signal to quit.
+// @title News Alligator API
+// @version 1
+// @description This is a News Alligator API server.
+// @host https://localhost:8080
+// @BasePath /articles
+
 func main() {
 	// Initialize in-memory databases
 	db := inmemory.New()

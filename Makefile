@@ -24,3 +24,6 @@ dev-down:
 
 dev-build:
 	docker-compose -f devbox/docker-compose.yml build
+
+swag:
+	swag init -d .,../../../pkg/handler/web,../../../pkg/model

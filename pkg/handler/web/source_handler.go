@@ -2,12 +2,23 @@ package web
 
 import (
 	"github.com/antonchaban/news-aggregator/pkg/model"
+	_ "github.com/antonchaban/news-aggregator/pkg/model"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
 )
 
-// fetchSrcById fetches a source by its ID and returns it in the response.
+// @Summary Fetch source by ID
+// @Description Immediately fetches news from source by ID
+// @Tags sources
+// @ID fetch-source-by-id
+// @Accept json
+// @Produce json
+// @Param id path int true "Source ID"
+// @Success 200 {object} []model.Article
+// @Failure 400 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Router /sources/{id} [get]
 func (h *Handler) fetchSrcById(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -22,7 +33,17 @@ func (h *Handler) fetchSrcById(c *gin.Context) {
 	c.JSON(http.StatusOK, fetchedArticles)
 }
 
-// createSource creates a new source from the request body and returns it in the response.
+// @Summary Create a new source
+// @Description Create a new source
+// @Tags sources
+// @ID create-source
+// @Accept json
+// @Produce json
+// @Param source body model.Source true "Source object"
+// @Success 200 {object} model.Source
+// @Failure 400 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Router /sources [post]
 func (h *Handler) createSource(c *gin.Context) {
 	var input model.Source
 	if err := c.BindJSON(&input); err != nil {
@@ -37,7 +58,17 @@ func (h *Handler) createSource(c *gin.Context) {
 	c.JSON(http.StatusOK, sources)
 }
 
-// deleteSource deletes a source by its ID and returns a success message.
+// @Summary Delete source by ID
+// @Description Delete source and all associated articles by ID
+// @Tags sources
+// @ID delete-source-by-id
+// @Accept json
+// @Produce json
+// @Param id path int true "Source ID"
+// @Success 200 {object} errorResponse
+// @Failure 400 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Router /sources/{id} [delete]
 func (h *Handler) deleteSource(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -52,6 +83,18 @@ func (h *Handler) deleteSource(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "source deleted"})
 }
 
+// @Summary Update source by ID
+// @Description Update source by ID
+// @Tags sources
+// @ID update-source-by-id
+// @Accept json
+// @Produce json
+// @Param id path int true "Source ID"
+// @Param source body model.Source true "Source object"
+// @Success 200 {object} model.Source
+// @Failure 400 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Router /sources/{id} [put]
 func (h *Handler) updateSource(c *gin.Context) {
 	var input model.Source
 	if err := c.BindJSON(&input); err != nil {
