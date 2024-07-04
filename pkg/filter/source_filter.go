@@ -67,6 +67,10 @@ func (h *SourceFilter) Filter(articles []model.Article, f Filters) ([]model.Arti
 	return articles, nil
 }
 
+func (h *SourceFilter) BuildFilterQuery(f Filters) (string, []interface{}) {
+	return "", nil // todo implement
+}
+
 // findOther checks if the source name is not one of the predefined sources
 func findOther(sourceName string) bool {
 	return sourceName != abcNewsSource && sourceName != bbcNewsSource &&

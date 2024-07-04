@@ -63,3 +63,7 @@ func (h *DateRangeFilter) Filter(articles []model.Article, f Filters) ([]model.A
 	}
 	return articles, nil
 }
+
+func (h *DateRangeFilter) BuildFilterQuery(f Filters) (string, []interface{}) {
+	return "", nil // TODO implement
+}

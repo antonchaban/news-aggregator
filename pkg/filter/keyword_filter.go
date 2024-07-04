@@ -45,3 +45,7 @@ func (h *KeywordFilter) Filter(articles []model.Article, f Filters) ([]model.Art
 	}
 	return articles, nil
 }
+
+func (h *KeywordFilter) BuildFilterQuery(f Filters) (string, []interface{}) {
+	return "", nil // todo implement
+}
