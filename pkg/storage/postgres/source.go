@@ -2,6 +2,9 @@ package postgres
 
 import (
 	"context"
+	"database/sql"
+	"errors"
+	"fmt"
 	"github.com/antonchaban/news-aggregator/pkg/model"
 	"github.com/antonchaban/news-aggregator/pkg/storage"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -46,21 +49,48 @@ func (psrc *postgresSrcStorage) Save(src model.Source) (model.Source, error) {
 }
 
 func (psrc *postgresSrcStorage) SaveAll(sources []model.Source) error {
-	//TODO implement me
-	panic("implement me")
+	tx, err := psrc.db.Begin(context.Background())
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback(context.Background())
+
+	for _, src := range sources {
+		_, err := tx.Exec(context.Background(), "INSERT INTO sources (name, link) VALUES ($1, $2)", src.Name, src.Link)
+		if err != nil {
+			return err
+		}
+	}
+
+	err = tx.Commit(context.Background())
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (psrc *postgresSrcStorage) Delete(id int) error {
-	//TODO implement me
-	panic("implement me")
+	_, err := psrc.db.Exec(context.Background(), "DELETE FROM sources WHERE id = $1", id)
+	return err
 }
 
 func (psrc *postgresSrcStorage) GetByID(id int) (model.Source, error) {
-	//TODO implement me
-	panic("implement me")
+	var src model.Source
+	err := psrc.db.QueryRow(context.Background(), "SELECT id, name, link FROM sources WHERE id = $1", id).Scan(&src.Id, &src.Name, &src.Link)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return model.Source{}, fmt.Errorf("source with id %d not found", id)
+		}
+		return model.Source{}, err
+	}
+	return src, nil
 }
 
 func (psrc *postgresSrcStorage) Update(id int, src model.Source) (model.Source, error) {
-	//TODO implement me
-	panic("implement me")
+	_, err := psrc.db.Exec(context.Background(), "UPDATE sources SET name = $1, link = $2 WHERE id = $3", src.Name, src.Link, id)
+	if err != nil {
+		return model.Source{}, err
+	}
+	src.Id = id
+	return src, nil
 }

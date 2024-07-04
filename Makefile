@@ -27,3 +27,9 @@ dev-build:
 
 swag:
 	swag init -d .,../../../pkg/handler/web,../../../pkg/model
+
+run-postgres:
+	docker run --name=news-alligator-db -e POSTGRES_PASSWORD='qwerty' -p 5436:5432 -d --rm postgres
+
+migrate:
+	migrate -path ./schema -database 'postgres://postgres:qwerty@0.0.0.0:5436/postgres?sslmode=disable' up
