@@ -6,7 +6,7 @@
 // Usage example:
 //
 //	server := server.NewServer("path/to/certFile", "path/to/keyFile")
-//	err := server.Run("8080", yourHttpHandler, yourWebHandler)
+//	err := server.RunWithFiles("8080", yourHttpHandler, yourWebHandler)
 //	if err != nil {
 //	    log.Fatal(err)
 //	}

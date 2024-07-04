@@ -53,7 +53,7 @@ func main() {
 
 	// Start the server in a goroutine
 	go func() {
-		if err := srv.Run(os.Getenv("PORT"), h.InitRoutes(), *h); err != nil {
+		if err := srv.Run(os.Getenv("PORT"), h.InitRoutes()); err != nil {
 			logrus.Fatal("error occurred while running http server: ", err.Error())
 		}
 	}()
