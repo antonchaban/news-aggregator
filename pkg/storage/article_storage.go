@@ -44,4 +44,5 @@ type ArticleStorage interface {
 	SaveAll(articles []model.Article) error
 	Delete(id int) error
 	DeleteBySourceID(id int) error
+	GetByFilter(query string, args []interface{}) ([]model.Article, error)
 }

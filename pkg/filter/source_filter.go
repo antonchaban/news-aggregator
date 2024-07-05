@@ -67,8 +67,39 @@ func (h *SourceFilter) Filter(articles []model.Article, f Filters) ([]model.Arti
 	return articles, nil
 }
 
-func (h *SourceFilter) BuildFilterQuery(f Filters) (string, []interface{}) {
-	return "", nil // todo implement
+func (h *SourceFilter) BuildFilterQuery(f Filters, query string) (string, []interface{}) {
+	var args []interface{}
+	if f.Source != "" {
+		sourceMap := map[string]string{
+			"abcnews":         abcNewsSource,
+			"bbc":             bbcNewsSource,
+			"washingtontimes": washingtonTimesSource,
+			"nbc":             nbcNewsSource,
+			"usatoday":        usaTodaySource,
+		}
+
+		sourceList := strings.Split(f.Source, ",")
+		var sourceConditions []string
+		for _, source := range sourceList {
+			if source == "other" {
+				sourceConditions = append(sourceConditions, "sources.name NOT IN (?, ?, ?, ?, ?)")
+				args = append(args, abcNewsSource, bbcNewsSource, washingtonTimesSource, nbcNewsSource, usaTodaySource)
+			} else if sourceName, ok := sourceMap[source]; ok {
+				sourceConditions = append(sourceConditions, "sources.name = ?")
+				args = append(args, sourceName)
+			} else {
+				logrus.WithField("event_id", "source_not_found").Errorf("Source not found: %s", source)
+				return query, nil
+			}
+		}
+		if len(sourceConditions) > 0 {
+			query += " AND (" + strings.Join(sourceConditions, " OR ") + ")"
+		}
+	}
+	if h.next != nil {
+		return h.next.BuildFilterQuery(f, query)
+	}
+	return query, args
 }
 
 // findOther checks if the source name is not one of the predefined sources

@@ -84,3 +84,25 @@ func (pa *postgresArticleStorage) DeleteBySourceID(id int) error {
 	_, err := pa.db.Exec(context.Background(), "DELETE FROM articles WHERE source_id = $1", id)
 	return err
 }
+
+func (pa *postgresArticleStorage) GetByFilter(query string, args []interface{}) ([]model.Article, error) {
+	rows, err := pa.db.Query(context.Background(), query, args...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var articles []model.Article
+	for rows.Next() {
+		var article model.Article
+		err := rows.Scan(
+			&article.Id, &article.Title, &article.Description, &article.Link, &article.PubDate,
+			&article.Source.Id, &article.Source.Name, &article.Source.Link,
+		)
+		if err != nil {
+			return nil, err
+		}
+		articles = append(articles, article)
+	}
+	return articles, nil
+}

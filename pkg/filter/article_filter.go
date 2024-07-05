@@ -7,7 +7,7 @@ import (
 type ArticleFilter interface {
 	SetNext(handler ArticleFilter) ArticleFilter
 	Filter(articles []model.Article, f Filters) ([]model.Article, error)
-	BuildFilterQuery(f Filters) (string, []interface{})
+	BuildFilterQuery(f Filters, query string) (string, []interface{})
 }
 
 type Filters struct {
@@ -15,4 +15,5 @@ type Filters struct {
 	Source    string
 	StartDate string
 	EndDate   string
+	UseDB     bool
 }

@@ -54,15 +54,27 @@ func (a *articleService) Delete(id int) error {
 func (a *articleService) GetByFilter(f filter.Filters) ([]model.Article, error) {
 	logrus.WithField("event_id", "get_by_filter_start").Info("Fetching articles with filter")
 
-	// Fetch all articles initially
-	articles, err := a.GetAll()
+	if f.UseDB {
+		articles, err := a.getByFilterDB(f)
+		if err != nil {
+			if err.Error() == "GetByFilter operation is not supported in in-memory storage" {
+				logrus.WithField("event_id", "fallback_to_inmemory").Warn("Falling back to in-memory filtering")
+				return a.getByFilterInMemory(f)
+			}
+			return nil, err
+		}
+		return articles, nil
+	}
+	return a.getByFilterInMemory(f)
+}
+
+func (a *articleService) getByFilterInMemory(f filter.Filters) ([]model.Article, error) {
+	articles, err := a.articleStorage.GetAll()
 	if err != nil {
 		logrus.WithField("event_id", "get_all_articles_error").Error("Error fetching all articles", err)
 		return nil, err
 	}
 	logrus.WithField("event_id", "all_articles_fetched").Info("All articles fetched successfully")
-
-	// Create filter handlers
 	sourceFilter := &filter.SourceFilter{}
 	keywordFilter := &filter.KeywordFilter{}
 	dateRangeFilter := &filter.DateRangeFilter{}
@@ -82,4 +94,28 @@ func (a *articleService) GetByFilter(f filter.Filters) ([]model.Article, error) 
 	logrus.WithField("event_id", "filtering_complete").Info("Filtering completed successfully")
 
 	return filteredArticles, nil
+}
+
+func (a *articleService) getByFilterDB(f filter.Filters) ([]model.Article, error) {
+	baseQuery := "SELECT articles.* FROM articles JOIN sources ON articles.source_id = sources.id WHERE 1=1"
+
+	sourceFilter := &filter.SourceFilter{}
+	keywordFilter := &filter.KeywordFilter{}
+	dateRangeFilter := &filter.DateRangeFilter{}
+
+	logrus.WithField("event_id", "filters_created").Info("Filter handlers created")
+
+	sourceFilter.SetNext(keywordFilter).SetNext(dateRangeFilter)
+	logrus.WithField("event_id", "filters_chained").Info("Filters chained together")
+
+	query, args := sourceFilter.BuildFilterQuery(f, baseQuery)
+
+	articles, err := a.articleStorage.GetByFilter(query, args)
+	if err != nil {
+		logrus.WithField("event_id", "query_error").Error("Error executing query", err)
+		return nil, err
+	}
+
+	logrus.WithField("event_id", "filtering_complete").Info("Filtering completed successfully")
+	return articles, nil
 }
