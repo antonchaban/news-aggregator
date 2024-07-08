@@ -60,7 +60,7 @@ func New(articleRepo ArticleStorage) cli.ArticleService {
 	return &articleService{articleStorage: articleRepo}
 }
 
-func (a *articleService) LoadDataFromFiles() error {
+func (a *articleService) LoadDataFromFilesToStorage() error {
 	files, err := getFilesInDir()
 	if err != nil {
 		return err

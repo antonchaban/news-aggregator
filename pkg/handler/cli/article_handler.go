@@ -23,7 +23,7 @@ type ArticleService interface {
 	Delete(id int) error
 	SaveAll(articles []model.Article) error
 	GetByFilter(f filter.Filters) ([]model.Article, error)
-	LoadDataFromFiles() error
+	LoadDataFromFilesToStorage() error
 }
 
 // filterArticles filters the provided articles based on the provided sources, keywords, and date range.

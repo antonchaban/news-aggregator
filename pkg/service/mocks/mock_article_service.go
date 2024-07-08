@@ -95,9 +95,9 @@ func (mr *MockArticleServiceMockRecorder) GetByFilter(arg0 interface{}) *gomock.
 }
 
 // LoadDataFromFiles mocks base method.
-func (m *MockArticleService) LoadDataFromFiles() error {
+func (m *MockArticleService) LoadDataFromFilesToStorage() error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "LoadDataFromFiles")
+	ret := m.ctrl.Call(m, "LoadDataFromFilesToStorage")
 	ret0, _ := ret[0].(error)
 	return ret0
 }
@@ -105,7 +105,7 @@ func (m *MockArticleService) LoadDataFromFiles() error {
 // LoadDataFromFiles indicates an expected call of LoadDataFromFiles.
 func (mr *MockArticleServiceMockRecorder) LoadDataFromFiles() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LoadDataFromFiles", reflect.TypeOf((*MockArticleService)(nil).LoadDataFromFiles))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LoadDataFromFilesToStorage", reflect.TypeOf((*MockArticleService)(nil).LoadDataFromFilesToStorage))
 }
 
 // SaveAll mocks base method.
