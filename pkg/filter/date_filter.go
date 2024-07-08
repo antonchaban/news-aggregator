@@ -6,15 +6,18 @@ import (
 	"time"
 )
 
+// DateRangeFilter filters articles based on their publication date.
 type DateRangeFilter struct {
 	next ArticleFilter
 }
 
-func (h *DateRangeFilter) SetNext(handler ArticleFilter) ArticleFilter {
-	h.next = handler
-	return handler
+// SetNext sets the next filter in the chain and returns the filter.
+func (h *DateRangeFilter) SetNext(filter ArticleFilter) ArticleFilter {
+	h.next = filter
+	return filter
 }
 
+// Filter filters articles by their publication date based on the provided Filters.
 func (h *DateRangeFilter) Filter(articles []model.Article, f Filters) ([]model.Article, error) {
 	var startDateObj, endDateObj time.Time
 	var err error
