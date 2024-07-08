@@ -16,6 +16,8 @@ import (
 
 //go:generate mockgen -destination=../service/mocks/mock_article_service.go -package=mocks news-aggregator/pkg/service ArticleService
 
+const articleTemplate = "article.tmpl"
+
 // ArticleService is an interface that defines the methods for interacting with the article storage.
 type ArticleService interface {
 	GetAll() ([]model.Article, error)
@@ -81,7 +83,7 @@ func getTemplatePath() (string, error) {
 		return "", errors.New("environment variable DATA_DIR not set")
 	}
 
-	tmplPath := filepath.Join(tmplDir, "article.tmpl")
+	tmplPath := filepath.Join(tmplDir, articleTemplate)
 
 	if _, err := os.Stat(tmplPath); os.IsNotExist(err) {
 		log.Fatalf("Template file not found: %s", tmplPath)
