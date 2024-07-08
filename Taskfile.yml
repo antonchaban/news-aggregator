@@ -1,0 +1,48 @@
+version: '3'
+
+tasks:
+  build:
+    cmds:
+      - docker build . -f Dockerfile -t antohachaban/news-alligator-web
+    desc: Build the Docker image
+
+  run:
+    cmds:
+      - docker run -d -v news-aggregator-backups:/root/backups -p 8080:8080 antohachaban/news-alligator-web
+    desc: Run the Docker container
+
+  stop:
+    cmds:
+      - docker stop $(docker ps -q --filter ancestor=antohachaban/news-alligator-web)
+    desc: Stop the Docker container
+
+  push:
+    cmds:
+      - docker push antohachaban/news-alligator-web
+    desc: Push the Docker image to the registry
+
+  test:
+    cmds:
+      - go test -v ./...
+    desc: Run tests
+
+  pull:
+    cmds:
+      - docker pull antohachaban/news-alligator-web
+    desc: Pull the Docker image from the registry
+
+  swag:
+    cmds:
+      - swag init -d .,../../../pkg/handler/web,../../../pkg/model
+    desc: Initialize Swagger documentation
+
+  run-local:
+    env:
+      PORT: 8080
+      SAVES_DIR: C:/Work/news-aggregator/backups
+      CERT_FILE: C:/Work/news-aggregator/server.crt
+      KEY_FILE: C:/Work/news-aggregator/server.key
+    cmds:
+      - go build -o web.exe C:/Work/news-aggregator/cmd/news-alligator/web
+      - ./web
+    desc: Build and run the main Go file locally with environment variables
