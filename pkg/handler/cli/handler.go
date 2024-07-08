@@ -4,7 +4,6 @@ import (
 	"flag"
 	"fmt"
 	"github.com/antonchaban/news-aggregator/pkg/filter"
-	"github.com/antonchaban/news-aggregator/pkg/service"
 	"os"
 )
 
@@ -15,10 +14,10 @@ type Handler interface {
 
 // cliHandler is a struct that holds a reference to the articleService.
 type cliHandler struct {
-	service service.ArticleService
+	service ArticleService
 }
 
-func NewHandler(asvc service.ArticleService) (Handler, error) {
+func NewHandler(asvc ArticleService) (Handler, error) {
 	h := &cliHandler{service: asvc}
 	err := h.initCommands()
 	if err != nil {

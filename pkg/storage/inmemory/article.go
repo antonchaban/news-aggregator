@@ -3,7 +3,7 @@ package inmemory
 import (
 	"errors"
 	"github.com/antonchaban/news-aggregator/pkg/model"
-	"github.com/antonchaban/news-aggregator/pkg/storage"
+	"github.com/antonchaban/news-aggregator/pkg/service"
 )
 
 // MemoryArticleStorage is a struct that contains the in-memory database for articles.
@@ -12,7 +12,7 @@ type memoryArticleStorage struct {
 	nextID   int
 }
 
-func New() storage.ArticleStorage {
+func New() service.ArticleStorage {
 	return &memoryArticleStorage{
 		Articles: []model.Article{},
 		nextID:   1, // Initializing IDs for inmemory storage, and then auto-incrementing it after saving an article

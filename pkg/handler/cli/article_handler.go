@@ -14,6 +14,18 @@ import (
 	"text/template"
 )
 
+//go:generate mockgen -destination=../service/mocks/mock_article_service.go -package=mocks news-aggregator/pkg/service ArticleService
+
+// ArticleService is an interface that defines the methods for interacting with the article storage.
+type ArticleService interface {
+	GetAll() ([]model.Article, error)
+	Create(article model.Article) (model.Article, error)
+	Delete(id int) error
+	SaveAll(articles []model.Article) error
+	GetByFilter(f filter.Filters) ([]model.Article, error)
+	LoadDataFromFiles() error
+}
+
 // filterArticles filters the provided articles based on the provided sources, keywords, and date range.
 // It returns the filtered articles.
 func (h *cliHandler) filterArticles(f filter.Filters) ([]model.Article, error) {
