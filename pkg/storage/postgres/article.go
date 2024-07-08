@@ -54,23 +54,12 @@ func (pa *postgresArticleStorage) Save(article model.Article) (model.Article, er
 }
 
 func (pa *postgresArticleStorage) SaveAll(articles []model.Article) error {
-	tx, err := pa.db.Begin(context.Background())
-	if err != nil {
-		return err
-	}
-	defer tx.Rollback(context.Background())
-
 	for _, article := range articles {
-		_, err := tx.Exec(context.Background(), "INSERT INTO articles (title, description, link, source_id, pub_date) VALUES ($1, $2, $3, $4, $5)",
-			article.Title, article.Description, article.Link, article.Source.Id, article.PubDate)
+		_, err := pa.Save(article)
 		if err != nil {
 			return err
 		}
-	}
 
-	err = tx.Commit(context.Background())
-	if err != nil {
-		return err
 	}
 	return nil
 }

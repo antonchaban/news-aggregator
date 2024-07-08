@@ -6,6 +6,7 @@ import (
 	"github.com/antonchaban/news-aggregator/pkg/model"
 	"github.com/antonchaban/news-aggregator/pkg/storage"
 	"github.com/sirupsen/logrus"
+	"os"
 )
 
 //go:generate mockgen -destination=../service/mocks/mock_article_service.go -package=mocks github.com/antonchaban/news-aggregator/pkg/service ArticleService
@@ -54,7 +55,7 @@ func (a *articleService) Delete(id int) error {
 func (a *articleService) GetByFilter(f filter.Filters) ([]model.Article, error) {
 	logrus.WithField("event_id", "get_by_filter_start").Info("Fetching articles with filter")
 
-	if f.UseDB {
+	if os.Getenv("STORAGE_TYPE") == "postgres" {
 		articles, err := a.getByFilterDB(f)
 		if err != nil {
 			if err.Error() == "GetByFilter operation is not supported in in-memory storage" {
@@ -97,7 +98,13 @@ func (a *articleService) getByFilterInMemory(f filter.Filters) ([]model.Article,
 }
 
 func (a *articleService) getByFilterDB(f filter.Filters) ([]model.Article, error) {
-	baseQuery := "SELECT articles.* FROM articles JOIN sources ON articles.source_id = sources.id WHERE 1=1"
+	baseQuery := `
+		SELECT a.id, a.title, a.description, a.link, a.pub_date,
+		       s.id, s.name, s.link
+		FROM articles a
+		JOIN sources s ON a.source_id = s.id
+		WHERE 1=1
+	`
 
 	sourceFilter := &filter.SourceFilter{}
 	keywordFilter := &filter.KeywordFilter{}

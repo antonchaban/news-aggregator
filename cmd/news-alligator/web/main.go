@@ -28,6 +28,7 @@ func main() {
 	os.Setenv("DB_PASSWORD", "qwerty")
 	os.Setenv("DB_NAME", "postgres")
 	os.Setenv("DB_SSLMODE", "disable")
+	os.Setenv("STORAGE_TYPE", "postgres")
 	// Initialize in-memory databases
 	db, err := storage.NewPostgresDB(storage.Config{
 		Host:     os.Getenv("DB_HOST"),
