@@ -1,0 +1,64 @@
+{{ define "filter" }}
+  {{- if gt (len .Value) 0 }}
+    {{ .Label }}: {{ .Value | indent 4 }}
+  {{- end }}
+{{ end }}
+
+{{ define "article" }}
+Title: {{ .Article.Title | highlightKeywords | indent 4 }}
+Description: {{ .Article.Description | highlightKeywords | indent 4 }}
+Link: {{ .Article.Link | indent 4 }}
+Date: {{ .Article.PubDate | date "2006-01-02 15:04:05 MST" | indent 4 }}
+{{- if not (gt (len .Filters.Source) 0) }}
+Source: {{ .Article.Source | indent 4 }}
+{{- end }}
+-------------------------------
+{{ end }}
+
+{{ define "header" }}
+Filters Applied:
+{{- $noFilters := and (eq (len .Filters.Source) 0) (eq (len .Filters.Keyword) 0) (eq (len .Filters.StartDate) 0) (eq (len .Filters.EndDate) 0) }}
+{{- if $noFilters }}
+  No filters applied
+{{- else }}
+  {{- template "filter" (dict "Label" "Sources" "Value" (.Filters.Source | indent 4)) }}
+  {{- template "filter" (dict "Label" "Keywords" "Value" (.Filters.Keyword | indent 4)) }}
+  {{- template "filter" (dict "Label" "Date Start" "Value" (.Filters.StartDate | indent 4)) }}
+  {{- template "filter" (dict "Label" "Date End" "Value" (.Filters.EndDate | indent 4)) }}
+{{- end }}
+Number of News Items: {{ len .Articles }}
+{{ end }}
+
+{{ define "renderArticles" }}
+  {{- range .Articles }}
+    {{ template "article" (dict "Article" . "Filters" $.Filters) }}
+  {{- end }}
+{{ end }}
+
+{{ define "main" }}
+{{- $count := len .Articles }}
+{{- if eq $count 0 }}
+No news items available.
+{{- else }}
+  {{- if gt (len .Filters.Source) 0 }}
+    {{- range $source, $articles := groupBy .Articles "Source" }}
+      {{- if $source }}
+{{ $source }} ({{ len $articles }})
+      {{- end }}
+      {{ template "renderArticles" (dict "Articles" $articles "Filters" $.Filters) }}
+    {{- end }}
+  {{- else }}
+    {{ template "renderArticles" . }}
+  {{- end }}
+{{- end }}
+{{ end }}
+
+{{ define "footer" }}
+Developer: Anton Chaban
+{{ end }}
+
+{{ define "page" }}
+{{ template "header" .}}
+{{ template "main" . }}
+{{ template "footer" . }}
+{{ end }}

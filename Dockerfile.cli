@@ -1,0 +1,20 @@
+# Stage 1: Base
+FROM golang:1.22-alpine AS base
+WORKDIR /src
+COPY go.mod go.sum ./
+RUN go mod download
+COPY . .
+RUN go build -o /bin/cli ./cmd/news-alligator/cli/main.go
+
+# Stage 2: Run
+FROM scratch
+WORKDIR /root/
+
+ENV DATA_DIR=/root/data
+ENV TMPL_DIR=/root/templates
+
+COPY --from=base /bin/cli /bin/cli
+COPY data /root/data
+COPY templates /root/templates
+
+ENTRYPOINT ["/bin/cli"]
