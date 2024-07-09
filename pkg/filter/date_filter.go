@@ -65,15 +65,13 @@ func (h *DateRangeFilter) Filter(articles []model.Article, f Filters) ([]model.A
 }
 
 func (h *DateRangeFilter) BuildFilterQuery(f Filters, query string) (string, []interface{}) {
-	var args []interface{}
 	if f.StartDate != "" {
 		startDate, err := time.Parse("2006-01-02", f.StartDate)
 		if err != nil {
 			logrus.WithField("event_id", "parse_start_date_error").Errorf("Failed to parse start date: %v", err)
 			return query, nil
 		}
-		query += " AND articles.pub_date >= ?"
-		args = append(args, startDate)
+		query += fmt.Sprintf(" AND pub_date >= '%s'", startDate.Format("2006-01-02"))
 	}
 
 	if f.EndDate != "" {
@@ -82,12 +80,11 @@ func (h *DateRangeFilter) BuildFilterQuery(f Filters, query string) (string, []i
 			logrus.WithField("event_id", "parse_end_date_error").Errorf("Failed to parse end date: %v", err)
 			return query, nil
 		}
-		query += " AND articles.pub_date <= ?"
-		args = append(args, endDate)
+		query += fmt.Sprintf(" AND pub_date <= '%s'", endDate.Format("2006-01-02"))
 	}
 
 	if h.next != nil {
 		return h.next.BuildFilterQuery(f, query)
 	}
-	return query, args
+	return query, nil
 }
