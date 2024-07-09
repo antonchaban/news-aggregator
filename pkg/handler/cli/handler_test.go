@@ -74,6 +74,8 @@ func TestExecute(t *testing.T) {
 		EndDate:   "2023-12-31",
 	}
 
+	os.Setenv("DATA_DIR", "C:\\Work\\news-aggregator\\data")
+	os.Setenv("TMPL_DIR", "C:\\Work\\news-aggregator\\templates")
 	err := handler.execute(f, "ASC")
 	if err != nil {
 		return
@@ -85,6 +87,6 @@ func TestExecute(t *testing.T) {
 	var buf [1024]byte
 	n, _ := r.Read(buf[:])
 	output := string(buf[:n])
-	assert.Contains(t, output, "Title: Title 1")
+	assert.Contains(t, output, "Title:     Title 1")
 	assert.NotContains(t, output, "Title: Title 2")
 }
