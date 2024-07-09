@@ -47,17 +47,13 @@ func (h *KeywordFilter) Filter(articles []model.Article, f Filters) ([]model.Art
 }
 
 func (h *KeywordFilter) BuildFilterQuery(f Filters, query string) (string, []interface{}) {
-	var args []interface{}
 	if f.Keyword != "" {
 		keywordList := strings.Split(f.Keyword, ",")
 		var keywordConditions []string
 		for _, keyword := range keywordList {
 			normalizedKeyword := "%" + strings.ToLower(keyword) + "%"
-			stemmedKeyword := "%" + porterstemmer.StemString(strings.ToLower(keyword)) + "%"
-			condition := "(LOWER(articles.title) ILIKE ? OR LOWER(articles.description) ILIKE ? OR " +
-				"LOWER(articles.title) ILIKE ? OR LOWER(articles.description) ILIKE ?)"
+			condition := "(LOWER(title) ILIKE '" + normalizedKeyword + "' OR LOWER(description) ILIKE '" + normalizedKeyword + "')"
 			keywordConditions = append(keywordConditions, condition)
-			args = append(args, normalizedKeyword, normalizedKeyword, stemmedKeyword, stemmedKeyword)
 		}
 		if len(keywordConditions) > 0 {
 			query += " AND (" + strings.Join(keywordConditions, " OR ") + ")"
@@ -66,5 +62,5 @@ func (h *KeywordFilter) BuildFilterQuery(f Filters, query string) (string, []int
 	if h.next != nil {
 		return h.next.BuildFilterQuery(f, query)
 	}
-	return query, args
+	return query, nil
 }
