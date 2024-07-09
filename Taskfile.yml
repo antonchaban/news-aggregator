@@ -46,3 +46,12 @@ tasks:
       - go build -o web.exe ./cmd/news-alligator/web
       - ./web.exe
     desc: Build and run the main Go file locally with environment variables
+
+
+  mockgen:
+    desc: Run mockgen for generating mocks
+    cmds:
+      - mockgen -destination=pkg/service/mocks/mock_source_service.go -package=mocks github.com/antonchaban/news-aggregator/pkg/service SourceService
+      - mockgen -destination=pkg/storage/mocks/mock_article.go -package=mocks github.com/antonchaban/news-aggregator/pkg/storage ArticleStorage
+      - mockgen -destination=pkg/service/mocks/mock_article_service.go -package=mocks github.com/antonchaban/news-aggregator/pkg/service ArticleService
+      - mockgen -destination=pkg/storage/mocks/mock_source.go -package=mocks github.com/antonchaban/news-aggregator/pkg/storage SourceStorage

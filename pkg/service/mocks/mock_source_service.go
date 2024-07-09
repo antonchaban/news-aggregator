@@ -92,6 +92,21 @@ func (mr *MockSourceServiceMockRecorder) FetchSourceByID(arg0 interface{}) *gomo
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FetchSourceByID", reflect.TypeOf((*MockSourceService)(nil).FetchSourceByID), arg0)
 }
 
+// GetAll mocks base method.
+func (m *MockSourceService) GetAll() ([]model.Source, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetAll")
+	ret0, _ := ret[0].([]model.Source)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetAll indicates an expected call of GetAll.
+func (mr *MockSourceServiceMockRecorder) GetAll() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAll", reflect.TypeOf((*MockSourceService)(nil).GetAll))
+}
+
 // LoadDataFromFiles mocks base method.
 func (m *MockSourceService) LoadDataFromFiles() ([]model.Article, error) {
 	m.ctrl.T.Helper()
