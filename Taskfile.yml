@@ -1,22 +1,22 @@
 version: '3'
 
 tasks:
-  build:
+  build-docker:
     cmds:
       - docker build . -f Dockerfile -t antohachaban/news-alligator-web
     desc: Build the Docker image
 
-  run:
+  run-docker:
     cmds:
       - docker run -d -v news-aggregator-backups:/root/backups -p 8080:8080 antohachaban/news-alligator-web
     desc: Run the Docker container
 
-  stop:
+  stop-docker:
     cmds:
       - docker stop $(docker ps -q --filter ancestor=antohachaban/news-alligator-web)
     desc: Stop the Docker container
 
-  push:
+  push-docker:
     cmds:
       - docker push antohachaban/news-alligator-web
     desc: Push the Docker image to the registry
@@ -26,7 +26,7 @@ tasks:
       - go test -v ./...
     desc: Run tests
 
-  pull:
+  pull-docker:
     cmds:
       - docker pull antohachaban/news-alligator-web
     desc: Pull the Docker image from the registry
@@ -64,3 +64,34 @@ tasks:
     cmds:
       - migrate -path ./schema -database 'postgres://postgres:qwerty@0.0.0.0:5436/postgres?sslmode=disable' up
     desc: Initialize the database
+
+  format:
+    cmds:
+      - go fmt ./...
+    desc: Format the code
+
+  vet:
+    cmds:
+      - go vet ./...
+    desc: Run go vet to check for issues
+
+  install-golangci-lint:
+    cmds:
+      - curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.51.2
+    desc: Install golangci-lint
+
+  lint:
+    deps: [install-golangci-lint]
+    cmds:
+      - golangci-lint run
+    desc: Run linter to check for linting issues
+
+  tidy:
+    cmds:
+      - go mod tidy
+    desc: Run go mod tidy to clean up dependencies
+
+  build-go:
+    cmds:
+      - go build -o web.exe ./cmd/news-alligator/web
+    desc: Build the Go source code
