@@ -77,6 +77,21 @@ func (mr *MockArticleStorageMockRecorder) GetAll() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAll", reflect.TypeOf((*MockArticleStorage)(nil).GetAll))
 }
 
+// GetByFilter mocks base method.
+func (m *MockArticleStorage) GetByFilter(arg0 string, arg1 []interface{}) ([]model.Article, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetByFilter", arg0, arg1)
+	ret0, _ := ret[0].([]model.Article)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetByFilter indicates an expected call of GetByFilter.
+func (mr *MockArticleStorageMockRecorder) GetByFilter(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByFilter", reflect.TypeOf((*MockArticleStorage)(nil).GetByFilter), arg0, arg1)
+}
+
 // Save mocks base method.
 func (m *MockArticleStorage) Save(arg0 model.Article) (model.Article, error) {
 	m.ctrl.T.Helper()
