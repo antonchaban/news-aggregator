@@ -27,6 +27,9 @@ jobs:
       - name: Install task
         uses: arduino/setup-task@v2
 
+      - name: Install mockgen
+        run: go install github.com/golang/mock/mockgen@v1.6.0
+
       - name: Generate mocks
         run: task mockgen
 
@@ -110,7 +113,7 @@ jobs:
         uses: arduino/setup-task@v2
 
       - name: Format
-        run: task fmt
+        run: task format
 
   finish:
     runs-on: ubuntu-latest
