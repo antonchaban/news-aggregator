@@ -11,13 +11,13 @@ import (
 )
 
 func TestNewErrorResponse(t *testing.T) {
+	originalOutput := logrus.StandardLogger().Out
+	defer logrus.SetOutput(originalOutput)
+
 	var logBuffer bytes.Buffer
 	logrus.SetOutput(&logBuffer)
-	defer func() {
-		logrus.SetOutput(nil)
-	}()
 
-	router := gin.Default()
+	router := gin.New()
 
 	// Define a test route that triggers the newErrorResponse function
 	router.GET("/test", func(c *gin.Context) {
@@ -36,7 +36,6 @@ func TestNewErrorResponse(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, "Internal Server Error", resp.Message)
 
-	// Check the log output
 	logOutput := logBuffer.String()
 	assert.Contains(t, logOutput, "Internal Server Error")
 }
