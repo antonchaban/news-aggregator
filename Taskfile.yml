@@ -3,8 +3,10 @@ version: '3'
 tasks:
   build:
     cmds:
-      - docker build . -f Dockerfile -t antohachaban/news-alligator-web
-    desc: Build the Docker image
+      - docker build . -f ./.Dockerfile -t antohachaban/news-alligator-web:{{.VERSION}}
+    env:
+        VERSION: '{{.VERSION | default "latest"}}'
+    desc: "Build the Docker image, example: task build VERSION=0.1.2"
 
   run:
     cmds:
