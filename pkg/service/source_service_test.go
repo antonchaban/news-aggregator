@@ -61,9 +61,9 @@ func Test_getFilesInDir(t *testing.T) {
 		{
 			name:   "get files successfully",
 			envVar: "testdata",
-			want: []string{"testdata\\empty.json", "testdata\\empty_rss.xml", "testdata\\file1.txt",
-				"testdata\\file2.txt", "testdata\\invalid.json", "testdata\\invalid_rss.xml", "testdata\\json.json",
-				"testdata\\rss.xml"},
+			want: []string{"testdata/empty.json", "testdata/empty_rss.xml", "testdata/file1.txt",
+				"testdata/file2.txt", "testdata/invalid.json", "testdata/invalid_rss.xml", "testdata/json.json",
+				"testdata/rss.xml"},
 			wantErr: func(t assert.TestingT, err error, i ...interface{}) bool {
 				return assert.NoError(t, err)
 			},
