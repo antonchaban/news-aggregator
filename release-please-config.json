@@ -1,0 +1,10 @@
+{
+  "release-type": "go",
+  "tag-separator": "@",
+  "include-component-in-tag": true,
+  "packages" : {
+    "." : {
+      "package-name" : "news-alligator"
+    }
+  }
+}
