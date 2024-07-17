@@ -55,9 +55,17 @@ tasks:
       - mockgen -destination=pkg/service/mocks/mock_article_service.go -package=mocks github.com/antonchaban/news-aggregator/pkg/service ArticleService
       - mockgen -destination=pkg/storage/mocks/mock_source.go -package=mocks github.com/antonchaban/news-aggregator/pkg/storage SourceStorage
 
-  run-postgres:
+  install-postgres:
     cmds:
-      - docker run --name=news-alligator-db -e POSTGRES_PASSWORD='qwerty' -p 5436:5432 -d --rm postgres
+      - docker pull postgres
+    desc: Pull the PostgreSQL Docker image
+
+  run-postgres:
+    deps: [install-postgres]
+    env:
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+    cmds:
+      - docker run --name=news-alligator-db -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD -p 5436:5432 -d --rm postgres
     desc: Run the PostgreSQL container
 
   init-db:
