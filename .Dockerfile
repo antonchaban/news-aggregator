@@ -27,6 +27,13 @@ ENV PORT=8080
 ENV SAVES_DIR=/root/backups
 ENV CERT_FILE=/root/server.crt
 ENV KEY_FILE=/root/server.key
+ENV DB_HOST=localhost
+ENV DB_PORT=5436
+ENV DB_USERNAME=postgres
+ENV DB_PASSWORD=qwerty
+ENV DB_NAME=postgres
+ENV DB_SSLMODE=disable
+ENV STORAGE_TYPE=postgres
 
 COPY --from=base /src/backups /root/backups
 COPY server.crt /root/server.crt
