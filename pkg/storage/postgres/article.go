@@ -102,11 +102,35 @@ func (pa *postgresArticleStorage) DeleteBySourceID(id int) error {
 }
 
 func (pa *postgresArticleStorage) GetByFilter(query string, args []interface{}) ([]model.Article, error) {
-	var articles []model.Article
-	err := pa.db.Select(&articles, query, args...)
+	rows, err := pa.db.Query(query, args...)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error executing query: %w", err)
 	}
+	defer rows.Close()
+
+	var articles []model.Article
+
+	for rows.Next() {
+		var article model.Article
+		var source model.Source
+
+		err := rows.Scan(
+			&article.Id, &article.Title, &article.Description, &article.Link, &article.PubDate,
+			&source.Id, &source.Name, &source.Link,
+		)
+		if err != nil {
+			return nil, fmt.Errorf("error scanning row: %w", err)
+		}
+
+		article.Source = source
+		articles = append(articles, article)
+	}
+
+	// Check for any errors encountered during iteration
+	if err = rows.Err(); err != nil {
+		return nil, fmt.Errorf("error iterating rows: %w", err)
+	}
+
 	return articles, nil
 
 	/*rows, err := pa.db.Query(context.Background(), query, args...)
