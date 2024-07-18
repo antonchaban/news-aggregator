@@ -9,6 +9,7 @@ import (
 	"github.com/antonchaban/news-aggregator/pkg/service"
 	"github.com/antonchaban/news-aggregator/pkg/storage"
 	"github.com/antonchaban/news-aggregator/pkg/storage/postgres"
+	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
 	"os"
 	"os/signal"
