@@ -1,26 +1,31 @@
 version: '3'
 
+env:
+  DOCKER_IMAGE_NAME: antohachaban/news-alligator-web
+
 tasks:
   build:
     cmds:
-      - docker build . -f ./.Dockerfile -t antohachaban/news-alligator-web:{{.VERSION}}
-    env:
+      - docker build . -f ./.Dockerfile -t {{.DOCKER_IMAGE_NAME}}:{{.VERSION}}
+    vars:
         VERSION: '{{.VERSION | default "latest"}}'
     desc: "Build the Docker image, example: task build VERSION=0.1.2"
 
   run:
     cmds:
-      - docker run -d -v news-aggregator-backups:/root/backups -p 8080:8080 antohachaban/news-alligator-web
-    desc: Run the Docker container
+      - docker run -d -v news-aggregator-backups:/root/backups -p {{.PORT}}:8080 {{.DOCKER_IMAGE_NAME}}
+    vars:
+      PORT: '{{default "8080" .PORT}}'
+    desc: "Run the Docker container, example: task build PORT=8080"
 
   stop:
     cmds:
-      - docker stop $(docker ps -q --filter ancestor=antohachaban/news-alligator-web)
+      - docker stop $(docker ps -q --filter ancestor={{.DOCKER_IMAGE_NAME}})
     desc: Stop the Docker container
 
   push:
     cmds:
-      - docker push antohachaban/news-alligator-web
+      - docker push {{.DOCKER_IMAGE_NAME}}
     desc: Push the Docker image to the registry
 
   test:
@@ -30,12 +35,12 @@ tasks:
 
   pull:
     cmds:
-      - docker pull antohachaban/news-alligator-web
+      - docker pull {{.DOCKER_IMAGE_NAME}}
     desc: Pull the Docker image from the registry
 
   swag:
     cmds:
-      - swag init -d .,../../../pkg/handler/web,../../../pkg/model
+      - swag init -d cmd/news-alligator/web,pkg/handler/web,pkg/model
     desc: Initialize Swagger documentation
 
   run-local:
