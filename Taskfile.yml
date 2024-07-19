@@ -55,7 +55,14 @@ tasks:
       - ./web.exe
     desc: Build and run the main Go file locally with environment variables
 
+  install-mockgen:
+    cmds:
+      - go install github.com/golang/mock/mockgen@latest
+    desc: Install mockgen
+    internal: true
+
   mockgen:
+    deps: [install-mockgen]
     desc: Run mockgen for generating mocks
     cmds:
       - mockgen -destination=pkg/service/mocks/mock_source_service.go -package=mocks github.com/antonchaban/news-aggregator/pkg/service SourceService
