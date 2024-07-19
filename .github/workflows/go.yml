@@ -14,7 +14,8 @@ on:
       - feature/**
 
 jobs:
-  mockgen:
+
+  lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -27,15 +28,13 @@ jobs:
       - name: Install task
         uses: arduino/setup-task@v2
 
-      - name: Install mockgen
-        run: go install github.com/golang/mock/mockgen@v1.6.0
+      - name: Build
+        run: task lint
 
-      - name: Generate mocks
-        run: task mockgen
 
   build:
     runs-on: ubuntu-latest
-    needs: mockgen
+    needs: lint
     steps:
       - uses: actions/checkout@v4
 
@@ -52,7 +51,6 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
-    needs: mockgen
     steps:
       - uses: actions/checkout@v4
 
@@ -67,53 +65,6 @@ jobs:
       - name: Test
         run: task test
 
-  tidy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: '1.22'
-
-      - name: Install task
-        uses: arduino/setup-task@v2
-
-      - name: Tidy
-        run: task tidy
-
-  vet:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: '1.22'
-
-      - name: Install task
-        uses: arduino/setup-task@v2
-
-      - name: Vet
-        run: task vet
-
-  fmt:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: '1.22'
-
-      - name: Install task
-        uses: arduino/setup-task@v2
-
-      - name: Format
-        run: task format
 
   finish:
     runs-on: ubuntu-latest
