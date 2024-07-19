@@ -25,11 +25,10 @@ jobs:
         with:
           go-version: '1.22'
 
-      - name: Install task
-        uses: arduino/setup-task@v2
-
-      - name: Build
-        run: task lint
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@v3
+        with:
+          version: v1.51.2
 
 
   build:
