@@ -19,6 +19,10 @@ type Parser interface {
 
 func ParseArticlesFromFeed(urlPath url.URL) ([]model.Article, error) {
 	format, err := DetermineFeedFormat(urlPath)
+	if err != nil {
+		logrus.Errorf("error occurred while determining feed format: %s", err.Error())
+		return nil, err
+	}
 	parser, err := createParser(format)
 	if err != nil {
 		logrus.Errorf("error occurred while creating parser: %s", err.Error())
