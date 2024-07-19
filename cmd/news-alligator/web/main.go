@@ -40,6 +40,7 @@ func main() {
 	})
 	if err != nil {
 		logrus.Fatalf("error occurred while initializing database: %s", err.Error())
+		panic(err)
 	}
 
 	//artDb := inmemory.New()
