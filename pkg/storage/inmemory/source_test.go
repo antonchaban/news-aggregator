@@ -126,7 +126,7 @@ func Test_memorySourceStorage_GetAll(t *testing.T) {
 				nextID:  tt.fields.nextID,
 			}
 			got, err := m.GetAll()
-			if !tt.wantErr(t, err, fmt.Sprintf("GetAll()")) {
+			if !tt.wantErr(t, err, "GetAll()") {
 				return
 			}
 			assert.Equalf(t, tt.want, got, "GetAll()")

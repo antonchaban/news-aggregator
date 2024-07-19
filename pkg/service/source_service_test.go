@@ -88,7 +88,7 @@ func Test_getFilesInDir(t *testing.T) {
 			}
 
 			got, err := getFilesInDir()
-			if !tt.wantErr(t, err, fmt.Sprintf("getFilesInDir()")) {
+			if !tt.wantErr(t, err, "getFilesInDir()") {
 				return
 			}
 			assert.Equalf(t, tt.want, got, "getFilesInDir()")
@@ -230,7 +230,7 @@ func Test_sourceService_FetchFromAllSources(t *testing.T) {
 				articleStorage: mockArticleStorage,
 				srcStorage:     mockSourceStorage,
 			}
-			tt.wantErr(t, s.FetchFromAllSources(), fmt.Sprintf("FetchFromAllSources()"))
+			tt.wantErr(t, s.FetchFromAllSources(), "FetchFromAllSources()")
 		})
 	}
 }

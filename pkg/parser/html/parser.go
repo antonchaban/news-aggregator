@@ -1,7 +1,6 @@
 package html
 
 import (
-	"errors"
 	"fmt"
 	"github.com/PuerkitoBio/goquery"
 	"github.com/antonchaban/news-aggregator/pkg/model"
@@ -109,7 +108,7 @@ func parseDate(date string, timeFormats []string) (parsedDate time.Time, err err
 			return parsedTime, nil
 		}
 	}
-	return time.Now().UTC(), errors.New(fmt.Sprintf("error parsing date: %s", date))
+	return time.Now().UTC(), fmt.Errorf("failed to parse date: %s", date)
 }
 
 // resolveLink resolves relative links to absolute using the base URL

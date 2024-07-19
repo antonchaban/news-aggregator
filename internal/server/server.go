@@ -76,6 +76,9 @@ func (s *Server) RunWithFiles(port string, handler http.Handler, artHandler web.
 		return err
 	}
 	err = artHandler.ArticleService().SaveAll(articles)
+	if err != nil {
+		return err
+	}
 
 	if err := s.httpServer.ListenAndServeTLS(s.certFile, s.keyFile); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		logrus.Fatalf("Could not listen on %s: %v\n", port, err)
@@ -96,6 +99,9 @@ func (s *Server) RunWithFiles(port string, handler http.Handler, artHandler web.
 func (s *Server) Shutdown(ctx context.Context, articles []model.Article, sources []model.Source) error {
 	fmt.Println("Shutting down the server...")
 	err := backuper.NewSaver(articles, sources).SaveAllToFile()
+	if err != nil {
+		return err
+	}
 	err = backuper.NewSaver(articles, sources).SaveSrcsToFile()
 	if err != nil {
 		return err

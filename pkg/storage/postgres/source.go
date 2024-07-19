@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"github.com/antonchaban/news-aggregator/pkg/model"
 	"github.com/antonchaban/news-aggregator/pkg/storage"
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -53,7 +54,12 @@ func (psrc *postgresSrcStorage) SaveAll(sources []model.Source) error {
 	if err != nil {
 		return err
 	}
-	defer tx.Rollback(context.Background())
+	defer func(tx pgx.Tx, ctx context.Context) {
+		err := tx.Rollback(ctx)
+		if err != nil {
+			fmt.Println("Error during rollback transaction: ", err)
+		}
+	}(tx, context.Background())
 
 	for _, src := range sources {
 		_, err := tx.Exec(context.Background(), "INSERT INTO sources (name, link) VALUES ($1, $2)", src.Name, src.Link)
