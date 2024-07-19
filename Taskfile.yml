@@ -29,6 +29,7 @@ tasks:
     desc: Push the Docker image to the registry
 
   test:
+    deps: [mockgen]
     cmds:
       - go test -v ./...
     desc: Run tests
@@ -66,6 +67,7 @@ tasks:
     cmds:
       - docker pull postgres
     desc: Pull the PostgreSQL Docker image
+    internal: true
 
   run-postgres:
     deps: [install-postgres]
@@ -94,6 +96,7 @@ tasks:
     cmds:
       - curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.51.2
     desc: Install golangci-lint
+    internal: true
 
   lint:
     deps: [install-golangci-lint]
@@ -110,3 +113,11 @@ tasks:
     cmds:
       - go build -o web.exe ./cmd/news-alligator/web
     desc: Build the Go source code
+
+  all-checks:
+    desc: Run format, vet, lint
+    cmds:
+      - task format
+      - task vet
+      - task lint
+      - task tidy
