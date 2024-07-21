@@ -8,13 +8,14 @@ WORKDIR /src
 
 COPY go.mod go.sum ./
 RUN go mod download
-
-COPY backups /src/backups
-COPY cmd/news-alligator/web /src/cmd/news-alligator/web
-COPY internal /src/internal
-COPY pkg /src/pkg
 COPY server.crt /src/server.crt
 COPY server.key /src/server.key
+
+
+COPY cmd/news-alligator/web /src/cmd/news-alligator/web
+COPY internal /src/
+COPY backups /src/backups
+COPY pkg /src/pkg
 
 RUN go build -o /bin/web /src/cmd/news-alligator/web/main.go
 
