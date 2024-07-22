@@ -3,8 +3,8 @@ package backuper
 import (
 	"encoding/json"
 	"errors"
+	"github.com/antonchaban/news-aggregator/pkg/handler/web"
 	"github.com/antonchaban/news-aggregator/pkg/model"
-	"github.com/antonchaban/news-aggregator/pkg/service"
 	"github.com/sirupsen/logrus"
 	"os"
 	"path/filepath"
@@ -18,11 +18,11 @@ type Loader interface {
 
 // newsLoader is an implementation of the Loader interface.
 type newsLoader struct {
-	srcService service.SourceService
+	srcService web.SourceService
 }
 
 // NewLoader creates a new Loader instance.
-func NewLoader(srcSvc service.SourceService) Loader {
+func NewLoader(srcSvc web.SourceService) Loader {
 	return &newsLoader{
 		srcService: srcSvc,
 	}

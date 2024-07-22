@@ -3,7 +3,7 @@ package inmemory
 import (
 	"errors"
 	"github.com/antonchaban/news-aggregator/pkg/model"
-	"github.com/antonchaban/news-aggregator/pkg/storage"
+	"github.com/antonchaban/news-aggregator/pkg/service"
 	"github.com/sirupsen/logrus"
 )
 
@@ -13,7 +13,7 @@ type memoryArticleStorage struct {
 	nextID   int
 }
 
-func New() storage.ArticleStorage {
+func New() service.ArticleStorage {
 	logrus.WithField("event_id", "article_storage_initialized").Info("Initializing Article Storage")
 	return &memoryArticleStorage{
 		Articles: []model.Article{},

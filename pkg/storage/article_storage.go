@@ -1,6 +1,6 @@
 package storage
 
-import (
+/*import (
 	"github.com/antonchaban/news-aggregator/pkg/model"
 )
 
@@ -45,3 +45,4 @@ type ArticleStorage interface {
 	Delete(id int) error
 	DeleteBySourceID(id int) error
 }
+*/

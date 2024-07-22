@@ -7,7 +7,6 @@ import (
 	"github.com/antonchaban/news-aggregator/pkg/backuper"
 	"github.com/antonchaban/news-aggregator/pkg/handler/web"
 	"github.com/antonchaban/news-aggregator/pkg/model"
-	"github.com/antonchaban/news-aggregator/pkg/service"
 	"github.com/sirupsen/logrus"
 	"net/http"
 	"time"
@@ -135,7 +134,7 @@ func NewServer(certFile, keyFile string) *Server {
 //
 // Parameters:
 // - ssvc: The SourceService to use for adding sources.
-func initializeSources(ssvc service.SourceService) {
+func initializeSources(ssvc web.SourceService) {
 	sources := []model.Source{
 		{Name: "BBC News", Link: "https://feeds.bbci.co.uk/news/rss.xml"},
 		{Name: "ABC News: International", Link: "https://abcnews.go.com/abcnews/internationalheadlines"},

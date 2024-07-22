@@ -3,7 +3,7 @@ package inmemory
 import (
 	"errors"
 	"github.com/antonchaban/news-aggregator/pkg/model"
-	"github.com/antonchaban/news-aggregator/pkg/storage"
+	"github.com/antonchaban/news-aggregator/pkg/service"
 	"github.com/sirupsen/logrus"
 )
 
@@ -14,7 +14,7 @@ type memorySourceStorage struct {
 }
 
 // NewSrc creates a new instance of the in-memory source storage.
-func NewSrc() storage.SourceStorage {
+func NewSrc() service.SourceStorage {
 	logrus.WithField("event_id", "source_storage_initialized").Info("Initializing Source Storage")
 	return &memorySourceStorage{
 		Sources: []model.Source{},

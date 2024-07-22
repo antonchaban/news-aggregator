@@ -1,6 +1,6 @@
 package storage
 
-import "github.com/antonchaban/news-aggregator/pkg/model"
+/*import "github.com/antonchaban/news-aggregator/pkg/model"
 
 //go:generate mockgen -destination=mocks/mock_source.go -package=mocks github.com/antonchaban/news-aggregator/pkg/storage SourceStorage
 
@@ -50,3 +50,4 @@ type SourceStorage interface {
 	GetByID(id int) (model.Source, error)
 	Update(id int, src model.Source) (model.Source, error)
 }
+*/

@@ -1,7 +1,7 @@
 package scheduler
 
 import (
-	"github.com/antonchaban/news-aggregator/pkg/service"
+	"github.com/antonchaban/news-aggregator/pkg/handler/web"
 	"github.com/go-co-op/gocron"
 	"github.com/sirupsen/logrus"
 	"time"
@@ -10,12 +10,12 @@ import (
 // Scheduler is a struct that holds the gocron.Scheduler instance and the services required for the scheduler to work
 type Scheduler struct {
 	scheduler *gocron.Scheduler
-	asvc      service.ArticleService
-	ssvc      service.SourceService
+	asvc      web.ArticleService
+	ssvc      web.SourceService
 }
 
 // NewScheduler initializes a new Scheduler instance with the provided article and source services.
-func NewScheduler(asvc service.ArticleService, ssvc service.SourceService) *Scheduler {
+func NewScheduler(asvc web.ArticleService, ssvc web.SourceService) *Scheduler {
 	logrus.WithField("event_id", "scheduler_initialized").Info("Initializing Scheduler")
 	return &Scheduler{
 		scheduler: gocron.NewScheduler(time.UTC),
