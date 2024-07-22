@@ -44,11 +44,11 @@ func main() {
 	}
 
 	// Create a new HTTPS server
-	srv := server.NewServer(os.Getenv("CERT_FILE"), os.Getenv("KEY_FILE"))
+	srv := server.NewServer(os.Getenv(certFileEnvVar), os.Getenv(keyFileEnvVar))
 
 	// Start the server in a goroutine
 	go func() {
-		if err := srv.Run(os.Getenv("PORT"), h.InitRoutes(), *h); err != nil {
+		if err := srv.Run(os.Getenv(portEnvVar), h.InitRoutes(), *h); err != nil {
 			logrus.Fatal("error occurred while running http server: ", err.Error())
 		}
 	}()
