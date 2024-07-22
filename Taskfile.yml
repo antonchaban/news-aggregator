@@ -41,7 +41,7 @@ tasks:
 
   swag:
     cmds:
-      - swag init -d cmd/news-alligator/web,pkg/handler/web,pkg/model
+      - swag init -d cmd/news-alligator/web,pkg/handler/web,pkg/model -o ./cmd/news-alligator/web/docs
     desc: Initialize Swagger documentation
 
   run-local:
@@ -96,18 +96,6 @@ tasks:
       - go vet ./...
     desc: Run go vet to check for issues
 
-  install-golangci-lint:
-    cmds:
-      - curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.51.2
-    desc: Install golangci-lint
-    internal: true
-
-  lint:
-    deps: [install-golangci-lint]
-    cmds:
-      - golangci-lint run
-    desc: Run linter to check for linting issues
-
   tidy:
     cmds:
       - go mod tidy
@@ -121,6 +109,7 @@ tasks:
   all-checks:
     desc: Run format, vet, lint
     cmds:
+      - task swag
       - task format
       - task vet
       - task tidy

@@ -15,8 +15,29 @@ on:
 
 jobs:
 
+  all-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.22'
+
+      - name: Install task
+        uses: arduino/setup-task@v2
+
+      - name: Run all checks
+        run: task all-checks
+
+      - name: Check for changes
+        run: |
+          git diff --exit-code || (echo "There are changes after running all checks." && exit 1)
+
   lint:
     runs-on: ubuntu-latest
+    needs: all-checks
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
