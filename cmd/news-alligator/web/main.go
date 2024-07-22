@@ -25,11 +25,11 @@ func main() {
 	// Initialize in-memory databases
 	db := inmemory.New()
 	srcDb := inmemory.NewSrc()
-	asvc := service.New(db)
-	ssvc := service.NewSourceService(db, srcDb)
+	articleService := service.New(db)
+	sourceService := service.NewSourceService(db, srcDb)
 
 	// Initialize web handler
-	h := web.NewHandler(asvc, ssvc)
+	h := web.NewHandler(articleService, sourceService)
 
 	if err := checkEnvVars(
 		"CERT_FILE", "KEY_FILE", "PORT",
@@ -50,7 +50,7 @@ func main() {
 	logrus.Print("news-alligator 🐊 started")
 
 	// Start the scheduler for updating articles
-	newScheduler := scheduler.NewScheduler(asvc, ssvc)
+	newScheduler := scheduler.NewScheduler(articleService, sourceService)
 	newScheduler.Start()
 
 	// Wait for a signal to quit
@@ -64,12 +64,12 @@ func main() {
 	newScheduler.Stop()
 
 	// Retrieve all articles before shutting down
-	articles, err := asvc.GetAll()
+	articles, err := articleService.GetAll()
 	if err != nil {
 		logrus.Errorf("error occurred on getting all articles: %s", err.Error())
 	}
 
-	sources, err := ssvc.GetAll()
+	sources, err := sourceService.GetAll()
 	if err != nil {
 		logrus.Errorf("error occurred on getting all sources: %s", err.Error())
 	}
