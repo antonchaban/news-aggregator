@@ -39,7 +39,13 @@ tasks:
       - docker pull {{.DOCKER_IMAGE_NAME}}
     desc: Pull the Docker image from the registry
 
+  swag-install:
+    cmds:
+      - go install github.com/swaggo/swag/cmd/swag@latest
+    desc: Install swag
+
   swag:
+    deps : [swag-install]
     cmds:
       - swag init -d cmd/news-alligator/web,pkg/handler/web,pkg/model -o ./cmd/news-alligator/web/docs
     desc: Initialize Swagger documentation
