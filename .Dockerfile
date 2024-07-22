@@ -11,8 +11,8 @@ ARG SAVES_DIR_ARG=/root/backups
 ARG CERT_FILE_ARG=/root/server.crt
 ARG KEY_FILE_ARG=/root/server.key
 
-COPY server.crt /src/server.crt
-COPY server.key /src/server.key
+COPY pkg/server/server.crt /src/server.crt
+COPY pkg/server/server.key /src/server.key
 COPY go.mod go.sum ./
 RUN go mod download
 
@@ -47,8 +47,8 @@ ENV CERT_FILE=${CERT_FILE:-/root/server.crt}
 ENV KEY_FILE=${KEY_FILE:-/root/server.key}
 
 COPY --from=base /src/backups /root/backups
-COPY server.crt /root/server.crt
-COPY server.key /root/server.key
+COPY pkg/server/server.crt /root/server.crt
+COPY pkg/server/server.key /root/server.key
 
 # Declare a volume
 VOLUME /root/backups
