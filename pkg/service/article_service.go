@@ -12,15 +12,6 @@ import (
 
 // ArticleStorage is an interface that defines the methods for interacting with the article storage.
 //
-// Key Responsibilities:
-// 1. Retrieve all stored articles.
-// 2. Save a single article to the storage.
-// 3. Save multiple articles to the storage.
-// 4. Delete an article from the storage by its ID.
-// 5. Retrieve articles that match a given keyword.
-// 6. Retrieve articles from a specific source.
-// 7. Retrieve articles within a specified date range.
-//
 // Expected Behaviors or Guarantees:
 // - The GetAll method should return all articles available in the storage or an error if the operation fails.
 // - The Save method should store the provided article and return the saved article (with updated fields such as ID) or an error if the operation fails.
@@ -58,6 +49,7 @@ func New(articleRepo ArticleStorage) web.ArticleService {
 	return &articleService{articleStorage: articleRepo}
 }
 
+// SaveAll saves multiple articles to the database.
 func (a *articleService) SaveAll(articles []model.Article) error {
 	err := a.articleStorage.SaveAll(articles)
 	if err != nil {

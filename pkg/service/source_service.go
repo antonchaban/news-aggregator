@@ -15,19 +15,6 @@ import (
 //go:generate mockgen -destination=mocks/mock_source.go -package=mocks github.com/antonchaban/news-aggregator/pkg/storage SourceStorage
 
 // SourceStorage is an interface that defines the methods for interacting with the source storage.
-//
-// Key Responsibilities:
-//
-// 1. GetAll retrieve all stored sources.
-//
-// 2. Save a single source to the storage.
-//
-// 3. Save multiple sources to the storage.
-//
-// 4. Delete a source from the storage by its ID.
-//
-// 5. GetByID retrieve a source by its ID.
-//
 // Expected Behaviors or Guarantees:
 // - The GetAll method should return all sources available in the storage or an error if the operation fails.
 //
