@@ -7,7 +7,6 @@ require (
 	github.com/PuerkitoBio/goquery v1.9.2
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-co-op/gocron v1.37.0
-	github.com/golang/mock v1.6.0
 	github.com/joho/godotenv v1.5.1
 	github.com/mmcdole/gofeed v1.3.0
 	github.com/reiver/go-porterstemmer v1.0.1
@@ -16,6 +15,7 @@ require (
 	github.com/swaggo/files v1.0.1
 	github.com/swaggo/gin-swagger v1.6.0
 	github.com/swaggo/swag v1.16.3
+	go.uber.org/mock v0.4.0
 )
 
 require (
