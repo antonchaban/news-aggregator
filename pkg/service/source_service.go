@@ -14,31 +14,11 @@ import (
 
 //go:generate mockgen -destination=mocks/mock_source.go -package=mocks github.com/antonchaban/news-aggregator/pkg/storage SourceStorage
 
+const (
+	eventErrorSavingArticles = "error_saving_articles"
+)
+
 // SourceStorage is an interface that defines the methods for interacting with the source storage.
-// Expected Behaviors or Guarantees:
-// - The GetAll method should return all sources available in the storage or an error if the operation fails.
-//
-// - The Save method should store the provided source and return the saved source (with updated fields such as ID) or an error if the operation fails.
-//
-// - The SaveAll method should store all provided sources and return an error if the operation fails for any reason.
-//
-// - The Delete method should remove the source with the specified ID from the storage and return an error if the operation fails.
-//
-// - The GetByID method should return the source with the specified ID or an error if the source does not exist or the operation fails.
-//
-// Common Errors or Exceptions and Handling:
-// - `error`: This general error can occur in any of the methods. It should be handled by logging the error and returning an appropriate message to the user or retrying the operation if possible.
-//
-// - Data validation errors: Validate input data before attempting to save or retrieve sources. For example, check if the `id` in Delete or GetByID methods is a valid positive integer.
-//
-// Known Limitations or Restrictions:
-// - The Delete method does not specify what happens if the source does not exist. It should be clarified whether it returns an error or silently succeeds.
-// - The methods do not define any constraints on the size or format of the sources being saved.
-//
-// Usage Guidelines or Best Practices:
-// - Use transactions where necessary to ensure data consistency, for example, when saving multiple sources with SaveAll.
-// - Ensure proper error handling and logging to facilitate debugging and monitoring of storage operations.
-// - Validate input data thoroughly before performing any operations to prevent injection attacks or corrupt data.
 type SourceStorage interface {
 	GetAll() ([]model.Source, error)
 	Save(src model.Source) (model.Source, error)
@@ -108,7 +88,7 @@ func (s *sourceService) FetchFromAllSources() error {
 		}
 		err = s.articleStorage.SaveAll(articles)
 		if err != nil {
-			logrus.Printf("Error saving articles: %v", err)
+			logrus.WithField("event_id", eventErrorSavingArticles).Errorf("Error saving articles: %v", err)
 			continue
 		}
 	}
@@ -149,7 +129,6 @@ func (s *sourceService) LoadDataFromFiles() ([]model.Article, error) {
 			return nil, err
 		}
 		articles = append(articles, parsedArticles...)
-
 	}
 
 	return articles, nil

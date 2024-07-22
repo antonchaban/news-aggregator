@@ -16,6 +16,12 @@ const (
 	usaTodaySource        = "USA TODAY"
 )
 
+const (
+	eventSourceFilterStart       = "source_filter_start"
+	eventSourceNotFound          = "source_not_found"
+	eventSourceFilteringComplete = "source_filtering_complete"
+)
+
 // SourceFilter filters articles based on their source.
 type SourceFilter struct {
 	next ArticleFilter
@@ -29,7 +35,7 @@ func (h *SourceFilter) SetNext(filter ArticleFilter) ArticleFilter {
 
 // Filter filters articles by their source based on the provided Filters.
 func (h *SourceFilter) Filter(articles []model.Article, f Filters) ([]model.Article, error) {
-	logrus.WithField("event_id", "source_filter_start").Info("Starting SourceFilter")
+	logrus.WithField("event_id", eventSourceFilterStart).Info("Starting SourceFilter")
 
 	if f.Source != "" {
 		sourceMap := map[string]string{
@@ -55,13 +61,13 @@ func (h *SourceFilter) Filter(articles []model.Article, f Filters) ([]model.Arti
 						break
 					}
 				} else {
-					logrus.WithField("event_id", "source_not_found").Errorf("Source not found: %s", source)
+					logrus.WithField("event_id", eventSourceNotFound).Errorf("Source not found: %s", source)
 					return nil, fmt.Errorf("source not found: %s", source)
 				}
 			}
 		}
 		articles = filteredArticles
-		logrus.WithField("filtered_count", len(filteredArticles)).Info("Source filtering complete")
+		logrus.WithField("filtered_count", len(filteredArticles)).Info(eventSourceFilteringComplete)
 	}
 
 	if h.next != nil {

@@ -7,6 +7,12 @@ import (
 	"time"
 )
 
+const (
+	eventDateRangeFilterStart = "date_range_filter_start"
+	eventParseStartDateError  = "parse_start_date_error"
+	eventParseEndDateError    = "parse_end_date_error"
+)
+
 // DateRangeFilter filters articles based on their publication date.
 type DateRangeFilter struct {
 	next ArticleFilter
@@ -20,14 +26,14 @@ func (h *DateRangeFilter) SetNext(filter ArticleFilter) ArticleFilter {
 
 // Filter filters articles by their publication date based on the provided Filters.
 func (h *DateRangeFilter) Filter(articles []model.Article, f Filters) ([]model.Article, error) {
-	logrus.WithField("event_id", "date_range_filter_start").Info("Starting DateRangeFilter")
+	logrus.WithField("event_id", eventDateRangeFilterStart).Info("Starting DateRangeFilter")
 	var startDateObj, endDateObj time.Time
 	var err error
 
 	if f.StartDate != "" {
 		startDateObj, err = time.Parse("2006-01-02", f.StartDate)
 		if err != nil {
-			logrus.WithField("event_id", "parse_start_date_error").Errorf("Failed to parse start date: %v", err)
+			logrus.WithField("event_id", eventParseStartDateError).Errorf("Failed to parse start date: %v", err)
 			return nil, fmt.Errorf("failed to parse start date: %v", err)
 		}
 	} else {
@@ -37,7 +43,7 @@ func (h *DateRangeFilter) Filter(articles []model.Article, f Filters) ([]model.A
 	if f.EndDate != "" {
 		endDateObj, err = time.Parse("2006-01-02", f.EndDate)
 		if err != nil {
-			logrus.WithField("event_id", "parse_end_date_error").Errorf("Failed to parse end date: %v", err)
+			logrus.WithField("event_id", eventParseEndDateError).Errorf("Failed to parse end date: %v", err)
 			return nil, fmt.Errorf("failed to parse end date: %v", err)
 		}
 	} else {

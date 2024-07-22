@@ -7,6 +7,11 @@ import (
 	"strings"
 )
 
+const (
+	eventKeywordFilterStart       = "keyword_filter_start"
+	eventKeywordFilteringComplete = "keyword_filtering_complete"
+)
+
 // KeywordFilter filters articles based on keywords in their title or description.
 type KeywordFilter struct {
 	next ArticleFilter
@@ -21,7 +26,7 @@ func (h *KeywordFilter) SetNext(filter ArticleFilter) ArticleFilter {
 // Filter filters articles by keywords in their title or description based on the provided Filters
 // using stemming algorithm.
 func (h *KeywordFilter) Filter(articles []model.Article, f Filters) ([]model.Article, error) {
-	logrus.WithField("event_id", "keyword_filter_start").Info("Starting KeywordFilter")
+	logrus.WithField("event_id", eventKeywordFilterStart).Info("Starting KeywordFilter")
 
 	if f.Keyword != "" {
 		keywordList := strings.Split(f.Keyword, ",")
@@ -41,7 +46,7 @@ func (h *KeywordFilter) Filter(articles []model.Article, f Filters) ([]model.Art
 			}
 		}
 		articles = keywordFilteredArticles
-		logrus.WithField("filtered_count", len(keywordFilteredArticles)).Info("Keyword filtering complete")
+		logrus.WithField("filtered_count", len(keywordFilteredArticles)).Info(eventKeywordFilteringComplete)
 	}
 
 	if h.next != nil {

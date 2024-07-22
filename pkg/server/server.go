@@ -12,6 +12,28 @@ import (
 	"time"
 )
 
+const (
+	eventServerStart               = "server_start"
+	eventLoadSourcesStart          = "load_sources_start"
+	eventLoadSourcesError          = "load_sources_error"
+	eventLoadSourcesComplete       = "load_sources_complete"
+	eventInitializeSourcesStart    = "initialize_sources_start"
+	eventInitializeSourcesComplete = "initialize_sources_complete"
+	eventAddSourcesStart           = "add_sources_start"
+	eventAddSourceError            = "add_source_error"
+	eventAddSourceSuccess          = "add_source_success"
+	eventAddSourcesComplete        = "add_sources_complete"
+	eventLoadArticlesStart         = "load_articles_start"
+	eventLoadArticlesError         = "load_articles_error"
+	eventLoadArticlesComplete      = "load_articles_complete"
+	eventSaveArticlesStart         = "save_articles_start"
+	eventSaveArticlesError         = "save_articles_error"
+	eventSaveArticlesComplete      = "save_articles_complete"
+	eventServerListenStart         = "server_listen_start"
+	eventServerListenError         = "server_listen_error"
+	eventServerStarted             = "server_started"
+)
+
 // Server represents a web server with TLS support.
 type Server struct {
 	httpServer *http.Server
@@ -19,10 +41,9 @@ type Server struct {
 	keyFile    string
 }
 
-// Run starts the HTTPs server on the specified port and initializes the sources.
+// Run starts the HTTPS server on the specified port and initializes the sources.
 // It also loads articles from a backup file and saves them using the provided
-// article handler.
-// The server listens for HTTPS requests using the specified
+// article handler. The server listens for HTTPS requests using the specified
 // certificate and key files.
 //
 // Parameters:
@@ -40,60 +61,60 @@ func (s *Server) Run(port string, handler http.Handler, artHandler web.Handler) 
 		WriteTimeout:   10 * time.Second,
 	}
 
-	logrus.WithField("event_id", "server_start").Info("Starting server on port ", port)
+	logrus.WithField("event_id", eventServerStart).Info("Starting server on port ", port)
 
 	// Load sources from file
-	logrus.WithField("event_id", "load_sources_start").Info("Loading sources from file")
+	logrus.WithField("event_id", eventLoadSourcesStart).Info("Loading sources from file")
 	srcs, err := backuper.NewLoader(artHandler.SrcService()).LoadSrcsFromFile()
 	if err != nil {
-		logrus.WithField("event_id", "load_sources_error").Error("Failed to load sources from file", err)
+		logrus.WithField("event_id", eventLoadSourcesError).Error("Failed to load sources from file", err)
 		return err
 	}
-	logrus.WithField("event_id", "load_sources_complete").Info("Sources loaded from file")
+	logrus.WithField("event_id", eventLoadSourcesComplete).Info("Sources loaded from file")
 
 	// Initialize sources if none are found
 	if len(srcs) == 0 {
-		logrus.WithField("event_id", "initialize_sources_start").Info("No sources found in file, initializing default sources")
+		logrus.WithField("event_id", eventInitializeSourcesStart).Info("No sources found in file, initializing default sources")
 		initializeSources(artHandler.SrcService())
-		logrus.WithField("event_id", "initialize_sources_complete").Info("Default sources initialized")
+		logrus.WithField("event_id", eventInitializeSourcesComplete).Info("Default sources initialized")
 	} else {
-		logrus.WithField("event_id", "add_sources_start").Info("Adding sources from file")
+		logrus.WithField("event_id", eventAddSourcesStart).Info("Adding sources from file")
 		for _, src := range srcs {
 			_, err := artHandler.SrcService().AddSource(src)
 			if err != nil {
-				logrus.WithField("event_id", "add_source_error").Errorf("Error occurred while adding source %s: %s", src.Name, err.Error())
+				logrus.WithField("event_id", eventAddSourceError).Errorf("Error occurred while adding source %s: %s", src.Name, err.Error())
 			} else {
-				logrus.WithField("event_id", "add_source_success").Infof("Source %s added successfully", src.Name)
+				logrus.WithField("event_id", eventAddSourceSuccess).Infof("Source %s added successfully", src.Name)
 			}
 		}
-		logrus.WithField("event_id", "add_sources_complete").Info("All sources added from file")
+		logrus.WithField("event_id", eventAddSourcesComplete).Info("All sources added from file")
 	}
 
 	// Load articles from file
-	logrus.WithField("event_id", "load_articles_start").Info("Loading articles from file")
+	logrus.WithField("event_id", eventLoadArticlesStart).Info("Loading articles from file")
 	articles, err := backuper.NewLoader(artHandler.SrcService()).LoadAllFromFile()
 	if err != nil {
-		logrus.WithField("event_id", "load_articles_error").Error("Failed to load articles from file", err)
+		logrus.WithField("event_id", eventLoadArticlesError).Error("Failed to load articles from file", err)
 		return err
 	}
-	logrus.WithField("event_id", "load_articles_complete").Info("Articles loaded from file")
+	logrus.WithField("event_id", eventLoadArticlesComplete).Info("Articles loaded from file")
 
 	// Save all articles
-	logrus.WithField("event_id", "save_articles_start").Info("Saving all articles")
+	logrus.WithField("event_id", eventSaveArticlesStart).Info("Saving all articles")
 	err = artHandler.ArticleService().SaveAll(articles)
 	if err != nil {
-		logrus.WithField("event_id", "save_articles_error").Error("Failed to save articles", err)
+		logrus.WithField("event_id", eventSaveArticlesError).Error("Failed to save articles", err)
 		return err
 	}
-	logrus.WithField("event_id", "save_articles_complete").Info("All articles saved")
+	logrus.WithField("event_id", eventSaveArticlesComplete).Info("All articles saved")
 
-	logrus.WithField("event_id", "server_listen_start").Info("Starting HTTPS server")
+	logrus.WithField("event_id", eventServerListenStart).Info("Starting HTTPS server")
 	if err := s.httpServer.ListenAndServeTLS(s.certFile, s.keyFile); err != nil && !errors.Is(err, http.ErrServerClosed) {
-		logrus.WithField("event_id", "server_listen_error").Fatalf("Could not listen on %s: %v\n", port, err)
+		logrus.WithField("event_id", eventServerListenError).Fatalf("Could not listen on %s: %v\n", port, err)
 		return err
 	}
 
-	logrus.WithField("event_id", "server_started").Info("Server started successfully")
+	logrus.WithField("event_id", eventServerStarted).Info("Server started successfully")
 	return nil
 }
 
