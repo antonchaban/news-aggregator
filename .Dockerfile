@@ -11,15 +11,14 @@ ARG SAVES_DIR_ARG=/root/backups
 ARG CERT_FILE_ARG=/root/server.crt
 ARG KEY_FILE_ARG=/root/server.key
 
-COPY go.mod go.sum ./
-RUN go mod download
 COPY server.crt /src/server.crt
 COPY server.key /src/server.key
+COPY go.mod go.sum ./
+RUN go mod download
 
 
 COPY cmd/news-alligator/web /src/cmd/news-alligator/web
-COPY internal /src/
-COPY backups /src/backups
+COPY backups/ /src/backups
 COPY pkg /src/pkg
 
 RUN go build -o /bin/web /src/cmd/news-alligator/web/main.go
@@ -43,6 +42,6 @@ COPY server.key /root/server.key
 VOLUME /root/backups
 
 COPY --from=base /bin/web /bin/
-EXPOSE 8080
+EXPOSE ${PORT}
 
 ENTRYPOINT ["/bin/web"]
