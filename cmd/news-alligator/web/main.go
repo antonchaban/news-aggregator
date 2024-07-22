@@ -21,6 +21,12 @@ import (
 // @host https://localhost:443
 // @BasePath /articles
 
+const (
+	certFileEnvVar = "CERT_FILE"
+	keyFileEnvVar  = "KEY_FILE"
+	portEnvVar     = "PORT"
+)
+
 func main() {
 	// Initialize in-memory databases
 	db := inmemory.New()
@@ -32,7 +38,7 @@ func main() {
 	h := web.NewHandler(articleService, sourceService)
 
 	if err := checkEnvVars(
-		"CERT_FILE", "KEY_FILE", "PORT",
+		certFileEnvVar, keyFileEnvVar, portEnvVar,
 	); err != nil {
 		logrus.Fatal(err)
 	}
