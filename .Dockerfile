@@ -6,7 +6,7 @@ RUN apk add --no-cache ca-certificates
 
 WORKDIR /src
 
-ARG PORT_ARG=8080
+ARG PORT_ARG=443
 ARG SAVES_DIR_ARG=/root/backups
 ARG CERT_FILE_ARG=/root/server.crt
 ARG KEY_FILE_ARG=/root/server.key

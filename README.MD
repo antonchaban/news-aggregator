@@ -19,15 +19,15 @@ docker pull antohachaban/news-alligator-web
 To run the News Alligator Web App, you can use the following command:
 
 ```sh
-docker run -d -v news-aggregator-backups:/root/backups -p 8080:8080 antohachaban/news-alligator-web
+docker run -d -v news-aggregator-backups:/root/backups -p 443:443 antohachaban/news-alligator-web
 ```
 
-This command will start the News Alligator Web App in a Docker container and expose it on port 8080. 
+This command will start the News Alligator Web App in a Docker container and expose it on port 443. 
 The `-v news-aggregator-backups:/root/backups` option mounts a volume to store backups of the database.
 
 ## Accessing the Web App
 
-Once the container is running, you can access the News Alligator Web App by navigating to `https://localhost:8080` in your web browser.
+Once the container is running, you can access the News Alligator Web App by navigating to `https://localhost:443` in your web browser.
 
 ## Stopping the Docker Container
 
