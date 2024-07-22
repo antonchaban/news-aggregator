@@ -6,7 +6,7 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-// Handler represents the HTTP handler with article and source services.
+// Handler represents the handler with article and source services.
 type Handler struct {
 	articleService ArticleService
 	srcService     SourceService
