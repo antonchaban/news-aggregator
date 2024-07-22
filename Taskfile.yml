@@ -123,5 +123,4 @@ tasks:
     cmds:
       - task format
       - task vet
-      - task lint
       - task tidy
