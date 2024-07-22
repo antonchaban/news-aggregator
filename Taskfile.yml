@@ -64,7 +64,6 @@ tasks:
   install-mockgen:
     cmds:
       - go install github.com/golang/mock/mockgen@latest
-      - go install go.uber.org/mock/mockgen@latest
     desc: Install mockgen
     internal: true
 
