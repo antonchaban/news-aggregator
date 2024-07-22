@@ -10,6 +10,7 @@ import (
 	"github.com/antonchaban/news-aggregator/pkg/storage"
 	"github.com/antonchaban/news-aggregator/pkg/storage/postgres"
 	"github.com/sirupsen/logrus"
+	_ "go.uber.org/mock/mockgen/model"
 	"os"
 	"os/signal"
 	"syscall"
