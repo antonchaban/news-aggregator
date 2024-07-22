@@ -85,8 +85,6 @@ func (a *memoryArticleStorage) SaveAll(articles []model.Article) error {
 				logrus.WithField("event_id", "save_all_articles_skip").Warn("Article already exists, skipping", article.Link)
 				continue
 			}
-			logrus.WithField("event_id", "save_all_articles_error").Error("Error saving article", err)
-			return err
 		}
 	}
 	logrus.WithField("event_id", "all_articles_saved").Info("All articles processed")
