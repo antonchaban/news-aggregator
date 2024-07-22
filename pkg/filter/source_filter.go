@@ -16,15 +16,18 @@ const (
 	usaTodaySource        = "USA TODAY"
 )
 
+// SourceFilter filters articles based on their source.
 type SourceFilter struct {
 	next ArticleFilter
 }
 
-func (h *SourceFilter) SetNext(handler ArticleFilter) ArticleFilter {
-	h.next = handler
-	return handler
+// SetNext sets the next filter in the chain and returns the filter.
+func (h *SourceFilter) SetNext(filter ArticleFilter) ArticleFilter {
+	h.next = filter
+	return filter
 }
 
+// Filter filters articles by their source based on the provided Filters.
 func (h *SourceFilter) Filter(articles []model.Article, f Filters) ([]model.Article, error) {
 	logrus.WithField("event_id", "source_filter_start").Info("Starting SourceFilter")
 
