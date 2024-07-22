@@ -121,6 +121,54 @@
         }
       }
     },
+    "go-swag@latest": {
+      "last_modified": "2024-07-07T07:43:47Z",
+      "resolved": "github:NixOS/nixpkgs/b60793b86201040d9dee019a05089a9150d08b5b#go-swag",
+      "source": "devbox-search",
+      "version": "1.16.3",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/ypywasg814maa2wzr337figjcvm5clm3-go-swag-1.16.3",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/ypywasg814maa2wzr337figjcvm5clm3-go-swag-1.16.3"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/h9hzg8hrx7wc5jwarhv4ybgmd3n0qd04-go-swag-1.16.3",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/h9hzg8hrx7wc5jwarhv4ybgmd3n0qd04-go-swag-1.16.3"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/bi41h00spb1xfndqaky9s1k3l7yk1643-go-swag-1.16.3",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/bi41h00spb1xfndqaky9s1k3l7yk1643-go-swag-1.16.3"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/pkhhmiddd27z6slzyrs51dfckmfpv167-go-swag-1.16.3",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/pkhhmiddd27z6slzyrs51dfckmfpv167-go-swag-1.16.3"
+        }
+      }
+    },
     "go-task@latest": {
       "last_modified": "2024-06-12T20:55:33Z",
       "resolved": "github:NixOS/nixpkgs/a9858885e197f984d92d7fe64e9fff6b2e488d40#go-task",
@@ -214,6 +262,54 @@
             }
           ],
           "store_path": "/nix/store/vz8d6wmfcf38l3h3vymwqr6c5zxp5jmp-go-1.22.3"
+        }
+      }
+    },
+    "mockgen@latest": {
+      "last_modified": "2024-07-07T07:43:47Z",
+      "resolved": "github:NixOS/nixpkgs/b60793b86201040d9dee019a05089a9150d08b5b#mockgen",
+      "source": "devbox-search",
+      "version": "0.4.0",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/k2s5hjmbix6qixwbfgwl6dvpsdyp8pjg-mockgen-0.4.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/k2s5hjmbix6qixwbfgwl6dvpsdyp8pjg-mockgen-0.4.0"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/y4scifjvhv60ac004rpp0x7k6ckhkg46-mockgen-0.4.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/y4scifjvhv60ac004rpp0x7k6ckhkg46-mockgen-0.4.0"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/mj1la5vzsbhpqnp607waa9wypkjra5wd-mockgen-0.4.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/mj1la5vzsbhpqnp607waa9wypkjra5wd-mockgen-0.4.0"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/jw5dv0yf0h9zpi8rc20dmkxg5b4w1xga-mockgen-0.4.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/jw5dv0yf0h9zpi8rc20dmkxg5b4w1xga-mockgen-0.4.0"
         }
       }
     }

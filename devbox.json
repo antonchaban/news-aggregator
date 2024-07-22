@@ -4,6 +4,8 @@
     "docker@24.0.9",
     "go-task@latest",
     "git@latest",
-    "go@1.22.3"
+    "go@1.22.3",
+    "mockgen@latest",
+    "go-swag@latest"
   ]
 }
