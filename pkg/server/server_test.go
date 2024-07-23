@@ -67,7 +67,7 @@ func TestServer_Run(t *testing.T) {
 	// Set up environment variables
 	os.Setenv("CERT_FILE", "server.crt")
 	os.Setenv("KEY_FILE", "server.key")
-	os.Setenv("PORT", "443")
+	os.Setenv("PORT", "8443")
 	os.Setenv("SAVES_DIR", "testdata") // Assuming a temporary directory for testing
 
 	tests := []struct {
@@ -147,7 +147,7 @@ func TestServer_Shutdown(t *testing.T) {
 
 	os.Setenv("CERT_FILE", "server.crt")
 	os.Setenv("KEY_FILE", "server.key")
-	os.Setenv("PORT", "443")
+	os.Setenv("PORT", "8443")
 	os.Setenv("SAVES_DIR", "testdata")
 
 	server := &http.Server{
