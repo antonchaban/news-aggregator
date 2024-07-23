@@ -70,7 +70,7 @@ tasks:
   run-postgres:
     deps: [install-postgres]
     env:
-      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+      POSTGRES_PASSWORD: qwerty
     cmds:
       - docker run --name=news-alligator-db -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD -p 5436:5432 -d --rm postgres
     desc: Run the PostgreSQL container

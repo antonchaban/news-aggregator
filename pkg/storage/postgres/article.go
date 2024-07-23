@@ -18,38 +18,33 @@ func New(db *sqlx.DB) storage.ArticleStorage {
 func (pa *postgresArticleStorage) GetAll() ([]model.Article, error) {
 	var articles []model.Article
 	query := fmt.Sprintf(`SELECT a.id, a.title, a.description, a.link, a.pub_date,
-			       s.id, s.name, s.link
+			       s.id AS source_id, s.name AS source_name, s.link AS source_link
 			FROM articles a
 			JOIN sources s ON a.source_id = s.id`)
-	err := pa.db.Select(&articles, query)
+	rows, err := pa.db.Queryx(query)
 	if err != nil {
 		return nil, err
 	}
-	return articles, nil
-	/*	rows, err := pa.db.Query(context.Background(), `
-			SELECT a.id, a.title, a.description, a.link, a.pub_date,
-			       s.id, s.name, s.link
-			FROM articles a
-			JOIN sources s ON a.source_id = s.id
-		`)
+	defer rows.Close()
+
+	for rows.Next() {
+		var article model.Article
+		var source model.Source
+
+		err := rows.Scan(&article.Id, &article.Title, &article.Description, &article.Link, &article.PubDate,
+			&source.Id, &source.Name, &source.Link)
 		if err != nil {
 			return nil, err
 		}
-		defer rows.Close()
+		article.Source = source
+		articles = append(articles, article)
+	}
 
-		var articles []model.Article
-		for rows.Next() {
-			var article model.Article
-			err := rows.Scan(
-				&article.Id, &article.Title, &article.Description, &article.Link, &article.PubDate,
-				&article.Source.Id, &article.Source.Name, &article.Source.Link,
-			)
-			if err != nil {
-				return nil, err
-			}
-			articles = append(articles, article)
-		}
-		return articles, nil*/
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return articles, nil
 }
 
 func (pa *postgresArticleStorage) Save(article model.Article) (model.Article, error) {
@@ -62,14 +57,6 @@ func (pa *postgresArticleStorage) Save(article model.Article) (model.Article, er
 	}
 	article.Id = id
 	return article, nil
-	/*var id int
-	err := pa.db.QueryRow(context.Background(), "INSERT INTO articles (title, description, link, source_id, pub_date) VALUES ($1, $2, $3, $4, $5) RETURNING id",
-		article.Title, article.Description, article.Link, article.Source.Id, article.PubDate).Scan(&id)
-	if err != nil {
-		return model.Article{}, err
-	}
-	article.Id = id
-	return article, nil*/
 }
 
 func (pa *postgresArticleStorage) SaveAll(articles []model.Article) error {
@@ -86,8 +73,6 @@ func (pa *postgresArticleStorage) Delete(id int) error {
 	query := fmt.Sprintf(`DELETE FROM articles WHERE id = $1`)
 	_, err := pa.db.Exec(query, id)
 	return err
-	/*	_, err := pa.db.Exec(context.Background(), "DELETE FROM articles WHERE id = $1", id)
-		return err*/
 }
 
 func (pa *postgresArticleStorage) DeleteBySourceID(id int) error {
@@ -97,8 +82,6 @@ func (pa *postgresArticleStorage) DeleteBySourceID(id int) error {
 		return err
 	}
 	return err
-	/*_, err := pa.db.Exec(context.Background(), "DELETE FROM articles WHERE source_id = $1", id)
-	return err*/
 }
 
 func (pa *postgresArticleStorage) GetByFilter(query string, args []interface{}) ([]model.Article, error) {
@@ -132,24 +115,4 @@ func (pa *postgresArticleStorage) GetByFilter(query string, args []interface{}) 
 	}
 
 	return articles, nil
-
-	/*rows, err := pa.db.Query(context.Background(), query, args...)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
-	var articles []model.Article
-	for rows.Next() {
-		var article model.Article
-		err := rows.Scan(
-			&article.Id, &article.Title, &article.Description, &article.Link, &article.PubDate,
-			&article.Source.Id, &article.Source.Name, &article.Source.Link,
-		)
-		if err != nil {
-			return nil, err
-		}
-		articles = append(articles, article)
-	}
-	return articles, nil*/
 }

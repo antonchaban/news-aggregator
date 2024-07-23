@@ -3,9 +3,9 @@ package main
 import (
 	"context"
 	_ "github.com/antonchaban/news-aggregator/cmd/news-alligator/web/docs"
-	"github.com/antonchaban/news-aggregator/internal/server"
 	"github.com/antonchaban/news-aggregator/pkg/handler/web"
 	"github.com/antonchaban/news-aggregator/pkg/scheduler"
+	"github.com/antonchaban/news-aggregator/pkg/server"
 	"github.com/antonchaban/news-aggregator/pkg/service"
 	"github.com/antonchaban/news-aggregator/pkg/storage"
 	"github.com/antonchaban/news-aggregator/pkg/storage/postgres"
