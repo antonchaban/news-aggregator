@@ -117,6 +117,7 @@ tasks:
     desc: Run format, vet, lint
     cmds:
       - task swag
+      - task mockgen
       - task format
       - task vet
       - task tidy

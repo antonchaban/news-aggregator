@@ -6,8 +6,7 @@ name: Go
 on:
   push:
     branches:
-      - master
-      - feature/cicd-actions
+      - '**'
   pull_request:
     branches:
       - master
