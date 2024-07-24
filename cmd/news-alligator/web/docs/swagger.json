@@ -6,7 +6,7 @@
         "contact": {},
         "version": "1"
     },
-    "host": "https://localhost:8080",
+    "host": "https://localhost:443",
     "basePath": "/articles",
     "paths": {
         "/articles": {

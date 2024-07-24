@@ -29,7 +29,7 @@ definitions:
       message:
         type: string
     type: object
-host: https://localhost:8080
+host: https://localhost:443
 info:
   contact: {}
   description: This is a News Alligator API server.
