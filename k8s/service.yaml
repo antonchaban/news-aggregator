@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: news-alligator-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8443
+      targetPort: 443
+  selector:
+    app: news-alligator

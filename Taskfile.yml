@@ -121,3 +121,18 @@ tasks:
       - task format
       - task vet
       - task tidy
+
+  k8s-apply:
+    cmds:
+      - kubectl apply -f ./k8s
+    desc: Apply Kubernetes manifests
+
+  k8s-delete:
+    cmds:
+      - kubectl delete -f ./k8s
+    desc: Delete Kubernetes manifests
+
+  k8s-port-forward:
+    cmds:
+      - kubectl port-forward svc/news-alligator-service 443:8443
+    desc: Port forward to the Kubernetes service
