@@ -122,14 +122,14 @@ tasks:
       - task vet
       - task tidy
 
-  k8s-apply:
+  deploy:
     cmds:
-      - kubectl apply -f ./k8s
+      - kubectl apply -f ./manifest
     desc: Apply Kubernetes manifests
 
-  k8s-delete:
+  undeploy:
     cmds:
-      - kubectl delete -f ./k8s
+      - kubectl delete -f ./manifest
     desc: Delete Kubernetes manifests
 
   k8s-port-forward:
