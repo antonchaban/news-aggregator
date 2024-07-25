@@ -6,12 +6,25 @@ import (
 	"github.com/antonchaban/news-aggregator/pkg/parser/html"
 	"github.com/antonchaban/news-aggregator/pkg/parser/json"
 	"github.com/antonchaban/news-aggregator/pkg/parser/rss"
+	"github.com/sirupsen/logrus"
+	"net/url"
 	"os"
 )
 
 // Parser is an interface that defines parsing strategy
 type Parser interface {
 	ParseFile(f *os.File) ([]model.Article, error)
+	ParseFeed(urlPath url.URL) ([]model.Article, error)
+}
+
+func ParseArticlesFromFeed(urlPath url.URL) ([]model.Article, error) {
+	format, err := DetermineFeedFormat(urlPath)
+	parser, err := createParser(format)
+	feed, err := parser.ParseFeed(urlPath)
+	if err != nil {
+		logrus.Errorf("error occurred while parsing feed: %s", err.Error())
+	}
+	return feed, err
 }
 
 // ParseArticlesFromFile Parse function takes a file and returns a slice of parsed articles
@@ -52,13 +65,15 @@ func createParser(format string) (Parser, error) {
 		return &json.Parser{}, nil
 	case htmlFormat:
 		config := html.FeedConfig{
-			ArticleSelector:     "a.gnt_m_flm_a",
+			ArticleSelector:     "div.gnt_m.gnt_m_flm > a.gnt_m_flm_a",
+			TitleSelector:       "",
 			LinkSelector:        "",
 			DescriptionSelector: "data-c-br",
 			PubDateSelector:     "div.gnt_m_flm_sbt",
 			Source:              "USA TODAY",
 			DateAttribute:       "data-c-dt",
 			TimeFormat: []string{
+				"3:04 p.m. ET January 2, 2006",
 				"2006-01-02 15:04",
 				"Jan 02, 2006",
 			},

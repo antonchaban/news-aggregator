@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/antonchaban/news-aggregator/pkg/filter"
+	"github.com/antonchaban/news-aggregator/pkg/handler/web"
 	"os"
 )
 
@@ -14,11 +15,12 @@ type Handler interface {
 
 // cliHandler is a struct that holds a reference to the articleService.
 type cliHandler struct {
-	service ArticleService
+	artService web.ArticleService
+	srcService web.SourceService
 }
 
-func NewHandler(asvc ArticleService) (Handler, error) {
-	h := &cliHandler{service: asvc}
+func NewHandler(asvc web.ArticleService, ssvc web.SourceService) (Handler, error) {
+	h := &cliHandler{artService: asvc, srcService: ssvc}
 	err := h.initCommands()
 	if err != nil {
 		return nil, err
@@ -75,7 +77,11 @@ func (h *cliHandler) initCommands() error {
 // execute loads the articles, filters them based on the provided sources, keywords, and date range,
 // and then prints the filtered articles.
 func (h *cliHandler) execute(f filter.Filters, sortOrder string) error {
-	err := h.service.LoadDataFromFilesToStorage()
+	articles, err := h.srcService.LoadDataFromFiles()
+	if err != nil {
+		return err
+	}
+	err = h.artService.SaveAll(articles)
 	if err != nil {
 		return err
 	}

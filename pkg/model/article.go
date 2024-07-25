@@ -18,7 +18,7 @@ type Article struct {
 	Title       string
 	Description string
 	Link        string
-	Source      string
+	Source      Source
 	PubDate     time.Time
 }
 

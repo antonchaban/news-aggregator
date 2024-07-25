@@ -1,6 +1,10 @@
 package parser
 
 import (
+	"github.com/sirupsen/logrus"
+	"io"
+	"net/http"
+	"net/url"
 	"strings"
 )
 
@@ -21,4 +25,30 @@ func DetermineFileFormat(filename string) (format string) {
 		return htmlFormat
 	}
 	return unknownFormat
+}
+
+func DetermineFeedFormat(urlPath url.URL) (format string, err error) {
+	resp, err := http.Head(urlPath.String())
+	if err != nil {
+		logrus.Errorf("error occurred while sending HEAD request: %s", err.Error())
+		return unknownFormat, err
+	}
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			logrus.Errorf("error occurred while closing response body: %s", err.Error())
+		}
+	}(resp.Body)
+
+	contentType := resp.Header.Get("Content-Type")
+	switch {
+	case strings.Contains(contentType, "xml"):
+		return rssFormat, nil
+	case strings.Contains(contentType, "json"):
+		return jsonFormat, nil
+	case strings.Contains(contentType, "html"):
+		return htmlFormat, nil
+	default:
+		return unknownFormat, nil
+	}
 }

@@ -29,17 +29,17 @@ func TestSourceFilter_Filter(t *testing.T) {
 					{
 						Id:     1,
 						Title:  "Article 1",
-						Source: abcNewsSource,
+						Source: model.Source{Name: abcNewsSource},
 					},
 					{
 						Id:     2,
 						Title:  "Article 2",
-						Source: bbcNewsSource,
+						Source: model.Source{Name: bbcNewsSource},
 					},
 					{
 						Id:     3,
 						Title:  "Article 3",
-						Source: "Some other source",
+						Source: model.Source{Name: "Some other source"},
 					},
 				},
 				f: Filters{
@@ -50,12 +50,12 @@ func TestSourceFilter_Filter(t *testing.T) {
 				{
 					Id:     1,
 					Title:  "Article 1",
-					Source: abcNewsSource,
+					Source: model.Source{Name: abcNewsSource},
 				},
 				{
 					Id:     2,
 					Title:  "Article 2",
-					Source: bbcNewsSource,
+					Source: model.Source{Name: bbcNewsSource},
 				},
 			},
 			wantErr: assert.NoError,
@@ -67,12 +67,12 @@ func TestSourceFilter_Filter(t *testing.T) {
 					{
 						Id:     1,
 						Title:  "Article 1",
-						Source: "Some other source",
+						Source: model.Source{Name: "Some source"},
 					},
 					{
 						Id:     2,
 						Title:  "Article 2",
-						Source: "Another source",
+						Source: model.Source{Name: "Some other source"},
 					},
 				},
 				f: Filters{
@@ -89,17 +89,17 @@ func TestSourceFilter_Filter(t *testing.T) {
 					{
 						Id:     1,
 						Title:  "Article 1",
-						Source: abcNewsSource,
+						Source: model.Source{Name: abcNewsSource},
 					},
 					{
 						Id:     2,
 						Title:  "Article 2",
-						Source: bbcNewsSource,
+						Source: model.Source{Name: bbcNewsSource},
 					},
 					{
 						Id:     3,
 						Title:  "Article 3",
-						Source: usaTodaySource,
+						Source: model.Source{Name: usaTodaySource},
 					},
 				},
 				f: Filters{
@@ -110,17 +110,17 @@ func TestSourceFilter_Filter(t *testing.T) {
 				{
 					Id:     1,
 					Title:  "Article 1",
-					Source: abcNewsSource,
+					Source: model.Source{Name: abcNewsSource},
 				},
 				{
 					Id:     2,
 					Title:  "Article 2",
-					Source: bbcNewsSource,
+					Source: model.Source{Name: bbcNewsSource},
 				},
 				{
 					Id:     3,
 					Title:  "Article 3",
-					Source: usaTodaySource,
+					Source: model.Source{Name: usaTodaySource},
 				},
 			},
 			wantErr: assert.NoError,
@@ -132,12 +132,12 @@ func TestSourceFilter_Filter(t *testing.T) {
 					{
 						Id:     1,
 						Title:  "Article 1",
-						Source: abcNewsSource,
+						Source: model.Source{Name: abcNewsSource},
 					},
 					{
 						Id:     2,
 						Title:  "Article 2",
-						Source: bbcNewsSource,
+						Source: model.Source{Name: bbcNewsSource},
 					},
 				},
 				f: Filters{
@@ -148,12 +148,12 @@ func TestSourceFilter_Filter(t *testing.T) {
 				{
 					Id:     1,
 					Title:  "Article 1",
-					Source: abcNewsSource,
+					Source: model.Source{Name: abcNewsSource},
 				},
 				{
 					Id:     2,
 					Title:  "Article 2",
-					Source: bbcNewsSource,
+					Source: model.Source{Name: bbcNewsSource},
 				},
 			},
 			wantErr: assert.NoError,
@@ -165,7 +165,7 @@ func TestSourceFilter_Filter(t *testing.T) {
 					{
 						Id:     1,
 						Title:  "Article 1",
-						Source: abcNewsSource,
+						Source: model.Source{Name: abcNewsSource},
 					},
 				},
 				f: Filters{

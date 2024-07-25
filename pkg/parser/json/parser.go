@@ -2,14 +2,27 @@ package json
 
 import (
 	"encoding/json"
+	"errors"
 	"github.com/antonchaban/news-aggregator/pkg/model"
+	"github.com/sirupsen/logrus"
 	"io"
+	"net/url"
 	"os"
 	"time"
 )
 
+const (
+	eventParseJsonFileStart   = "parse_json_file_start"
+	eventReadFileError        = "read_file_error"
+	eventJsonUnmarshalError   = "json_unmarshal_error"
+	eventParseJsonFileSuccess = "parse_json_file_success"
+)
+
 // Parser is a struct that implements the Parser interface
-type Parser struct {
+type Parser struct{}
+
+func (j *Parser) ParseFeed(url url.URL) ([]model.Article, error) {
+	return nil, errors.New("not implemented")
 }
 
 // Feed is a struct that represents the JSON feed
@@ -30,13 +43,18 @@ type Feed struct {
 
 // ParseFile parses the given file and returns a slice of articles.
 func (j *Parser) ParseFile(f *os.File) ([]model.Article, error) {
+	logrus.WithField("event_id", eventParseJsonFileStart).Infof("Starting to parse file: %s", f.Name())
+
 	bytes, err := io.ReadAll(f)
 	if err != nil {
+		logrus.WithField("event_id", eventReadFileError).Errorf("Error reading file: %s", err.Error())
 		return nil, err
 	}
+
 	var feed Feed
 	err = json.Unmarshal(bytes, &feed)
 	if err != nil {
+		logrus.WithField("event_id", eventJsonUnmarshalError).Errorf("Error unmarshalling JSON: %s", err.Error())
 		return nil, err
 	}
 
@@ -46,11 +64,12 @@ func (j *Parser) ParseFile(f *os.File) ([]model.Article, error) {
 			Title:       item.Title,
 			Link:        item.URL,
 			Description: item.Description,
-			Source:      item.Source.Name,
+			Source:      model.Source{Name: item.Source.Name},
 			PubDate:     item.PublishedAt,
 		}
 		articles = append(articles, article)
 	}
 
+	logrus.WithField("event_id", eventParseJsonFileSuccess).Infof("File parsing completed, found %d articles", len(articles))
 	return articles, nil
 }

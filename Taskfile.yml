@@ -1,0 +1,104 @@
+version: '3'
+
+env:
+  DOCKER_IMAGE_NAME: antohachaban/news-alligator-web
+
+tasks:
+  build:
+    cmds:
+      - docker build . -f ./.Dockerfile -t {{.DOCKER_IMAGE_NAME}}:{{.VERSION}}
+    vars:
+      VERSION: '{{.VERSION | default "latest"}}'
+    desc: "Build the Docker image, example: task build VERSION=0.1.2"
+
+  run-docker:
+    cmds:
+      - docker run -d -v news-aggregator-backups:/root/backups -p {{.PORT}}:443 {{.DOCKER_IMAGE_NAME}}
+    vars:
+      PORT: '{{default "443" .PORT}}'
+    desc: "Run the Docker container, example: task build PORT=443"
+
+  stop-docker:
+    cmds:
+      - docker stop $(docker ps -q --filter ancestor={{.DOCKER_IMAGE_NAME}})
+    desc: Stop the Docker container
+
+  push-docker:
+    cmds:
+      - docker push {{.DOCKER_IMAGE_NAME}}
+    desc: Push the Docker image to the registry
+
+  test:
+    deps: [mockgen]
+    cmds:
+      - go test -v ./...
+    desc: Run tests
+
+  pull-docker:
+    cmds:
+      - docker pull {{.DOCKER_IMAGE_NAME}}
+    desc: Pull the Docker image from the registry
+
+  swag-install:
+    cmds:
+      - go install github.com/swaggo/swag/cmd/swag@latest
+    desc: Install swag
+
+  swag:
+    deps : [swag-install]
+    cmds:
+      - swag init -d cmd/news-alligator/web,pkg/handler/web,pkg/model -o ./cmd/news-alligator/web/docs
+    desc: Initialize Swagger documentation
+
+  run-local:
+    env:
+      PORT: 443
+      SAVES_DIR: ./backups
+      CERT_FILE: ./server.crt
+      KEY_FILE: ./server.key
+    cmds:
+      - go build -o web.exe ./cmd/news-alligator/web
+      - ./web.exe
+    desc: Build and run the main Go file locally with environment variables
+
+  install-mockgen:
+    cmds:
+      - go install github.com/golang/mock/mockgen@latest
+      - go install go.uber.org/mock/mockgen@latest
+    desc: Install mockgen
+    internal: true
+
+  mockgen:
+    deps: [install-mockgen]
+    desc: Run mockgen for generating mocks
+    cmds:
+      - go generate ./...
+
+  format:
+    cmds:
+      - go fmt ./...
+    desc: Format the code
+
+  vet:
+    cmds:
+      - go vet ./...
+    desc: Run go vet to check for issues
+
+  tidy:
+    cmds:
+      - go mod tidy
+    desc: Run go mod tidy to clean up dependencies
+
+  build-go:
+    cmds:
+      - go build -o web.exe ./cmd/news-alligator/web
+    desc: Build the Go source code
+
+  all-checks:
+    desc: Run format, vet, lint
+    cmds:
+      - task swag
+      - task mockgen
+      - task format
+      - task vet
+      - task tidy
