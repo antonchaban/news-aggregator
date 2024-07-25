@@ -13,6 +13,7 @@ spec:
       labels:
         app: news-alligator
     spec:
+      serviceAccountName: news-alligator-sa
       containers:
         - name: news-alligator
           image: antohachaban/news-alligator-web:0.1.2
