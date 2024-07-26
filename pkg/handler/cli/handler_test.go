@@ -8,8 +8,8 @@ import (
 	"time"
 
 	"github.com/antonchaban/news-aggregator/pkg/model"
-	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
+	"go.uber.org/mock/gomock"
 )
 
 func TestInitCommands_Help(t *testing.T) {
@@ -95,6 +95,6 @@ func TestExecute(t *testing.T) {
 	var buf [1024]byte
 	n, _ := r.Read(buf[:])
 	output := string(buf[:n])
-	assert.Contains(t, output, "Title: Title 1")
-	assert.NotContains(t, output, "Title: Title 2")
+	assert.Contains(t, output, "Title:     Title 1")
+	assert.NotContains(t, output, "Title:     Title 2")
 }

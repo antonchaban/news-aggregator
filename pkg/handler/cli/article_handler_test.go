@@ -4,7 +4,7 @@ import (
 	"github.com/antonchaban/news-aggregator/pkg/filter"
 	"github.com/antonchaban/news-aggregator/pkg/model"
 	"github.com/antonchaban/news-aggregator/pkg/service/mocks"
-	"github.com/golang/mock/gomock"
+	"go.uber.org/mock/gomock"
 	"testing"
 	"time"
 )

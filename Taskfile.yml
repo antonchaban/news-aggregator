@@ -13,10 +13,10 @@ tasks:
 
   run-docker:
     cmds:
-      - docker run -d -v news-aggregator-backups:/root/backups -p {{.PORT}}:8080 {{.DOCKER_IMAGE_NAME}}
+      - docker run -d -v news-aggregator-backups:/root/backups -p {{.PORT}}:443 {{.DOCKER_IMAGE_NAME}}
     vars:
-        PORT: '{{default "8080" .PORT}}'
-    desc: "Run the Docker container, example: task build PORT=8080"
+        PORT: '{{default "443" .PORT}}'
+    desc: "Run the Docker container, example: task build PORT=443"
 
   stop-docker:
     cmds:
@@ -45,7 +45,7 @@ tasks:
 
   run-local:
     env:
-      PORT: 8080
+      PORT: 443
       SAVES_DIR: ./backups
       CERT_FILE: ./server.crt
       KEY_FILE: ./server.key

@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/antonchaban/news-aggregator/pkg/model"
-	"github.com/antonchaban/news-aggregator/pkg/storage"
+	"github.com/antonchaban/news-aggregator/pkg/service"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -13,7 +13,7 @@ type postgresSrcStorage struct {
 	db *sqlx.DB
 }
 
-func NewSrc(db *sqlx.DB) storage.SourceStorage {
+func NewSrc(db *sqlx.DB) service.SourceStorage {
 	return &postgresSrcStorage{db: db}
 }
 

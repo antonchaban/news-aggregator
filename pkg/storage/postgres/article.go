@@ -3,7 +3,7 @@ package postgres
 import (
 	"fmt"
 	"github.com/antonchaban/news-aggregator/pkg/model"
-	"github.com/antonchaban/news-aggregator/pkg/storage"
+	"github.com/antonchaban/news-aggregator/pkg/service"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -11,7 +11,7 @@ type postgresArticleStorage struct {
 	db *sqlx.DB
 }
 
-func New(db *sqlx.DB) storage.ArticleStorage {
+func New(db *sqlx.DB) service.ArticleStorage {
 	return &postgresArticleStorage{db: db}
 }
 

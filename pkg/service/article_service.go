@@ -3,28 +3,37 @@ package service
 import (
 	"errors"
 	"github.com/antonchaban/news-aggregator/pkg/filter"
+	"github.com/antonchaban/news-aggregator/pkg/handler/web"
 	"github.com/antonchaban/news-aggregator/pkg/model"
-	"github.com/antonchaban/news-aggregator/pkg/storage"
 	"github.com/sirupsen/logrus"
 	"os"
 )
 
-//go:generate mockgen -destination=../service/mocks/mock_article_service.go -package=mocks github.com/antonchaban/news-aggregator/pkg/service ArticleService
+const (
+	eventGetByFilterStart    = "get_by_filter_start"
+	eventGetAllArticlesError = "get_all_articles_error"
+	eventAllArticlesFetched  = "all_articles_fetched"
+	eventFiltersCreated      = "filters_created"
+	eventFiltersChained      = "filters_chained"
+	eventFilteringError      = "filtering_error"
+	eventFilteringComplete   = "filtering_complete"
+)
 
-// ArticleService is an interface that defines the methods for interacting with the article storage.
-type ArticleService interface {
+// ArticleStorage is an interface that defines the methods for interacting with the article storage.
+type ArticleStorage interface {
 	GetAll() ([]model.Article, error)
-	Create(article model.Article) (model.Article, error)
-	Delete(id int) error
+	Save(article model.Article) (model.Article, error)
 	SaveAll(articles []model.Article) error
-	GetByFilter(f filter.Filters) ([]model.Article, error)
+	Delete(id int) error
+	DeleteBySourceID(id int) error
+	GetByFilter(query string, args []interface{}) ([]model.Article, error)
 }
 
 type articleService struct {
-	articleStorage storage.ArticleStorage
+	articleStorage ArticleStorage
 }
 
-func New(articleRepo storage.ArticleStorage) ArticleService {
+func New(articleRepo ArticleStorage) web.ArticleService {
 	return &articleService{articleStorage: articleRepo}
 }
 

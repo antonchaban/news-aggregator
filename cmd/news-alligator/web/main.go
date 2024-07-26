@@ -19,7 +19,7 @@ import (
 // @title News Alligator API
 // @version 1
 // @description This is a News Alligator API server.
-// @host https://localhost:8080
+// @host https://localhost:443
 // @BasePath /articles
 
 func main() {
