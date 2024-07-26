@@ -19,6 +19,8 @@ const (
 	eventFilteringComplete   = "filtering_complete"
 )
 
+//go:generate mockgen -destination=../storage/mocks/mock_article.go -package=mocks github.com/antonchaban/news-aggregator/pkg/service ArticleStorage
+
 // ArticleStorage is an interface that defines the methods for interacting with the article storage.
 type ArticleStorage interface {
 	GetAll() ([]model.Article, error)

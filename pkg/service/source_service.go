@@ -12,6 +12,8 @@ import (
 	"path/filepath"
 )
 
+//go:generate mockgen -destination=../storage/mocks/mock_source.go -package=mocks github.com/antonchaban/news-aggregator/pkg/service SourceStorage
+
 // SourceStorage is an interface that defines the methods for interacting with the source storage.
 type SourceStorage interface {
 	GetAll() ([]model.Source, error)

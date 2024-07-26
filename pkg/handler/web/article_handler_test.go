@@ -5,8 +5,8 @@ import (
 	"github.com/antonchaban/news-aggregator/pkg/model"
 	service_mocks "github.com/antonchaban/news-aggregator/pkg/service/mocks"
 	"github.com/gin-gonic/gin"
-	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
+	"go.uber.org/mock/gomock"
 	"net/http/httptest"
 	"testing"
 )

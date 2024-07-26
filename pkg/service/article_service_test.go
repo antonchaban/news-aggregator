@@ -3,10 +3,9 @@ package service
 import (
 	"github.com/antonchaban/news-aggregator/pkg/filter"
 	"github.com/antonchaban/news-aggregator/pkg/model"
-	"github.com/antonchaban/news-aggregator/pkg/storage"
 	"github.com/antonchaban/news-aggregator/pkg/storage/mocks"
-	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
+	"go.uber.org/mock/gomock"
 	"testing"
 )
 
@@ -260,7 +259,7 @@ func TestArticleService_GetByFilter(t *testing.T) {
 func TestNew(t *testing.T) {
 	tests := []struct {
 		name         string
-		articleRepo  storage.ArticleStorage
+		articleRepo  ArticleStorage
 		expectedRepo *articleService
 	}{
 		{

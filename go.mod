@@ -19,6 +19,7 @@ require (
 	github.com/swaggo/gin-swagger v1.6.0
 	github.com/swaggo/swag v1.16.3
 	github.com/zhashkevych/go-sqlxmock v1.5.1
+	go.uber.org/mock v0.4.0
 )
 
 require (

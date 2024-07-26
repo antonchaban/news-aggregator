@@ -11,6 +11,7 @@ import (
 	"github.com/antonchaban/news-aggregator/pkg/storage/postgres"
 	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
+	_ "go.uber.org/mock/mockgen/model"
 	"os"
 	"os/signal"
 	"syscall"
