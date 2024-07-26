@@ -14,6 +14,10 @@ import (
 
 //go:generate mockgen -destination=../storage/mocks/mock_source.go -package=mocks github.com/antonchaban/news-aggregator/pkg/service SourceStorage
 
+const (
+	eventErrorSavingArticles = "error_saving_articles"
+)
+
 // SourceStorage is an interface that defines the methods for interacting with the source storage.
 type SourceStorage interface {
 	GetAll() ([]model.Source, error)
@@ -84,7 +88,7 @@ func (s *sourceService) FetchFromAllSources() error {
 		}
 		err = s.articleStorage.SaveAll(articles)
 		if err != nil {
-			logrus.Printf("Error saving articles: %v", err)
+			logrus.WithField("event_id", eventErrorSavingArticles).Errorf("Error saving articles: %v", err)
 			continue
 		}
 	}

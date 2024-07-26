@@ -39,6 +39,7 @@ func New(articleRepo ArticleStorage) web.ArticleService {
 	return &articleService{articleStorage: articleRepo}
 }
 
+// SaveAll saves multiple articles to the database.
 func (a *articleService) SaveAll(articles []model.Article) error {
 	err := a.articleStorage.SaveAll(articles)
 	if err != nil {
@@ -64,7 +65,7 @@ func (a *articleService) Delete(id int) error {
 
 // GetByFilter returns all articles that match the given filters.
 func (a *articleService) GetByFilter(f filter.Filters) ([]model.Article, error) {
-	logrus.WithField("event_id", "get_by_filter_start").Info("Fetching articles with filter")
+	logrus.WithField("event_id", eventGetByFilterStart).Info("Fetching articles with filter")
 
 	if os.Getenv("STORAGE_TYPE") == "postgres" {
 		articles, err := a.getByFilterDB(f)
@@ -83,27 +84,27 @@ func (a *articleService) GetByFilter(f filter.Filters) ([]model.Article, error) 
 func (a *articleService) getByFilterInMemory(f filter.Filters) ([]model.Article, error) {
 	articles, err := a.articleStorage.GetAll()
 	if err != nil {
-		logrus.WithField("event_id", "get_all_articles_error").Error("Error fetching all articles", err)
+		logrus.WithField("event_id", eventGetAllArticlesError).Error("Error fetching all articles", err)
 		return nil, err
 	}
-	logrus.WithField("event_id", "all_articles_fetched").Info("All articles fetched successfully")
+	logrus.WithField("event_id", eventAllArticlesFetched).Info("All articles fetched successfully")
 	sourceFilter := &filter.SourceFilter{}
 	keywordFilter := &filter.KeywordFilter{}
 	dateRangeFilter := &filter.DateRangeFilter{}
 
-	logrus.WithField("event_id", "filters_created").Info("Filter handlers created")
+	logrus.WithField("event_id", eventFiltersCreated).Info("Filter handlers created")
 
 	// Create the chain
 	sourceFilter.SetNext(keywordFilter).SetNext(dateRangeFilter)
-	logrus.WithField("event_id", "filters_chained").Info("Filters chained together")
+	logrus.WithField("event_id", eventFiltersChained).Info("Filters chained together")
 
 	// Start filtering
 	filteredArticles, err := sourceFilter.Filter(articles, f)
 	if err != nil {
-		logrus.WithField("event_id", "filtering_error").Error("Error during filtering", err)
+		logrus.WithField("event_id", eventFilteringError).Error("Error during filtering", err)
 		return nil, err
 	}
-	logrus.WithField("event_id", "filtering_complete").Info("Filtering completed successfully")
+	logrus.WithField("event_id", eventFilteringComplete).Info("Filtering completed successfully")
 
 	return filteredArticles, nil
 }
@@ -121,19 +122,19 @@ func (a *articleService) getByFilterDB(f filter.Filters) ([]model.Article, error
 	keywordFilter := &filter.KeywordFilter{}
 	dateRangeFilter := &filter.DateRangeFilter{}
 
-	logrus.WithField("event_id", "filters_created").Info("Filter handlers created")
+	logrus.WithField("event_id", eventFiltersCreated).Info("Filter handlers created")
 
 	sourceFilter.SetNext(keywordFilter).SetNext(dateRangeFilter)
-	logrus.WithField("event_id", "filters_chained").Info("Filters chained together")
+	logrus.WithField("event_id", eventFiltersChained).Info("Filters chained together")
 
 	query, args := sourceFilter.BuildFilterQuery(f, baseQuery)
 
 	articles, err := a.articleStorage.GetByFilter(query, args)
 	if err != nil {
-		logrus.WithField("event_id", "query_error").Error("Error executing query", err)
+		logrus.WithField("event_id", eventFilteringError).Error("Error executing query", err)
 		return nil, err
 	}
 
-	logrus.WithField("event_id", "filtering_complete").Info("Filtering completed successfully")
+	logrus.WithField("event_id", eventFilteringComplete).Info("Filtering completed successfully")
 	return articles, nil
 }
