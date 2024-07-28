@@ -6,6 +6,7 @@
     "git@latest",
     "go@1.22.3",
     "mockgen@latest",
-    "go-swag@latest"
+    "go-swag@latest",
+    "kubectl@1.30.2"
   ]
 }
