@@ -96,7 +96,10 @@ func TestLoadSrcsFromFile(t *testing.T) {
 		}
 		fileData, _ := json.Marshal(validSources)
 		validFilePath := filepath.Join("./testdata", "sources.json")
-		os.WriteFile(validFilePath, fileData, 0644)
+		err := os.WriteFile(validFilePath, fileData, 0644)
+		if err != nil {
+			return
+		}
 
 		sources, err := loader.LoadSrcsFromFile()
 		assert.NotNil(t, sources)

@@ -230,7 +230,7 @@ func Test_sourceService_FetchFromAllSources(t *testing.T) {
 				articleStorage: mockArticleStorage,
 				srcStorage:     mockSourceStorage,
 			}
-			tt.wantErr(t, s.FetchFromAllSources(), fmt.Sprintf("FetchFromAllSources()"))
+			tt.wantErr(t, s.FetchFromAllSources(), "FetchFromAllSources()")
 		})
 	}
 }
