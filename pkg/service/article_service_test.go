@@ -3,7 +3,7 @@ package service
 import (
 	"github.com/antonchaban/news-aggregator/pkg/filter"
 	"github.com/antonchaban/news-aggregator/pkg/model"
-	"github.com/antonchaban/news-aggregator/pkg/storage/mocks"
+	"github.com/antonchaban/news-aggregator/pkg/service/mocks"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/mock/gomock"
 	"testing"

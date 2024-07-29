@@ -2,8 +2,8 @@ package backuper
 
 import (
 	"encoding/json"
+	"github.com/antonchaban/news-aggregator/pkg/handler/web/mocks"
 	"github.com/antonchaban/news-aggregator/pkg/model"
-	"github.com/antonchaban/news-aggregator/pkg/service/mocks"
 	"github.com/stretchr/testify/assert"
 	"os"
 	"path/filepath"
