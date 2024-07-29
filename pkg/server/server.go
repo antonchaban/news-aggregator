@@ -147,6 +147,9 @@ func (s *Server) RunWithFiles(port string, handler http.Handler, artHandler web.
 func (s *Server) Shutdown(ctx context.Context, articles []model.Article, sources []model.Source) error {
 	fmt.Println("Shutting down the server...")
 	err := backuper.NewSaver(articles, sources).SaveAllToFile()
+	if err != nil {
+		return err
+	}
 	err = backuper.NewSaver(articles, sources).SaveSrcsToFile()
 	if err != nil {
 		return err

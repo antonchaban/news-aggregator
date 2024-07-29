@@ -88,7 +88,7 @@ func Test_getFilesInDir(t *testing.T) {
 			}
 
 			got, err := getFilesInDir()
-			if !tt.wantErr(t, err, fmt.Sprintf("getFilesInDir()")) {
+			if !tt.wantErr(t, err, "getFilesInDir()") {
 				return
 			}
 			assert.Equalf(t, tt.want, got, "getFilesInDir()")

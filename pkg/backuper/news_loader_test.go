@@ -33,7 +33,10 @@ func TestLoadAllFromFile(t *testing.T) {
 	t.Run("should return error when json is invalid", func(t *testing.T) {
 		os.Setenv("SAVES_DIR", "./testdata")
 		invalidFilePath := filepath.Join("./testdata", "articles.json")
-		os.WriteFile(invalidFilePath, []byte(`invalid json`), 0644)
+		err := os.WriteFile(invalidFilePath, []byte(`invalid json`), 0644)
+		if err != nil {
+			return
+		}
 
 		articles, err := loader.LoadAllFromFile()
 		assert.Nil(t, articles)
@@ -47,7 +50,10 @@ func TestLoadAllFromFile(t *testing.T) {
 		}
 		fileData, _ := json.Marshal(validArticles)
 		validFilePath := filepath.Join("./testdata", "articles.json")
-		os.WriteFile(validFilePath, fileData, 0644)
+		err := os.WriteFile(validFilePath, fileData, 0644)
+		if err != nil {
+			return
+		}
 
 		articles, err := loader.LoadAllFromFile()
 		assert.NotNil(t, articles)
@@ -73,7 +79,10 @@ func TestLoadSrcsFromFile(t *testing.T) {
 	t.Run("should return error when json is invalid", func(t *testing.T) {
 		os.Setenv("SAVES_DIR", "./testdata")
 		invalidFilePath := filepath.Join("./testdata", "sources.json")
-		os.WriteFile(invalidFilePath, []byte(`invalid json`), 0644)
+		err := os.WriteFile(invalidFilePath, []byte(`invalid json`), 0644)
+		if err != nil {
+			return
+		}
 
 		sources, err := loader.LoadSrcsFromFile()
 		assert.Nil(t, sources)
