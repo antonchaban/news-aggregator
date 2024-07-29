@@ -3,7 +3,7 @@ package inmemory
 import (
 	"fmt"
 	"github.com/antonchaban/news-aggregator/pkg/model"
-	"github.com/antonchaban/news-aggregator/pkg/storage"
+	"github.com/antonchaban/news-aggregator/pkg/service"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -11,7 +11,7 @@ import (
 func TestNewSrc(t *testing.T) {
 	tests := []struct {
 		name string
-		want storage.SourceStorage
+		want service.SourceStorage
 	}{
 		{
 			name: "initialize in-memory storage",
@@ -126,7 +126,7 @@ func Test_memorySourceStorage_GetAll(t *testing.T) {
 				nextID:  tt.fields.nextID,
 			}
 			got, err := m.GetAll()
-			if !tt.wantErr(t, err, "GetAll()") {
+			if !tt.wantErr(t, err, fmt.Sprintf("GetAll()")) {
 				return
 			}
 			assert.Equalf(t, tt.want, got, "GetAll()")

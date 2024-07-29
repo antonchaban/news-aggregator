@@ -142,10 +142,7 @@ func TestArticleInMemory_GetAll(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 
 			storage := New()
-			err := storage.SaveAll(tt.articles)
-			if err != nil {
-				return
-			}
+			storage.SaveAll(tt.articles)
 			articles, err := storage.GetAll()
 
 			if tt.expectErr {

@@ -3,9 +3,10 @@ package service
 import (
 	"errors"
 	"fmt"
+	"github.com/antonchaban/news-aggregator/pkg/handler/web"
 	"github.com/antonchaban/news-aggregator/pkg/parser"
-	"github.com/antonchaban/news-aggregator/pkg/storage"
 	"github.com/stretchr/testify/require"
+	"go.uber.org/mock/gomock"
 	"net/url"
 	"os"
 	"testing"
@@ -14,7 +15,6 @@ import (
 	"github.com/antonchaban/news-aggregator/pkg/model"
 	"github.com/antonchaban/news-aggregator/pkg/storage/mocks"
 	"github.com/stretchr/testify/assert"
-	"go.uber.org/mock/gomock"
 )
 
 func TestNewSourceService(t *testing.T) {
@@ -26,16 +26,16 @@ func TestNewSourceService(t *testing.T) {
 	tests := []struct {
 		name string
 		args struct {
-			articleRepo storage.ArticleStorage
-			srcRepo     storage.SourceStorage
+			articleRepo ArticleStorage
+			srcRepo     SourceStorage
 		}
-		want SourceService
+		want web.SourceService
 	}{
 		{
 			name: "initialize source service",
 			args: struct {
-				articleRepo storage.ArticleStorage
-				srcRepo     storage.SourceStorage
+				articleRepo ArticleStorage
+				srcRepo     SourceStorage
 			}{
 				articleRepo: mockArticleStorage,
 				srcRepo:     mockSourceStorage,
@@ -88,7 +88,7 @@ func Test_getFilesInDir(t *testing.T) {
 			}
 
 			got, err := getFilesInDir()
-			if !tt.wantErr(t, err, "getFilesInDir()") {
+			if !tt.wantErr(t, err, fmt.Sprintf("getFilesInDir()")) {
 				return
 			}
 			assert.Equalf(t, tt.want, got, "getFilesInDir()")
@@ -230,7 +230,7 @@ func Test_sourceService_FetchFromAllSources(t *testing.T) {
 				articleStorage: mockArticleStorage,
 				srcStorage:     mockSourceStorage,
 			}
-			tt.wantErr(t, s.FetchFromAllSources(), "FetchFromAllSources()")
+			tt.wantErr(t, s.FetchFromAllSources(), fmt.Sprintf("FetchFromAllSources()"))
 		})
 	}
 }
@@ -341,8 +341,8 @@ func Test_sourceService_LoadDataFromFiles(t *testing.T) {
 
 func Test_sourceService_UpdateSource(t *testing.T) {
 	type fields struct {
-		articleStorage storage.ArticleStorage
-		srcStorage     storage.SourceStorage
+		articleStorage ArticleStorage
+		srcStorage     SourceStorage
 	}
 	type args struct {
 		id     int

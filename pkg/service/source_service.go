@@ -2,9 +2,9 @@ package service
 
 import (
 	"errors"
+	"github.com/antonchaban/news-aggregator/pkg/handler/web"
 	"github.com/antonchaban/news-aggregator/pkg/model"
 	"github.com/antonchaban/news-aggregator/pkg/parser"
-	"github.com/antonchaban/news-aggregator/pkg/storage"
 	"github.com/sirupsen/logrus"
 	"log"
 	"net/url"
@@ -12,27 +12,30 @@ import (
 	"path/filepath"
 )
 
-//go:generate mockgen -destination=../service/mocks/mock_source_service.go -package=mocks github.com/antonchaban/news-aggregator/pkg/service SourceService
+//go:generate mockgen -destination=../storage/mocks/mock_source.go -package=mocks github.com/antonchaban/news-aggregator/pkg/service SourceStorage
 
-// SourceService represents the service for sources.
-type SourceService interface {
-	FetchFromAllSources() error
-	FetchSourceByID(id int) ([]model.Article, error)
-	LoadDataFromFiles() ([]model.Article, error)
-	AddSource(source model.Source) (model.Source, error)
-	DeleteSource(id int) error
-	UpdateSource(id int, source model.Source) (model.Source, error)
+const (
+	eventErrorSavingArticles = "error_saving_articles"
+)
+
+// SourceStorage is an interface that defines the methods for interacting with the source storage.
+type SourceStorage interface {
 	GetAll() ([]model.Source, error)
+	Save(src model.Source) (model.Source, error)
+	SaveAll(sources []model.Source) error
+	Delete(id int) error
+	GetByID(id int) (model.Source, error)
+	Update(id int, src model.Source) (model.Source, error)
 }
 
 // sourceService is the implementation of the SourceService interface.
 type sourceService struct {
-	articleStorage storage.ArticleStorage
-	srcStorage     storage.SourceStorage
+	articleStorage ArticleStorage
+	srcStorage     SourceStorage
 }
 
 // NewSourceService creates a new SourceService with the given article and source repositories.
-func NewSourceService(articleRepo storage.ArticleStorage, srcRepo storage.SourceStorage) SourceService {
+func NewSourceService(articleRepo ArticleStorage, srcRepo SourceStorage) web.SourceService {
 	return &sourceService{articleStorage: articleRepo, srcStorage: srcRepo}
 }
 
@@ -85,7 +88,7 @@ func (s *sourceService) FetchFromAllSources() error {
 		}
 		err = s.articleStorage.SaveAll(articles)
 		if err != nil {
-			logrus.Printf("Error saving articles: %v", err)
+			logrus.WithField("event_id", eventErrorSavingArticles).Errorf("Error saving articles: %v", err)
 			continue
 		}
 	}
