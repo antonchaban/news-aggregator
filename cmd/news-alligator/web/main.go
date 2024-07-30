@@ -5,7 +5,6 @@ import (
 	"fmt"
 	_ "github.com/antonchaban/news-aggregator/cmd/news-alligator/web/docs"
 	"github.com/antonchaban/news-aggregator/pkg/handler/web"
-	"github.com/antonchaban/news-aggregator/pkg/scheduler"
 	"github.com/antonchaban/news-aggregator/pkg/server"
 	"github.com/antonchaban/news-aggregator/pkg/service"
 	"github.com/antonchaban/news-aggregator/pkg/storage"
@@ -47,12 +46,6 @@ func init() {
 }
 
 func main() {
-
-	fmt.Println(pgHost)
-	fmt.Println(pgUser)
-	fmt.Println(pgPass)
-	fmt.Println(pgDBName)
-	fmt.Println(pgSSLMode)
 	if err := checkEnvVars(
 		certFileEnvVar, keyFileEnvVar, portEnvVar,
 	); err != nil {
@@ -93,8 +86,8 @@ func main() {
 	logrus.Print("news-alligator 🐊 started")
 
 	// Start the scheduler for updating articles
-	newScheduler := scheduler.NewScheduler(articleService, sourceService)
-	newScheduler.Start()
+	//newScheduler := scheduler.NewScheduler(articleService, sourceService)
+	//newScheduler.Start()
 
 	// Wait for a signal to quit
 	quit := make(chan os.Signal, 1)
@@ -104,7 +97,7 @@ func main() {
 	logrus.Print("news-alligator 🐊 shutting down")
 
 	// Stop the scheduler
-	newScheduler.Stop()
+	//newScheduler.Stop()
 
 	// Retrieve all articles before shutting down
 	articles, err := articleService.GetAll()
