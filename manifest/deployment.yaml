@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: news-alligator-deployment
+  namespace: news-alligator
 spec:
   replicas: 1
   selector:
@@ -14,7 +15,7 @@ spec:
     spec:
       containers:
         - name: news-alligator
-          image: antohachaban/news-alligator-web:0.1.2 # todo: change to latest
+          image: antohachaban/news-alligator-web:0.1.2
           ports:
             - containerPort: 443
           imagePullPolicy: IfNotPresent
