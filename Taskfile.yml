@@ -146,5 +146,5 @@ tasks:
 
   k8s-port-forward:
     cmds:
-      - kubectl port-forward svc/news-alligator-service 443:8443
+      - kubectl port-forward svc/news-alligator-service 443:8443 -n news-alligator
     desc: Port forward to the Kubernetes service
