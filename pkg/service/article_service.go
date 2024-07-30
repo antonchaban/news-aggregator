@@ -17,6 +17,7 @@ const (
 	eventFiltersChained      = "filters_chained"
 	eventFilteringError      = "filtering_error"
 	eventFilteringComplete   = "filtering_complete"
+	storTypeEnvVar           = "STORAGE_TYPE"
 )
 
 //go:generate mockgen -destination=mocks/mock_article.go -package=mocks github.com/antonchaban/news-aggregator/pkg/service ArticleStorage
@@ -67,7 +68,7 @@ func (a *articleService) Delete(id int) error {
 func (a *articleService) GetByFilter(f filter.Filters) ([]model.Article, error) {
 	logrus.WithField("event_id", eventGetByFilterStart).Info("Fetching articles with filter")
 
-	if os.Getenv("STORAGE_TYPE") == "postgres" {
+	if os.Getenv(storTypeEnvVar) == "postgres" {
 		articles, err := a.getByFilterDB(f)
 		if err != nil {
 			if err.Error() == "GetByFilter operation is not supported in in-memory storage" {

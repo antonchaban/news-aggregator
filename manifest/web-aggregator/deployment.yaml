@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: news-alligator-deployment
+  namespace: news-alligator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: news-alligator
+  template:
+    metadata:
+      labels:
+        app: news-alligator
+    spec:
+      serviceAccountName: news-alligator-sa
+      initContainers:
+        - name: run-migrations
+          image: antohachaban/alligator-migrations:0.1
+          command: [ "migrate", "-path", "/migrations", "-database",  "$(POSTGRESQL_URL)", "goto", "$(VERSION)" ] # CLI команда запуску міграцій, де $(POSTGRESQL_URL) і $(VERSION) змінні середовища
+          env:
+            - name: POSTGRESQL_URL
+              value: "postgres://admin:admin@postgres:5432/postgres?sslmode=disable"
+            - name: VERSION
+              value: "000002"
+      containers:
+        - name: news-alligator
+          image: antohachaban/news-alligator-web:0.2
+          ports:
+            - containerPort: 443
+          volumeMounts:
+            - name: news-alligator-storage
+              mountPath: /root/backups  # The path inside the container where the volume will be mounted
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: news-alligator-config
+            - secretRef:
+                name: news-alligator-secret
+      volumes:
+        - name: news-alligator-storage
+          persistentVolumeClaim:
+            claimName: news-alligator-pvc

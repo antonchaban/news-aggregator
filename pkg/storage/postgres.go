@@ -3,11 +3,13 @@ package storage
 import (
 	"fmt"
 	"github.com/jmoiron/sqlx"
+	"os"
 )
+
+const storTypeEnvVar = "STORAGE_TYPE"
 
 type Config struct {
 	Host     string
-	Port     string
 	Username string
 	Password string
 	DBName   string
@@ -15,8 +17,11 @@ type Config struct {
 }
 
 func NewPostgresDB(cfg Config) (*sqlx.DB, error) {
-	db, err := sqlx.Open("postgres", fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=%s",
-		cfg.Host, cfg.Port, cfg.Username, cfg.DBName, cfg.Password, cfg.SSLMode))
+	fmt.Println("Vales for db:")
+	fmt.Printf("postgres://%s:%s@%s/%s?sslmode=%s",
+		cfg.Username, cfg.Password, cfg.Host, cfg.DBName, cfg.SSLMode)
+	db, err := sqlx.Connect(os.Getenv(storTypeEnvVar), fmt.Sprintf("postgres://%s:%s@%s/%s?sslmode=%s",
+		cfg.Username, cfg.Password, cfg.Host, cfg.DBName, cfg.SSLMode))
 	if err != nil {
 		return nil, err
 	}
