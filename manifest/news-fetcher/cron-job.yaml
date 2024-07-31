@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: news-fetcher-cronjob
+  namespace: news-alligator
+spec:
+  schedule: "* * * * *" #	Run every minute for testing purposes
+  #schedule: "0 0 * * *" # Run once a day at midnight
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: news-fetcher
+              image: antohachaban/news-fetcher:0.1
+              envFrom:
+                - secretRef:
+                    name: news-alligator-secret
+                - configMapRef:
+                    name: news-alligator-config
+          restartPolicy: OnFailure
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
