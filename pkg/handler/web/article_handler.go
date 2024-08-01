@@ -2,10 +2,22 @@ package web
 
 import (
 	"github.com/antonchaban/news-aggregator/pkg/filter"
+	"github.com/antonchaban/news-aggregator/pkg/model"
 	_ "github.com/antonchaban/news-aggregator/pkg/model"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
+
+//go:generate mockgen -destination=../../service/mocks/mock_article_service.go -package=mocks github.com/antonchaban/news-aggregator/pkg/handler/web ArticleService
+
+// ArticleService is an interface that defines the methods for interacting with the article storage.
+type ArticleService interface {
+	GetAll() ([]model.Article, error)
+	Create(article model.Article) (model.Article, error)
+	Delete(id int) error
+	SaveAll(articles []model.Article) error
+	GetByFilter(f filter.Filters) ([]model.Article, error)
+}
 
 // @Summary Get articles by filter
 // @Description Get articles by filter parameters

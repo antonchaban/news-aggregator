@@ -1,0 +1,14 @@
+[
+  {
+    "Id": 1,
+    "Title": "Test Article 1",
+    "Description": "",
+    "Link": "",
+    "Source": {
+      "id": 0,
+      "name": "",
+      "link": ""
+    },
+    "PubDate": "0001-01-01T00:00:00Z"
+  }
+]
