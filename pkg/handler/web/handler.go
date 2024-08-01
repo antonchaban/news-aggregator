@@ -29,7 +29,7 @@ func NewHandler(asvc ArticleService, ss SourceService) *Handler {
 	return h
 }
 
-// InitRoutes initializes the routes for the HTTP server.
+// InitRoutes initializes the routes for the server.
 func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
 

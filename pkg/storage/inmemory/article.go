@@ -105,3 +105,8 @@ func (a *memoryArticleStorage) SaveAll(articles []model.Article) error {
 	logrus.WithField("event_id", eventAllArticlesSaved).Info("All articles processed")
 	return nil
 }
+
+func (a *memoryArticleStorage) GetByFilter(query string, args []interface{}) ([]model.Article, error) {
+	logrus.WithField("event_id", "get_by_filter_not_supported").Warn("GetByFilter operation is not supported in in-memory storage")
+	return nil, errors.New("GetByFilter operation is not supported in in-memory storage")
+}

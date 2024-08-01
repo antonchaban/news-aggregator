@@ -56,7 +56,7 @@ func TestNewServer(t *testing.T) {
 	}
 }
 
-func TestServer_Run(t *testing.T) {
+func TestServer_RunWithFiles(t *testing.T) {
 	// Set up in-memory databases and services
 	db := inmemory.New()
 	srcDb := inmemory.NewSrc()
@@ -97,7 +97,7 @@ func TestServer_Run(t *testing.T) {
 
 			serverErr := make(chan error)
 			go func() {
-				serverErr <- s.Run(tt.port, tt.handler, *handler)
+				serverErr <- s.RunWithFiles(tt.port, tt.handler, *handler)
 			}()
 
 			time.Sleep(2 * time.Second)
@@ -193,7 +193,7 @@ func TestServer_Shutdown(t *testing.T) {
 
 			serverErr := make(chan error)
 			go func() {
-				serverErr <- s.Run(os.Getenv("PORT"), handler.InitRoutes(), *handler)
+				serverErr <- s.RunWithFiles(os.Getenv("PORT"), handler.InitRoutes(), *handler)
 			}()
 
 			// Allow some time for the server to start

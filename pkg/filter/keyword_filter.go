@@ -54,3 +54,22 @@ func (h *KeywordFilter) Filter(articles []model.Article, f Filters) ([]model.Art
 	}
 	return articles, nil
 }
+
+func (h *KeywordFilter) BuildFilterQuery(f Filters, query string) (string, []interface{}) {
+	if f.Keyword != "" {
+		keywordList := strings.Split(f.Keyword, ",")
+		var keywordConditions []string
+		for _, keyword := range keywordList {
+			normalizedKeyword := "%" + strings.ToLower(keyword) + "%"
+			condition := "(LOWER(title) ILIKE '" + normalizedKeyword + "' OR LOWER(description) ILIKE '" + normalizedKeyword + "')"
+			keywordConditions = append(keywordConditions, condition)
+		}
+		if len(keywordConditions) > 0 {
+			query += " AND (" + strings.Join(keywordConditions, " OR ") + ")"
+		}
+	}
+	if h.next != nil {
+		return h.next.BuildFilterQuery(f, query)
+	}
+	return query, nil
+}

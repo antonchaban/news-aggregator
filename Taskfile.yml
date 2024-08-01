@@ -13,10 +13,10 @@ tasks:
 
   run-docker:
     cmds:
-      - docker run -d -v news-aggregator-backups:/root/backups -p {{.PORT}}:443 {{.DOCKER_IMAGE_NAME}}
+      - docker run -d -v news-aggregator-backups:/root/backups -p {{.PORT}}:8080 {{.DOCKER_IMAGE_NAME}}
     vars:
-      PORT: '{{default "443" .PORT}}'
-    desc: "Run the Docker container, example: task build PORT=443"
+      PORT: '{{default "8080" .PORT}}'
+    desc: "Run the Docker container, example: task build PORT=8080"
 
   stop-docker:
     cmds:
@@ -52,7 +52,7 @@ tasks:
 
   run-local:
     env:
-      PORT: 443
+      PORT: 8080
       SAVES_DIR: ./backups
       CERT_FILE: ./server.crt
       KEY_FILE: ./server.key
@@ -73,6 +73,25 @@ tasks:
     desc: Run mockgen for generating mocks
     cmds:
       - go generate ./...
+
+  install-postgres:
+    cmds:
+      - docker pull postgres
+    desc: Pull the PostgreSQL Docker image
+    internal: true
+
+  run-postgres:
+    deps: [install-postgres]
+    env:
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+    cmds:
+      - docker run --name=news-alligator-db -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD -p 5436:5432 -d --rm postgres
+    desc: Run the PostgreSQL container
+
+  init-db:
+    cmds:
+      - migrate -path ./schema -database 'postgres://postgres:qwerty@0.0.0.0:5436/postgres?sslmode=disable' up
+    desc: Initialize the database
 
   format:
     cmds:

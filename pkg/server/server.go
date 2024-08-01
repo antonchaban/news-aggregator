@@ -41,18 +41,36 @@ type Server struct {
 	keyFile    string
 }
 
-// Run starts the HTTPS server on the specified port and initializes the sources.
+func (s *Server) Run(port string, handler http.Handler) error {
+	s.httpServer = &http.Server{
+		Addr:           ":" + port,
+		Handler:        handler,
+		MaxHeaderBytes: 1 << 20,
+		ReadTimeout:    10 * time.Second,
+		WriteTimeout:   10 * time.Second,
+	}
+
+	if err := s.httpServer.ListenAndServeTLS(s.certFile, s.keyFile); err != nil && !errors.Is(err, http.ErrServerClosed) {
+		logrus.Fatalf("Could not listen on %s: %v\n", port, err)
+		return err
+	}
+
+	return nil
+}
+
+// RunWithFiles starts the HTTPs server on the specified port and initializes the sources.
 // It also loads articles from a backup file and saves them using the provided
-// article handler. The server listens for HTTPS requests using the specified
+// article handler.
+// The server listens for HTTPS requests using the specified
 // certificate and key files.
 //
 // Parameters:
 // - port: The port on which the server will listen for requests.
-// - handler: The handler for handling requests.
+// - handler: Handler to use for handling requests.
 // - artHandler: The web handler for managing articles.
 //
 // Returns an error if the server fails to start or if loading/saving articles fails.
-func (s *Server) Run(port string, handler http.Handler, artHandler web.Handler) error {
+func (s *Server) RunWithFiles(port string, handler http.Handler, artHandler web.Handler) error {
 	s.httpServer = &http.Server{
 		Addr:           ":" + port,
 		Handler:        handler,

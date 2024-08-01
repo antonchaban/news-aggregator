@@ -10,7 +10,7 @@ Description: {{ .Article.Description | highlightKeywords | indent 4 }}
 Link: {{ .Article.Link | indent 4 }}
 Date: {{ .Article.PubDate | date "2006-01-02 15:04:05 MST" | indent 4 }}
 {{- if not (gt (len .Filters.Source) 0) }}
-Source: {{ .Article.Source | indent 4 }}
+Source: {{ .Article.Source.Name | indent 4 }}
 {{- end }}
 -------------------------------
 {{ end }}

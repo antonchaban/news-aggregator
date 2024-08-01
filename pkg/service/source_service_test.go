@@ -3,8 +3,10 @@ package service
 import (
 	"errors"
 	"fmt"
+	"github.com/antonchaban/news-aggregator/pkg/handler/web"
 	"github.com/antonchaban/news-aggregator/pkg/parser"
 	"github.com/stretchr/testify/require"
+	"go.uber.org/mock/gomock"
 	"net/url"
 	"os"
 	"testing"
@@ -13,7 +15,6 @@ import (
 	"github.com/antonchaban/news-aggregator/pkg/model"
 	"github.com/antonchaban/news-aggregator/pkg/storage/mocks"
 	"github.com/stretchr/testify/assert"
-	"go.uber.org/mock/gomock"
 )
 
 func TestNewSourceService(t *testing.T) {
@@ -28,7 +29,7 @@ func TestNewSourceService(t *testing.T) {
 			articleRepo ArticleStorage
 			srcRepo     SourceStorage
 		}
-		want *sourceService
+		want web.SourceService
 	}{
 		{
 			name: "initialize source service",

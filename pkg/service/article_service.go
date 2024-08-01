@@ -6,9 +6,8 @@ import (
 	"github.com/antonchaban/news-aggregator/pkg/handler/web"
 	"github.com/antonchaban/news-aggregator/pkg/model"
 	"github.com/sirupsen/logrus"
+	"os"
 )
-
-//go:generate mockgen -destination=mocks/mock_article.go -package=mocks github.com/antonchaban/news-aggregator/pkg/storage ArticleStorage
 
 const (
 	eventGetByFilterStart    = "get_by_filter_start"
@@ -20,6 +19,8 @@ const (
 	eventFilteringComplete   = "filtering_complete"
 )
 
+//go:generate mockgen -destination=../storage/mocks/mock_article.go -package=mocks github.com/antonchaban/news-aggregator/pkg/service ArticleStorage
+
 // ArticleStorage is an interface that defines the methods for interacting with the article storage.
 type ArticleStorage interface {
 	GetAll() ([]model.Article, error)
@@ -27,6 +28,7 @@ type ArticleStorage interface {
 	SaveAll(articles []model.Article) error
 	Delete(id int) error
 	DeleteBySourceID(id int) error
+	GetByFilter(query string, args []interface{}) ([]model.Article, error)
 }
 
 type articleService struct {
@@ -65,15 +67,27 @@ func (a *articleService) Delete(id int) error {
 func (a *articleService) GetByFilter(f filter.Filters) ([]model.Article, error) {
 	logrus.WithField("event_id", eventGetByFilterStart).Info("Fetching articles with filter")
 
-	// Fetch all articles initially
-	articles, err := a.GetAll()
+	if os.Getenv("STORAGE_TYPE") == "postgres" {
+		articles, err := a.getByFilterDB(f)
+		if err != nil {
+			if err.Error() == "GetByFilter operation is not supported in in-memory storage" {
+				logrus.WithField("event_id", "fallback_to_inmemory").Warn("Falling back to in-memory filtering")
+				return a.getByFilterInMemory(f)
+			}
+			return nil, err
+		}
+		return articles, nil
+	}
+	return a.getByFilterInMemory(f)
+}
+
+func (a *articleService) getByFilterInMemory(f filter.Filters) ([]model.Article, error) {
+	articles, err := a.articleStorage.GetAll()
 	if err != nil {
 		logrus.WithField("event_id", eventGetAllArticlesError).Error("Error fetching all articles", err)
 		return nil, err
 	}
 	logrus.WithField("event_id", eventAllArticlesFetched).Info("All articles fetched successfully")
-
-	// Create filter handlers
 	sourceFilter := &filter.SourceFilter{}
 	keywordFilter := &filter.KeywordFilter{}
 	dateRangeFilter := &filter.DateRangeFilter{}
@@ -93,4 +107,34 @@ func (a *articleService) GetByFilter(f filter.Filters) ([]model.Article, error) 
 	logrus.WithField("event_id", eventFilteringComplete).Info("Filtering completed successfully")
 
 	return filteredArticles, nil
+}
+
+func (a *articleService) getByFilterDB(f filter.Filters) ([]model.Article, error) {
+	baseQuery := `
+		SELECT a.id, a.title, a.description, a.link, a.pub_date,
+		       s.id, s.name, s.link
+		FROM articles a
+		JOIN sources s ON a.source_id = s.id
+		WHERE 1=1
+	`
+
+	sourceFilter := &filter.SourceFilter{}
+	keywordFilter := &filter.KeywordFilter{}
+	dateRangeFilter := &filter.DateRangeFilter{}
+
+	logrus.WithField("event_id", eventFiltersCreated).Info("Filter handlers created")
+
+	sourceFilter.SetNext(keywordFilter).SetNext(dateRangeFilter)
+	logrus.WithField("event_id", eventFiltersChained).Info("Filters chained together")
+
+	query, args := sourceFilter.BuildFilterQuery(f, baseQuery)
+
+	articles, err := a.articleStorage.GetByFilter(query, args)
+	if err != nil {
+		logrus.WithField("event_id", eventFilteringError).Error("Error executing query", err)
+		return nil, err
+	}
+
+	logrus.WithField("event_id", eventFilteringComplete).Info("Filtering completed successfully")
+	return articles, nil
 }
