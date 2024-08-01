@@ -7,6 +7,7 @@
     "go@1.22.3",
     "mockgen@latest",
     "go-swag@latest",
-    "kubectl@1.30.2"
+    "kubectl@1.30.2",
+    "kubebuilder@4.1.0"
   ]
 }
