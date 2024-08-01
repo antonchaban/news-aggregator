@@ -36,7 +36,7 @@ ENV KEY_FILE=${KEY_FILE_ARG}
 RUN go build -o /bin/web /src/cmd/news-alligator/web/main.go
 
 # Stage 2: Run
-FROM scratch
+FROM alpine:3.20
 COPY --from=base /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 WORKDIR /root/
 
