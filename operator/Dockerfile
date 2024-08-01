@@ -1,8 +1,8 @@
 # Build the manager binary
-FROM golang:1.22 AS builder
+FROM golang:1.22-alpine AS builder
 ARG TARGETOS
 ARG TARGETARCH
-
+RUN apk add --no-cache ca-certificates
 WORKDIR /workspace
 # Copy the Go Modules manifests
 COPY go.mod go.mod
@@ -25,7 +25,9 @@ RUN CGO_ENABLED=0 GOOS=${TARGETOS:-linux} GOARCH=${TARGETARCH} go build -a -o ma
 
 # Use distroless as minimal base image to package the manager binary
 # Refer to https://github.com/GoogleContainerTools/distroless for more details
-FROM gcr.io/distroless/static:nonroot
+FROM alpine:3.20
+RUN apk --no-cache add curl
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 WORKDIR /
 COPY --from=builder /workspace/manager .
 USER 65532:65532

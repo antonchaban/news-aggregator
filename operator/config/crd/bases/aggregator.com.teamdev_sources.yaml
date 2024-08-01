@@ -39,6 +39,8 @@ spec:
           spec:
             description: SourceSpec defines Source fields
             properties:
+              id:
+                type: integer
               link:
                 type: string
               name:

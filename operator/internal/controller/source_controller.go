@@ -17,21 +17,29 @@ limitations under the License.
 package controller
 
 import (
+	aggregatorv1 "com.teamdev/news-aggregator/api/v1"
 	"context"
-
+	"crypto/tls"
+	"fmt"
+	"github.com/sirupsen/logrus"
+	"io/ioutil"
 	"k8s.io/apimachinery/pkg/runtime"
+	"net/http"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
-	"sigs.k8s.io/controller-runtime/pkg/log"
-
-	aggregatorv1 "com.teamdev/news-aggregator/api/v1"
+	"time"
 )
 
 // SourceReconciler reconciles a Source object
 type SourceReconciler struct {
-	client.Client
+	Client client.Client
 	Scheme *runtime.Scheme
 }
+
+const (
+	newsAggregatorSrcServiceURL = "https://news-alligator-service.news-alligator.svc.cluster.local:8443/sources"
+	newsAggregatorArtServiceURL = "https://news-alligator-service.news-alligator.svc.cluster.local:8443/articles"
+)
 
 // +kubebuilder:rbac:groups=aggregator.com.teamdev,resources=sources,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=aggregator.com.teamdev,resources=sources/status,verbs=get;update;patch
@@ -47,16 +55,47 @@ type SourceReconciler struct {
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.18.4/pkg/reconcile
 func (r *SourceReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	logger := log.FromContext(ctx)
-
 	var source aggregatorv1.Source
 	err := r.Client.Get(ctx, req.NamespacedName, &source)
 	if err != nil {
 		return ctrl.Result{}, err
 	}
-	logger.Info("hello from src reconcile", "Name", source.Spec.Name)
-	logger.Info("hello from src reconcile", "Link", source.Spec.Link)
 
+	logrus.Printf("name is: %s", source.Spec.Name)
+	logrus.Printf("link is: %s", source.Spec.Link)
+
+	c := &http.Client{
+		Timeout: 10 * time.Second,
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		},
+	}
+
+	testReq, err := http.NewRequest(http.MethodGet, newsAggregatorArtServiceURL, nil)
+	if err != nil {
+		fmt.Println("Error creating request:", err)
+		return ctrl.Result{}, nil
+	}
+	testReq.Header.Set("Content-Type", "application/json")
+
+	// Send the request
+	resp, err := c.Do(testReq)
+	if err != nil {
+		fmt.Println("Error sending request:", err)
+		return ctrl.Result{}, nil
+	}
+	defer resp.Body.Close()
+
+	// Read the response body
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println("Error reading response body:", err)
+		return ctrl.Result{}, nil
+	}
+
+	logrus.Printf("body is: %s", body)
+
+	logrus.Println("############################")
 	return ctrl.Result{}, nil
 }
 

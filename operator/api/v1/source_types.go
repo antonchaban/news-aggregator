@@ -24,6 +24,7 @@ import (
 
 // SourceSpec defines Source fields
 type SourceSpec struct {
+	Id   int    `json:"id,omitempty"`
 	Name string `json:"name,omitempty"`
 	Link string `json:"link,omitempty"`
 }
