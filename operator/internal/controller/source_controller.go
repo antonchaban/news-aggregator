@@ -47,9 +47,15 @@ type SourceReconciler struct {
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.18.4/pkg/reconcile
 func (r *SourceReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	_ = log.FromContext(ctx)
+	logger := log.FromContext(ctx)
 
-	// TODO(user): your logic here
+	var source aggregatorv1.Source
+	err := r.Client.Get(ctx, req.NamespacedName, &source)
+	if err != nil {
+		return ctrl.Result{}, err
+	}
+	logger.Info("hello from src reconcile", "Name", source.Spec.Name)
+	logger.Info("hello from src reconcile", "Link", source.Spec.Link)
 
 	return ctrl.Result{}, nil
 }

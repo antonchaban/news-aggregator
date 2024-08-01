@@ -24,15 +24,13 @@ import (
 
 // SourceSpec defines Source fields
 type SourceSpec struct {
-	Id   int    `json:"id,omitempty"`
 	Name string `json:"name,omitempty"`
 	Link string `json:"link,omitempty"`
 }
 
 // SourceStatus defines the observed state of Source
 type SourceStatus struct {
-	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
+	Message string `json:"message,omitempty"`
 }
 
 // +kubebuilder:object:root=true

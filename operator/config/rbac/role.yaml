@@ -1,11 +1,58 @@
+---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  labels:
-    app.kubernetes.io/name: operator
-    app.kubernetes.io/managed-by: kustomize
   name: manager-role
 rules:
-- apiGroups: [""]
-  resources: ["pods"]
-  verbs: ["get", "list", "watch"]
+- apiGroups:
+  - aggregator.com.teamdev
+  resources:
+  - hotnews
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - aggregator.com.teamdev
+  resources:
+  - hotnews/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - aggregator.com.teamdev
+  resources:
+  - hotnews/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - aggregator.com.teamdev
+  resources:
+  - sources
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - aggregator.com.teamdev
+  resources:
+  - sources/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - aggregator.com.teamdev
+  resources:
+  - sources/status
+  verbs:
+  - get
+  - patch
+  - update
