@@ -8,7 +8,6 @@ require (
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-co-op/gocron v1.37.0
 	github.com/jmoiron/sqlx v1.4.0
-	github.com/joho/godotenv v1.5.1
 	github.com/lib/pq v1.10.9
 	github.com/mmcdole/gofeed v1.3.0
 	github.com/reiver/go-porterstemmer v1.0.1

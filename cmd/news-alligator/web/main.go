@@ -62,6 +62,10 @@ func main() {
 		DBName:   os.Getenv(dbNameEnvVar),
 		SSLMode:  os.Getenv(dbSSLModeEnvVar),
 	})
+	if err != nil {
+		logrus.Fatalf("error occurred while initializing database: %s", err.Error())
+		panic(err)
+	}
 
 	//artDb := inmemory.New()
 	//srcDb := inmemory.NewSrc()

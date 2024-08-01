@@ -17,10 +17,10 @@ func New(db *sqlx.DB) service.ArticleStorage {
 
 func (pa *postgresArticleStorage) GetAll() ([]model.Article, error) {
 	var articles []model.Article
-	query := fmt.Sprintf(`SELECT a.id, a.title, a.description, a.link, a.pub_date,
+	query := `SELECT a.id, a.title, a.description, a.link, a.pub_date,
 			       s.id AS source_id, s.name AS source_name, s.link AS source_link
 			FROM articles a
-			JOIN sources s ON a.source_id = s.id`)
+			JOIN sources s ON a.source_id = s.id`
 	rows, err := pa.db.Queryx(query)
 	if err != nil {
 		return nil, err
@@ -49,7 +49,7 @@ func (pa *postgresArticleStorage) GetAll() ([]model.Article, error) {
 
 func (pa *postgresArticleStorage) Save(article model.Article) (model.Article, error) {
 	var id int
-	createQuery := fmt.Sprintf(`INSERT INTO articles (title, description, link, source_id, pub_date) VALUES ($1, $2, $3, $4, $5) RETURNING id`)
+	createQuery := `INSERT INTO articles (title, description, link, source_id, pub_date) VALUES ($1, $2, $3, $4, $5) RETURNING id`
 
 	err := pa.db.QueryRow(createQuery, article.Title, article.Description, article.Link, article.Source.Id, article.PubDate).Scan(&id)
 	if err != nil {
@@ -70,13 +70,13 @@ func (pa *postgresArticleStorage) SaveAll(articles []model.Article) error {
 }
 
 func (pa *postgresArticleStorage) Delete(id int) error {
-	query := fmt.Sprintf(`DELETE FROM articles WHERE id = $1`)
+	query := `DELETE FROM articles WHERE id = $1`
 	_, err := pa.db.Exec(query, id)
 	return err
 }
 
 func (pa *postgresArticleStorage) DeleteBySourceID(id int) error {
-	query := fmt.Sprintf(`DELETE FROM articles WHERE source_id = $1`)
+	query := `DELETE FROM articles WHERE source_id = $1`
 	_, err := pa.db.Exec(query, id)
 	if err != nil {
 		return err

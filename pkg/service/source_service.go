@@ -12,7 +12,7 @@ import (
 	"path/filepath"
 )
 
-//go:generate mockgen -destination=../storage/mocks/mock_source.go -package=mocks github.com/antonchaban/news-aggregator/pkg/service SourceStorage
+//go:generate mockgen -destination=mocks/mock_source.go -package=mocks github.com/antonchaban/news-aggregator/pkg/service SourceStorage
 
 const (
 	eventErrorSavingArticles = "error_saving_articles"
