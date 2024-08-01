@@ -2,8 +2,8 @@ package cli
 
 import (
 	"github.com/antonchaban/news-aggregator/pkg/filter"
+	"github.com/antonchaban/news-aggregator/pkg/handler/web/mocks"
 	"github.com/antonchaban/news-aggregator/pkg/model"
-	"github.com/antonchaban/news-aggregator/pkg/service/mocks"
 	"go.uber.org/mock/gomock"
 	"testing"
 	"time"

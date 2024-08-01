@@ -8,6 +8,19 @@ import (
 	"strconv"
 )
 
+//go:generate mockgen -destination=mocks/mock_source_service.go -package=mocks github.com/antonchaban/news-aggregator/pkg/handler/web SourceService
+
+// SourceService represents the service for sources.
+type SourceService interface {
+	FetchFromAllSources() error
+	FetchSourceByID(id int) ([]model.Article, error)
+	LoadDataFromFiles() ([]model.Article, error)
+	AddSource(source model.Source) (model.Source, error)
+	DeleteSource(id int) error
+	UpdateSource(id int, source model.Source) (model.Source, error)
+	GetAll() ([]model.Source, error)
+}
+
 // @Summary Fetch source by ID
 // @Description Immediately fetches news from source by ID
 // @Tags sources

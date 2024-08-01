@@ -1,36 +1,35 @@
 package web
 
 import (
-	"github.com/antonchaban/news-aggregator/pkg/service"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-// Handler represents the HTTP handler with article and source services.
+// Handler represents the handler with article and source services.
 type Handler struct {
-	articleService service.ArticleService
-	srcService     service.SourceService
+	articleService ArticleService
+	srcService     SourceService
 }
 
 // SrcService returns the source service.
-func (h *Handler) SrcService() service.SourceService {
+func (h *Handler) SrcService() SourceService {
 	return h.srcService
 }
 
 // ArticleService returns the article service.
-func (h *Handler) ArticleService() service.ArticleService {
+func (h *Handler) ArticleService() ArticleService {
 	return h.articleService
 }
 
 // NewHandler creates a new Handler instance.
-func NewHandler(asvc service.ArticleService, ss service.SourceService) *Handler {
+func NewHandler(asvc ArticleService, ss SourceService) *Handler {
 	h := &Handler{articleService: asvc,
 		srcService: ss}
 	return h
 }
 
-// InitRoutes initializes the routes for the HTTP server.
+// InitRoutes initializes the routes for the server.
 func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
 

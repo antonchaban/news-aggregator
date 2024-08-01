@@ -14,6 +14,8 @@ import (
 	"text/template"
 )
 
+const articleTemplate = "article.tmpl"
+
 // filterArticles filters the provided articles based on the provided sources, keywords, and date range.
 // It returns the filtered articles.
 func (h *cliHandler) filterArticles(f filter.Filters) ([]model.Article, error) {
@@ -69,7 +71,7 @@ func getTemplatePath() (string, error) {
 		return "", errors.New("environment variable TMPL_DIR not set")
 	}
 
-	tmplPath := filepath.Join(tmplDir, "article.tmpl")
+	tmplPath := filepath.Join(tmplDir, articleTemplate)
 
 	if _, err := os.Stat(tmplPath); os.IsNotExist(err) {
 		log.Fatalf("Template file not found: %s", tmplPath)

@@ -1,16 +1,16 @@
 {{ define "filter" }}
   {{- if gt (len .Value) 0 }}
-    {{ .Label }}: {{ .Value }}
+    {{ .Label }}: {{ .Value | indent 4 }}
   {{- end }}
 {{ end }}
 
 {{ define "article" }}
-Title: {{ .Article.Title | highlightKeywords }}
-Description: {{ .Article.Description | highlightKeywords }}
-Link: {{ .Article.Link }}
-Date: {{ .Article.PubDate | date "2006-01-02 15:04:05 MST" }}
+Title: {{ .Article.Title | highlightKeywords | indent 4 }}
+Description: {{ .Article.Description | highlightKeywords | indent 4 }}
+Link: {{ .Article.Link | indent 4 }}
+Date: {{ .Article.PubDate | date "2006-01-02 15:04:05 MST" | indent 4 }}
 {{- if not (gt (len .Filters.Source) 0) }}
-Source: {{ .Article.Source }}
+Source: {{ .Article.Source.Name | indent 4 }}
 {{- end }}
 -------------------------------
 {{ end }}
@@ -21,10 +21,10 @@ Filters Applied:
 {{- if $noFilters }}
   No filters applied
 {{- else }}
-  {{- template "filter" (dict "Label" "Sources" "Value" .Filters.Source) }}
-  {{- template "filter" (dict "Label" "Keywords" "Value" .Filters.Keyword) }}
-  {{- template "filter" (dict "Label" "Date Start" "Value" .Filters.StartDate) }}
-  {{- template "filter" (dict "Label" "Date End" "Value" .Filters.EndDate) }}
+  {{- template "filter" (dict "Label" "Sources" "Value" (.Filters.Source | indent 4)) }}
+  {{- template "filter" (dict "Label" "Keywords" "Value" (.Filters.Keyword | indent 4)) }}
+  {{- template "filter" (dict "Label" "Date Start" "Value" (.Filters.StartDate | indent 4)) }}
+  {{- template "filter" (dict "Label" "Date End" "Value" (.Filters.EndDate | indent 4)) }}
 {{- end }}
 Number of News Items: {{ len .Articles }}
 {{ end }}
@@ -58,7 +58,7 @@ Developer: Anton Chaban
 {{ end }}
 
 {{ define "page" }}
-{{ template "header" . }}
+{{ template "header" .}}
 {{ template "main" . }}
 {{ template "footer" . }}
 {{ end }}
