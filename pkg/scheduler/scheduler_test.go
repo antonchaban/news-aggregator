@@ -2,7 +2,7 @@ package scheduler
 
 import (
 	"fmt"
-	service_mocks "github.com/antonchaban/news-aggregator/pkg/service/mocks"
+	service_mocks "github.com/antonchaban/news-aggregator/pkg/handler/web/mocks"
 	"github.com/sirupsen/logrus"
 	"go.uber.org/mock/gomock"
 	"testing"

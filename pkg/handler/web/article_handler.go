@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-//go:generate mockgen -destination=../../service/mocks/mock_article_service.go -package=mocks github.com/antonchaban/news-aggregator/pkg/handler/web ArticleService
+//go:generate mockgen -destination=mocks/mock_article_service.go -package=mocks github.com/antonchaban/news-aggregator/pkg/handler/web ArticleService
 
 // ArticleService is an interface that defines the methods for interacting with the article storage.
 type ArticleService interface {

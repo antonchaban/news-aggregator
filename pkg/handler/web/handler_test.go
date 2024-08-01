@@ -1,7 +1,7 @@
 package web
 
 import (
-	service_mocks "github.com/antonchaban/news-aggregator/pkg/service/mocks"
+	service_mocks "github.com/antonchaban/news-aggregator/pkg/handler/web/mocks"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
