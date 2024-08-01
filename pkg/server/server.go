@@ -58,7 +58,7 @@ func (s *Server) Run(port string, handler http.Handler) error {
 	return nil
 }
 
-// RunWithFiles starts the HTTP server on the specified port and initializes the sources.
+// RunWithFiles starts the HTTPs server on the specified port and initializes the sources.
 // It also loads articles from a backup file and saves them using the provided
 // article handler.
 // The server listens for HTTPS requests using the specified
@@ -66,7 +66,7 @@ func (s *Server) Run(port string, handler http.Handler) error {
 //
 // Parameters:
 // - port: The port on which the server will listen for requests.
-// - handler: The HTTP handler to use for handling requests.
+// - handler: Handler to use for handling requests.
 // - artHandler: The web handler for managing articles.
 //
 // Returns an error if the server fails to start or if loading/saving articles fails.
