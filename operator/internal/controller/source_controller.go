@@ -17,12 +17,14 @@ limitations under the License.
 package controller
 
 import (
+	"bytes"
 	aggregatorv1 "com.teamdev/news-aggregator/api/v1"
 	"context"
 	"crypto/tls"
+	"encoding/json"
 	"fmt"
 	"github.com/sirupsen/logrus"
-	"io/ioutil"
+	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
 	"net/http"
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -58,11 +60,55 @@ func (r *SourceReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 	var source aggregatorv1.Source
 	err := r.Client.Get(ctx, req.NamespacedName, &source)
 	if err != nil {
+		if errors.IsNotFound(err) {
+			logrus.Info("Source resource not found, possibly deleted. Removing source from news-aggregator.")
+			return ctrl.Result{}, nil
+		}
 		return ctrl.Result{}, err
 	}
 
-	logrus.Printf("name is: %s", source.Spec.Name)
-	logrus.Printf("link is: %s", source.Spec.Link)
+	if source.ObjectMeta.DeletionTimestamp.IsZero() {
+		if !containsString(source.Finalizers, "source.finalizers.teamdev.com") {
+			source.Finalizers = append(source.Finalizers, "source.finalizers.teamdev.com")
+			if err := r.Client.Update(ctx, &source); err != nil {
+				return ctrl.Result{}, err
+			}
+		}
+	} else {
+		if containsString(source.Finalizers, "source.finalizers.teamdev.com") {
+			if _, err := r.deleteSourceFromAggregator(ctx, source.Status.ID); err != nil {
+				return ctrl.Result{}, err
+			}
+			source.Finalizers = removeString(source.Finalizers, "source.finalizers.teamdev.com")
+			if err := r.Client.Update(ctx, &source); err != nil {
+				return ctrl.Result{}, err
+			}
+		}
+		return ctrl.Result{}, nil
+	}
+
+	logrus.Info("Reconciling Source", "ID", source.Status.ID, "Name", source.Spec.Name, "Link", source.Spec.Link)
+
+	if source.Status.ID == 0 {
+		return r.createSourceInAggregator(ctx, &source)
+	} else {
+		return r.updateSourceInAggregator(ctx, source.Status.ID, &source)
+	}
+}
+
+func (r *SourceReconciler) createSourceInAggregator(ctx context.Context, source *aggregatorv1.Source) (ctrl.Result, error) {
+	logrus.Println("Creating source:", source.Name)
+
+	sourceData, err := json.Marshal(source.Spec)
+	if err != nil {
+		return ctrl.Result{}, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, newsAggregatorSrcServiceURL, bytes.NewBuffer(sourceData))
+	if err != nil {
+		return ctrl.Result{}, err
+	}
+	req.Header.Set("Content-Type", "application/json")
 
 	c := &http.Client{
 		Timeout: 10 * time.Second,
@@ -70,33 +116,115 @@ func (r *SourceReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 		},
 	}
-
-	testReq, err := http.NewRequest(http.MethodGet, newsAggregatorArtServiceURL, nil)
+	resp, err := c.Do(req)
 	if err != nil {
-		fmt.Println("Error creating request:", err)
-		return ctrl.Result{}, nil
-	}
-	testReq.Header.Set("Content-Type", "application/json")
-
-	// Send the request
-	resp, err := c.Do(testReq)
-	if err != nil {
-		fmt.Println("Error sending request:", err)
-		return ctrl.Result{}, nil
+		return ctrl.Result{}, err
 	}
 	defer resp.Body.Close()
 
-	// Read the response body
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		fmt.Println("Error reading response body:", err)
-		return ctrl.Result{}, nil
+	if resp.StatusCode != http.StatusOK {
+		logrus.Error(fmt.Errorf("failed to create source in news aggregator"), "Status", resp.Status)
+		return ctrl.Result{}, fmt.Errorf("failed to create source in news aggregator: %s", resp.Status)
 	}
 
-	logrus.Printf("body is: %s", body)
+	var createdSource aggregatorv1.SourceSpec
+	if err := json.NewDecoder(resp.Body).Decode(&createdSource); err != nil {
+		return ctrl.Result{}, err
+	}
 
-	logrus.Println("############################")
+	// Update the Source status with the created Source ID
+	source.Status.ID = createdSource.Id
+	if err := r.Client.Status().Update(ctx, source); err != nil {
+		return ctrl.Result{}, err
+	}
+
+	logrus.Info("Successfully created source in news aggregator")
 	return ctrl.Result{}, nil
+}
+
+func (r *SourceReconciler) updateSourceInAggregator(ctx context.Context, sourceID int, source *aggregatorv1.Source) (ctrl.Result, error) {
+	logrus.Println("Updating source:", source.Name)
+
+	sourceData, err := json.Marshal(source.Spec)
+	if err != nil {
+		return ctrl.Result{}, err
+	}
+
+	url := fmt.Sprintf("%s/%d", newsAggregatorSrcServiceURL, sourceID)
+	req, err := http.NewRequest(http.MethodPut, url, bytes.NewBuffer(sourceData))
+	if err != nil {
+		return ctrl.Result{}, err
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	c := &http.Client{
+		Timeout: 10 * time.Second,
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		},
+	}
+	resp, err := c.Do(req)
+	if err != nil {
+		return ctrl.Result{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		logrus.Error(fmt.Errorf("failed to update source in news aggregator"), "Status", resp.Status)
+		return ctrl.Result{}, fmt.Errorf("failed to update source in news aggregator: %s", resp.Status)
+	}
+
+	logrus.Info("Successfully updated source in news aggregator")
+	return ctrl.Result{}, nil
+}
+
+func (r *SourceReconciler) deleteSourceFromAggregator(ctx context.Context, sourceID int) (ctrl.Result, error) {
+	logrus.Println("Deleting source with ID:", sourceID)
+
+	url := fmt.Sprintf("%s/%d", newsAggregatorSrcServiceURL, sourceID)
+	req, err := http.NewRequest(http.MethodDelete, url, nil)
+	if err != nil {
+		return ctrl.Result{}, err
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	c := &http.Client{
+		Timeout: 10 * time.Second,
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		},
+	}
+	resp, err := c.Do(req)
+	if err != nil {
+		return ctrl.Result{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		logrus.Error(fmt.Errorf("failed to delete source from news aggregator"), "Status", resp.Status)
+		return ctrl.Result{}, fmt.Errorf("failed to delete source from news aggregator: %s", resp.Status)
+	}
+
+	logrus.Info("Successfully deleted source from news aggregator")
+	return ctrl.Result{}, nil
+}
+
+func containsString(slice []string, s string) bool {
+	for _, item := range slice {
+		if item == s {
+			return true
+		}
+	}
+	return false
+}
+
+func removeString(slice []string, s string) []string {
+	for i, item := range slice {
+		if item == s {
+			return append(slice[:i], slice[i+1:]...)
+		}
+	}
+	return slice
 }
 
 // SetupWithManager sets up the controller with the Manager.

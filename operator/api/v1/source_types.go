@@ -31,6 +31,7 @@ type SourceSpec struct {
 
 // SourceStatus defines the observed state of Source
 type SourceStatus struct {
+	ID      int    `json:"id,omitempty"`
 	Message string `json:"message,omitempty"`
 }
 

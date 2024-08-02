@@ -3,7 +3,6 @@ kind: Source
 metadata:
   name: bbc-source
 spec:
-  id: 1
   name: "BBC News"
   link: "https://feeds.bbci.co.uk/news/rss.xml"
 ---
@@ -12,7 +11,6 @@ kind: Source
 metadata:
   name: abc-source
 spec:
-  id: 2
   name: "ABC News: International"
   link: "https://abcnews.go.com/abcnews/internationalheadlines"
 ---
