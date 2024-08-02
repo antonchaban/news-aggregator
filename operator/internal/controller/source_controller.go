@@ -40,7 +40,6 @@ type SourceReconciler struct {
 
 const (
 	newsAggregatorSrcServiceURL = "https://news-alligator-service.news-alligator.svc.cluster.local:8443/sources"
-	newsAggregatorArtServiceURL = "https://news-alligator-service.news-alligator.svc.cluster.local:8443/articles"
 )
 
 // +kubebuilder:rbac:groups=aggregator.com.teamdev,resources=sources,verbs=get;list;watch;create;update;patch;delete
