@@ -39,13 +39,39 @@ spec:
           spec:
             description: HotNewsSpec defines the desired state of HotNews
             properties:
-              foo:
-                description: Foo is an example field of HotNews. Edit hotnews_types.go
-                  to remove/update
+              dateEnd:
                 type: string
+              dateStart:
+                type: string
+              feedGroups:
+                items:
+                  type: string
+                type: array
+              feeds:
+                items:
+                  type: string
+                type: array
+              keywords:
+                items:
+                  type: string
+                type: array
+              summaryConfig:
+                properties:
+                  titlesCount:
+                    type: integer
+                type: object
             type: object
           status:
             description: HotNewsStatus defines the observed state of HotNews
+            properties:
+              articlesCount:
+                type: integer
+              articlesTitles:
+                items:
+                  type: string
+                type: array
+              newsLink:
+                type: string
             type: object
         type: object
     served: true

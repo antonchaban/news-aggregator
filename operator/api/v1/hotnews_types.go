@@ -25,17 +25,23 @@ import (
 
 // HotNewsSpec defines the desired state of HotNews
 type HotNewsSpec struct {
-	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
+	Keywords      []string      `json:"keywords,omitempty"`
+	DateStart     string        `json:"dateStart,omitempty"`
+	DateEnd       string        `json:"dateEnd,omitempty"` // todo maybe should use time.Time
+	Feeds         []string      `json:"feeds,omitempty"`
+	FeedGroups    []string      `json:"feedGroups,omitempty"`
+	SummaryConfig SummaryConfig `json:"summaryConfig,omitempty"`
+}
 
-	// Foo is an example field of HotNews. Edit hotnews_types.go to remove/update
-	Foo string `json:"foo,omitempty"`
+type SummaryConfig struct {
+	TitlesCount int `json:"titlesCount,omitempty"`
 }
 
 // HotNewsStatus defines the observed state of HotNews
 type HotNewsStatus struct {
-	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
+	ArticlesCount  int      `json:"articlesCount,omitempty"`
+	NewsLink       string   `json:"newsLink,omitempty"`
+	ArticlesTitles []string `json:"articlesTitles,omitempty"`
 }
 
 // +kubebuilder:object:root=true
