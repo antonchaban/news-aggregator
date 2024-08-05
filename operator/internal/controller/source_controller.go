@@ -24,12 +24,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/sirupsen/logrus"
-	"golang.org/x/exp/slices"
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
 	"net/http"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
+	"slices"
 	"time"
 )
 
@@ -40,22 +40,8 @@ type SourceReconciler struct {
 }
 
 const (
-	newsAggregatorSrcServiceURL        = "https://news-alligator-service.news-alligator.svc.cluster.local:8443/sources"
-	sourceFinalizer                    = "source.finalizers.teamdev.com"
-	contentTypeHeader                  = "Content-Type"
-	contentTypeJSON                    = "application/json"
-	httpClientTimeout                  = 10 * time.Second
-	logSourceNotFound                  = "Source resource not found, possibly deleted. Removing source from news-aggregator."
-	logSourceReconcile                 = "Reconciling Source"
-	logSourceCreate                    = "Creating source:"
-	logSourceUpdate                    = "Updating source:"
-	logSourceDelete                    = "Deleting source with ID:"
-	logSourceCreateSuccess             = "Successfully created source in news aggregator"
-	logSourceUpdateSuccess             = "Successfully updated source in news aggregator"
-	logSourceDeleteSuccess             = "Successfully deleted source from news aggregator"
-	logErrorCreateSourceInAggregator   = "failed to create source in news aggregator"
-	logErrorUpdateSourceInAggregator   = "failed to update source in news aggregator"
-	logErrorDeleteSourceFromAggregator = "failed to delete source from news aggregator"
+	newsAggregatorSrcServiceURL = "https://news-alligator-service.news-alligator.svc.cluster.local:8443/sources"
+	srcFinalizer                = "source.finalizers.teamdev.com"
 )
 
 // +kubebuilder:rbac:groups=aggregator.com.teamdev,resources=sources,verbs=get;list;watch;create;update;patch;delete
@@ -64,31 +50,38 @@ const (
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.
+// TODO(user): Modify the Reconcile function to compare the state specified by
+// the Source object against the actual cluster state, and then
+// perform operations to make the cluster state reflect the state specified by
+// the user.
+//
+// For more details, check Reconcile and its Result here:
+// - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.18.4/pkg/reconcile
 func (r *SourceReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	var source aggregatorv1.Source
 	err := r.Client.Get(ctx, req.NamespacedName, &source)
 	if err != nil {
 		if errors.IsNotFound(err) {
-			logrus.Info(logSourceNotFound)
+			logrus.Info("Source resource not found, possibly deleted. Removing source from news-aggregator.")
 			return ctrl.Result{}, nil
 		}
 		return ctrl.Result{}, err
 	}
 
 	if source.ObjectMeta.DeletionTimestamp.IsZero() {
-		if !slices.Contains(source.Finalizers, sourceFinalizer) {
-			source.Finalizers = append(source.Finalizers, sourceFinalizer)
+		if !slices.Contains(source.Finalizers, srcFinalizer) {
+			source.Finalizers = append(source.Finalizers, srcFinalizer)
 			if err := r.Client.Update(ctx, &source); err != nil {
 				return ctrl.Result{}, err
 			}
 		}
 	} else {
-		if slices.Contains(source.Finalizers, sourceFinalizer) {
+		if slices.Contains(source.Finalizers, srcFinalizer) {
 			if _, err := r.deleteSource(source.Status.ID); err != nil {
 				return ctrl.Result{}, err
 			}
-			source.Finalizers = slices.Delete(source.Finalizers, slices.Index(source.Finalizers, sourceFinalizer),
-				slices.Index(source.Finalizers, sourceFinalizer)+1)
+			source.Finalizers = slices.Delete(source.Finalizers,
+				slices.Index(source.Finalizers, srcFinalizer), slices.Index(source.Finalizers, srcFinalizer)+1)
 			if err := r.Client.Update(ctx, &source); err != nil {
 				return ctrl.Result{}, err
 			}
@@ -96,68 +89,35 @@ func (r *SourceReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 		return ctrl.Result{}, nil
 	}
 
-	logrus.Info(logSourceReconcile, "ID", source.Status.ID, "Name", source.Spec.Name, "Link", source.Spec.Link)
+	logrus.Info("Reconciling Source", "ID", source.Status.ID, "Name", source.Spec.Name, "Link", source.Spec.Link)
 
 	if source.Status.ID == 0 {
 		return r.createSource(ctx, &source)
 	} else {
-		return r.updateSource(ctx, source.Status.ID, &source)
+		return r.updateSource(source.Status.ID, &source)
 	}
 }
 
 func (r *SourceReconciler) createSource(ctx context.Context, source *aggregatorv1.Source) (ctrl.Result, error) {
-	logrus.Println(logSourceCreate, source.Name)
+	logrus.Println("Creating source:", source.Name)
 
-	return r.sendSrcReq(ctx, http.MethodPost, newsAggregatorSrcServiceURL,
-		source, logSourceCreateSuccess, logErrorCreateSourceInAggregator)
-}
-
-func (r *SourceReconciler) updateSource(ctx context.Context, sourceID int, source *aggregatorv1.Source) (ctrl.Result, error) {
-	logrus.Println(logSourceUpdate, source.Name)
-
-	url := fmt.Sprintf("%s/%d", newsAggregatorSrcServiceURL, sourceID)
-	return r.sendSrcReq(ctx, http.MethodPut, url, source,
-		logSourceUpdateSuccess, logErrorUpdateSourceInAggregator)
-}
-
-func (r *SourceReconciler) deleteSource(sourceID int) (ctrl.Result, error) {
-	logrus.Println(logSourceDelete, sourceID)
-
-	url := fmt.Sprintf("%s/%d", newsAggregatorSrcServiceURL, sourceID)
-	return r.sendRequest(http.MethodDelete, url, nil, logSourceDeleteSuccess,
-		logErrorDeleteSourceFromAggregator)
-}
-
-func (r *SourceReconciler) sendSrcReq(ctx context.Context, method, url string,
-	source *aggregatorv1.Source, successMsg, errorMsg string) (ctrl.Result, error) {
 	sourceData, err := json.Marshal(source.Spec)
 	if err != nil {
 		return ctrl.Result{}, err
 	}
 
-	result, err := r.sendRequest(method, url, bytes.NewBuffer(sourceData), successMsg, errorMsg)
-	if err == nil && method == http.MethodPost {
-		var createdSource aggregatorv1.SourceSpec
-		if err := json.NewDecoder(bytes.NewBuffer(sourceData)).Decode(&createdSource); err != nil {
-			return ctrl.Result{}, err
-		}
-		source.Status.ID = createdSource.Id
-		if err := r.Client.Status().Update(ctx, source); err != nil {
-			return ctrl.Result{}, err
-		}
-	}
-	return result, err
-}
-
-func (r *SourceReconciler) sendRequest(method, url string,
-	body *bytes.Buffer, successMsg, errorMsg string) (ctrl.Result, error) {
-	req, err := http.NewRequest(method, url, body)
+	req, err := http.NewRequest(http.MethodPost, newsAggregatorSrcServiceURL, bytes.NewBuffer(sourceData))
 	if err != nil {
 		return ctrl.Result{}, err
 	}
-	req.Header.Set(contentTypeHeader, contentTypeJSON)
+	req.Header.Set("Content-Type", "application/json")
 
-	c := r.getHTTPClient()
+	c := &http.Client{
+		Timeout: 10 * time.Second,
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		},
+	}
 	resp, err := c.Do(req)
 	if err != nil {
 		return ctrl.Result{}, err
@@ -165,21 +125,90 @@ func (r *SourceReconciler) sendRequest(method, url string,
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		logrus.Error(fmt.Errorf(errorMsg), "Status", resp.Status)
-		return ctrl.Result{}, fmt.Errorf("%s: %s", errorMsg, resp.Status)
+		logrus.Error(fmt.Errorf("failed to create source in news aggregator"), "Status", resp.Status)
+		return ctrl.Result{}, fmt.Errorf("failed to create source in news aggregator: %s", resp.Status)
 	}
 
-	logrus.Info(successMsg)
+	var createdSource aggregatorv1.SourceSpec
+	if err := json.NewDecoder(resp.Body).Decode(&createdSource); err != nil {
+		return ctrl.Result{}, err
+	}
+
+	// Update the Source status with the created Source ID
+	source.Status.ID = createdSource.Id
+	if err := r.Client.Status().Update(ctx, source); err != nil {
+		return ctrl.Result{}, err
+	}
+
+	logrus.Info("Successfully created source in news aggregator")
 	return ctrl.Result{}, nil
 }
 
-func (r *SourceReconciler) getHTTPClient() *http.Client {
-	return &http.Client{
-		Timeout: httpClientTimeout,
+func (r *SourceReconciler) updateSource(sourceID int, source *aggregatorv1.Source) (ctrl.Result, error) {
+	logrus.Println("Updating source:", source.Name)
+
+	sourceData, err := json.Marshal(source.Spec)
+	if err != nil {
+		return ctrl.Result{}, err
+	}
+
+	url := fmt.Sprintf("%s/%d", newsAggregatorSrcServiceURL, sourceID)
+	req, err := http.NewRequest(http.MethodPut, url, bytes.NewBuffer(sourceData))
+	if err != nil {
+		return ctrl.Result{}, err
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	c := &http.Client{
+		Timeout: 10 * time.Second,
 		Transport: &http.Transport{
 			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 		},
 	}
+	resp, err := c.Do(req)
+	if err != nil {
+		return ctrl.Result{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		logrus.Error(fmt.Errorf("failed to update source in news aggregator"), "Status", resp.Status)
+		return ctrl.Result{}, fmt.Errorf("failed to update source in news aggregator: %s", resp.Status)
+	}
+
+	logrus.Info("Successfully updated source in news aggregator")
+	return ctrl.Result{}, nil
+}
+
+func (r *SourceReconciler) deleteSource(sourceID int) (ctrl.Result, error) {
+	logrus.Println("Deleting source with ID:", sourceID)
+
+	url := fmt.Sprintf("%s/%d", newsAggregatorSrcServiceURL, sourceID)
+	req, err := http.NewRequest(http.MethodDelete, url, nil)
+	if err != nil {
+		return ctrl.Result{}, err
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	c := &http.Client{
+		Timeout: 10 * time.Second,
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		},
+	}
+	resp, err := c.Do(req)
+	if err != nil {
+		return ctrl.Result{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		logrus.Error(fmt.Errorf("failed to delete source from news aggregator"), "Status", resp.Status)
+		return ctrl.Result{}, fmt.Errorf("failed to delete source from news aggregator: %s", resp.Status)
+	}
+
+	logrus.Info("Successfully deleted source from news aggregator")
+	return ctrl.Result{}, nil
 }
 
 // SetupWithManager sets up the controller with the Manager.
