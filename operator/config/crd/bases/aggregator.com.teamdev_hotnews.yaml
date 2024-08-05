@@ -39,38 +39,75 @@ spec:
           spec:
             description: HotNewsSpec defines the desired state of HotNews
             properties:
-              dateEnd:
+              date_end:
                 type: string
-              dateStart:
+              date_start:
                 type: string
-              feedGroups:
-                items:
-                  type: string
-                type: array
-              feeds:
-                items:
-                  type: string
-                type: array
               keywords:
                 items:
                   type: string
                 type: array
-              summaryConfig:
+              source_groups:
+                items:
+                  type: string
+                type: array
+              sources:
+                items:
+                  description: Source is the Schema for the sources API
+                  properties:
+                    apiVersion:
+                      description: |-
+                        APIVersion defines the versioned schema of this representation of an object.
+                        Servers should convert recognized schemas to the latest internal value, and
+                        may reject unrecognized values.
+                        More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+                      type: string
+                    kind:
+                      description: |-
+                        Kind is a string value representing the REST resource this object represents.
+                        Servers may infer this from the endpoint the client submits requests to.
+                        Cannot be updated.
+                        In CamelCase.
+                        More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+                      type: string
+                    metadata:
+                      type: object
+                    spec:
+                      description: SourceSpec defines Source fields
+                      properties:
+                        id:
+                          type: integer
+                        link:
+                          type: string
+                        name:
+                          type: string
+                      type: object
+                    status:
+                      description: SourceStatus defines the observed state of Source
+                      properties:
+                        id:
+                          type: integer
+                        message:
+                          type: string
+                      type: object
+                  type: object
+                type: array
+              summary_config:
                 properties:
-                  titlesCount:
+                  titles_count:
                     type: integer
                 type: object
             type: object
           status:
             description: HotNewsStatus defines the observed state of HotNews
             properties:
-              articlesCount:
+              articles_count:
                 type: integer
-              articlesTitles:
+              articles_titles:
                 items:
                   type: string
                 type: array
-              newsLink:
+              news_link:
                 type: string
             type: object
         type: object

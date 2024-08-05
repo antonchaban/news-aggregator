@@ -26,22 +26,22 @@ import (
 // HotNewsSpec defines the desired state of HotNews
 type HotNewsSpec struct {
 	Keywords      []string      `json:"keywords,omitempty"`
-	DateStart     string        `json:"dateStart,omitempty"`
-	DateEnd       string        `json:"dateEnd,omitempty"` // todo maybe should use time.Time
-	Feeds         []string      `json:"feeds,omitempty"`
-	FeedGroups    []string      `json:"feedGroups,omitempty"`
-	SummaryConfig SummaryConfig `json:"summaryConfig,omitempty"`
+	StartDate     string        `json:"date_start,omitempty"`
+	EndDate       string        `json:"date_end,omitempty"` // todo maybe should use time.Time
+	Sources       []Source      `json:"sources,omitempty"`
+	SourceGroups  []string      `json:"source_groups,omitempty"`
+	SummaryConfig SummaryConfig `json:"summary_config,omitempty"`
 }
 
 type SummaryConfig struct {
-	TitlesCount int `json:"titlesCount,omitempty"`
+	TitlesCount int `json:"titles_count,omitempty"`
 }
 
 // HotNewsStatus defines the observed state of HotNews
 type HotNewsStatus struct {
-	ArticlesCount  int      `json:"articlesCount,omitempty"`
-	NewsLink       string   `json:"newsLink,omitempty"`
-	ArticlesTitles []string `json:"articlesTitles,omitempty"`
+	ArticlesCount  int      `json:"articles_count,omitempty"`
+	NewsLink       string   `json:"news_link,omitempty"`
+	ArticlesTitles []string `json:"articles_titles,omitempty"`
 }
 
 // +kubebuilder:object:root=true
