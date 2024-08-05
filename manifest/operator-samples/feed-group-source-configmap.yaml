@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: feed-group-source
+  namespace: default
+data:
+  news: "abcnews,bbc,nbc"
+  media: "washingtontimes,usatoday"

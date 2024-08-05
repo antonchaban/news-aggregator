@@ -1,0 +1,16 @@
+apiVersion: aggregator.com.teamdev/v1
+kind: Source
+metadata:
+  name: bbc-source
+spec:
+  name: "BBC News"
+  link: "https://feeds.bbci.co.uk/news/rss.xml"
+---
+apiVersion: aggregator.com.teamdev/v1
+kind: Source
+metadata:
+  name: abc-source
+spec:
+  name: "ABC News: International"
+  link: "https://abcnews.go.com/abcnews/internationalheadlines"
+---

@@ -28,7 +28,7 @@ type HotNewsSpec struct {
 	Keywords      []string      `json:"keywords,omitempty"`
 	StartDate     string        `json:"date_start,omitempty"`
 	EndDate       string        `json:"date_end,omitempty"` // todo maybe should use time.Time
-	Sources       []Source      `json:"sources,omitempty"`
+	Sources       []string      `json:"sources,omitempty"`
 	SourceGroups  []string      `json:"source_groups,omitempty"`
 	SummaryConfig SummaryConfig `json:"summary_config,omitempty"`
 }
