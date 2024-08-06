@@ -2,6 +2,7 @@
   {
     "id": 1,
     "name": "Test Source 1",
-    "link": ""
+    "link": "",
+    "short_name": ""
   }
 ]

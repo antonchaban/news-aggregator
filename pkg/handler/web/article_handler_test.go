@@ -30,15 +30,16 @@ func TestHandler_getArticlesByFilter(t *testing.T) {
 						Link:        "Link",
 						Description: "Description",
 						Source: model.Source{
-							Name: "CNN",
+							Name:      "CNN",
+							ShortName: "cnn",
 						},
 					},
 				}, nil)
 			},
 			expectedCode:         200,
-			expectedResponseBody: `[{"Id":1,"Title":"Title","Description":"Description","Link":"Link","Source":{"id":0,"name":"CNN","link":""},"PubDate":"0001-01-01T00:00:00Z"}]`,
+			expectedResponseBody: `[{"Id":1,"Title":"Title","Description":"Description","Link":"Link","Source":{"id":0,"name":"CNN","link":"","short_name":"cnn"},"PubDate":"0001-01-01T00:00:00Z"}]`,
 			inputQuery: map[string]string{
-				"sources": "other",
+				"sources": "cnn",
 			},
 		},
 	}
@@ -66,7 +67,7 @@ func TestHandler_getArticlesByFilter(t *testing.T) {
 
 			// Create Request
 			w := httptest.NewRecorder()
-			req := httptest.NewRequest("POST", "/articles?sources=other", nil)
+			req := httptest.NewRequest("POST", "/articles?sources=cnn", nil)
 
 			// Make Request
 			r.ServeHTTP(w, req)

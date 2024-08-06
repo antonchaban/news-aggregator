@@ -30,8 +30,8 @@ func (psrc *postgresSrcStorage) GetAll() ([]model.Source, error) {
 
 func (psrc *postgresSrcStorage) Save(src model.Source) (model.Source, error) {
 	var id int
-	createQuery := `INSERT INTO sources (name, link, short_name) VALUES ($1, $2) RETURNING id`
-	err := psrc.db.QueryRow(createQuery, src.Name, src.Link).Scan(&id)
+	createQuery := `INSERT INTO sources (name, link, short_name) VALUES ($1, $2, $3) RETURNING id`
+	err := psrc.db.QueryRow(createQuery, src.Name, src.Link, src.ShortName).Scan(&id)
 	if err != nil {
 		return model.Source{}, err
 	}

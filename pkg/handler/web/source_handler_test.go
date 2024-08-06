@@ -46,7 +46,7 @@ func TestHandler_fetchSrcById(t *testing.T) {
 				}, nil)
 			},
 			expectedCode:         200,
-			expectedResponseBody: `[{"Id":1,"Title":"Title1","Description":"Description1","Link":"Link1","Source":{"id":0,"name":"CNN","link":""},"PubDate":"0001-01-01T00:00:00Z"},{"Id":2,"Title":"Title2","Description":"Description2","Link":"Link2","Source":{"id":0,"name":"CNN","link":""},"PubDate":"0001-01-01T00:00:00Z"}]`,
+			expectedResponseBody: `[{"Id":1,"Title":"Title1","Description":"Description1","Link":"Link1","Source":{"id":0,"name":"CNN","link":"","short_name":""},"PubDate":"0001-01-01T00:00:00Z"},{"Id":2,"Title":"Title2","Description":"Description2","Link":"Link2","Source":{"id":0,"name":"CNN","link":"","short_name":""},"PubDate":"0001-01-01T00:00:00Z"}]`,
 			inputID:              "1",
 		},
 		{
@@ -102,8 +102,8 @@ func TestHandler_createSource(t *testing.T) {
 				r.EXPECT().AddSource(src).Return(src, nil)
 			},
 			expectedCode:         200,
-			expectedResponseBody: `{"id":1,"name":"CNN","link":"http://cnn.com"}`,
-			inputBody:            `{"id":1,"name":"CNN","link":"http://cnn.com"}`,
+			expectedResponseBody: `{"id":1,"name":"CNN","link":"http://cnn.com","short_name":"cnn"}`,
+			inputBody:            `{"id":1,"name":"CNN","link":"http://cnn.com","short_name":"cnn"}`,
 		},
 		{
 			name:                 "BadRequest",
@@ -122,7 +122,7 @@ func TestHandler_createSource(t *testing.T) {
 			srcSvc := service_mocks.NewMockSourceService(c)
 			var src model.Source
 			if test.inputBody != "" {
-				src = model.Source{Id: 1, Name: "CNN", Link: "http://cnn.com"}
+				src = model.Source{Id: 1, Name: "CNN", Link: "http://cnn.com", ShortName: "cnn"}
 			}
 			test.mockBehavior(srcSvc, src)
 
@@ -217,8 +217,8 @@ func TestHandler_updateSource(t *testing.T) {
 				r.EXPECT().UpdateSource(id, src).Return(src, nil)
 			},
 			expectedCode:         200,
-			expectedResponseBody: `{"id":1,"name":"CNN","link":"http://cnn.com"}`,
-			inputBody:            `{"id":1,"name":"CNN","link":"http://cnn.com"}`,
+			expectedResponseBody: `{"id":1,"name":"CNN","link":"http://cnn.com","short_name":"cnn"}`,
+			inputBody:            `{"id":1,"name":"CNN","link":"http://cnn.com","short_name":"cnn"}`,
 			inputID:              "1",
 		},
 		{
@@ -239,7 +239,7 @@ func TestHandler_updateSource(t *testing.T) {
 			srcSvc := service_mocks.NewMockSourceService(c)
 			var src model.Source
 			if test.inputBody != "" {
-				src = model.Source{Id: 1, Name: "CNN", Link: "http://cnn.com"}
+				src = model.Source{Id: 1, Name: "CNN", Link: "http://cnn.com", ShortName: "cnn"}
 			}
 			id, _ := strconv.Atoi(test.inputID)
 			test.mockBehavior(srcSvc, id, src)
