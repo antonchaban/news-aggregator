@@ -45,6 +45,8 @@ spec:
                 type: string
               name:
                 type: string
+              short_name:
+                type: string
             type: object
           status:
             description: SourceStatus defines the observed state of Source

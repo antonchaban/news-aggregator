@@ -24,9 +24,10 @@ import (
 
 // SourceSpec defines Source fields
 type SourceSpec struct {
-	Id   int    `json:"id,omitempty"`
-	Name string `json:"name,omitempty"`
-	Link string `json:"link,omitempty"`
+	Id        int    `json:"id,omitempty"`
+	Name      string `json:"name,omitempty"`
+	Link      string `json:"link,omitempty"`
+	ShortName string `json:"short_name,omitempty"`
 }
 
 // SourceStatus defines the observed state of Source
