@@ -2,6 +2,7 @@ version: '3'
 
 env:
   DOCKER_IMAGE_NAME: antohachaban/news-alligator-web
+  POSTGRES_PASSWORD: qwerty
 
 tasks:
   build:
@@ -85,7 +86,7 @@ tasks:
     env:
       POSTGRES_PASSWORD: $POSTGRES_PASSWORD
     cmds:
-      - docker run --name=news-alligator-db -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD -p 5436:5432 -d --rm postgres
+      - docker run --name=news-alligator-db -e POSTGRES_PASSWORD={{.POSTGRES_PASSWORD}} -p 5436:5432 -d --rm postgres
     desc: Run the PostgreSQL container
 
   init-db:

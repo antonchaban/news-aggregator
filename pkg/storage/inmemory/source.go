@@ -124,3 +124,14 @@ func (m *memorySourceStorage) Update(id int, src model.Source) (model.Source, er
 	logrus.WithField("event_id", eventUpdateSourceError).Error("Source not found", id)
 	return model.Source{}, errors.New("source not found")
 }
+
+func (m *memorySourceStorage) GetByShortName(shortName string) (model.Source, error) {
+	logrus.WithField("event_id", eventGetSourceByID).Info("Fetching source by short name", shortName)
+	for _, s := range m.Sources {
+		if s.ShortName == shortName {
+			return s, nil
+		}
+	}
+	logrus.WithField("event_id", eventGetSourceByIDError).Error("Source not found", shortName)
+	return model.Source{}, errors.New("source not found")
+}

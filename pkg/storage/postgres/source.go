@@ -19,7 +19,7 @@ func NewSrc(db *sqlx.DB) service.SourceStorage {
 
 func (psrc *postgresSrcStorage) GetAll() ([]model.Source, error) {
 	var sources []model.Source
-	query := `SELECT id, name, link FROM sources`
+	query := `SELECT id, name, link, short_name FROM sources`
 	err := psrc.db.Select(&sources, query)
 	if err != nil {
 		return nil, err
@@ -30,7 +30,7 @@ func (psrc *postgresSrcStorage) GetAll() ([]model.Source, error) {
 
 func (psrc *postgresSrcStorage) Save(src model.Source) (model.Source, error) {
 	var id int
-	createQuery := `INSERT INTO sources (name, link) VALUES ($1, $2) RETURNING id`
+	createQuery := `INSERT INTO sources (name, link, short_name) VALUES ($1, $2) RETURNING id`
 	err := psrc.db.QueryRow(createQuery, src.Name, src.Link).Scan(&id)
 	if err != nil {
 		return model.Source{}, err
@@ -62,6 +62,19 @@ func (psrc *postgresSrcStorage) GetByID(id int) (model.Source, error) {
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return model.Source{}, fmt.Errorf("source with id %d not found", id)
+		}
+		return model.Source{}, err
+	}
+	return src, nil
+}
+
+func (psrc *postgresSrcStorage) GetByShortName(shortName string) (model.Source, error) {
+	var src model.Source
+	query := `SELECT id, name, link, short_name FROM sources WHERE short_name = $1`
+	err := psrc.db.Get(&src, query, shortName)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return model.Source{}, fmt.Errorf("source with short name %s not found", shortName)
 		}
 		return model.Source{}, err
 	}

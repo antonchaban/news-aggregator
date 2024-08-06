@@ -78,28 +78,11 @@ func (h *SourceFilter) Filter(articles []model.Article, f Filters) ([]model.Arti
 
 func (h *SourceFilter) BuildFilterQuery(f Filters, query string) (string, []interface{}) {
 	if f.Source != "" {
-		sourceMap := map[string]string{
-			"abcnews":         abcNewsSource,
-			"bbc":             bbcNewsSource,
-			"washingtontimes": washingtonTimesSource,
-			"nbc":             nbcNewsSource,
-			"usatoday":        usaTodaySource,
-		}
-
 		sourceList := strings.Split(f.Source, ",")
 		var sourceConditions []string
 		for _, source := range sourceList {
-			if source == "other" {
-				condition := fmt.Sprintf("s.name NOT IN ('%s', '%s', '%s', '%s', '%s')",
-					abcNewsSource, bbcNewsSource, washingtonTimesSource, nbcNewsSource, usaTodaySource)
-				sourceConditions = append(sourceConditions, condition)
-			} else if sourceName, ok := sourceMap[source]; ok {
-				condition := fmt.Sprintf("s.name = '%s'", sourceName)
-				sourceConditions = append(sourceConditions, condition)
-			} else {
-				logrus.WithField("event_id", "source_not_found").Errorf("Source not found: %s", source)
-				return query, nil
-			}
+			condition := fmt.Sprintf("s.short_name = '%s'", source)
+			sourceConditions = append(sourceConditions, condition)
 		}
 		if len(sourceConditions) > 0 {
 			query += " AND (" + strings.Join(sourceConditions, " OR ") + ")"
