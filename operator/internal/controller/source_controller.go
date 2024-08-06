@@ -39,7 +39,7 @@ type SourceReconciler struct {
 	Scheme *runtime.Scheme
 }
 
-const (
+const ( // move newsAggregatorSrcServiceURL to main.go
 	newsAggregatorSrcServiceURL = "https://news-alligator-service.news-alligator.svc.cluster.local:8443/sources"
 	srcFinalizer                = "source.finalizers.teamdev.com"
 )
@@ -112,7 +112,7 @@ func (r *SourceReconciler) createSource(ctx context.Context, source *aggregatorv
 	}
 	req.Header.Set("Content-Type", "application/json")
 
-	c := &http.Client{
+	c := &http.Client{ // init http client in main.go
 		Timeout: 10 * time.Second,
 		Transport: &http.Transport{
 			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
@@ -125,7 +125,7 @@ func (r *SourceReconciler) createSource(ctx context.Context, source *aggregatorv
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		logrus.Error(fmt.Errorf("failed to create source in news aggregator"), "Status", resp.Status)
+		//logrus.Error(fmt.Errorf("failed to create source in news aggregator"), "Status", resp.Status)
 		return ctrl.Result{}, fmt.Errorf("failed to create source in news aggregator: %s", resp.Status)
 	}
 

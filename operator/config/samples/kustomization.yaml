@@ -1,5 +1,4 @@
 ## Append samples of your project ##
 resources:
 - aggregator_v1_source.yaml
-- aggregator_v1_hotnews.yaml
 # +kubebuilder:scaffold:manifestskustomizesamples

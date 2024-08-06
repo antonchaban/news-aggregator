@@ -33,6 +33,7 @@ type SourceSpec struct {
 type SourceStatus struct {
 	ID      int    `json:"id,omitempty"`
 	Message string `json:"message,omitempty"`
+	// todo add more fields
 }
 
 // +kubebuilder:object:root=true
