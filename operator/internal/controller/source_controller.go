@@ -79,6 +79,7 @@ func (r *SourceReconciler) createSource(ctx context.Context, source *aggregatorv
 	if err != nil {
 		return ctrl.Result{}, err
 	}
+	logrus.Println("Source data:", string(sourceData))
 
 	req, err := http.NewRequest(http.MethodPost, r.NewsAggregatorSrcServiceURL, bytes.NewBuffer(sourceData))
 	if err != nil {

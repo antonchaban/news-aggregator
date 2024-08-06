@@ -5,7 +5,6 @@ import (
 	"fmt"
 	_ "github.com/antonchaban/news-aggregator/cmd/news-alligator/web/docs"
 	"github.com/antonchaban/news-aggregator/pkg/handler/web"
-	"github.com/antonchaban/news-aggregator/pkg/scheduler"
 	"github.com/antonchaban/news-aggregator/pkg/server"
 	"github.com/antonchaban/news-aggregator/pkg/service"
 	"github.com/antonchaban/news-aggregator/pkg/storage"
@@ -86,8 +85,8 @@ func main() {
 
 	logrus.Print("news-alligator 🐊 started")
 
-	newScheduler := scheduler.NewScheduler(articleService, sourceService)
-	newScheduler.Start()
+	//newScheduler := scheduler.NewScheduler(articleService, sourceService)
+	//newScheduler.Start()
 
 	// Wait for a signal to quit
 	quit := make(chan os.Signal, 1)
@@ -96,7 +95,7 @@ func main() {
 
 	logrus.Print("news-alligator 🐊 shutting down")
 
-	newScheduler.Stop()
+	//newScheduler.Stop()
 
 	// Retrieve all articles before shutting down
 	articles, err := articleService.GetAll()

@@ -5,6 +5,7 @@ metadata:
 spec:
   name: "BBC News"
   link: "https://feeds.bbci.co.uk/news/rss.xml"
+  short_name: "bbc"
 ---
 apiVersion: aggregator.com.teamdev/v1
 kind: Source
@@ -13,4 +14,5 @@ metadata:
 spec:
   name: "ABC News: International"
   link: "https://abcnews.go.com/abcnews/internationalheadlines"
+  short_name: "abcnews"
 ---
