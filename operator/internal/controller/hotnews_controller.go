@@ -45,6 +45,21 @@ const (
 	hotNewsFinalizer         = "hotnews.finalizers.teamdev.com"
 )
 
+type Article struct {
+	Id          int       `json:"Id"`
+	Title       string    `json:"Title"`
+	Description string    `json:"Description"`
+	Link        string    `json:"Link"`
+	Source      Source    `json:"Source"`
+	PubDate     time.Time `json:"PubDate"`
+}
+
+type Source struct {
+	Id   int    `json:"id"`
+	Name string `json:"name"`
+	Link string `json:"link"`
+}
+
 // +kubebuilder:rbac:groups=aggregator.com.teamdev,resources=hotnews,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=aggregator.com.teamdev,resources=hotnews/status,verbs=get;update;patch
 // +kubebuilder:rbac:groups=aggregator.com.teamdev,resources=hotnews/finalizers,verbs=update
@@ -133,16 +148,19 @@ func (r *HotNewsReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 		return ctrl.Result{}, fmt.Errorf("failed to get articles from news aggregator: %s", resp.Status)
 	}
 
-	var summary aggregatorv1.HotNewsStatus
-	if err := json.NewDecoder(resp.Body).Decode(&summary); err != nil {
+	var articles []Article
+	if err := json.NewDecoder(resp.Body).Decode(&articles); err != nil {
 		logrus.Error("Failed to decode response: ", err)
 		return ctrl.Result{}, err
 	}
 
+	hotNews.Status.ArticlesTitles = make([]string, 0, len(articles))
 	// Update HotNews status
-	hotNews.Status.ArticlesCount = summary.ArticlesCount
-	hotNews.Status.NewsLink = summary.NewsLink
-	hotNews.Status.ArticlesTitles = summary.ArticlesTitles
+	hotNews.Status.ArticlesCount = len(articles)
+	hotNews.Status.NewsLink = reqURL
+	for _, article := range articles {
+		hotNews.Status.ArticlesTitles = append(hotNews.Status.ArticlesTitles, article.Title)
+	}
 
 	if err := r.Status().Update(ctx, &hotNews); err != nil {
 		logrus.Error("Failed to update HotNews status: ", err)
