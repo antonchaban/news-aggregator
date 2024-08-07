@@ -240,13 +240,11 @@ func (r *SourceReconciler) SetupWithManager(mgr ctrl.Manager) error {
 			CreateFunc: func(e event.CreateEvent) bool {
 				return true
 			},
-			UpdateFunc: func(e event.UpdateEvent) bool {
-				oldObject := e.ObjectOld.(*aggregatorv1.Source)
-				newObject := e.ObjectNew.(*aggregatorv1.Source)
-				return oldObject.Spec != newObject.Spec
-			},
 			DeleteFunc: func(e event.DeleteEvent) bool {
-				return true
+				return !e.DeleteStateUnknown
+			},
+			UpdateFunc: func(e event.UpdateEvent) bool {
+				return e.ObjectNew.GetGeneration() != e.ObjectOld.GetGeneration()
 			},
 		}).
 		Complete(r)
