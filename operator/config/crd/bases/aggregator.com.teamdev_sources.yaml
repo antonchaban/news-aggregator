@@ -51,10 +51,35 @@ spec:
           status:
             description: SourceStatus defines the observed state of Source
             properties:
+              conditions:
+                items:
+                  description: SourceCondition defines the observed state of Source
+                    at a certain point.
+                  properties:
+                    lastUpdateTime:
+                      description: Last time the condition was checked.
+                      format: date-time
+                      type: string
+                    message:
+                      description: Human-readable message indicating details about
+                        last transition.
+                      type: string
+                    reason:
+                      description: Reason for the condition's last transition.
+                      type: string
+                    status:
+                      description: Status of the condition, one of True or False.
+                      type: string
+                    type:
+                      description: Type of condition.
+                      type: string
+                  required:
+                  - status
+                  - type
+                  type: object
+                type: array
               id:
                 type: integer
-              message:
-                type: string
             type: object
         type: object
     served: true

@@ -16,3 +16,11 @@ spec:
   link: "https://abcnews.go.com/abcnews/internationalheadlines"
   short_name: "abcnews"
 ---
+apiVersion: aggregator.com.teamdev/v1
+kind: Source
+metadata:
+  name: fox-source
+spec:
+  name: "FOX NEWS"
+  link: "https://moxie.foxnews.com/google-publisher/world.xml"
+  short_name: "foxnews"

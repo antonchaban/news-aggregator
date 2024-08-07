@@ -30,11 +30,32 @@ type SourceSpec struct {
 	ShortName string `json:"short_name,omitempty"`
 }
 
+// SourceConditionType is a valid value for SourceCondition.Type
+type SourceConditionType string
+
+const (
+	SourceAdded   SourceConditionType = "Added"
+	SourceUpdated SourceConditionType = "Updated"
+)
+
+// SourceCondition defines the observed state of Source at a certain point.
+type SourceCondition struct {
+	// Type of condition.
+	Type SourceConditionType `json:"type"`
+	// Status of the condition, one of True or False.
+	Status metav1.ConditionStatus `json:"status"`
+	// Last time the condition was checked.
+	LastUpdateTime metav1.Time `json:"lastUpdateTime,omitempty"`
+	// Reason for the condition's last transition.
+	Reason string `json:"reason,omitempty"`
+	// Human-readable message indicating details about last transition.
+	Message string `json:"message,omitempty"`
+}
+
 // SourceStatus defines the observed state of Source
 type SourceStatus struct {
-	ID      int    `json:"id,omitempty"`
-	Message string `json:"message,omitempty"`
-	// todo add more fields
+	ID         int               `json:"id,omitempty"`
+	Conditions []SourceCondition `json:"conditions,omitempty"`
 }
 
 // +kubebuilder:object:root=true
