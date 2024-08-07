@@ -237,10 +237,16 @@ func (r *SourceReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&aggregatorv1.Source{}).
 		WithEventFilter(predicate.Funcs{
+			CreateFunc: func(e event.CreateEvent) bool {
+				return true
+			},
 			UpdateFunc: func(e event.UpdateEvent) bool {
 				oldObject := e.ObjectOld.(*aggregatorv1.Source)
 				newObject := e.ObjectNew.(*aggregatorv1.Source)
 				return oldObject.Spec != newObject.Spec
+			},
+			DeleteFunc: func(e event.DeleteEvent) bool {
+				return true
 			},
 		}).
 		Complete(r)
