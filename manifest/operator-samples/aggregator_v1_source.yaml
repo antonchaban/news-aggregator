@@ -12,7 +12,7 @@ kind: Source
 metadata:
   name: abc-source
 spec:
-  name: "ABC News: International"
+  name: "ABC News"
   link: "https://abcnews.go.com/abcnews/internationalheadlines"
   short_name: "abcnews"
 ---

@@ -1,0 +1,8 @@
+apiVersion: aggregator.com.teamdev/v1
+kind: Source
+metadata:
+  name: test-source
+spec:
+  name: "BBC News"
+  link: "https://feeds.bbci.co.uk/news/rss.xml"
+  short_name: "bbc"

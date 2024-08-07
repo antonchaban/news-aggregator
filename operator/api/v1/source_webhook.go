@@ -17,8 +17,12 @@ limitations under the License.
 package v1
 
 import (
+	"context"
+	"fmt"
 	"k8s.io/apimachinery/pkg/runtime"
+	"net/url"
 	ctrl "sigs.k8s.io/controller-runtime"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
@@ -43,8 +47,6 @@ var _ webhook.Defaulter = &Source{}
 // Default implements webhook.Defaulter so a webhook will be registered for the type
 func (r *Source) Default() {
 	sourcelog.Info("default", "name", r.Name)
-
-	// TODO(user): fill in your defaulting logic.
 }
 
 // TODO(user): change verbs to "verbs=create;update;delete" if you want to enable deletion validation.
@@ -57,23 +59,79 @@ var _ webhook.Validator = &Source{}
 // ValidateCreate implements webhook.Validator so a webhook will be registered for the type
 func (r *Source) ValidateCreate() (admission.Warnings, error) {
 	sourcelog.Info("validate create", "name", r.Name)
-
-	// TODO(user): fill in your validation logic upon object creation.
-	return nil, nil
+	return r.validateSource()
 }
 
 // ValidateUpdate implements webhook.Validator so a webhook will be registered for the type
 func (r *Source) ValidateUpdate(old runtime.Object) (admission.Warnings, error) {
 	sourcelog.Info("validate update", "name", r.Name)
-
-	// TODO(user): fill in your validation logic upon object update.
-	return nil, nil
+	return r.validateSource()
 }
 
 // ValidateDelete implements webhook.Validator so a webhook will be registered for the type
 func (r *Source) ValidateDelete() (admission.Warnings, error) {
 	sourcelog.Info("validate delete", "name", r.Name)
+	return nil, nil
+}
 
-	// TODO(user): fill in your validation logic upon object deletion.
+func (r *Source) validateSource() (admission.Warnings, error) {
+	if len(r.Spec.Name) == 0 || len(r.Spec.ShortName) == 0 || len(r.Spec.Link) == 0 {
+		return nil, fmt.Errorf("name, short_name, and link fields cannot be empty")
+	}
+
+	if len(r.Spec.Name) > 20 || len(r.Spec.ShortName) > 20 {
+		return nil, fmt.Errorf("name and short_name cannot be more than 20 characters")
+	}
+
+	if !isValidURL(r.Spec.Link) {
+		return nil, fmt.Errorf("link field must be a valid URL")
+	}
+
+	// Check for uniqueness within the namespace
+	return r.checkUniqueFields()
+}
+
+func isValidURL(link string) bool {
+	u, err := url.Parse(link)
+	return err == nil && u.Scheme != "" && u.Host != ""
+}
+
+func (r *Source) checkUniqueFields() (admission.Warnings, error) {
+	ctx := context.Background()
+	config := ctrl.GetConfigOrDie()
+	scheme := runtime.NewScheme()
+	if err := AddToScheme(scheme); err != nil {
+		sourcelog.Error(err, "failed to add scheme")
+		return nil, err
+	}
+	cl, err := client.New(config, client.Options{Scheme: scheme})
+	if err != nil {
+		sourcelog.Error(err, "failed to create client")
+		return nil, err
+	}
+
+	var sources SourceList
+	sourcelog.Info("Listing sources in namespace", "namespace", r.Namespace)
+	if err := cl.List(ctx, &sources, client.InNamespace(r.Namespace)); err != nil {
+		sourcelog.Error(err, "failed to list sources")
+		return nil, err
+	}
+
+	sourcelog.Info("Sources retrieved", "count", len(sources.Items))
+	for _, source := range sources.Items {
+		sourcelog.Info("Source found", "name", source.Name, "shortName", source.Spec.ShortName, "link", source.Spec.Link)
+		if source.Name != r.Name {
+			if source.Spec.Name == r.Spec.Name {
+				return nil, fmt.Errorf("name must be unique in the namespace")
+			}
+			if source.Spec.ShortName == r.Spec.ShortName {
+				return nil, fmt.Errorf("short_name must be unique in the namespace")
+			}
+			if source.Spec.Link == r.Spec.Link {
+				return nil, fmt.Errorf("link must be unique in the namespace")
+			}
+		}
+	}
+
 	return nil, nil
 }
