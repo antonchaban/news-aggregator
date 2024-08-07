@@ -134,11 +134,11 @@ func TestPostgresSrcStorage_Update(t *testing.T) {
 
 	storage := NewSrc(db)
 
-	mock.ExpectExec(`UPDATE sources SET name = \$1, link = \$2 WHERE id = \$3`).
-		WithArgs("updated source", "updated link", 1).
+	mock.ExpectExec(`UPDATE sources SET name = \$1, link = \$2, short_name = \$3 WHERE id = \$4`).
+		WithArgs("updated source", "updated link", "updated short name", 1).
 		WillReturnResult(sqlmock.NewResult(0, 1))
 
-	source := model.Source{Name: "updated source", Link: "updated link"}
+	source := model.Source{Name: "updated source", Link: "updated link", ShortName: "updated short name"}
 	updatedSource, err := storage.Update(1, source)
 	assert.NoError(t, err)
 	assert.Equal(t, 1, updatedSource.Id)

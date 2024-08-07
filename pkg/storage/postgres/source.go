@@ -82,8 +82,8 @@ func (psrc *postgresSrcStorage) GetByShortName(shortName string) (model.Source, 
 }
 
 func (psrc *postgresSrcStorage) Update(id int, src model.Source) (model.Source, error) {
-	query := `UPDATE sources SET name = $1, link = $2 WHERE id = $3`
-	_, err := psrc.db.Exec(query, src.Name, src.Link, id)
+	query := `UPDATE sources SET name = $1, link = $2, short_name = $3 WHERE id = $4`
+	_, err := psrc.db.Exec(query, src.Name, src.Link, src.ShortName, id)
 	if err != nil {
 		return model.Source{}, err
 	}
