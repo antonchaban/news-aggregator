@@ -20,25 +20,28 @@ import (
 )
 
 // SourceReconciler reconciles a Source object
+// It contains the logic for handling Source resources, including creating, updating, and deleting them.
 type SourceReconciler struct {
-	Client                      client.Client
-	Scheme                      *runtime.Scheme
-	HTTPClient                  *http.Client
-	NewsAggregatorSrcServiceURL string
+	Client                      client.Client   // Client for interacting with the Kubernetes API
+	Scheme                      *runtime.Scheme // Scheme for the reconciler
+	HTTPClient                  *http.Client    // HTTP client for making external requests
+	NewsAggregatorSrcServiceURL string          // URL of the news aggregator source service
 }
 
 const (
-	srcFinalizer     = "source.finalizers.teamdev.com"
-	reasonFailedUpd  = "FailedUpdate"
-	reasonFailedCr   = "FailedCreation"
-	reasonSuccessCr  = "SuccessfulCreation"
-	reasonSuccessUpd = "SuccessfulUpdate"
+	srcFinalizer     = "source.finalizers.teamdev.com" // Finalizer string for Source resources
+	reasonFailedUpd  = "FailedUpdate"                  // Reason for a failed update
+	reasonFailedCr   = "FailedCreation"                // Reason for a failed creation
+	reasonSuccessCr  = "SuccessfulCreation"            // Reason for a successful creation
+	reasonSuccessUpd = "SuccessfulUpdate"              // Reason for a successful update
 )
 
 // +kubebuilder:rbac:groups=aggregator.com.teamdev,resources=sources,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=aggregator.com.teamdev,resources=sources/status,verbs=get;update;patch
 // +kubebuilder:rbac:groups=aggregator.com.teamdev,resources=sources/finalizers,verbs=update
 
+// Reconcile is the main logic for reconciling a Source resource.
+// It handles creating, updating, and deleting sources in the news aggregator service.
 func (r *SourceReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	var source aggregatorv1.Source
 	err := r.Client.Get(ctx, req.NamespacedName, &source)
@@ -80,6 +83,7 @@ func (r *SourceReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 	}
 }
 
+// createSource creates a new source in the news aggregator service due to a new Source resource being created.
 func (r *SourceReconciler) createSource(ctx context.Context, source *aggregatorv1.Source) (ctrl.Result, error) {
 	logrus.Println("Creating source:", source.Spec.Name)
 
@@ -144,6 +148,7 @@ func (r *SourceReconciler) createSource(ctx context.Context, source *aggregatorv
 	return ctrl.Result{}, nil
 }
 
+// updateSource updates an existing source in the news aggregator service due to a Source resource being updated.
 func (r *SourceReconciler) updateSource(ctx context.Context, sourceID int, source *aggregatorv1.Source) (ctrl.Result, error) {
 	logrus.Println("Updating source:", source.Spec.Name)
 
@@ -195,6 +200,7 @@ func (r *SourceReconciler) updateSource(ctx context.Context, sourceID int, sourc
 	return ctrl.Result{}, nil
 }
 
+// deleteSource deletes a source from the news aggregator service.
 func (r *SourceReconciler) deleteSource(sourceID int) (ctrl.Result, error) {
 	logrus.Println("Deleting source with ID:", sourceID)
 
@@ -220,6 +226,7 @@ func (r *SourceReconciler) deleteSource(sourceID int) (ctrl.Result, error) {
 	return ctrl.Result{}, nil
 }
 
+// updateSourceStatus updates the SourceStatus of a source resource with the given condition.
 func (r *SourceReconciler) updateSourceStatus(ctx context.Context, source *aggregatorv1.Source, conditionType aggregatorv1.SourceConditionType, status metav1.ConditionStatus, reason, message string) error {
 	newCondition := aggregatorv1.SourceCondition{
 		Type:           conditionType,
@@ -233,6 +240,7 @@ func (r *SourceReconciler) updateSourceStatus(ctx context.Context, source *aggre
 	return r.Client.Status().Update(ctx, source)
 }
 
+// SetupWithManager sets up the controller with the Manager, uses predicates to filter events.
 func (r *SourceReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&aggregatorv1.Source{}).

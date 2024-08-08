@@ -32,48 +32,53 @@ import (
 var sourcelog = logf.Log.WithName("source-resource")
 
 // SetupWebhookWithManager will setup the manager to manage the webhooks
+// This function configures the webhook with the manager.
 func (r *Source) SetupWebhookWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewWebhookManagedBy(mgr).
 		For(r).
 		Complete()
 }
 
-// TODO(user): EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
-
 // +kubebuilder:webhook:path=/mutate-aggregator-com-teamdev-v1-source,mutating=true,failurePolicy=fail,sideEffects=None,groups=aggregator.com.teamdev,resources=sources,verbs=create;update,versions=v1,name=msource.kb.io,admissionReviewVersions=v1
 
 var _ webhook.Defaulter = &Source{}
 
 // Default implements webhook.Defaulter so a webhook will be registered for the type
+// This function able to set default values for the Source resource.
 func (r *Source) Default() {
 	sourcelog.Info("default", "name", r.Name)
 }
 
-// TODO(user): change verbs to "verbs=create;update;delete" if you want to enable deletion validation.
-// NOTE: The 'path' attribute must follow a specific pattern and should not be modified directly here.
-// Modifying the path for an invalid path can cause API server errors; failing to locate the webhook.
 // +kubebuilder:webhook:path=/validate-aggregator-com-teamdev-v1-source,mutating=false,failurePolicy=fail,sideEffects=None,groups=aggregator.com.teamdev,resources=sources,verbs=create;update,versions=v1,name=vsource.kb.io,admissionReviewVersions=v1
 
 var _ webhook.Validator = &Source{}
 
 // ValidateCreate implements webhook.Validator so a webhook will be registered for the type
+// This function validates the Source resource upon creation.
 func (r *Source) ValidateCreate() (admission.Warnings, error) {
 	sourcelog.Info("validate create", "name", r.Name)
 	return r.validateSource()
 }
 
 // ValidateUpdate implements webhook.Validator so a webhook will be registered for the type
+// This function validates the Source resource upon update.
 func (r *Source) ValidateUpdate(old runtime.Object) (admission.Warnings, error) {
 	sourcelog.Info("validate update", "name", r.Name)
 	return r.validateSource()
 }
 
 // ValidateDelete implements webhook.Validator so a webhook will be registered for the type
+// This function validates the Source resource upon deletion.
 func (r *Source) ValidateDelete() (admission.Warnings, error) {
 	sourcelog.Info("validate delete", "name", r.Name)
 	return nil, nil
 }
 
+// validateSource validates the fields of a Source resource.
+// It ensures that the Name, ShortName, and Link fields are non-empty,
+// the Name and ShortName fields are no longer than 20 characters,
+// and the Link field is a valid URL.
+// It also ensures that these fields are unique within the namespace.
 func (r *Source) validateSource() (admission.Warnings, error) {
 	if len(r.Spec.Name) == 0 || len(r.Spec.ShortName) == 0 || len(r.Spec.Link) == 0 {
 		return nil, fmt.Errorf("name, short_name, and link fields cannot be empty")
@@ -91,11 +96,13 @@ func (r *Source) validateSource() (admission.Warnings, error) {
 	return r.checkUniqueFields()
 }
 
+// isValidURL checks if the provided link is a valid URL.
 func isValidURL(link string) bool {
 	u, err := url.Parse(link)
 	return err == nil && u.Scheme != "" && u.Host != ""
 }
 
+// checkUniqueFields ensures that the Name, ShortName, and Link fields are unique within the namespace.
 func (r *Source) checkUniqueFields() (admission.Warnings, error) {
 	ctx := context.Background()
 	config := ctrl.GetConfigOrDie()

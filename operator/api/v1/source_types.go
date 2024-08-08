@@ -20,9 +20,13 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
-
-// SourceSpec defines Source fields
+// SourceSpec defines the desired state of Source
+// It contains the specifications for a Source resource.
+// Fields:
+// - Id: Unique identifier for the source.
+// - Name: Name of the source.
+// - Link: URL link to the source.
+// - ShortName: Shortened name of the source for search.
 type SourceSpec struct {
 	Id        int    `json:"id,omitempty"`
 	Name      string `json:"name,omitempty"`
@@ -30,7 +34,10 @@ type SourceSpec struct {
 	ShortName string `json:"short_name,omitempty"`
 }
 
-// SourceConditionType is a valid value for SourceCondition.Type
+// SourceConditionType represents the type of condition for Source
+// Valid values are:
+// - "Added": Indicates that the source has been added.
+// - "Updated": Indicates that the source has been updated.
 type SourceConditionType string
 
 const (
@@ -38,21 +45,26 @@ const (
 	SourceUpdated SourceConditionType = "Updated"
 )
 
-// SourceCondition defines the observed state of Source at a certain point.
+// SourceCondition defines the observed state of Source at the change moment
+// Fields:
+// - Type: Type of condition (e.g., Added, Updated).
+// - Status: Status of the condition, one of True or False.
+// - LastUpdateTime: The last time the condition was updated.
+// - Reason: The reason for the condition's last transition.
+// - Message: A human-readable message indicating details about the last transition.
 type SourceCondition struct {
-	// Type of condition.
-	Type SourceConditionType `json:"type"`
-	// Status of the condition, one of True or False.
-	Status metav1.ConditionStatus `json:"status"`
-	// Last time the condition was checked.
-	LastUpdateTime metav1.Time `json:"lastUpdateTime,omitempty"`
-	// Reason for the condition's last transition.
-	Reason string `json:"reason,omitempty"`
-	// Human-readable message indicating details about last transition.
-	Message string `json:"message,omitempty"`
+	Type           SourceConditionType    `json:"type"`
+	Status         metav1.ConditionStatus `json:"status"`
+	LastUpdateTime metav1.Time            `json:"lastUpdateTime,omitempty"`
+	Reason         string                 `json:"reason,omitempty"`
+	Message        string                 `json:"message,omitempty"`
 }
 
 // SourceStatus defines the observed state of Source
+// It contains the current status of the Source resource, including conditions.
+// Fields:
+// - ID: Unique identifier for the source.
+// - Conditions: List of conditions associated with the source.
 type SourceStatus struct {
 	ID         int               `json:"id,omitempty"`
 	Conditions []SourceCondition `json:"conditions,omitempty"`
@@ -62,6 +74,7 @@ type SourceStatus struct {
 // +kubebuilder:subresource:status
 
 // Source is the Schema for the sources API
+// It represents a source resource in the Kubernetes cluster.
 type Source struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
@@ -73,6 +86,7 @@ type Source struct {
 // +kubebuilder:object:root=true
 
 // SourceList contains a list of Source
+// It is a list of Source resources.
 type SourceList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
