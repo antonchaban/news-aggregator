@@ -20,28 +20,46 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
-// NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
-
 // HotNewsSpec defines the desired state of HotNews
+// Fields:
+// - Keywords: A list of keywords to filter news, must be always required.
+// - DateStart: The start date for the news filter, can be empty.
+// - DateEnd: The end date for the news filter, can be empty.
+// - Sources: All source names in the current namespace, if empty, will watch ALL available feeds. This should be names of Source resources.
+// - FeedGroups: Available sections of feeds from the 'feed-group-source' ConfigMap.
+// - SummaryConfig: Configuration for how the status will show the summary of observed hot news.
 type HotNewsSpec struct {
-	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
+	Keywords      []string      `json:"keywords"`
+	DateStart     string        `json:"date_start,omitempty"`
+	DateEnd       string        `json:"date_end,omitempty"`
+	Sources       []string      `json:"sources,omitempty"`
+	FeedGroups    []string      `json:"feed_groups,omitempty"`
+	SummaryConfig SummaryConfig `json:"summary_config"`
+}
 
-	// Foo is an example field of HotNews. Edit hotnews_types.go to remove/update
-	Foo string `json:"foo,omitempty"`
+// SummaryConfig defines the summary configuration
+// Fields:
+// - TitlesCount: The number of article titles to include in the summary.
+type SummaryConfig struct {
+	TitlesCount int `json:"titles_count"`
 }
 
 // HotNewsStatus defines the observed state of HotNews
+// Fields:
+// - ArticlesCount: The count of articles by the criteria.
+// - NewsLink: A link to the news-aggregator HTTPS server to get all news by the criteria in JSON format.
+// - ArticlesTitles: The first 'spec.summaryConfig.titlesCount' article titles, sorted by feed name.
 type HotNewsStatus struct {
-	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
+	ArticlesCount  int      `json:"articles_count,omitempty"`
+	NewsLink       string   `json:"news_link,omitempty"`
+	ArticlesTitles []string `json:"articles_titles,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 
 // HotNews is the Schema for the hotnews API
+// It represents a hot news resource in the Kubernetes cluster.
 type HotNews struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
@@ -53,6 +71,7 @@ type HotNews struct {
 // +kubebuilder:object:root=true
 
 // HotNewsList contains a list of HotNews
+// It is a list of HotNews resources.
 type HotNewsList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`

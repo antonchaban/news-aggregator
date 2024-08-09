@@ -1,9 +1,35 @@
 apiVersion: aggregator.com.teamdev/v1
 kind: HotNews
 metadata:
-  labels:
-    app.kubernetes.io/name: operator
-    app.kubernetes.io/managed-by: kustomize
-  name: hotnews-sample
+  name: biden-news
 spec:
-  # TODO(user): Add fields here
+  keywords:
+    - "Biden"
+  date_start: "2023-07-07"
+  date_end: "2024-08-10"
+  sources:
+    - "abcnews"
+    - "bbc"
+  summary_config:
+    titles_count: 10
+---
+apiVersion: aggregator.com.teamdev/v1
+kind: HotNews
+metadata:
+  name: olympics-news
+spec:
+  keywords:
+    - "olympics"
+    - "russia"
+    - "ukraine"
+    - "putin"
+  date_start: "2024-07-01"
+  date_end: "2024-08-30"
+  sources:
+    #- "washingtontimes"
+    #- "usatoday"
+    - "foxnews"
+    - "abcnews"
+    - "bbc"
+  summary_config:
+    titles_count: 5
