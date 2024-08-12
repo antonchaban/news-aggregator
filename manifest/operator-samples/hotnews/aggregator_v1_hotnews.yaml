@@ -1,0 +1,32 @@
+apiVersion: aggregator.com.teamdev/v1
+kind: HotNews
+metadata:
+  name: biden-news
+spec:
+  keywords:
+    - "Biden"
+  date_start: "2023-07-07"
+  date_end: "2024-08-10"
+  sources:
+    - "abcnews"
+    - "bbc"
+  summary_config:
+    titles_count: 11
+---
+apiVersion: aggregator.com.teamdev/v1
+kind: HotNews
+metadata:
+  name: olympics-news
+spec:
+  keywords:
+    - "olympics"
+    - "russia"
+    - "ukraine"
+    - "putin"
+    - "war"
+  date_start: "2024-07-01"
+  date_end: "2024-08-30"
+  feed_groups:
+    - "westMedias"
+  summary_config:
+    titles_count: 6

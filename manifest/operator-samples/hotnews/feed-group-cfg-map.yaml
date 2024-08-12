@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: feed-group-source
+data:
+#  category1: "abcnews"
+  westMedias: "bbc,foxnews"

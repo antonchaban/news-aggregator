@@ -23,7 +23,12 @@ import (
 	"github.com/sirupsen/logrus"
 	"k8s.io/apimachinery/pkg/api/errors"
 	"net/http"
+	"reflect"
+	"sigs.k8s.io/controller-runtime/pkg/builder"
+	"sigs.k8s.io/controller-runtime/pkg/event"
+	"sigs.k8s.io/controller-runtime/pkg/handler"
 	"sigs.k8s.io/controller-runtime/pkg/log"
+	"sigs.k8s.io/controller-runtime/pkg/predicate"
 	"slices"
 	"strings"
 	"time"
@@ -81,12 +86,13 @@ func (r *HotNewsReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 	err := r.Get(ctx, req.NamespacedName, hotNews)
 	if err != nil {
 		if errors.IsNotFound(err) {
-			logrus.Info("HotNews resource not found, possibly deleted.")
+			logrus.Info("HotNews resource not found, possibly deleted. In namespace: ", req.Namespace)
 			return ctrl.Result{}, nil
 		}
 		return ctrl.Result{}, err
 	}
 
+	// Handle finalizer logic
 	if hotNews.ObjectMeta.DeletionTimestamp.IsZero() {
 		if !slices.Contains(hotNews.Finalizers, hotNewsFinalizer) {
 			hotNews.Finalizers = append(hotNews.Finalizers, hotNewsFinalizer)
@@ -105,6 +111,24 @@ func (r *HotNewsReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 		return ctrl.Result{}, nil
 	}
 
+	// Fetch the ConfigMap containing feed groups
+	configMap := &corev1.ConfigMap{}
+	err = r.Get(ctx, client.ObjectKey{Namespace: req.Namespace, Name: r.ConfigMapName}, configMap)
+	if err != nil {
+		if errors.IsNotFound(err) {
+			logger.Error(err, "ConfigMap not found")
+			return ctrl.Result{}, nil
+		}
+		return ctrl.Result{}, err
+	}
+
+	// Resolve FeedGroups to actual source names
+	if len(hotNews.Spec.FeedGroups) > 0 {
+		resolvedSources := r.resolveFeedGroups(hotNews.Spec.FeedGroups, configMap)
+		hotNews.Spec.Sources = append(hotNews.Spec.Sources, resolvedSources...)
+	}
+
+	// Build query parameters for the HTTP request
 	queryParams := make(map[string]string)
 	if len(hotNews.Spec.Keywords) > 0 {
 		logrus.Println("Keywords: ", hotNews.Spec.Keywords)
@@ -118,7 +142,6 @@ func (r *HotNewsReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 	}
 	if len(hotNews.Spec.Sources) > 0 {
 		logrus.Println("Sources: ", hotNews.Spec.Sources)
-		// todo add validation of short names to webhook
 		queryParams["sources"] = strings.Join(hotNews.Spec.Sources, ",")
 	}
 
@@ -167,19 +190,6 @@ func (r *HotNewsReconciler) resolveFeedGroups(feedGroups []string, configMap *co
 	return feedNames
 }
 
-// unique removes duplicate strings from a slice
-func unique(strings []string) []string {
-	keys := make(map[string]bool)
-	list := []string{}
-	for _, entry := range strings {
-		if _, value := keys[entry]; !value {
-			keys[entry] = true
-			list = append(list, entry)
-		}
-	}
-	return list
-}
-
 // fetchArticles fetches articles from the given URL
 func (r *HotNewsReconciler) fetchArticles(url string) ([]Article, error) {
 	resp, err := r.HTTPClient.Get(url)
@@ -214,7 +224,26 @@ func getTitles(articles []Article, count int) []string {
 
 // SetupWithManager sets up the controller with the Manager.
 func (r *HotNewsReconciler) SetupWithManager(mgr ctrl.Manager) error {
+	configMapPredicate := predicate.Funcs{
+		UpdateFunc: func(e event.UpdateEvent) bool {
+			oldObj := e.ObjectOld.(*corev1.ConfigMap)
+			newObj := e.ObjectNew.(*corev1.ConfigMap)
+			return !reflect.DeepEqual(oldObj.Data, newObj.Data)
+		},
+		CreateFunc: func(e event.CreateEvent) bool {
+			return true
+		},
+		DeleteFunc: func(e event.DeleteEvent) bool {
+			return true
+		},
+	}
+
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&aggregatorv1.HotNews{}).
+		Watches(
+			&corev1.ConfigMap{},
+			&handler.EnqueueRequestForObject{},
+			builder.WithPredicates(configMapPredicate),
+		).
 		Complete(r)
 }
