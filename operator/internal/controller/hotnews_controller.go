@@ -1,19 +1,3 @@
-/*
-Copyright 2024.
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
-
 package controller
 
 import (
@@ -35,6 +19,8 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
+
+var k8sClient client.Client
 
 // HotNewsReconciler reconciles a HotNews object
 type HotNewsReconciler struct {
@@ -78,14 +64,14 @@ func (r *HotNewsReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 	// Check if the reconcile was triggered by a ConfigMap or Source update
 	var configMap corev1.ConfigMap
 	var source aggregatorv1.Source
-	err := r.Get(ctx, req.NamespacedName, &configMap)
+	err := k8sClient.Get(ctx, req.NamespacedName, &configMap)
 	if err == nil {
 		logrus.Println("Handling ConfigMap update")
 		// ConfigMap update detected, handle all HotNews that reference this ConfigMap
 		return r.handleConfigMapUpdate(ctx, &configMap)
 	}
 
-	err = r.Get(ctx, req.NamespacedName, &source)
+	err = k8sClient.Get(ctx, req.NamespacedName, &source)
 	if err == nil {
 		logrus.Println("Handling Source update")
 		// Source update detected, handle all HotNews that reference this Source
@@ -94,7 +80,7 @@ func (r *HotNewsReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 
 	// If not above - it is a standard HotNews
 	hotNews := &aggregatorv1.HotNews{}
-	err = r.Get(ctx, req.NamespacedName, hotNews)
+	err = k8sClient.Get(ctx, req.NamespacedName, hotNews)
 	if err != nil {
 		if errors.IsNotFound(err) {
 			logrus.Info("HotNews resource not found, possibly deleted. In namespace: ", req.Namespace)
@@ -106,14 +92,14 @@ func (r *HotNewsReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 	if hotNews.ObjectMeta.DeletionTimestamp.IsZero() {
 		if !slices.Contains(hotNews.Finalizers, hotNewsFinalizer) {
 			hotNews.Finalizers = append(hotNews.Finalizers, hotNewsFinalizer)
-			if err := r.Update(ctx, hotNews); err != nil {
+			if err := k8sClient.Update(ctx, hotNews); err != nil {
 				return ctrl.Result{}, err
 			}
 		}
 	} else {
 		if slices.Contains(hotNews.Finalizers, hotNewsFinalizer) {
 			hotNews.Finalizers = slices.Delete(hotNews.Finalizers, slices.Index(hotNews.Finalizers, hotNewsFinalizer), slices.Index(hotNews.Finalizers, hotNewsFinalizer)+1)
-			if err := r.Update(ctx, hotNews); err != nil {
+			if err := k8sClient.Update(ctx, hotNews); err != nil {
 				return ctrl.Result{}, err
 			}
 		}
@@ -130,7 +116,7 @@ func (r *HotNewsReconciler) reconcileHotNews(ctx context.Context, hotNews *aggre
 
 	// Fetch the ConfigMap containing feed groups
 	configMap := &corev1.ConfigMap{}
-	err := r.Get(ctx, client.ObjectKey{Namespace: hotNews.Namespace, Name: r.ConfigMapName}, configMap)
+	err := k8sClient.Get(ctx, client.ObjectKey{Namespace: hotNews.Namespace, Name: r.ConfigMapName}, configMap)
 	if err != nil {
 		if errors.IsNotFound(err) {
 			logger.Error(err, "ConfigMap not found")
@@ -176,7 +162,7 @@ func (r *HotNewsReconciler) reconcileHotNews(ctx context.Context, hotNews *aggre
 	hotNews.Status.ArticlesTitles = getTitles(articles, hotNews.Spec.SummaryConfig.TitlesCount)
 
 	// Update the HotNews status
-	err = r.Client.Status().Update(ctx, hotNews)
+	err = k8sClient.Status().Update(ctx, hotNews)
 	if err != nil {
 		logger.Error(err, "unable to update HotNews status")
 		return ctrl.Result{}, err
@@ -189,7 +175,7 @@ func (r *HotNewsReconciler) reconcileHotNews(ctx context.Context, hotNews *aggre
 // handleConfigMapUpdate handles updates to the ConfigMap and reconciles all relevant HotNews resources
 func (r *HotNewsReconciler) handleConfigMapUpdate(ctx context.Context, configMap *corev1.ConfigMap) (ctrl.Result, error) {
 	var hotNewsList aggregatorv1.HotNewsList
-	err := r.List(ctx, &hotNewsList, &client.ListOptions{Namespace: configMap.Namespace})
+	err := k8sClient.List(ctx, &hotNewsList, &client.ListOptions{Namespace: configMap.Namespace})
 	if err != nil {
 		logrus.Errorf("Failed to list HotNews resources: %v", err)
 		return ctrl.Result{}, err
@@ -209,7 +195,7 @@ func (r *HotNewsReconciler) handleConfigMapUpdate(ctx context.Context, configMap
 // handleSourceUpdate handles updates to the Source and reconciles all relevant HotNews resources
 func (r *HotNewsReconciler) handleSourceUpdate(ctx context.Context, source *aggregatorv1.Source) (ctrl.Result, error) {
 	var hotNewsList aggregatorv1.HotNewsList
-	err := r.List(ctx, &hotNewsList, &client.ListOptions{Namespace: source.Namespace})
+	err := k8sClient.List(ctx, &hotNewsList, &client.ListOptions{Namespace: source.Namespace})
 	if err != nil {
 		logrus.Errorf("Failed to list HotNews resources: %v", err)
 		return ctrl.Result{}, err
@@ -231,7 +217,7 @@ func (r *HotNewsReconciler) handleSourceUpdate(ctx context.Context, source *aggr
 
 		// Fetch the ConfigMap referenced by HotNews
 		configMap := &corev1.ConfigMap{}
-		err := r.Get(ctx, client.ObjectKey{Namespace: hotNews.Namespace, Name: r.ConfigMapName}, configMap)
+		err := k8sClient.Get(ctx, client.ObjectKey{Namespace: hotNews.Namespace, Name: r.ConfigMapName}, configMap)
 		if err != nil {
 			logrus.Errorf("Failed to get ConfigMap %s: %v", r.ConfigMapName, err)
 			continue
@@ -253,6 +239,7 @@ func (r *HotNewsReconciler) handleSourceUpdate(ctx context.Context, source *aggr
 	}
 	return ctrl.Result{}, nil
 }
+
 func buildQuery(params map[string]string) string {
 	var query []string
 	for k, v := range params {
@@ -306,6 +293,7 @@ func getTitles(articles []Article, count int) []string {
 
 // SetupWithManager sets up the controller with the Manager.
 func (r *HotNewsReconciler) SetupWithManager(mgr ctrl.Manager) error {
+	k8sClient = mgr.GetClient() // Set the global k8sClient variable
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&aggregatorv1.HotNews{}).
 		Watches(

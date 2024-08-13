@@ -1,19 +1,3 @@
-/*
-Copyright 2024.
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
-
 package v1
 
 import (
@@ -33,8 +17,11 @@ import (
 // log is for logging in this package.
 var hotnewslog = logf.Log.WithName("hotnews-resource")
 
+var k8sClient client.Client
+
 // SetupWebhookWithManager will setup the manager to manage the webhooks
 func (r *HotNews) SetupWebhookWithManager(mgr ctrl.Manager) error {
+	k8sClient = mgr.GetClient() // Set the global k8sClient variable
 	return ctrl.NewWebhookManagedBy(mgr).
 		For(r).
 		Complete()
@@ -125,20 +112,8 @@ func (r *HotNews) validateHotNews() (admission.Warnings, error) {
 			allErrs = append(allErrs, field.Forbidden(field.NewPath("spec").Child("feedGroups"), "feedGroups cannot be used when sources are specified"))
 		}
 
-		config := ctrl.GetConfigOrDie()
-		scheme := runtime.NewScheme()
-		if err := AddToScheme(scheme); err != nil {
-			hotnewslog.Error(err, "failed to add scheme")
-			return nil, err
-		}
-		cl, err := client.New(config, client.Options{Scheme: scheme})
-		if err != nil {
-			hotnewslog.Error(err, "failed to create client")
-			return nil, err
-		}
-
 		sourceList := &SourceList{}
-		err = cl.List(context.Background(), sourceList, &client.ListOptions{Namespace: r.Namespace})
+		err := k8sClient.List(context.Background(), sourceList, &client.ListOptions{Namespace: r.Namespace})
 		logrus.Println("SourceList: ", sourceList.Items)
 		if err != nil {
 			allErrs = append(allErrs, field.Invalid(field.NewPath("spec").Child("sources"), r.Spec.Sources, "unable to fetch SourceList"))
