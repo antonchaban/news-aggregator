@@ -1,84 +1,94 @@
-/*
-Copyright 2024.
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
-
 package controller
 
 import (
 	"context"
-
-	. "github.com/onsi/ginkgo/v2"
-	. "github.com/onsi/gomega"
-	"k8s.io/apimachinery/pkg/api/errors"
-	"k8s.io/apimachinery/pkg/types"
-	"sigs.k8s.io/controller-runtime/pkg/reconcile"
-
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"net/http"
+	"net/http/httptest"
+	"sigs.k8s.io/controller-runtime/pkg/reconcile"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+	corev1 "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/apimachinery/pkg/types"
+	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
+	"sigs.k8s.io/controller-runtime/pkg/client/fake"
 
 	aggregatorv1 "com.teamdev/news-aggregator/api/v1"
 )
 
-var _ = Describe("HotNews Controller", func() {
-	Context("When reconciling a resource", func() {
-		const resourceName = "test-resource"
+func TestHotNewsReconcile(t *testing.T) {
+	// Create a new scheme and add the necessary schemes
+	scheme := runtime.NewScheme()
+	_ = clientgoscheme.AddToScheme(scheme)
+	_ = aggregatorv1.AddToScheme(scheme)
 
-		ctx := context.Background()
+	// Create the initial HotNews object
+	initialHotNews := &aggregatorv1.HotNews{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      "test-hotnews",
+			Namespace: "default",
+		},
+		Spec: aggregatorv1.HotNewsSpec{
+			Keywords:   []string{"news"},
+			FeedGroups: []string{"group1"},
+		},
+		Status: aggregatorv1.HotNewsStatus{
+			ArticlesCount:  1,
+			NewsLink:       "http://127.0.0.1:59641?keywords=news&sources=bbc,abcnews",
+			ArticlesTitles: []string{},
+		},
+	}
 
-		typeNamespacedName := types.NamespacedName{
-			Name:      resourceName,
-			Namespace: "default", // TODO(user):Modify as needed
-		}
-		hotnews := &aggregatorv1.HotNews{}
+	// Create a ConfigMap with feed groups
+	initialConfigMap := &corev1.ConfigMap{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      "feed-config",
+			Namespace: "default",
+		},
+		Data: map[string]string{
+			"group1": "bbc,abcnews",
+		},
+	}
 
-		BeforeEach(func() {
-			By("creating the custom resource for the Kind HotNews")
-			err := k8sClient.Get(ctx, typeNamespacedName, hotnews)
-			if err != nil && errors.IsNotFound(err) {
-				resource := &aggregatorv1.HotNews{
-					ObjectMeta: metav1.ObjectMeta{
-						Name:      resourceName,
-						Namespace: "default",
-					},
-					// TODO(user): Specify other spec details if needed.
-				}
-				Expect(k8sClient.Create(ctx, resource)).To(Succeed())
-			}
-		})
+	k8sClient = fake.NewClientBuilder().WithScheme(scheme).WithObjects(initialHotNews, initialConfigMap).Build()
 
-		AfterEach(func() {
-			// TODO(user): Cleanup logic after each test, like removing the resource instance.
-			resource := &aggregatorv1.HotNews{}
-			err := k8sClient.Get(ctx, typeNamespacedName, resource)
-			Expect(err).NotTo(HaveOccurred())
+	// Mock HTTP server to simulate external news service
+	mockServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		response := `[{"id": 1, "Title": "Mock Article", "Description": "Mock Description", "Link": "http://mock-link", "Source": {"id": 1, "name": "BBC News", "link": "https://feeds.bbci.co.uk/news/rss.xml", "short_name": "bbc"}, "PubDate": "2024-08-13T00:00:00Z"}]`
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(response))
+	}))
+	defer mockServer.Close()
 
-			By("Cleanup the specific resource instance HotNews")
-			Expect(k8sClient.Delete(ctx, resource)).To(Succeed())
-		})
-		It("should successfully reconcile the resource", func() {
-			By("Reconciling the created resource")
-			controllerReconciler := &HotNewsReconciler{
-				Client: k8sClient,
-				Scheme: k8sClient.Scheme(),
-			}
+	// Create the reconciler with the mock server URL
+	r := &HotNewsReconciler{
+		Client:        k8sClient,
+		Scheme:        scheme,
+		HTTPClient:    http.DefaultClient,
+		ArticleSvcURL: mockServer.URL,
+		ConfigMapName: "feed-config",
+	}
 
-			_, err := controllerReconciler.Reconcile(ctx, reconcile.Request{
-				NamespacedName: typeNamespacedName,
-			})
-			Expect(err).NotTo(HaveOccurred())
-			// TODO(user): Add more specific assertions depending on your controller's reconciliation logic.
-			// Example: If you expect a certain status condition after reconciliation, verify it here.
-		})
-	})
-})
+	// Create the reconcile request
+	req := reconcile.Request{
+		NamespacedName: types.NamespacedName{
+			Name:      "test-hotnews",
+			Namespace: "default",
+		},
+	}
+
+	// Perform the reconciliation
+	_, err := r.Reconcile(context.Background(), req)
+
+	// Retrieve the HotNews object after reconciliation
+	updatedHotNews := &aggregatorv1.HotNews{}
+	err = k8sClient.Get(context.Background(), req.NamespacedName, updatedHotNews)
+	assert.NoError(t, err, "HotNews object should be found after reconciliation")
+
+	// Verify that the status was updated correctly
+	assert.Equal(t, 1, updatedHotNews.Status.ArticlesCount, "Articles count should be 1 after reconciliation")
+	assert.NotEmpty(t, updatedHotNews.Status.NewsLink, "NewsLink should be set after reconciliation")
+}
