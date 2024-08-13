@@ -119,8 +119,12 @@ func (r *HotNews) validateHotNews() (admission.Warnings, error) {
 		}
 	}
 
-	// Validate sources
 	if len(r.Spec.Sources) > 0 {
+		// Check that FeedGroups is empty if Sources is not empty
+		if len(r.Spec.FeedGroups) > 0 {
+			allErrs = append(allErrs, field.Forbidden(field.NewPath("spec").Child("feedGroups"), "feedGroups cannot be used when sources are specified"))
+		}
+
 		config := ctrl.GetConfigOrDie()
 		scheme := runtime.NewScheme()
 		if err := AddToScheme(scheme); err != nil {
