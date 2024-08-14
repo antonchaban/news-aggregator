@@ -1,29 +1,48 @@
 package v1
 
 import (
-	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"reflect"
+	"sigs.k8s.io/controller-runtime/pkg/client"
+	"sigs.k8s.io/controller-runtime/pkg/client/fake"
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 	"testing"
 )
 
-func TestSource_Default(t *testing.T) {
-	type fields struct {
-		TypeMeta   v1.TypeMeta
-		ObjectMeta v1.ObjectMeta
-		Spec       SourceSpec
-		Status     SourceStatus
+// setupFakeClient initializes a fake k8sClient with preloaded Source objects
+func setupFakeClient() client.Client {
+	s := runtime.NewScheme()
+	_ = AddToScheme(s)
+
+	existingSourceList := &SourceList{
+		Items: []Source{
+			{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "test",
+					Namespace: "default",
+				},
+				Spec: SourceSpec{
+					Name:      "test",
+					Link:      "https://test.com",
+					ShortName: "test",
+				},
+			},
+		},
 	}
+
+	return fake.NewClientBuilder().WithScheme(s).WithLists(existingSourceList).Build()
+}
+
+func TestSource_Default(t *testing.T) {
 	tests := []struct {
 		name   string
-		fields fields
+		fields Source
 	}{
 		{
 			name: "Test Default",
-			fields: fields{
-				TypeMeta: v1.TypeMeta{},
-				ObjectMeta: v1.ObjectMeta{
+			fields: Source{
+				ObjectMeta: metav1.ObjectMeta{
 					Name: "test",
 				},
 				Spec: SourceSpec{
@@ -31,17 +50,14 @@ func TestSource_Default(t *testing.T) {
 					ShortName: "test",
 					Link:      "https://test.com",
 				},
-				Status: SourceStatus{},
 			},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			r := &Source{
-				TypeMeta:   tt.fields.TypeMeta,
 				ObjectMeta: tt.fields.ObjectMeta,
 				Spec:       tt.fields.Spec,
-				Status:     tt.fields.Status,
 			}
 			r.Default()
 		})
@@ -49,23 +65,18 @@ func TestSource_Default(t *testing.T) {
 }
 
 func TestSource_ValidateCreate(t *testing.T) {
-	type fields struct {
-		TypeMeta   v1.TypeMeta
-		ObjectMeta v1.ObjectMeta
-		Spec       SourceSpec
-		Status     SourceStatus
-	}
+	k8sClient = setupFakeClient()
+
 	tests := []struct {
 		name    string
-		fields  fields
+		fields  Source
 		want    admission.Warnings
 		wantErr bool
 	}{
 		{
 			name: "Test Validate Create",
-			fields: fields{
-				TypeMeta: v1.TypeMeta{},
-				ObjectMeta: v1.ObjectMeta{
+			fields: Source{
+				ObjectMeta: metav1.ObjectMeta{
 					Name: "test",
 				},
 				Spec: SourceSpec{
@@ -73,15 +84,13 @@ func TestSource_ValidateCreate(t *testing.T) {
 					ShortName: "test",
 					Link:      "https://test.com",
 				},
-				Status: SourceStatus{},
 			},
 			want: nil,
 		},
 		{
 			name: "Test Validate Create Error",
-			fields: fields{
-				TypeMeta: v1.TypeMeta{},
-				ObjectMeta: v1.ObjectMeta{
+			fields: Source{
+				ObjectMeta: metav1.ObjectMeta{
 					Name: "test",
 				},
 				Spec: SourceSpec{
@@ -89,7 +98,6 @@ func TestSource_ValidateCreate(t *testing.T) {
 					ShortName: "verybigandlongshortnametocreateerror",
 					Link:      "https://test.com",
 				},
-				Status: SourceStatus{},
 			},
 			wantErr: true,
 		},
@@ -97,10 +105,8 @@ func TestSource_ValidateCreate(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			r := &Source{
-				TypeMeta:   tt.fields.TypeMeta,
 				ObjectMeta: tt.fields.ObjectMeta,
 				Spec:       tt.fields.Spec,
-				Status:     tt.fields.Status,
 			}
 			got, err := r.ValidateCreate()
 			if (err != nil) != tt.wantErr {
@@ -115,32 +121,24 @@ func TestSource_ValidateCreate(t *testing.T) {
 }
 
 func TestSource_ValidateDelete(t *testing.T) {
-	type fields struct {
-		TypeMeta   v1.TypeMeta
-		ObjectMeta v1.ObjectMeta
-		Spec       SourceSpec
-		Status     SourceStatus
-	}
+	k8sClient = setupFakeClient()
+
 	tests := []struct {
 		name    string
-		fields  fields
+		fields  Source
 		want    admission.Warnings
 		wantErr bool
 	}{
 		{
-			name: "Test Validate Update",
-			fields: fields{
-				TypeMeta: v1.TypeMeta{},
-				ObjectMeta: v1.ObjectMeta{
+			name: "Test Validate Delete",
+			fields: Source{
+				ObjectMeta: metav1.ObjectMeta{
 					Name: "test",
 				},
 				Spec: SourceSpec{
 					Name:      "test",
 					ShortName: "test",
 					Link:      "https://test.com",
-				},
-				Status: SourceStatus{
-					ID: 1,
 				},
 			},
 			want: nil,
@@ -149,10 +147,8 @@ func TestSource_ValidateDelete(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			r := &Source{
-				TypeMeta:   tt.fields.TypeMeta,
 				ObjectMeta: tt.fields.ObjectMeta,
 				Spec:       tt.fields.Spec,
-				Status:     tt.fields.Status,
 			}
 			got, err := r.ValidateDelete()
 			if (err != nil) != tt.wantErr {
@@ -167,55 +163,37 @@ func TestSource_ValidateDelete(t *testing.T) {
 }
 
 func TestSource_ValidateUpdate(t *testing.T) {
-	type fields struct {
-		TypeMeta   v1.TypeMeta
-		ObjectMeta v1.ObjectMeta
-		Spec       SourceSpec
-		Status     SourceStatus
+	k8sClient = setupFakeClient()
+
+	oldSource := &Source{
+		Spec: SourceSpec{
+			Name:      "test",
+			ShortName: "test",
+			Link:      "https://test.com",
+		},
 	}
-	type args struct {
-		old runtime.Object
-	}
+
 	tests := []struct {
 		name    string
-		fields  fields
-		args    args
+		newSpec SourceSpec
 		want    admission.Warnings
 		wantErr bool
 	}{
 		{
 			name: "Test Validate Update",
-			fields: fields{
-				TypeMeta: v1.TypeMeta{},
-				ObjectMeta: v1.ObjectMeta{
-					Name: "test",
-				},
-				Spec: SourceSpec{
-					Name:      "test",
-					ShortName: "test",
-					Link:      "https://test.com",
-				},
-				Status: SourceStatus{
-					ID: 1,
-				},
+			newSpec: SourceSpec{
+				Name:      "test",
+				ShortName: "test",
+				Link:      "https://test.com",
 			},
 			want: nil,
 		},
 		{
 			name: "Test Validate Update Error",
-			fields: fields{
-				TypeMeta: v1.TypeMeta{},
-				ObjectMeta: v1.ObjectMeta{
-					Name: "test",
-				},
-				Spec: SourceSpec{
-					Name:      "test",
-					ShortName: "verybigandlongshortnametocreateerror",
-					Link:      "https://test.com",
-				},
-				Status: SourceStatus{
-					ID: 1,
-				},
+			newSpec: SourceSpec{
+				Name:      "test",
+				ShortName: "verybigandlongshortnametocreateerror",
+				Link:      "https://test.com",
 			},
 			wantErr: true,
 		},
@@ -223,12 +201,12 @@ func TestSource_ValidateUpdate(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			r := &Source{
-				TypeMeta:   tt.fields.TypeMeta,
-				ObjectMeta: tt.fields.ObjectMeta,
-				Spec:       tt.fields.Spec,
-				Status:     tt.fields.Status,
+				ObjectMeta: metav1.ObjectMeta{
+					Name: "test",
+				},
+				Spec: tt.newSpec,
 			}
-			got, err := r.ValidateUpdate(tt.args.old)
+			got, err := r.ValidateUpdate(oldSource)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("ValidateUpdate() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -241,32 +219,24 @@ func TestSource_ValidateUpdate(t *testing.T) {
 }
 
 func TestSource_checkUniqueFields(t *testing.T) {
-	type fields struct {
-		TypeMeta   v1.TypeMeta
-		ObjectMeta v1.ObjectMeta
-		Spec       SourceSpec
-		Status     SourceStatus
-	}
+	k8sClient = setupFakeClient()
+
 	tests := []struct {
 		name    string
-		fields  fields
+		fields  Source
 		want    admission.Warnings
 		wantErr bool
 	}{
 		{
 			name: "Test Check Unique Fields",
-			fields: fields{
-				TypeMeta: v1.TypeMeta{},
-				ObjectMeta: v1.ObjectMeta{
+			fields: Source{
+				ObjectMeta: metav1.ObjectMeta{
 					Name: "test",
 				},
 				Spec: SourceSpec{
 					Name:      "test",
 					ShortName: "test",
 					Link:      "https://test.com",
-				},
-				Status: SourceStatus{
-					ID: 1,
 				},
 			},
 			want: nil,
@@ -275,10 +245,8 @@ func TestSource_checkUniqueFields(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			r := &Source{
-				TypeMeta:   tt.fields.TypeMeta,
 				ObjectMeta: tt.fields.ObjectMeta,
 				Spec:       tt.fields.Spec,
-				Status:     tt.fields.Status,
 			}
 			got, err := r.checkUniqueFields()
 			if (err != nil) != tt.wantErr {
@@ -293,23 +261,18 @@ func TestSource_checkUniqueFields(t *testing.T) {
 }
 
 func TestSource_validateSource(t *testing.T) {
-	type fields struct {
-		TypeMeta   v1.TypeMeta
-		ObjectMeta v1.ObjectMeta
-		Spec       SourceSpec
-		Status     SourceStatus
-	}
+	k8sClient = setupFakeClient()
+
 	tests := []struct {
 		name    string
-		fields  fields
+		fields  Source
 		want    admission.Warnings
 		wantErr bool
 	}{
 		{
 			name: "Test Validate Source",
-			fields: fields{
-				TypeMeta: v1.TypeMeta{},
-				ObjectMeta: v1.ObjectMeta{
+			fields: Source{
+				ObjectMeta: metav1.ObjectMeta{
 					Name: "test",
 				},
 				Spec: SourceSpec{
@@ -317,26 +280,19 @@ func TestSource_validateSource(t *testing.T) {
 					ShortName: "test",
 					Link:      "https://test.com",
 				},
-				Status: SourceStatus{
-					ID: 1,
-				},
 			},
 			want: nil,
 		},
 		{
 			name: "Test Validate Source Error",
-			fields: fields{
-				TypeMeta: v1.TypeMeta{},
-				ObjectMeta: v1.ObjectMeta{
+			fields: Source{
+				ObjectMeta: metav1.ObjectMeta{
 					Name: "test",
 				},
 				Spec: SourceSpec{
 					Name:      "test",
 					ShortName: "verybigandlongshortnametocreateerror",
 					Link:      "https://test.com",
-				},
-				Status: SourceStatus{
-					ID: 1,
 				},
 			},
 			wantErr: true,
@@ -345,10 +301,8 @@ func TestSource_validateSource(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			r := &Source{
-				TypeMeta:   tt.fields.TypeMeta,
 				ObjectMeta: tt.fields.ObjectMeta,
 				Spec:       tt.fields.Spec,
-				Status:     tt.fields.Status,
 			}
 			got, err := r.validateSource()
 			if (err != nil) != tt.wantErr {
@@ -363,32 +317,25 @@ func TestSource_validateSource(t *testing.T) {
 }
 
 func Test_isValidURL(t *testing.T) {
-	type args struct {
-		link string
-	}
 	tests := []struct {
 		name string
-		args args
+		link string
 		want bool
 	}{
 		{
 			name: "Test Valid URL",
-			args: args{
-				link: "https://test.com",
-			},
+			link: "https://test.com",
 			want: true,
 		},
 		{
 			name: "Test Invalid URL",
-			args: args{
-				link: "test.com",
-			},
+			link: "test.com",
 			want: false,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := isValidURL(tt.args.link); got != tt.want {
+			if got := isValidURL(tt.link); got != tt.want {
 				t.Errorf("isValidURL() = %v, want %v", got, tt.want)
 			}
 		})
