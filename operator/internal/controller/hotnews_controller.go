@@ -20,8 +20,6 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
-var k8sClient client.Client
-
 // HotNewsReconciler reconciles a HotNews object
 type HotNewsReconciler struct {
 	client.Client
