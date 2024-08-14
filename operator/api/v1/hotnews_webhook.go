@@ -17,8 +17,6 @@ import (
 // log is for logging in this package.
 var hotnewslog = logf.Log.WithName("hotnews-resource")
 
-var k8sClient client.Client
-
 // SetupWebhookWithManager will setup the manager to manage the webhooks
 func (r *HotNews) SetupWebhookWithManager(mgr ctrl.Manager) error {
 	k8sClient = mgr.GetClient() // Set the global k8sClient variable

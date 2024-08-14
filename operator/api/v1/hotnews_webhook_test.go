@@ -9,8 +9,8 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client/fake"
 )
 
-// setupFakeClient initializes a fake k8sClient with preloaded Source objects
-func setupFakeClient() client.Client {
+// setupHNewsFakeClient initializes a fake k8sClient with preloaded Source objects
+func setupHNewsFakeClient() client.Client {
 	s := runtime.NewScheme()
 	_ = AddToScheme(s)
 
@@ -95,7 +95,7 @@ func TestHotNews_Default(t *testing.T) {
 }
 
 func TestHotNews_ValidateCreate(t *testing.T) {
-	k8sClient = setupFakeClient()
+	k8sClient = setupHNewsFakeClient()
 
 	tests := []struct {
 		name    string
@@ -159,7 +159,7 @@ func TestHotNews_ValidateCreate(t *testing.T) {
 }
 
 func TestHotNews_ValidateUpdate(t *testing.T) {
-	k8sClient = setupFakeClient()
+	k8sClient = setupHNewsFakeClient()
 
 	oldHotNews := &HotNews{
 		Spec: HotNewsSpec{
@@ -230,7 +230,7 @@ func TestHotNews_ValidateUpdate(t *testing.T) {
 }
 
 func TestHotNews_ValidateDelete(t *testing.T) {
-	k8sClient = setupFakeClient()
+	k8sClient = setupHNewsFakeClient()
 
 	tests := []struct {
 		name    string
