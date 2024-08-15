@@ -1,5 +1,29 @@
+# Application-specific values
+replicaCount: 1
+containerPort: 443
+imageName: "antohachaban/news-alligator-web:0.2.2"
+namespace: "news-alligator"
+serviceAccount: "news-alligator-sa"
+
+# Resource requests and limits for the application container
+resources:
+  limits:
+    cpu: "500m"
+    memory: "128Mi"
+  requests:
+    cpu: "250m"
+    memory: "64Mi"
+
+# Autoscaling settings (currently disabled)
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+
+# PostgreSQL configuration from the Bitnami chart
 postgresql:
-  fullnameOverride: postgres
+  fullnameOverride: "postgres"
   auth:
     database: "postgres"
     username: "admin"
@@ -7,4 +31,4 @@ postgresql:
   primary:
     persistence:
       size: 2Gi
-      mountPath: /var/lib/postgresql/data
+      mountPath: /bitnami/postgresql
