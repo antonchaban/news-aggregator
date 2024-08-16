@@ -32,3 +32,18 @@ postgresql:
     persistence:
       size: 2Gi
       mountPath: /bitnami/postgresql
+
+# CronJob settings
+cronjob:
+  enabled: true
+  name: "news-fetcher-cronjob"
+#  schedule: "0 0 * * *" # Default: Run once a day at midnight
+  schedule: "* * * * *" # Run every minute for testing
+  image:
+    name: "antohachaban/news-fetcher:0.1"
+  env:
+    secretName: "news-alligator-secret"
+    configMapName: "news-alligator-config"
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+
