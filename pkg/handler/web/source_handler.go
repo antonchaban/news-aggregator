@@ -126,3 +126,22 @@ func (h *Handler) updateSource(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, sources)
 }
+
+// @Summary Get all sources
+// @Description Get all sources
+// @Tags sources
+// @ID get-all-sources
+// @Accept json
+// @Produce json
+// @Success 200 {object} []model.Source
+// @Failure 400 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Router /sources [get]
+func (h *Handler) getAllSources(c *gin.Context) {
+	sources, err := h.SrcService().GetAll()
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, sources)
+}

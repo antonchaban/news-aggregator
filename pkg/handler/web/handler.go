@@ -45,6 +45,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		sources.POST("", h.createSource)
 		sources.DELETE("/:id", h.deleteSource)
 		sources.PUT("/:id", h.updateSource)
+		sources.GET("", h.getAllSources)
 	}
 	return router
 }

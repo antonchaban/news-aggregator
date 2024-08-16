@@ -1,7 +1,7 @@
 # Application-specific values
 replicaCount: 1
 containerPort: 443
-imageName: "antohachaban/news-alligator-web:0.2.2"
+imageName: "antohachaban/news-alligator-web:0.2.3"
 namespace: "news-alligator"
 serviceAccount: "news-alligator-sa"
 

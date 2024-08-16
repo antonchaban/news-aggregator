@@ -262,3 +262,60 @@ func TestHandler_updateSource(t *testing.T) {
 		})
 	}
 }
+
+func TestHandler_getAllSources(t *testing.T) {
+	type mockBehavior func(r *service_mocks.MockSourceService)
+	tests := []struct {
+		name                 string
+		mockBehavior         mockBehavior
+		expectedCode         int
+		expectedResponseBody string
+	}{
+		{
+			name: "OK",
+			mockBehavior: func(r *service_mocks.MockSourceService) {
+				r.EXPECT().GetAll().Return([]model.Source{
+					{
+						Id:        1,
+						Name:      "CNN",
+						Link:      "http://cnn.com",
+						ShortName: "cnn",
+					},
+					{
+						Id:        2,
+						Name:      "BBC",
+						Link:      "http://bbc.com",
+						ShortName: "bbc",
+					},
+				}, nil)
+			},
+			expectedCode:         200,
+			expectedResponseBody: `[{"id":1,"name":"CNN","link":"http://cnn.com","short_name":"cnn"},{"id":2,"name":"BBC","link":"http://bbc.com","short_name":"bbc"}]`,
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			// Init Dependencies
+			c := gomock.NewController(t)
+			defer c.Finish()
+
+			srcSvc := service_mocks.NewMockSourceService(c)
+			test.mockBehavior(srcSvc)
+
+			// Init Endpoint
+			r := gin.New()
+			r.GET("/source", NewHandler(nil, srcSvc).getAllSources)
+
+			// Create Request
+			w := httptest.NewRecorder()
+			req := httptest.NewRequest("GET", "/source", nil)
+
+			// Make Request
+			r.ServeHTTP(w, req)
+
+			// Assert
+			assert.Equal(t, w.Code, test.expectedCode)
+			assert.JSONEq(t, w.Body.String(), test.expectedResponseBody)
+		})
+	}
+}
