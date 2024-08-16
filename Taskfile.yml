@@ -4,6 +4,10 @@ env:
   DOCKER_IMAGE_NAME: antohachaban/news-alligator-web
   POSTGRES_PASSWORD: qwerty
 
+vars:
+  Namespace: "news-alligator"
+  HelmDir: "manifest/helm/news-alligator"
+
 tasks:
   build:
     cmds:
@@ -149,3 +153,18 @@ tasks:
     cmds:
       - kubectl port-forward svc/news-alligator-service 443:8443 -n news-alligator
     desc: Port forward to the Kubernetes service
+
+  createChart:
+    desc: "Create Helm chart for news-aggregator"
+    cmds:
+      - helm create manifests/helm/news-alligator
+
+  installChart:
+    desc: "Install Helm chart on Kubernetes cluster"
+    cmds:
+      - helm install news-alligator --namespace {{.Namespace}} {{.HelmDir}}
+
+  uninstallChart:
+    desc: "Uninstall Helm chart from Kubernetes cluster"
+    cmds:
+      - helm uninstall news-alligator --namespace {{.Namespace}}
