@@ -31,6 +31,9 @@ spec:
           volumeMounts:
             - name: news-alligator-storage
               mountPath: /root/backups
+            - name: tls-certificates
+              mountPath: /etc/tls
+              readOnly: true
           resources:
             limits:
               cpu: {{ .Values.resources.limits.cpu }}
@@ -47,3 +50,6 @@ spec:
         - name: news-alligator-storage
           persistentVolumeClaim:
             claimName: {{ .Release.Name }}-pvc
+        - name: tls-certificates
+          secret:
+            secretName: {{ .Values.tlsSecretName }}

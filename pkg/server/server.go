@@ -50,7 +50,11 @@ func (s *Server) Run(port string, handler http.Handler) error {
 		WriteTimeout:   10 * time.Second,
 	}
 
-	if err := s.httpServer.ListenAndServeTLS(s.certFile, s.keyFile); err != nil && !errors.Is(err, http.ErrServerClosed) {
+	// Kubernetes will mount the certificate and key file paths.
+	certFile := "/etc/tls/tls.crt"
+	keyFile := "/etc/tls/tls.key"
+
+	if err := s.httpServer.ListenAndServeTLS(certFile, keyFile); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		logrus.Fatalf("Could not listen on %s: %v\n", port, err)
 		return err
 	}
@@ -126,8 +130,11 @@ func (s *Server) RunWithFiles(port string, handler http.Handler, artHandler web.
 	}
 	logrus.WithField("event_id", eventSaveArticlesComplete).Info("All articles saved")
 
+	certFile := "/etc/tls/tls.crt"
+	keyFile := "/etc/tls/tls.key"
+
 	logrus.WithField("event_id", eventServerListenStart).Info("Starting HTTPS server")
-	if err := s.httpServer.ListenAndServeTLS(s.certFile, s.keyFile); err != nil && !errors.Is(err, http.ErrServerClosed) {
+	if err := s.httpServer.ListenAndServeTLS(certFile, keyFile); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		logrus.WithField("event_id", eventServerListenError).Fatalf("Could not listen on %s: %v\n", port, err)
 		return err
 	}
@@ -157,18 +164,9 @@ func (s *Server) Shutdown(ctx context.Context, articles []model.Article, sources
 	return s.httpServer.Shutdown(ctx)
 }
 
-// NewServer creates a new Server instance with the specified certificate and key files.
-//
-// Parameters:
-// - certFile: The path to the certificate file for TLS.
-// - keyFile: The path to the key file for TLS.
-//
-// Returns a new Server instance.
-func NewServer(certFile, keyFile string) *Server {
-	return &Server{
-		certFile: certFile,
-		keyFile:  keyFile,
-	}
+// NewServer creates a new Server instance.
+func NewServer() *Server {
+	return &Server{}
 }
 
 // initializeSources initializes the sources for the provided SourceService.

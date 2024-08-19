@@ -1,0 +1,18 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: teamdev-cert
+  namespace: {{ .Values.namespace }}
+spec:
+  secretName: {{ .Values.tlsSecretName }}
+  duration: {{ .Values.certvalues.duration }}
+  renewBefore: 240h # 10 days before expiration
+  subject:
+    organizations:
+      - {{ .Values.certvalues.organization }}
+  commonName: {{ .Values.certvalues.commonName }}
+  dnsNames:
+    - {{ .Values.certvalues.dnsName }}
+  issuerRef:
+    name: teamdev-issuer
+    kind: Issuer

@@ -5,6 +5,13 @@ imageName: "antohachaban/news-alligator-web:0.2.3"
 namespace: "news-alligator"
 serviceAccount: "news-alligator-sa"
 
+tlsSecretName: "teamdev-tls-secret"
+certvalues:
+  commonName: "https://teamdev.com/"
+  duration: "8760h"
+  organization: "Team Dev"
+  dnsName: "teamdev.com"
+
 # Resource requests and limits for the application container
 resources:
   limits:
