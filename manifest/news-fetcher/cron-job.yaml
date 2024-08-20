@@ -14,7 +14,7 @@ spec:
               image: antohachaban/news-fetcher:0.1
               envFrom:
                 - secretRef:
-                    name: news-alligator-secret
+                    name: postgres-secret
                 - configMapRef:
                     name: news-alligator-config
           restartPolicy: OnFailure

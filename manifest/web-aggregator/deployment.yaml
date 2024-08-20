@@ -36,7 +36,7 @@ spec:
             - configMapRef:
                 name: news-alligator-config
             - secretRef:
-                name: news-alligator-secret
+                name: postgres-secret
       volumes:
         - name: news-alligator-storage
           persistentVolumeClaim:
