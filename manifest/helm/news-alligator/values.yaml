@@ -21,12 +21,22 @@ resources:
     cpu: "250m"
     memory: "64Mi"
 
-# Autoscaling settings (currently disabled)
+# Autoscaling settings
 autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 10
-  targetCPUUtilizationPercentage: 80
+  hpa:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 80
+
+  vpa:
+    enabled: true
+    minAllowed:
+      cpu: "200m"
+      memory: "64Mi"
+    maxAllowed:
+      cpu: "2"
+      memory: "1Gi"
 
 # PostgreSQL configuration from the Bitnami chart
 postgresql:
@@ -44,8 +54,7 @@ postgresql:
 cronjob:
   enabled: true
   name: "news-fetcher-cronjob"
-#  schedule: "0 0 * * *" # Default: Run once a day at midnight
-  schedule: "* * * * *" # Run every minute for testing
+  schedule: "0 0 * * *" # Default: Run once a day at midnight
   image:
     name: "antohachaban/news-fetcher:0.1"
   env:
@@ -53,4 +62,3 @@ cronjob:
     configMapName: "news-alligator-config"
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 1
-

@@ -1,0 +1,23 @@
+{{- if .Values.autoscaling.vpa.enabled }}
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: {{ .Release.Name }}-vpa
+  namespace: {{ .Values.namespace }}
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ .Release.Name }}-deployment
+  updatePolicy:
+    updateMode: "Auto"
+  resourcePolicy:
+    containerPolicies:
+      - containerName: news-alligator
+        minAllowed:
+          cpu: {{ .Values.autoscaling.vpa.minAllowed.cpu }}
+          memory: {{ .Values.autoscaling.vpa.minAllowed.memory }}
+        maxAllowed:
+          cpu: {{ .Values.autoscaling.vpa.maxAllowed.cpu }}
+          memory: {{ .Values.autoscaling.vpa.maxAllowed.memory }}
+{{- end }}
