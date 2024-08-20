@@ -26,7 +26,7 @@ func init() {
 }
 
 func main() {
-	db, err := storage.NewPostgresDB(storage.Config{
+	db, err := storage.NewDB(storage.Config{
 		Host:     pgHost,
 		Username: pgUser,
 		Password: pgPass,

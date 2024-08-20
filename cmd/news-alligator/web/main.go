@@ -30,19 +30,19 @@ const (
 )
 
 var (
-	pgHost    string
-	pgUser    string
-	pgPass    string
-	pgDBName  string
-	pgSSLMode string
+	dbHost  string
+	dbUser  string
+	dbPass  string
+	dbName  string
+	sslMode string
 )
 
 func init() {
-	pgHost = os.Getenv("POSTGRES_HOST")
-	pgUser = os.Getenv("POSTGRES_USER")
-	pgPass = os.Getenv("POSTGRES_PASSWORD")
-	pgDBName = os.Getenv("POSTGRES_DB")
-	pgSSLMode = "disable"
+	dbHost = os.Getenv("POSTGRES_HOST")
+	dbUser = os.Getenv("POSTGRES_USER")
+	dbPass = os.Getenv("POSTGRES_PASSWORD")
+	dbName = os.Getenv("POSTGRES_DB")
+	sslMode = "disable"
 }
 
 func main() {
@@ -54,12 +54,12 @@ func main() {
 
 	// Initialize in-memory databases
 
-	db, err := storage.NewPostgresDB(storage.Config{
-		Host:     pgHost,
-		Username: pgUser,
-		Password: pgPass,
-		DBName:   pgDBName,
-		SSLMode:  pgSSLMode,
+	db, err := storage.NewDB(storage.Config{
+		Host:     dbHost,
+		Username: dbUser,
+		Password: dbPass,
+		DBName:   dbName,
+		SSLMode:  sslMode,
 	})
 	if err != nil {
 		logrus.Fatal("error occurred while connecting to the database: ", err.Error())
