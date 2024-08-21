@@ -6,7 +6,6 @@ env:
 
 vars:
   Namespace: "news-alligator"
-  HelmDir: "manifest/helm/news-alligator"
 
 tasks:
   build:
@@ -138,31 +137,99 @@ tasks:
     desc: Create a Kubernetes namespace
     internal: true
 
-  deploy:
-    deps: [create-namespace]
+  apply-secret:
+    deps: [ create-namespace ]
     cmds:
-      - kubectl apply -f ./manifest
-    desc: Apply Kubernetes manifests
+      - export POSTGRES_USER="admin"
+      - export POSTGRES_PASSWORD="admin"
+      - export POSTGRES_USER_BASE64=$(echo -n $POSTGRES_USER | base64)
+      - export POSTGRES_PASSWORD_BASE64=$(echo -n $POSTGRES_PASSWORD | base64)
+      - envsubst < manifest/postgres/secret.yaml | kubectl apply -f -
+    desc: Apply the PostgreSQL secret
 
-  undeploy:
+  apply-postgres-manifests:
+    deps: [ apply-secret ]
     cmds:
-      - kubectl delete -f ./manifest
-    desc: Delete Kubernetes manifests
+      - kubectl apply -f manifest/postgres/config-map.yaml
+      - kubectl apply -f manifest/postgres/deployment.yaml
+      - kubectl apply -f manifest/postgres/service.yaml
+      - kubectl apply -f manifest/postgres/storage.yaml
+    desc: Apply the Postgres manifests
+
+  apply-web-aggregator:
+    deps: [ apply-postgres-manifests ]
+    cmds:
+      - kubectl apply -f manifest/web-aggregator
+    desc: Apply the Web Aggregator manifests
+
+  apply-news-fetcher:
+    deps: [ apply-web-aggregator ]
+    cmds:
+      - kubectl apply -f manifest/news-fetcher
+    desc: Apply the News Fetcher manifests
+
+  deploy:
+    cmds:
+      - task apply-news-fetcher
+    desc: Deploy the entire application stack
 
   k8s-port-forward:
     cmds:
       - kubectl port-forward svc/news-alligator-service 443:8443 -n news-alligator
     desc: Port forward to the Kubernetes service
 
+  undeploy-news-fetcher:
+    cmds:
+      - kubectl delete -f manifest/news-fetcher || echo "News Fetcher resources already deleted."
+    desc: Delete the News Fetcher manifests
+
+  undeploy-web-aggregator:
+    deps: [undeploy-news-fetcher]
+    cmds:
+      - kubectl delete -f manifest/web-aggregator || echo "Web Aggregator resources already deleted."
+    desc: Delete the Web Aggregator manifests
+
+  undeploy-postgres-manifests:
+    deps: [undeploy-web-aggregator]
+    cmds:
+      - kubectl delete -f manifest/postgres/config-map.yaml || echo "Postgres ConfigMap already deleted."
+      - kubectl delete -f manifest/postgres/deployment.yaml || echo "Postgres Deployment already deleted."
+      - kubectl delete -f manifest/postgres/service.yaml || echo "Postgres Service already deleted."
+      - kubectl delete -f manifest/postgres/storage.yaml || echo "Postgres Storage already deleted."
+    desc: Delete the Postgres manifests
+
+  delete-secret:
+    deps: [undeploy-postgres-manifests]
+    cmds:
+      - kubectl delete secret postgres-secret -n news-alligator || echo "Postgres secret already deleted."
+    desc: Delete the PostgreSQL secret
+
+  delete-namespace:
+    deps: [delete-secret]
+    cmds:
+      - kubectl delete namespace news-alligator || echo "Namespace news-alligator already deleted."
+    desc: Delete the Kubernetes namespace
+
+  undeploy:
+    cmds:
+      - task delete-namespace
+    desc: Undeploy the entire application stack
+
+
   createChart:
     desc: "Create Helm chart for news-aggregator"
     cmds:
-      - helm create manifests/helm/news-alligator
+      - helm package manifest/helm/news-alligator
+      - mkdir -p manifest/helm/charts
+      - mv *.tgz manifest/helm/charts
 
   installChart:
+    deps:
+        - createChart
+        - create-namespace
     desc: "Install Helm chart on Kubernetes cluster"
     cmds:
-      - helm install news-alligator --namespace {{.Namespace}} {{.HelmDir}}
+      - helm upgrade --install news-alligator manifest/helm/charts/news-alligator-*.tgz --namespace {{.Namespace}}
 
   uninstallChart:
     desc: "Uninstall Helm chart from Kubernetes cluster"
