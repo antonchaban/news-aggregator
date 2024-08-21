@@ -168,11 +168,6 @@ tasks:
     cmds:
       - task apply-news-fetcher
     desc: Deploy the entire application stack
-#
-#  undeploy:
-#    cmds:
-#      - kubectl delete -f ./manifest
-#    desc: Delete Kubernetes manifests
 
   k8s-port-forward:
     cmds:
@@ -184,14 +179,12 @@ tasks:
       - kubectl delete -f manifest/news-fetcher || echo "News Fetcher resources already deleted."
     desc: Delete the News Fetcher manifests
 
-  # Task to delete the Web Aggregator manifests
   undeploy-web-aggregator:
     deps: [undeploy-news-fetcher]
     cmds:
       - kubectl delete -f manifest/web-aggregator || echo "Web Aggregator resources already deleted."
     desc: Delete the Web Aggregator manifests
 
-  # Task to delete the Postgres-related Kubernetes manifests
   undeploy-postgres-manifests:
     deps: [undeploy-web-aggregator]
     cmds:
@@ -201,21 +194,18 @@ tasks:
       - kubectl delete -f manifest/postgres/storage.yaml || echo "Postgres Storage already deleted."
     desc: Delete the Postgres manifests
 
-  # Task to delete the secret
   delete-secret:
     deps: [undeploy-postgres-manifests]
     cmds:
       - kubectl delete secret postgres-secret -n news-alligator || echo "Postgres secret already deleted."
     desc: Delete the PostgreSQL secret
 
-  # Task to delete the namespace (as a cleanup step)
   delete-namespace:
     deps: [delete-secret]
     cmds:
       - kubectl delete namespace news-alligator || echo "Namespace news-alligator already deleted."
     desc: Delete the Kubernetes namespace
 
-  # Main task to undeploy everything
   undeploy:
     cmds:
       - task delete-namespace
