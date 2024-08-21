@@ -16,9 +16,9 @@ type Config struct {
 	SSLMode  string
 }
 
-func NewPostgresDB(cfg Config) (*sqlx.DB, error) {
-	db, err := sqlx.Connect(os.Getenv(storTypeEnvVar), fmt.Sprintf("postgres://%s:%s@%s/%s?sslmode=%s",
-		cfg.Username, cfg.Password, cfg.Host, cfg.DBName, cfg.SSLMode))
+func NewDB(cfg Config) (*sqlx.DB, error) {
+	db, err := sqlx.Connect(os.Getenv(storTypeEnvVar), fmt.Sprintf("%s://%s:%s@%s/%s?sslmode=%s",
+		os.Getenv(storTypeEnvVar), cfg.Username, cfg.Password, cfg.Host, cfg.DBName, cfg.SSLMode))
 	if err != nil {
 		return nil, err
 	}
