@@ -4,7 +4,7 @@ metadata:
   name: news-fetcher-cronjob
   namespace: news-alligator
 spec:
-  schedule: "0 0 * * *" # Run once a day at midnight
+  schedule: "* * * * *" # Run once a day at midnight
   jobTemplate:
     spec:
       template:

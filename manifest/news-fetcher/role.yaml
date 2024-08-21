@@ -3,5 +3,4 @@ kind: Role
 metadata:
   namespace: news-alligator
   name: news-fetcher-role
-rules:
-  -
+rules: []

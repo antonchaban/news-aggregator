@@ -17,10 +17,20 @@ spec:
       initContainers:
         - name: run-migrations
           image: antohachaban/alligator-migrations:0.1
-          command: [ "migrate", "-path", "/migrations", "-database",  "$(POSTGRESQL_URL)", "goto", "$(VERSION)" ] # The command to run inside the container
+          command: [ "migrate", "-path", "/migrations", "-database", "$(POSTGRESQL_URL)", "goto", "$(VERSION)" ]
           env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD
             - name: POSTGRESQL_URL
-              value: "postgres://admin:admin@postgres:5432/postgres?sslmode=disable"
+              value: "postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@postgres:5432/postgres?sslmode=disable"
             - name: VERSION
               value: "000002"
       containers:
@@ -30,7 +40,7 @@ spec:
             - containerPort: 443
           volumeMounts:
             - name: news-alligator-storage
-              mountPath: /root/backups  # The path inside the container where the volume will be mounted
+              mountPath: /root/backups
           imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:
