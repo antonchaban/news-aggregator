@@ -4,18 +4,18 @@ metadata:
   name: news-fetcher-cronjob
   namespace: news-alligator
 spec:
-  schedule: "* * * * *" #	Run every minute for testing purposes
-  #schedule: "0 0 * * *" # Run once a day at midnight
+  schedule: "* * * * *" # Run once a day at midnight
   jobTemplate:
     spec:
       template:
         spec:
+          serviceAccountName: news-fetcher-sa
           containers:
             - name: news-fetcher
               image: antohachaban/news-fetcher:0.1
               envFrom:
                 - secretRef:
-                    name: news-alligator-secret
+                    name: postgres-secret
                 - configMapRef:
                     name: news-alligator-config
           restartPolicy: OnFailure
