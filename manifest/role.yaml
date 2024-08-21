@@ -3,7 +3,4 @@ kind: Role
 metadata:
   namespace: news-alligator
   name: news-alligator-role
-rules:
-  - apiGroups: [""]
-    resources: ["services"]
-    verbs: ["get", "list", "watch"]
+rules: []
