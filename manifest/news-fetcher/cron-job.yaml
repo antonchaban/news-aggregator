@@ -9,6 +9,7 @@ spec:
     spec:
       template:
         spec:
+          serviceAccountName: news-fetcher-sa
           containers:
             - name: news-fetcher
               image: antohachaban/news-fetcher:0.1
