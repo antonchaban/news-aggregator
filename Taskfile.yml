@@ -4,6 +4,9 @@ env:
   DOCKER_IMAGE_NAME: antohachaban/news-alligator-web
   POSTGRES_PASSWORD: qwerty
 
+vars:
+  Namespace: "news-alligator"
+
 tasks:
   build:
     cmds:
@@ -216,12 +219,17 @@ tasks:
   createChart:
     desc: "Create Helm chart for news-aggregator"
     cmds:
-      - helm create manifests/helm/news-alligator
+      - helm package manifest/helm/news-alligator
+      - mkdir -p manifest/helm/charts
+      - mv *.tgz manifest/helm/charts
 
   installChart:
+    deps:
+        - createChart
+        - create-namespace
     desc: "Install Helm chart on Kubernetes cluster"
     cmds:
-      - helm install news-alligator --namespace {{.Namespace}} {{.HelmDir}}
+      - helm upgrade --install news-alligator manifest/helm/charts/news-alligator-*.tgz --namespace {{.Namespace}}
 
   uninstallChart:
     desc: "Uninstall Helm chart from Kubernetes cluster"
