@@ -289,6 +289,8 @@ func getTitles(articles []Article, count int) []string {
 	return titles
 }
 
+// todo generation
+// todo validate configmaps and sources
 // SetupWithManager sets up the controller with the Manager.
 func (r *HotNewsReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	k8sClient = mgr.GetClient() // Set the global k8sClient variable

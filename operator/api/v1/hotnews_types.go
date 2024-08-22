@@ -53,6 +53,7 @@ type HotNewsStatus struct {
 	ArticlesCount  int      `json:"articles_count,omitempty"`
 	NewsLink       string   `json:"news_link,omitempty"`
 	ArticlesTitles []string `json:"articles_titles,omitempty"`
+	// todo add condition
 }
 
 // +kubebuilder:object:root=true
