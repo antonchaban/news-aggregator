@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/sirupsen/logrus"
 	"k8s.io/apimachinery/pkg/api/errors"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"net/http"
 	"sigs.k8s.io/controller-runtime/pkg/event"
 	"sigs.k8s.io/controller-runtime/pkg/handler"
@@ -101,6 +102,10 @@ func (r *HotNewsReconciler) reconcileHotNews(ctx context.Context, hotNews *aggre
 	if err != nil {
 		if errors.IsNotFound(err) {
 			logger.Error(err, "ConfigMap not found")
+			err := r.updateHotNewsStatus(ctx, hotNews, aggregatorv1.HNewsUpdated, metav1.ConditionFalse, "FailedConfigMap", err.Error())
+			if err != nil {
+				return ctrl.Result{}, err
+			}
 			return ctrl.Result{}, nil
 		}
 		return ctrl.Result{}, err
@@ -133,6 +138,10 @@ func (r *HotNewsReconciler) reconcileHotNews(ctx context.Context, hotNews *aggre
 	// Fetch news from the aggregator
 	articles, err := r.fetchArticles(reqURL)
 	if err != nil {
+		err := r.updateHotNewsStatus(ctx, hotNews, aggregatorv1.HNewsUpdated, metav1.ConditionFalse, "FailedFetchArticles", err.Error())
+		if err != nil {
+			return ctrl.Result{}, err
+		}
 		logger.Error(err, "unable to fetch articles")
 		return ctrl.Result{}, err
 	}
@@ -145,11 +154,26 @@ func (r *HotNewsReconciler) reconcileHotNews(ctx context.Context, hotNews *aggre
 	// Update the HotNews status
 	err = k8sClient.Status().Update(ctx, hotNews)
 	if err != nil {
+		err := r.updateHotNewsStatus(ctx, hotNews, aggregatorv1.HNewsUpdated, metav1.ConditionFalse, "FailedUpdateStatus", err.Error())
+		if err != nil {
+			return ctrl.Result{}, err
+		}
 		logger.Error(err, "unable to update HotNews status")
 		return ctrl.Result{}, err
 	}
 
 	logger.Info("Successfully reconciled HotNews", "Name", hotNews.Name)
+	if len(hotNews.Status.Conditions) == 0 {
+		err = r.updateHotNewsStatus(ctx, hotNews, aggregatorv1.HNewsAdded, metav1.ConditionTrue, "Success", "HotNews created successfully")
+		if err != nil {
+			return ctrl.Result{}, err
+		}
+	} else {
+		err = r.updateHotNewsStatus(ctx, hotNews, aggregatorv1.HNewsUpdated, metav1.ConditionTrue, "Success", "HotNews updated successfully")
+		if err != nil {
+			return ctrl.Result{}, err
+		}
+	}
 	return ctrl.Result{}, nil
 }
 
@@ -270,6 +294,20 @@ func getTitles(articles []Article, count int) []string {
 		titles = append(titles, article.Title)
 	}
 	return titles
+}
+
+// updateHotNewsStatus updates the SourceStatus of a source resource with the given condition.
+func (r *HotNewsReconciler) updateHotNewsStatus(ctx context.Context, hotNews *aggregatorv1.HotNews, conditionType aggregatorv1.HNewsConditionType, status metav1.ConditionStatus, reason, message string) error {
+	newCondition := aggregatorv1.HotNewsCondition{
+		Type:           conditionType,
+		Status:         status,
+		LastUpdateTime: metav1.Time{Time: time.Now()},
+		Reason:         reason,
+		Message:        message,
+	}
+
+	hotNews.Status.Conditions = append(hotNews.Status.Conditions, newCondition)
+	return k8sClient.Status().Update(ctx, hotNews)
 }
 
 // todo validate configmaps and sources

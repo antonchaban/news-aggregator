@@ -44,8 +44,15 @@ type SummaryConfig struct {
 	TitlesCount int `json:"titles_count"`
 }
 
+type HNewsConditionType string
+
+const (
+	HNewsAdded   HNewsConditionType = "Added"
+	HNewsUpdated HNewsConditionType = "Updated"
+)
+
 type HotNewsCondition struct {
-	Type           SourceConditionType    `json:"type"`
+	Type           HNewsConditionType     `json:"type"`
 	Status         metav1.ConditionStatus `json:"status"`
 	LastUpdateTime metav1.Time            `json:"lastUpdateTime,omitempty"`
 	Reason         string                 `json:"reason,omitempty"`
