@@ -94,6 +94,30 @@ spec:
                 items:
                   type: string
                 type: array
+              conditions:
+                items:
+                  properties:
+                    lastUpdateTime:
+                      format: date-time
+                      type: string
+                    message:
+                      type: string
+                    reason:
+                      type: string
+                    status:
+                      type: string
+                    type:
+                      description: |-
+                        SourceConditionType represents the type of condition for Source
+                        Valid values are:
+                        - "Added": Indicates that the source has been added.
+                        - "Updated": Indicates that the source has been updated.
+                      type: string
+                  required:
+                  - status
+                  - type
+                  type: object
+                type: array
               news_link:
                 type: string
             type: object

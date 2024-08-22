@@ -7,8 +7,10 @@ import (
 	"github.com/sirupsen/logrus"
 	"k8s.io/apimachinery/pkg/api/errors"
 	"net/http"
+	"sigs.k8s.io/controller-runtime/pkg/event"
 	"sigs.k8s.io/controller-runtime/pkg/handler"
 	"sigs.k8s.io/controller-runtime/pkg/log"
+	"sigs.k8s.io/controller-runtime/pkg/predicate"
 	"slices"
 	"strings"
 	"time"
@@ -28,8 +30,6 @@ type HotNewsReconciler struct {
 	ArticleSvcURL string       // URL of the news aggregator source service
 	ConfigMapName string       // Name of the ConfigMap that contains feed groups
 }
-
-const hotNewsFinalizer = "hotnews.finalizers.teamdev.com"
 
 type Article struct {
 	Id          int       `json:"Iіd"`
@@ -85,23 +85,6 @@ func (r *HotNewsReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 			return ctrl.Result{}, nil
 		}
 		return ctrl.Result{}, err
-	}
-
-	if hotNews.ObjectMeta.DeletionTimestamp.IsZero() {
-		if !slices.Contains(hotNews.Finalizers, hotNewsFinalizer) {
-			hotNews.Finalizers = append(hotNews.Finalizers, hotNewsFinalizer)
-			if err := k8sClient.Update(ctx, hotNews); err != nil {
-				return ctrl.Result{}, err
-			}
-		}
-	} else {
-		if slices.Contains(hotNews.Finalizers, hotNewsFinalizer) {
-			hotNews.Finalizers = slices.Delete(hotNews.Finalizers, slices.Index(hotNews.Finalizers, hotNewsFinalizer), slices.Index(hotNews.Finalizers, hotNewsFinalizer)+1)
-			if err := k8sClient.Update(ctx, hotNews); err != nil {
-				return ctrl.Result{}, err
-			}
-		}
-		return ctrl.Result{}, nil
 	}
 
 	// Proceed with normal reconciliation for HotNews
@@ -289,13 +272,23 @@ func getTitles(articles []Article, count int) []string {
 	return titles
 }
 
-// todo generation
 // todo validate configmaps and sources
 // SetupWithManager sets up the controller with the Manager.
 func (r *HotNewsReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	k8sClient = mgr.GetClient() // Set the global k8sClient variable
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&aggregatorv1.HotNews{}).
+		WithEventFilter(predicate.Funcs{
+			CreateFunc: func(e event.CreateEvent) bool {
+				return true
+			},
+			DeleteFunc: func(e event.DeleteEvent) bool {
+				return !e.DeleteStateUnknown
+			},
+			UpdateFunc: func(e event.UpdateEvent) bool {
+				return e.ObjectNew.GetGeneration() != e.ObjectOld.GetGeneration()
+			},
+		}).
 		Watches(
 			&corev1.ConfigMap{},
 			&handler.EnqueueRequestForObject{},
