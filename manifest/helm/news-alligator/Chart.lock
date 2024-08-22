@@ -8,5 +8,8 @@ dependencies:
 - name: metrics-server
   repository: https://kubernetes-sigs.github.io/metrics-server/
   version: 3.12.1
-digest: sha256:b61252304d4a722cd7fc84a1d5e54f1f1460115f6c34274e61c35c778fba1762
-generated: "2024-08-21T19:39:01.57219546+03:00"
+- name: vertical-pod-autoscaler
+  repository: https://cowboysysop.github.io/charts/
+  version: 9.8.3
+digest: sha256:560ff46a4f521830a4cae94a731610a36b70b953145b8746dd902b66246ad45c
+generated: "2024-08-22T10:39:47.709573058+03:00"
