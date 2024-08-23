@@ -19,8 +19,6 @@ import (
 	"time"
 )
 
-var k8sClient client.Client
-
 // SourceReconciler reconciles a Source object
 // It contains the logic for handling Source resources, including creating, updating, and deleting them.
 type SourceReconciler struct {
@@ -46,7 +44,7 @@ const (
 // It handles creating, updating, and deleting sources in the news aggregator service.
 func (r *SourceReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	var source aggregatorv1.Source
-	err := k8sClient.Get(ctx, req.NamespacedName, &source)
+	err := r.Client.Get(ctx, req.NamespacedName, &source)
 	if err != nil {
 		if errors.IsNotFound(err) {
 			logrus.Info("Source resource not found, possibly deleted. Removing source from news-aggregator.")
@@ -58,7 +56,7 @@ func (r *SourceReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 	if source.ObjectMeta.DeletionTimestamp.IsZero() {
 		if !slices.Contains(source.Finalizers, srcFinalizer) {
 			source.Finalizers = append(source.Finalizers, srcFinalizer)
-			if err := k8sClient.Update(ctx, &source); err != nil {
+			if err := r.Client.Update(ctx, &source); err != nil {
 				return ctrl.Result{}, err
 			}
 		}
@@ -69,7 +67,7 @@ func (r *SourceReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 			}
 			source.Finalizers = slices.Delete(source.Finalizers,
 				slices.Index(source.Finalizers, srcFinalizer), slices.Index(source.Finalizers, srcFinalizer)+1)
-			if err := k8sClient.Update(ctx, &source); err != nil {
+			if err := r.Client.Update(ctx, &source); err != nil {
 				return ctrl.Result{}, err
 			}
 		}
@@ -137,7 +135,7 @@ func (r *SourceReconciler) createSource(ctx context.Context, source *aggregatorv
 	}
 
 	source.Status.ID = createdSource.Id
-	if err := k8sClient.Status().Update(ctx, source); err != nil {
+	if err := r.Client.Status().Update(ctx, source); err != nil {
 		return ctrl.Result{}, err
 	}
 
@@ -239,12 +237,11 @@ func (r *SourceReconciler) updateSourceStatus(ctx context.Context, source *aggre
 	}
 
 	source.Status.Conditions = append(source.Status.Conditions, newCondition)
-	return k8sClient.Status().Update(ctx, source)
+	return r.Client.Status().Update(ctx, source)
 }
 
 // SetupWithManager sets up the controller with the Manager, uses predicates to filter events.
 func (r *SourceReconciler) SetupWithManager(mgr ctrl.Manager) error {
-	k8sClient = mgr.GetClient()
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&aggregatorv1.Source{}).
 		WithEventFilter(predicate.Funcs{

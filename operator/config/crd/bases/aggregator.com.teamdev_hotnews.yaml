@@ -107,11 +107,6 @@ spec:
                     status:
                       type: string
                     type:
-                      description: |-
-                        SourceConditionType represents the type of condition for Source
-                        Valid values are:
-                        - "Added": Indicates that the source has been added.
-                        - "Updated": Indicates that the source has been updated.
                       type: string
                   required:
                   - status

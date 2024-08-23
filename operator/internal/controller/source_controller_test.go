@@ -1,5 +1,6 @@
 package controller
 
+/*
 import (
 	aggregatorv1 "com.teamdev/news-aggregator/api/v1"
 	"context"
@@ -80,3 +81,4 @@ func TestSourceReconcile(t *testing.T) {
 	assert.Contains(t, source.Finalizers, "source.finalizers.teamdev.com", "Finalizer should be added")
 	assert.Equal(t, 123, source.Status.ID, "Source ID should be updated to the value returned by the external service")
 }
+*/

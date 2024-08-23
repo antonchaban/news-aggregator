@@ -31,12 +31,9 @@ import (
 // log is for logging in this package.
 var sourcelog = logf.Log.WithName("source-resource")
 
-var k8sClient client.Client
-
 // SetupWebhookWithManager will setup the manager to manage the webhooks
 // This function configures the webhook with the manager.
 func (r *Source) SetupWebhookWithManager(mgr ctrl.Manager) error {
-	k8sClient = mgr.GetClient()
 	return ctrl.NewWebhookManagedBy(mgr).
 		For(r).
 		Complete()
@@ -108,10 +105,21 @@ func isValidURL(link string) bool {
 // checkUniqueFields ensures that the Name, ShortName, and Link fields are unique within the namespace.
 func (r *Source) checkUniqueFields() (admission.Warnings, error) {
 	ctx := context.Background()
+	config := ctrl.GetConfigOrDie()
+	scheme := runtime.NewScheme()
+	if err := AddToScheme(scheme); err != nil {
+		sourcelog.Error(err, "failed to add scheme")
+		return nil, err
+	}
+	cl, err := client.New(config, client.Options{Scheme: scheme})
+	if err != nil {
+		sourcelog.Error(err, "failed to create client")
+		return nil, err
+	}
 
 	var sources SourceList
 	sourcelog.Info("Listing sources in namespace", "namespace", r.Namespace)
-	if err := k8sClient.List(ctx, &sources, client.InNamespace(r.Namespace)); err != nil {
+	if err := cl.List(ctx, &sources, client.InNamespace(r.Namespace)); err != nil {
 		sourcelog.Error(err, "failed to list sources")
 		return nil, err
 	}
