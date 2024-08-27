@@ -29,11 +29,11 @@ type SourceReconciler struct {
 }
 
 const (
-	srcFinalizer     = "source.finalizers.teamdev.com" // Finalizer string for Source resources
-	reasonFailedUpd  = "FailedUpdate"                  // Reason for a failed update
-	reasonFailedCr   = "FailedCreation"                // Reason for a failed creation
-	reasonSuccessCr  = "SuccessfulCreation"            // Reason for a successful creation
-	reasonSuccessUpd = "SuccessfulUpdate"              // Reason for a successful update
+	SrcFinalizer     = "source.finalizers.teamdev.com" // Finalizer string for Source resources
+	ReasonFailedUpd  = "FailedUpdate"                  // Reason for a failed update
+	ReasonFailedCr   = "FailedCreation"                // Reason for a failed creation
+	ReasonSuccessCr  = "SuccessfulCreation"            // Reason for a successful creation
+	ReasonSuccessUpd = "SuccessfulUpdate"              // Reason for a successful update
 )
 
 // +kubebuilder:rbac:groups=aggregator.com.teamdev,resources=sources,verbs=get;list;watch;create;update;patch;delete
@@ -54,19 +54,19 @@ func (r *SourceReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 	}
 
 	if source.ObjectMeta.DeletionTimestamp.IsZero() {
-		if !slices.Contains(source.Finalizers, srcFinalizer) {
-			source.Finalizers = append(source.Finalizers, srcFinalizer)
+		if !slices.Contains(source.Finalizers, SrcFinalizer) {
+			source.Finalizers = append(source.Finalizers, SrcFinalizer)
 			if err := r.Client.Update(ctx, &source); err != nil {
 				return ctrl.Result{}, err
 			}
 		}
 	} else {
-		if slices.Contains(source.Finalizers, srcFinalizer) {
+		if slices.Contains(source.Finalizers, SrcFinalizer) {
 			if _, err := r.deleteSource(source.Status.ID); err != nil {
 				return ctrl.Result{}, err
 			}
 			source.Finalizers = slices.Delete(source.Finalizers,
-				slices.Index(source.Finalizers, srcFinalizer), slices.Index(source.Finalizers, srcFinalizer)+1)
+				slices.Index(source.Finalizers, SrcFinalizer), slices.Index(source.Finalizers, SrcFinalizer)+1)
 			if err := r.Client.Update(ctx, &source); err != nil {
 				return ctrl.Result{}, err
 			}
@@ -89,9 +89,9 @@ func (r *SourceReconciler) createSource(ctx context.Context, source *aggregatorv
 
 	sourceData, err := json.Marshal(source.Spec)
 	if err != nil {
-		err := r.updateSourceStatus(ctx, source, aggregatorv1.SourceAdded, metav1.ConditionFalse, reasonFailedCr, err.Error())
-		if err != nil {
-			return ctrl.Result{}, err
+		errUp := r.updateSourceStatus(ctx, source, aggregatorv1.SourceAdded, metav1.ConditionFalse, ReasonFailedCr, err.Error())
+		if errUp != nil {
+			return ctrl.Result{}, errUp
 		}
 		return ctrl.Result{}, err
 	}
@@ -99,9 +99,9 @@ func (r *SourceReconciler) createSource(ctx context.Context, source *aggregatorv
 
 	req, err := http.NewRequest(http.MethodPost, r.NewsAggregatorSrcServiceURL, bytes.NewBuffer(sourceData))
 	if err != nil {
-		err := r.updateSourceStatus(ctx, source, aggregatorv1.SourceAdded, metav1.ConditionFalse, reasonFailedCr, err.Error())
-		if err != nil {
-			return ctrl.Result{}, err
+		errUp := r.updateSourceStatus(ctx, source, aggregatorv1.SourceAdded, metav1.ConditionFalse, ReasonFailedCr, err.Error())
+		if errUp != nil {
+			return ctrl.Result{}, errUp
 		}
 		return ctrl.Result{}, err
 	}
@@ -109,27 +109,27 @@ func (r *SourceReconciler) createSource(ctx context.Context, source *aggregatorv
 
 	resp, err := r.HTTPClient.Do(req)
 	if err != nil {
-		err := r.updateSourceStatus(ctx, source, aggregatorv1.SourceAdded, metav1.ConditionFalse, reasonFailedCr, err.Error())
-		if err != nil {
-			return ctrl.Result{}, err
+		errUp := r.updateSourceStatus(ctx, source, aggregatorv1.SourceAdded, metav1.ConditionFalse, ReasonFailedCr, err.Error())
+		if errUp != nil {
+			return ctrl.Result{}, errUp
 		}
 		return ctrl.Result{}, err
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		err := r.updateSourceStatus(ctx, source, aggregatorv1.SourceAdded, metav1.ConditionFalse, reasonFailedCr, resp.Status)
-		if err != nil {
-			return ctrl.Result{}, err
+		errUp := r.updateSourceStatus(ctx, source, aggregatorv1.SourceAdded, metav1.ConditionFalse, ReasonFailedCr, resp.Status)
+		if errUp != nil {
+			return ctrl.Result{}, errUp
 		}
 		return ctrl.Result{}, fmt.Errorf("failed to create source in news aggregator: %s", resp.Status)
 	}
 
 	var createdSource aggregatorv1.SourceSpec
 	if err := json.NewDecoder(resp.Body).Decode(&createdSource); err != nil {
-		err := r.updateSourceStatus(ctx, source, aggregatorv1.SourceAdded, metav1.ConditionFalse, reasonFailedCr, err.Error())
-		if err != nil {
-			return ctrl.Result{}, err
+		errUp := r.updateSourceStatus(ctx, source, aggregatorv1.SourceAdded, metav1.ConditionFalse, ReasonFailedCr, err.Error())
+		if errUp != nil {
+			return ctrl.Result{}, errUp
 		}
 		return ctrl.Result{}, err
 	}
@@ -139,7 +139,7 @@ func (r *SourceReconciler) createSource(ctx context.Context, source *aggregatorv
 		return ctrl.Result{}, err
 	}
 
-	err = r.updateSourceStatus(ctx, source, aggregatorv1.SourceAdded, metav1.ConditionTrue, reasonSuccessCr, "Source successfully created in news aggregator")
+	err = r.updateSourceStatus(ctx, source, aggregatorv1.SourceAdded, metav1.ConditionTrue, ReasonSuccessCr, "Source successfully created in news aggregator")
 	if err != nil {
 		return ctrl.Result{}, err
 	}
@@ -154,9 +154,9 @@ func (r *SourceReconciler) updateSource(ctx context.Context, sourceID int, sourc
 
 	sourceData, err := json.Marshal(source.Spec)
 	if err != nil {
-		err := r.updateSourceStatus(ctx, source, aggregatorv1.SourceUpdated, metav1.ConditionFalse, reasonFailedUpd, err.Error())
-		if err != nil {
-			return ctrl.Result{}, err
+		errUp := r.updateSourceStatus(ctx, source, aggregatorv1.SourceUpdated, metav1.ConditionFalse, ReasonFailedUpd, err.Error())
+		if errUp != nil {
+			return ctrl.Result{}, errUp
 		}
 		return ctrl.Result{}, err
 	}
@@ -164,9 +164,9 @@ func (r *SourceReconciler) updateSource(ctx context.Context, sourceID int, sourc
 	url := fmt.Sprintf("%s/%d", r.NewsAggregatorSrcServiceURL, sourceID)
 	req, err := http.NewRequest(http.MethodPut, url, bytes.NewBuffer(sourceData))
 	if err != nil {
-		err := r.updateSourceStatus(ctx, source, aggregatorv1.SourceUpdated, metav1.ConditionFalse, reasonFailedUpd, err.Error())
-		if err != nil {
-			return ctrl.Result{}, err
+		errUp := r.updateSourceStatus(ctx, source, aggregatorv1.SourceUpdated, metav1.ConditionFalse, ReasonFailedUpd, err.Error())
+		if errUp != nil {
+			return ctrl.Result{}, errUp
 		}
 		return ctrl.Result{}, err
 	}
@@ -174,24 +174,24 @@ func (r *SourceReconciler) updateSource(ctx context.Context, sourceID int, sourc
 
 	resp, err := r.HTTPClient.Do(req)
 	if err != nil {
-		err := r.updateSourceStatus(ctx, source, aggregatorv1.SourceUpdated, metav1.ConditionFalse, reasonFailedUpd, err.Error())
-		if err != nil {
-			return ctrl.Result{}, err
+		errUp := r.updateSourceStatus(ctx, source, aggregatorv1.SourceUpdated, metav1.ConditionFalse, ReasonFailedUpd, err.Error())
+		if errUp != nil {
+			return ctrl.Result{}, errUp
 		}
 		return ctrl.Result{}, err
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		err = r.updateSourceStatus(ctx, source, aggregatorv1.SourceUpdated, metav1.ConditionFalse, reasonFailedUpd, resp.Status)
-		if err != nil {
-			return ctrl.Result{}, err
+		errUp := r.updateSourceStatus(ctx, source, aggregatorv1.SourceUpdated, metav1.ConditionFalse, ReasonFailedUpd, resp.Status)
+		if errUp != nil {
+			return ctrl.Result{}, errUp
 		}
 		logrus.Error(fmt.Errorf("failed to update source in news aggregator"), "Status", resp.Status)
 		return ctrl.Result{}, fmt.Errorf("failed to update source in news aggregator: %s", resp.Status)
 	}
 
-	err = r.updateSourceStatus(ctx, source, aggregatorv1.SourceUpdated, metav1.ConditionTrue, reasonSuccessUpd, "Source successfully updated in news aggregator")
+	err = r.updateSourceStatus(ctx, source, aggregatorv1.SourceUpdated, metav1.ConditionTrue, ReasonSuccessUpd, "Source successfully updated in news aggregator")
 	if err != nil {
 		return ctrl.Result{}, err
 	}
