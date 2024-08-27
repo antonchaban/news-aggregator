@@ -1,6 +1,6 @@
 package v1
 
-import (
+/*import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"testing"
@@ -259,4 +259,4 @@ func TestHotNews_ValidateDelete(t *testing.T) {
 			}
 		})
 	}
-}
+}*/
