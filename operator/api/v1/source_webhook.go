@@ -31,9 +31,16 @@ import (
 // log is for logging in this package.
 var sourcelog = logf.Log.WithName("source-resource")
 
+// SourceClientWrapper allows substituting the Kubernetes client with a mock for testing.
+type SourceClientWrapper struct {
+	Client client.Client
+}
+
+var SourceClient SourceClientWrapper
+
 // SetupWebhookWithManager will setup the manager to manage the webhooks
-// This function configures the webhook with the manager.
 func (r *Source) SetupWebhookWithManager(mgr ctrl.Manager) error {
+	SourceClient.Client = mgr.GetClient()
 	return ctrl.NewWebhookManagedBy(mgr).
 		For(r).
 		Complete()
@@ -93,7 +100,7 @@ func (r *Source) validateSource() (admission.Warnings, error) {
 	}
 
 	// Check for uniqueness within the namespace
-	return r.checkUniqueFields()
+	return r.checkUniqueFields(SourceClient.Client)
 }
 
 // isValidURL checks if the provided link is a valid URL.
@@ -103,19 +110,8 @@ func isValidURL(link string) bool {
 }
 
 // checkUniqueFields ensures that the Name, ShortName, and Link fields are unique within the namespace.
-func (r *Source) checkUniqueFields() (admission.Warnings, error) {
+func (r *Source) checkUniqueFields(cl client.Client) (admission.Warnings, error) {
 	ctx := context.Background()
-	config := ctrl.GetConfigOrDie()
-	scheme := runtime.NewScheme()
-	if err := AddToScheme(scheme); err != nil {
-		sourcelog.Error(err, "failed to add scheme")
-		return nil, err
-	}
-	cl, err := client.New(config, client.Options{Scheme: scheme})
-	if err != nil {
-		sourcelog.Error(err, "failed to create client")
-		return nil, err
-	}
 
 	var sources SourceList
 	sourcelog.Info("Listing sources in namespace", "namespace", r.Namespace)
@@ -132,7 +128,7 @@ func (r *Source) checkUniqueFields() (admission.Warnings, error) {
 				return nil, fmt.Errorf("name must be unique in the namespace")
 			}
 			if source.Spec.ShortName == r.Spec.ShortName {
-				return nil, fmt.Errorf("short_name must be unique in the namespace")
+				return admission.Warnings{}, fmt.Errorf("short_name must be unique in the namespace")
 			}
 			if source.Spec.Link == r.Spec.Link {
 				return nil, fmt.Errorf("link must be unique in the namespace")
