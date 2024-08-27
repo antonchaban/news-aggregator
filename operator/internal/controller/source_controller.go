@@ -135,7 +135,7 @@ func (r *SourceReconciler) createSource(ctx context.Context, source *aggregatorv
 	}
 
 	source.Status.ID = createdSource.Id
-	if err := r.Client.Update(ctx, source); err != nil { // todo check is okay?
+	if err := r.Client.Status().Update(ctx, source); err != nil {
 		return ctrl.Result{}, err
 	}
 
@@ -237,7 +237,7 @@ func (r *SourceReconciler) updateSourceStatus(ctx context.Context, source *aggre
 	}
 
 	source.Status.Conditions = append(source.Status.Conditions, newCondition)
-	return r.Client.Update(ctx, source) // todo check is okay
+	return r.Client.Status().Update(ctx, source)
 }
 
 // SetupWithManager sets up the controller with the Manager, uses predicates to filter events.

@@ -17,7 +17,9 @@ spec:
   - name: v1
     schema:
       openAPIV3Schema:
-        description: Source is the Schema for the sources API
+        description: |-
+          Source is the Schema for the sources API
+          It represents a source resource in the Kubernetes cluster.
         properties:
           apiVersion:
             description: |-
@@ -37,7 +39,14 @@ spec:
           metadata:
             type: object
           spec:
-            description: SourceSpec defines Source fields
+            description: |-
+              SourceSpec defines the desired state of Source
+              It contains the specifications for a Source resource.
+              Fields:
+              - Id: Unique identifier for the source.
+              - Name: Name of the source.
+              - Link: URL link to the source.
+              - ShortName: Shortened name of the source for search.
             properties:
               id:
                 type: integer
@@ -49,29 +58,39 @@ spec:
                 type: string
             type: object
           status:
-            description: SourceStatus defines the observed state of Source
+            description: |-
+              SourceStatus defines the observed state of Source
+              It contains the current status of the Source resource, including conditions.
+              Fields:
+              - ID: Unique identifier for the source.
+              - Conditions: List of conditions associated with the source.
             properties:
               conditions:
                 items:
-                  description: SourceCondition defines the observed state of Source
-                    at a certain point.
+                  description: |-
+                    SourceCondition defines the observed state of Source at the change moment
+                    Fields:
+                    - Type: Type of condition (e.g., Added, Updated).
+                    - Status: Status of the condition, one of True or False.
+                    - LastUpdateTime: The last time the condition was updated.
+                    - Reason: The reason for the condition's last transition.
+                    - Message: A human-readable message indicating details about the last transition.
                   properties:
                     lastUpdateTime:
-                      description: Last time the condition was checked.
                       format: date-time
                       type: string
                     message:
-                      description: Human-readable message indicating details about
-                        last transition.
                       type: string
                     reason:
-                      description: Reason for the condition's last transition.
                       type: string
                     status:
-                      description: Status of the condition, one of True or False.
                       type: string
                     type:
-                      description: Type of condition.
+                      description: |-
+                        SourceConditionType represents the type of condition for Source
+                        Valid values are:
+                        - "Added": Indicates that the source has been added.
+                        - "Updated": Indicates that the source has been updated.
                       type: string
                   required:
                   - status
