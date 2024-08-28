@@ -131,12 +131,74 @@ func (r *HotNewsReconciler) reconcileHotNews(ctx context.Context, hotNews *aggre
 	}
 
 	// Resolve FeedGroups to actual source names
+	resolvedSources := hotNews.Spec.Sources
 	if len(hotNews.Spec.FeedGroups) > 0 {
-		resolvedSources := r.resolveFeedGroups(hotNews.Spec.FeedGroups, configMap)
-		hotNews.Spec.Sources = append(hotNews.Spec.Sources, resolvedSources...)
+		resolvedSources = r.resolveFeedGroups(hotNews.Spec.FeedGroups, configMap)
 	}
 
-	// Build query parameters for the HTTP request
+	// Check if the resolved sources are different
+	sourcesChanged := !slices.Equal(hotNews.Spec.Sources, resolvedSources)
+	if sourcesChanged {
+		hotNews.Spec.Sources = resolvedSources
+		err = r.Client.Update(ctx, hotNews)
+		if err != nil {
+			logger.Error(err, "Failed to update HotNews with resolved sources")
+			return ctrl.Result{}, err
+		}
+	}
+
+	// Set OwnerReference to all Sources based on ShortName in HotNews.Spec.Sources
+	var updatedOwnerRefs bool
+	for _, sourceShortName := range hotNews.Spec.Sources {
+		// Find the Source object using the ShortName
+		var sourceList aggregatorv1.SourceList
+		err := r.Client.List(ctx, &sourceList, client.InNamespace(hotNews.Namespace))
+		if err != nil {
+			logger.Error(err, "Failed to list Sources")
+			return ctrl.Result{}, err
+		}
+
+		var sourceFound *aggregatorv1.Source
+		for _, source := range sourceList.Items {
+			if source.Spec.ShortName == sourceShortName {
+				sourceFound = &source
+				break
+			}
+		}
+
+		if sourceFound == nil {
+			logger.Error(fmt.Errorf("source with ShortName %s not found", sourceShortName), "Source not found")
+			//r.updateHotNewsStatus(ctx, hotNews, metav1.ConditionFalse, "SourceNotFound", "Source not found")
+			errUp := r.selectStatus(ctx, hotNews, metav1.ConditionFalse, "SourceNotFound", "Source not found")
+			if errUp != nil {
+				return ctrl.Result{}, errUp
+			}
+			return ctrl.Result{}, fmt.Errorf("source with ShortName %s not found", sourceShortName)
+		}
+
+		// Set the OwnerReference
+		ownerReference := metav1.OwnerReference{
+			APIVersion: aggregatorv1.GroupVersion.String(),
+			Kind:       "Source",
+			Name:       sourceFound.Name,
+			UID:        sourceFound.UID,
+		}
+
+		if !metav1.IsControlledBy(hotNews, sourceFound) {
+			hotNews.OwnerReferences = append(hotNews.OwnerReferences, ownerReference)
+			updatedOwnerRefs = true
+		}
+	}
+
+	if updatedOwnerRefs {
+		err = r.Client.Update(ctx, hotNews)
+		if err != nil {
+			logger.Error(err, "Failed to update HotNews with OwnerReferences")
+			return ctrl.Result{}, err
+		}
+	}
+
+	// Proceed with building query parameters and fetching articles
 	queryParams := make(map[string]string)
 	if len(hotNews.Spec.Keywords) > 0 {
 		queryParams["keywords"] = strings.Join(hotNews.Spec.Keywords, ",")
@@ -158,6 +220,7 @@ func (r *HotNewsReconciler) reconcileHotNews(ctx context.Context, hotNews *aggre
 	articles, err := r.fetchArticles(reqURL)
 	if err != nil {
 		logger.Error(err, "unable to fetch articles")
+		//r.updateHotNewsStatus(ctx, hotNews, metav1.ConditionFalse, "FetchArticlesFailed", "Failed to fetch articles")
 		errUp := r.selectStatus(ctx, hotNews, metav1.ConditionFalse, "FetchArticlesFailed", "Failed to fetch articles")
 		if errUp != nil {
 			return ctrl.Result{}, errUp
@@ -170,10 +233,10 @@ func (r *HotNewsReconciler) reconcileHotNews(ctx context.Context, hotNews *aggre
 	hotNews.Status.NewsLink = reqURL
 	hotNews.Status.ArticlesTitles = getTitles(articles, hotNews.Spec.SummaryConfig.TitlesCount)
 
-	// Update the HotNews status
 	err = r.Client.Status().Update(ctx, hotNews)
 	if err != nil {
 		logger.Error(err, "unable to update HotNews status")
+		//r.updateHotNewsStatus(ctx, hotNews, metav1.ConditionFalse, "UpdateStatusFailed", "Failed to update HotNews status")
 		errUp := r.selectStatus(ctx, hotNews, metav1.ConditionFalse, "UpdateStatusFailed", "Failed to update HotNews status")
 		if errUp != nil {
 			return ctrl.Result{}, errUp
@@ -181,11 +244,11 @@ func (r *HotNewsReconciler) reconcileHotNews(ctx context.Context, hotNews *aggre
 		return ctrl.Result{}, err
 	}
 
+	//r.updateHotNewsStatus(ctx, hotNews, metav1.ConditionTrue, "Reconciled", "Successfully reconciled HotNews")
 	errUp := r.selectStatus(ctx, hotNews, metav1.ConditionTrue, "Reconciled", "Successfully reconciled HotNews")
 	if errUp != nil {
 		return ctrl.Result{}, errUp
 	}
-
 	logger.Info("Successfully reconciled HotNews", "Name", hotNews.Name)
 	return ctrl.Result{}, nil
 }

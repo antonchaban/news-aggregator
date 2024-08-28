@@ -19,6 +19,7 @@ package v1
 import (
 	"context"
 	"fmt"
+	"github.com/sirupsen/logrus"
 	"k8s.io/apimachinery/pkg/runtime"
 	"net/url"
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -78,6 +79,30 @@ func (r *Source) ValidateUpdate(old runtime.Object) (admission.Warnings, error) 
 // This function validates the Source resource upon deletion.
 func (r *Source) ValidateDelete() (admission.Warnings, error) {
 	sourcelog.Info("validate delete", "name", r.Name)
+
+	// Initialize a new context and client
+	ctx := context.Background()
+	cl := SourceClient.Client
+
+	// List all HotNews resources in the same namespace
+	var hotNewsList HotNewsList
+	err := cl.List(ctx, &hotNewsList, client.InNamespace(r.Namespace))
+	logrus.Println("HotNewsList: ")
+	logrus.Println(hotNewsList)
+	if err != nil {
+		sourcelog.Error(err, "failed to list HotNews resources")
+		return nil, fmt.Errorf("failed to list HotNews resources: %w", err)
+	}
+
+	// Check if any HotNews resource references this Source
+	for _, hotNews := range hotNewsList.Items {
+		for _, ownerRef := range hotNews.OwnerReferences {
+			if ownerRef.UID == r.UID {
+				return nil, fmt.Errorf("cannot delete Source %s because it is referenced by HotNews resource: %s", r.Name, hotNews.Name)
+			}
+		}
+	}
+
 	return nil, nil
 }
 
