@@ -85,53 +85,11 @@ func (r *HotNews) validateHotNews() (admission.Warnings, error) {
 	}
 
 	// Validate dates
-	if r.Spec.DateStart != "" && r.Spec.DateEnd != "" {
-		startTime, err := time.Parse("2006-01-02", r.Spec.DateStart)
-		if err != nil {
-			allErrs = append(allErrs, field.Invalid(field.NewPath("spec").Child("dateStart"), r.Spec.DateStart, "invalid date format, should be YYYY-MM-DD"))
-		}
-		endTime, err := time.Parse("2006-01-02", r.Spec.DateEnd)
-		if err != nil {
-			allErrs = append(allErrs, field.Invalid(field.NewPath("spec").Child("dateEnd"), r.Spec.DateEnd, "invalid date format, should be YYYY-MM-DD"))
-		}
-		if err == nil && startTime.After(endTime) {
-			allErrs = append(allErrs, field.Invalid(field.NewPath("spec").Child("dateStart"), r.Spec.DateStart, "dateStart must be before dateEnd"))
-		}
-	} else {
-		if r.Spec.DateStart != "" {
-			if _, err := time.Parse("2006-01-02", r.Spec.DateStart); err != nil {
-				allErrs = append(allErrs, field.Invalid(field.NewPath("spec").Child("dateStart"), r.Spec.DateStart, "invalid date format, should be YYYY-MM-DD"))
-			}
-		}
-		if r.Spec.DateEnd != "" {
-			if _, err := time.Parse("2006-01-02", r.Spec.DateEnd); err != nil {
-				allErrs = append(allErrs, field.Invalid(field.NewPath("spec").Child("dateEnd"), r.Spec.DateEnd, "invalid date format, should be YYYY-MM-DD"))
-			}
-		}
-	}
+	r.validateDate(r.Spec.DateStart, r.Spec.DateEnd, &allErrs)
 
-	if len(r.Spec.Sources) > 0 {
-		// Check that FeedGroups is empty if Sources is not empty
-		if len(r.Spec.FeedGroups) > 0 {
-			allErrs = append(allErrs, field.Forbidden(field.NewPath("spec").Child("feedGroups"), "feedGroups cannot be used when sources are specified"))
-		}
-
-		sourceList := &SourceList{}
-		err := HotNewsClient.Client.List(context.Background(), sourceList, &client.ListOptions{Namespace: r.Namespace})
-		logrus.Println("SourceList: ", sourceList.Items)
-		if err != nil {
-			allErrs = append(allErrs, field.Invalid(field.NewPath("spec").Child("sources"), r.Spec.Sources, "unable to fetch SourceList"))
-		} else {
-			validSources := make(map[string]bool)
-			for _, source := range sourceList.Items {
-				validSources[source.Spec.ShortName] = true
-			}
-			for i, source := range r.Spec.Sources {
-				if !validSources[source] {
-					allErrs = append(allErrs, field.NotFound(field.NewPath("spec").Child("sources").Index(i), source))
-				}
-			}
-		}
+	err := r.validateSrc(r.Spec.Sources, r.Spec.FeedGroups, &allErrs)
+	if err != nil {
+		allErrs = append(allErrs, field.Invalid(field.NewPath("spec").Child("sources"), r.Spec.Sources, "error in sources"))
 	}
 
 	if len(allErrs) > 0 {
@@ -139,4 +97,60 @@ func (r *HotNews) validateHotNews() (admission.Warnings, error) {
 	}
 
 	return nil, nil
+}
+
+func (r *HotNews) validateDate(dateStart, dateEnd string, allErrs *field.ErrorList) {
+	if dateStart != "" && dateEnd != "" {
+		startTime, err := time.Parse("2006-01-02", dateStart)
+		if err != nil {
+			*allErrs = append(*allErrs, field.Invalid(field.NewPath("spec").Child("dateStart"), dateStart, "invalid date format, should be YYYY-MM-DD"))
+		}
+		endTime, err := time.Parse("2006-01-02", dateEnd)
+		if err != nil {
+			*allErrs = append(*allErrs, field.Invalid(field.NewPath("spec").Child("dateEnd"), dateEnd, "invalid date format, should be YYYY-MM-DD"))
+		}
+		if err == nil && startTime.After(endTime) {
+			*allErrs = append(*allErrs, field.Invalid(field.NewPath("spec").Child("dateStart"), dateStart, "dateStart must be before dateEnd"))
+		}
+	} else {
+		if dateStart != "" {
+			if _, err := time.Parse("2006-01-02", dateStart); err != nil {
+				*allErrs = append(*allErrs, field.Invalid(field.NewPath("spec").Child("dateStart"), dateStart, "invalid date format, should be YYYY-MM-DD"))
+			}
+		}
+		if dateEnd != "" {
+			if _, err := time.Parse("2006-01-02", dateEnd); err != nil {
+				*allErrs = append(*allErrs, field.Invalid(field.NewPath("spec").Child("dateEnd"), dateEnd, "invalid date format, should be YYYY-MM-DD"))
+			}
+		}
+	}
+
+}
+
+func (r *HotNews) validateSrc(sources, feedGroups []string, allErrs *field.ErrorList) error {
+	if len(sources) > 0 {
+
+		// Check that FeedGroups is empty if Sources is not empty
+		if len(feedGroups) > 0 {
+			*allErrs = append(*allErrs, field.Forbidden(field.NewPath("spec").Child("feedGroups"), "feedGroups cannot be used when sources are specified"))
+		}
+
+		sourceList := &SourceList{}
+		err := HotNewsClient.Client.List(context.Background(), sourceList, &client.ListOptions{Namespace: r.Namespace})
+		logrus.Println("SourceList: ", sourceList.Items)
+		if err != nil {
+			*allErrs = append(*allErrs, field.Invalid(field.NewPath("spec").Child("sources"), r.Spec.Sources, "unable to fetch SourceList"))
+		} else {
+			validSources := make(map[string]bool)
+			for _, source := range sourceList.Items {
+				validSources[source.Spec.ShortName] = true
+			}
+			for i, source := range r.Spec.Sources {
+				if !validSources[source] {
+					*allErrs = append(*allErrs, field.NotFound(field.NewPath("spec").Child("sources").Index(i), source))
+				}
+			}
+		}
+	}
+	return nil
 }
