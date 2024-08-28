@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/sirupsen/logrus"
 	"k8s.io/apimachinery/pkg/api/errors"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"net/http"
 	"sigs.k8s.io/controller-runtime/pkg/event"
 	"sigs.k8s.io/controller-runtime/pkg/handler"
@@ -120,7 +121,11 @@ func (r *HotNewsReconciler) reconcileHotNews(ctx context.Context, hotNews *aggre
 	if err != nil {
 		if errors.IsNotFound(err) {
 			logger.Error(err, "ConfigMap not found")
-			return ctrl.Result{}, nil
+			errUp := r.selectStatus(ctx, hotNews, metav1.ConditionFalse, "ConfigMapNotFound", "ConfigMap not found")
+			if errUp != nil {
+				return ctrl.Result{}, errUp
+			}
+			return ctrl.Result{}, err
 		}
 		return ctrl.Result{}, err
 	}
@@ -153,6 +158,10 @@ func (r *HotNewsReconciler) reconcileHotNews(ctx context.Context, hotNews *aggre
 	articles, err := r.fetchArticles(reqURL)
 	if err != nil {
 		logger.Error(err, "unable to fetch articles")
+		errUp := r.selectStatus(ctx, hotNews, metav1.ConditionFalse, "FetchArticlesFailed", "Failed to fetch articles")
+		if errUp != nil {
+			return ctrl.Result{}, errUp
+		}
 		return ctrl.Result{}, err
 	}
 
@@ -165,7 +174,16 @@ func (r *HotNewsReconciler) reconcileHotNews(ctx context.Context, hotNews *aggre
 	err = r.Client.Status().Update(ctx, hotNews)
 	if err != nil {
 		logger.Error(err, "unable to update HotNews status")
+		errUp := r.selectStatus(ctx, hotNews, metav1.ConditionFalse, "UpdateStatusFailed", "Failed to update HotNews status")
+		if errUp != nil {
+			return ctrl.Result{}, errUp
+		}
 		return ctrl.Result{}, err
+	}
+
+	errUp := r.selectStatus(ctx, hotNews, metav1.ConditionTrue, "Reconciled", "Successfully reconciled HotNews")
+	if errUp != nil {
+		return ctrl.Result{}, errUp
 	}
 
 	logger.Info("Successfully reconciled HotNews", "Name", hotNews.Name)
@@ -289,6 +307,39 @@ func getTitles(articles []Article, count int) []string {
 		titles = append(titles, article.Title)
 	}
 	return titles
+}
+
+func (r *HotNewsReconciler) selectStatus(ctx context.Context, hotNews *aggregatorv1.HotNews, cndStatus metav1.ConditionStatus, reason, message string) error {
+	if len(hotNews.Status.Conditions) == 0 {
+		err := r.updateHotNewsStatus(ctx, hotNews, aggregatorv1.HNewsAdded, cndStatus, reason, message)
+		if err != nil {
+			return err
+		}
+	} else {
+		err := r.updateHotNewsStatus(ctx, hotNews, aggregatorv1.HNewsUpdated, cndStatus, reason, message)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// updateHotNewsStatus updates the SourceStatus of a source resource with the given condition.
+func (r *HotNewsReconciler) updateHotNewsStatus(ctx context.Context, hotNews *aggregatorv1.HotNews, conditionType aggregatorv1.HNewsConditionType, status metav1.ConditionStatus, reason, message string) error {
+	logrus.Println("Updating HotNews status")
+	logrus.Println("HotNews status: ", hotNews.Status)
+	newCondition := aggregatorv1.HotNewsCondition{
+		Type:           conditionType,
+		Status:         status,
+		LastUpdateTime: metav1.Time{Time: time.Now()},
+		Reason:         reason,
+		Message:        message,
+	}
+
+	hotNews.Status.Conditions = append(hotNews.Status.Conditions, newCondition)
+	logrus.Println("Appending new condition")
+	logrus.Println("HotNews status: ", hotNews.Status)
+	return r.Client.Status().Update(ctx, hotNews)
 }
 
 // SetupWithManager sets up the controller with the Manager.

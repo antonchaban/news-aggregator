@@ -65,9 +65,7 @@ spec:
     - "ukraine"
     - "putin"
     - "war"
-    - "biden"
-    - "zelensky"
-    - "kursk"
+    - "usa"
   date_start: "2024-07-07"
   date_end: "2025-08-10"
   sources:
