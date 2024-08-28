@@ -47,7 +47,7 @@ func main() {
 	var newsAggregatorSrcServiceURL string
 	var newsAggregatorServiceURL string
 	var cfgMapName string
-	var cfgMapNameSpace string
+	//var cfgMapNameSpace string
 	var tlsOpts []func(*tls.Config)
 
 	flag.StringVar(&metricsAddr, "metrics-bind-address", "0", "The address the metrics endpoint binds to. "+
@@ -63,7 +63,7 @@ func main() {
 	flag.StringVar(&newsAggregatorSrcServiceURL, "news-aggregator-src-service-url", "https://news-alligator-service.news-alligator.svc.cluster.local:8443/sources", "The URL of the news aggregator source service")
 	flag.StringVar(&newsAggregatorServiceURL, "news-aggregator-service-url", "https://news-alligator-service.news-alligator.svc.cluster.local:8443/articles", "The URL of the news aggregator service")
 	flag.StringVar(&cfgMapName, "config-map-name", "feed-group-source", "The name of the ConfigMap that contains feed groups")
-	flag.StringVar(&cfgMapNameSpace, "config-map-namespace", "news-alligator", "The namespace of the ConfigMap that contains feed groups")
+	//flag.StringVar(&cfgMapNameSpace, "config-map-namespace", "news-alligator", "The namespace of the ConfigMap that contains feed groups")
 	opts := zap.Options{
 		Development: true,
 	}
@@ -131,12 +131,12 @@ func main() {
 		}
 	}
 	if err = (&controller.HotNewsReconciler{
-		Client:          mgr.GetClient(),
-		Scheme:          mgr.GetScheme(),
-		HTTPClient:      httpClient,
-		ArticleSvcURL:   newsAggregatorServiceURL,
-		ConfigMapName:   cfgMapName,
-		CfgMapNameSpace: cfgMapNameSpace,
+		Client:        mgr.GetClient(),
+		Scheme:        mgr.GetScheme(),
+		HTTPClient:    httpClient,
+		ArticleSvcURL: newsAggregatorServiceURL,
+		ConfigMapName: cfgMapName,
+		//CfgMapNameSpace: cfgMapNameSpace,
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "HotNews")
 		os.Exit(1)
