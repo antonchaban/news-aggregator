@@ -47,6 +47,7 @@ spec:
     - "biden"
     - "zelensky"
     - "kursk"
+    - "nuke"
   date_start: "2024-07-01"
   date_end: "2025-08-30"
   feed_groups:
@@ -69,7 +70,6 @@ spec:
   date_start: "2024-07-07"
   date_end: "2025-08-10"
   sources:
-    - "abcnews"
     - "bbc"
   summary_config:
     titles_count: 11
