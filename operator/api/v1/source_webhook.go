@@ -26,6 +26,7 @@ import (
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
+	"slices"
 )
 
 // log is for logging in this package.
@@ -46,7 +47,7 @@ func (r *Source) SetupWebhookWithManager(mgr ctrl.Manager) error {
 		Complete()
 }
 
-// +kubebuilder:webhook:path=/mutate-aggregator-com-teamdev-v1-source,mutating=true,failurePolicy=fail,sideEffects=None,groups=aggregator.com.teamdev,resources=sources,verbs=create;update,versions=v1,name=msource.kb.io,admissionReviewVersions=v1
+// +kubebuilder:webhook:path=/mutate-aggregator-com-teamdev-v1-source,mutating=true,failurePolicy=fail,sideEffects=None,groups=aggregator.com.teamdev,resources=sources,verbs=create;update;delete,versions=v1,name=msource.kb.io,admissionReviewVersions=v1
 
 var _ webhook.Defaulter = &Source{}
 
@@ -56,7 +57,7 @@ func (r *Source) Default() {
 	sourcelog.Info("default", "name", r.Name)
 }
 
-// +kubebuilder:webhook:path=/validate-aggregator-com-teamdev-v1-source,mutating=false,failurePolicy=fail,sideEffects=None,groups=aggregator.com.teamdev,resources=sources,verbs=create;update,versions=v1,name=vsource.kb.io,admissionReviewVersions=v1
+// +kubebuilder:webhook:path=/validate-aggregator-com-teamdev-v1-source,mutating=false,failurePolicy=fail,sideEffects=None,groups=aggregator.com.teamdev,resources=sources,verbs=create;update;delete,versions=v1,name=vsource.kb.io,admissionReviewVersions=v1
 
 var _ webhook.Validator = &Source{}
 
@@ -78,6 +79,20 @@ func (r *Source) ValidateUpdate(old runtime.Object) (admission.Warnings, error) 
 // This function validates the Source resource upon deletion.
 func (r *Source) ValidateDelete() (admission.Warnings, error) {
 	sourcelog.Info("validate delete", "name", r.Name)
+
+	// Check if the source is referenced by any HotNews resources
+	var hotNewsList HotNewsList
+	err := SourceClient.Client.List(context.Background(), &hotNewsList, &client.ListOptions{Namespace: r.Namespace})
+	if err != nil {
+		return nil, err
+	}
+
+	for _, hotNews := range hotNewsList.Items {
+		if slices.Contains(hotNews.Spec.Sources, r.Spec.ShortName) {
+			return nil, fmt.Errorf("cannot delete Source %s as it is referenced by HotNews %s", r.Spec.ShortName, hotNews.Name)
+		}
+	}
+
 	return nil, nil
 }
 

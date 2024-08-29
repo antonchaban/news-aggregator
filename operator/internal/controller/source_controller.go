@@ -53,19 +53,6 @@ func (r *SourceReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 		return ctrl.Result{}, err
 	}
 
-	// Check if the source is referenced by any HotNews resources
-	var hotNewsList aggregatorv1.HotNewsList
-	err = r.Client.List(ctx, &hotNewsList, &client.ListOptions{Namespace: source.Namespace})
-	if err != nil {
-		return ctrl.Result{}, err
-	}
-
-	for _, hotNews := range hotNewsList.Items {
-		if slices.Contains(hotNews.Spec.Sources, source.Spec.ShortName) {
-			return ctrl.Result{}, fmt.Errorf("cannot delete source %s as it is referenced by HotNews %s", source.Name, hotNews.Name)
-		}
-	}
-
 	// Handle finalizer and deletion logic
 	if source.ObjectMeta.DeletionTimestamp.IsZero() {
 		if !slices.Contains(source.Finalizers, SrcFinalizer) {
