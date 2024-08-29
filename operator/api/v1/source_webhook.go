@@ -19,7 +19,6 @@ package v1
 import (
 	"context"
 	"fmt"
-	"github.com/sirupsen/logrus"
 	"k8s.io/apimachinery/pkg/runtime"
 	"net/url"
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -27,7 +26,6 @@ import (
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
-	"slices"
 )
 
 // log is for logging in this package.
@@ -80,40 +78,6 @@ func (r *Source) ValidateUpdate(old runtime.Object) (admission.Warnings, error) 
 // This function validates the Source resource upon deletion.
 func (r *Source) ValidateDelete() (admission.Warnings, error) {
 	sourcelog.Info("validate delete", "name", r.Name)
-
-	// Initialize a new context and client
-	ctx := context.Background()
-	cl := SourceClient.Client
-
-	// List all HotNews resources in the same namespace
-	var hotNewsList HotNewsList
-	err := cl.List(ctx, &hotNewsList, client.InNamespace(r.Namespace))
-	if err != nil {
-		sourcelog.Error(err, "failed to list HotNews resources")
-		return nil, fmt.Errorf("failed to list HotNews resources: %w", err)
-	}
-
-	// Check if any HotNews resource references this Source by ShortName or OwnerReference
-	for _, hotNews := range hotNewsList.Items {
-		logrus.Println("HotNews found", "name", hotNews.Name)
-		logrus.Println("Sources referenced", "sources", hotNews.Spec.Sources)
-		// Check if the ShortName is referenced in HotNews.Spec.Sources
-		if slices.Contains(hotNews.Spec.Sources, r.Spec.ShortName) {
-			return nil, fmt.Errorf("cannot delete Source %s because it is referenced by HotNews resource: %s", r.Name, hotNews.Name)
-		}
-
-		// Additionally, check if the Source UID is in the OwnerReferences of HotNews
-		for _, ownerRef := range hotNews.OwnerReferences {
-			logrus.Println("OwnerReference found", "ownerRef", ownerRef)
-			logrus.Println("Source UID", "sourceUID", r.UID)
-			logrus.Println("OwnerReference UID", "ownerRefUID", ownerRef.UID)
-			logrus.Println("OwnerReference Name", "ownerRefName", ownerRef.Name)
-			if ownerRef.UID == r.UID {
-				return nil, fmt.Errorf("cannot delete Source %s because it is referenced by HotNews resource: %s", r.Name, hotNews.Name)
-			}
-		}
-	}
-
 	return nil, nil
 }
 

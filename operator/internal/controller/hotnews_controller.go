@@ -1,13 +1,18 @@
 package controller
 
 import (
+	aggregatorv1 "com.teamdev/news-aggregator/api/v1"
 	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/sirupsen/logrus"
+	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/runtime"
 	"net/http"
+	ctrl "sigs.k8s.io/controller-runtime"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/event"
 	"sigs.k8s.io/controller-runtime/pkg/handler"
 	"sigs.k8s.io/controller-runtime/pkg/log"
@@ -15,12 +20,6 @@ import (
 	"slices"
 	"strings"
 	"time"
-
-	aggregatorv1 "com.teamdev/news-aggregator/api/v1"
-	corev1 "k8s.io/api/core/v1"
-	"k8s.io/apimachinery/pkg/runtime"
-	ctrl "sigs.k8s.io/controller-runtime"
-	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 // HotNewsReconciler reconciles a HotNews object
@@ -42,7 +41,6 @@ type Article struct {
 	Source      Source    `json:"Source"`
 	PubDate     time.Time `json:"PubDate"`
 }
-
 type Source struct {
 	Id        int    `json:"id"`
 	Name      string `json:"name"`
@@ -71,14 +69,12 @@ func (r *HotNewsReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 		// ConfigMap update detected, handle all HotNews that reference this ConfigMap
 		return r.handleConfigMapUpdate(ctx, &configMap)
 	}
-
 	err = r.Client.Get(ctx, req.NamespacedName, &source)
 	if err == nil {
 		logrus.Println("Handling Source update")
 		// Source update detected, handle all HotNews that reference this Source
 		return r.handleSourceUpdate(ctx, &source)
 	}
-
 	// If not above - it is a standard HotNews
 	hotNews := &aggregatorv1.HotNews{}
 	err = r.Client.Get(ctx, req.NamespacedName, hotNews)
@@ -89,7 +85,6 @@ func (r *HotNewsReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 		}
 		return ctrl.Result{}, err
 	}
-
 	if hotNews.ObjectMeta.DeletionTimestamp.IsZero() {
 		if !slices.Contains(hotNews.Finalizers, hotNewsFinalizer) {
 			hotNews.Finalizers = append(hotNews.Finalizers, hotNewsFinalizer)
@@ -106,7 +101,6 @@ func (r *HotNewsReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 		}
 		return ctrl.Result{}, nil
 	}
-
 	// Proceed with normal reconciliation for HotNews
 	return r.reconcileHotNews(ctx, hotNews)
 }
@@ -131,74 +125,58 @@ func (r *HotNewsReconciler) reconcileHotNews(ctx context.Context, hotNews *aggre
 	}
 
 	// Resolve FeedGroups to actual source names
-	resolvedSources := hotNews.Spec.Sources
 	if len(hotNews.Spec.FeedGroups) > 0 {
-		resolvedSources = r.resolveFeedGroups(hotNews.Spec.FeedGroups, configMap)
+		resolvedSources := r.resolveFeedGroups(hotNews.Spec.FeedGroups, configMap)
+		hotNews.Spec.Sources = append(hotNews.Spec.Sources, resolvedSources...)
 	}
 
-	// Check if the resolved sources are different
-	sourcesChanged := !slices.Equal(hotNews.Spec.Sources, resolvedSources)
-	if sourcesChanged {
-		hotNews.Spec.Sources = resolvedSources
-		err = r.Client.Update(ctx, hotNews)
-		if err != nil {
-			logger.Error(err, "Failed to update HotNews with resolved sources")
-			return ctrl.Result{}, err
-		}
-	}
-
-	// Set OwnerReference to all Sources based on ShortName in HotNews.Spec.Sources
-	var updatedOwnerRefs bool
+	// Set OwnerReferences for each source using ShortName
 	for _, sourceShortName := range hotNews.Spec.Sources {
-		// Find the Source object using the ShortName
 		var sourceList aggregatorv1.SourceList
-		err := r.Client.List(ctx, &sourceList, client.InNamespace(hotNews.Namespace))
+		err := r.Client.List(ctx, &sourceList, &client.ListOptions{Namespace: hotNews.Namespace})
 		if err != nil {
 			logger.Error(err, "Failed to list Sources")
-			return ctrl.Result{}, err
+			continue
 		}
 
-		var sourceFound *aggregatorv1.Source
-		for _, source := range sourceList.Items {
-			if source.Spec.ShortName == sourceShortName {
-				sourceFound = &source
+		var source *aggregatorv1.Source
+		for _, src := range sourceList.Items {
+			if src.Spec.ShortName == sourceShortName {
+				source = &src
 				break
 			}
 		}
 
-		if sourceFound == nil {
-			logger.Error(fmt.Errorf("source with ShortName %s not found", sourceShortName), "Source not found")
-			//r.updateHotNewsStatus(ctx, hotNews, metav1.ConditionFalse, "SourceNotFound", "Source not found")
-			errUp := r.selectStatus(ctx, hotNews, metav1.ConditionFalse, "SourceNotFound", "Source not found")
-			if errUp != nil {
-				return ctrl.Result{}, errUp
+		if source == nil {
+			logger.Error(fmt.Errorf("source with short_name %s not found", sourceShortName), "Failed to find Source")
+			continue
+		}
+
+		// Check if the owner reference already exists
+		ownerExists := false
+		for _, owner := range source.OwnerReferences {
+			if owner.UID == hotNews.UID {
+				ownerExists = true
+				break
 			}
-			return ctrl.Result{}, fmt.Errorf("source with ShortName %s not found", sourceShortName)
 		}
 
-		// Set the OwnerReference
-		ownerReference := metav1.OwnerReference{
-			APIVersion: aggregatorv1.GroupVersion.String(),
-			Kind:       "Source",
-			Name:       sourceFound.Name,
-			UID:        sourceFound.UID,
-		}
-
-		if !metav1.IsControlledBy(hotNews, sourceFound) {
-			hotNews.OwnerReferences = append(hotNews.OwnerReferences, ownerReference)
-			updatedOwnerRefs = true
-		}
-	}
-
-	if updatedOwnerRefs {
-		err = r.Client.Update(ctx, hotNews)
-		if err != nil {
-			logger.Error(err, "Failed to update HotNews with OwnerReferences")
-			return ctrl.Result{}, err
+		// Add owner reference if not exists
+		if !ownerExists {
+			source.OwnerReferences = append(source.OwnerReferences, metav1.OwnerReference{
+				APIVersion: hotNews.APIVersion,
+				Kind:       hotNews.Kind,
+				Name:       hotNews.Name,
+				UID:        hotNews.UID,
+			})
+			if err := r.Client.Update(ctx, source); err != nil {
+				logger.Error(err, "Failed to update Source with owner reference", "ShortName", sourceShortName)
+				return ctrl.Result{}, err
+			}
 		}
 	}
 
-	// Proceed with building query parameters and fetching articles
+	// Build query parameters for the HTTP request
 	queryParams := make(map[string]string)
 	if len(hotNews.Spec.Keywords) > 0 {
 		queryParams["keywords"] = strings.Join(hotNews.Spec.Keywords, ",")
@@ -212,15 +190,12 @@ func (r *HotNewsReconciler) reconcileHotNews(ctx context.Context, hotNews *aggre
 	if len(hotNews.Spec.Sources) > 0 {
 		queryParams["sources"] = strings.Join(hotNews.Spec.Sources, ",")
 	}
-
 	reqURL := fmt.Sprintf("%s?%s", r.ArticleSvcURL, buildQuery(queryParams))
 	logrus.Println("Request URL: ", reqURL)
-
 	// Fetch news from the aggregator
 	articles, err := r.fetchArticles(reqURL)
 	if err != nil {
 		logger.Error(err, "unable to fetch articles")
-		//r.updateHotNewsStatus(ctx, hotNews, metav1.ConditionFalse, "FetchArticlesFailed", "Failed to fetch articles")
 		errUp := r.selectStatus(ctx, hotNews, metav1.ConditionFalse, "FetchArticlesFailed", "Failed to fetch articles")
 		if errUp != nil {
 			return ctrl.Result{}, errUp
@@ -233,10 +208,10 @@ func (r *HotNewsReconciler) reconcileHotNews(ctx context.Context, hotNews *aggre
 	hotNews.Status.NewsLink = reqURL
 	hotNews.Status.ArticlesTitles = getTitles(articles, hotNews.Spec.SummaryConfig.TitlesCount)
 
+	// Update the HotNews status
 	err = r.Client.Status().Update(ctx, hotNews)
 	if err != nil {
 		logger.Error(err, "unable to update HotNews status")
-		//r.updateHotNewsStatus(ctx, hotNews, metav1.ConditionFalse, "UpdateStatusFailed", "Failed to update HotNews status")
 		errUp := r.selectStatus(ctx, hotNews, metav1.ConditionFalse, "UpdateStatusFailed", "Failed to update HotNews status")
 		if errUp != nil {
 			return ctrl.Result{}, errUp
@@ -244,7 +219,6 @@ func (r *HotNewsReconciler) reconcileHotNews(ctx context.Context, hotNews *aggre
 		return ctrl.Result{}, err
 	}
 
-	//r.updateHotNewsStatus(ctx, hotNews, metav1.ConditionTrue, "Reconciled", "Successfully reconciled HotNews")
 	errUp := r.selectStatus(ctx, hotNews, metav1.ConditionTrue, "Reconciled", "Successfully reconciled HotNews")
 	if errUp != nil {
 		return ctrl.Result{}, errUp
@@ -261,7 +235,6 @@ func (r *HotNewsReconciler) handleConfigMapUpdate(ctx context.Context, configMap
 		logrus.Errorf("Failed to list HotNews resources: %v", err)
 		return ctrl.Result{}, err
 	}
-
 	for _, hotNews := range hotNewsList.Items {
 		if r.ConfigMapName == configMap.Name {
 			_, err := r.reconcileHotNews(ctx, &hotNews)
@@ -281,12 +254,10 @@ func (r *HotNewsReconciler) handleSourceUpdate(ctx context.Context, source *aggr
 		logrus.Errorf("Failed to list HotNews resources: %v", err)
 		return ctrl.Result{}, err
 	}
-
 	for _, hotNews := range hotNewsList.Items {
 		logrus.Println("HotNews: ", hotNews.Name)
 		logrus.Println("Sources: ", hotNews.Spec.Sources)
 		logrus.Println("Source: ", source.Spec)
-
 		// First check if the Source is directly in HotNews.Spec.Sources
 		if slices.Contains(hotNews.Spec.Sources, source.Spec.ShortName) {
 			_, err := r.reconcileHotNews(ctx, &hotNews)
@@ -295,7 +266,6 @@ func (r *HotNewsReconciler) handleSourceUpdate(ctx context.Context, source *aggr
 			}
 			continue
 		}
-
 		// Fetch the ConfigMap referenced by HotNews
 		configMap := &corev1.ConfigMap{}
 		err := r.Client.Get(ctx, client.ObjectKey{Namespace: hotNews.Namespace, Name: r.ConfigMapName}, configMap)
@@ -303,7 +273,6 @@ func (r *HotNewsReconciler) handleSourceUpdate(ctx context.Context, source *aggr
 			logrus.Errorf("Failed to get ConfigMap %s: %v", r.ConfigMapName, err)
 			continue
 		}
-
 		// Check if the Source is part of any feed groups in the ConfigMap
 		for _, feedGroup := range hotNews.Spec.FeedGroups {
 			if feeds, found := configMap.Data[feedGroup]; found {
@@ -312,6 +281,7 @@ func (r *HotNewsReconciler) handleSourceUpdate(ctx context.Context, source *aggr
 					_, err := r.reconcileHotNews(ctx, &hotNews)
 					if err != nil {
 						logrus.Errorf("Failed to reconcile HotNews: %v", err)
+
 					}
 					break
 				}
@@ -320,7 +290,6 @@ func (r *HotNewsReconciler) handleSourceUpdate(ctx context.Context, source *aggr
 	}
 	return ctrl.Result{}, nil
 }
-
 func buildQuery(params map[string]string) string {
 	var query []string
 	for k, v := range params {
@@ -347,16 +316,13 @@ func (r *HotNewsReconciler) fetchArticles(url string) ([]Article, error) {
 		return nil, err
 	}
 	defer resp.Body.Close()
-
 	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("failed to get articles from news aggregator: %s", resp.Status)
 	}
-
 	var articles []Article
 	if err := json.NewDecoder(resp.Body).Decode(&articles); err != nil {
 		return nil, err
 	}
-
 	return articles, nil
 }
 

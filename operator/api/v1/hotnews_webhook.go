@@ -130,11 +130,6 @@ func (r *HotNews) validateDate(dateStart, dateEnd string, allErrs *field.ErrorLi
 func (r *HotNews) validateSrc(sources []string, allErrs *field.ErrorList) error {
 	if len(sources) > 0 {
 
-		/*		// Check that FeedGroups is empty if Sources is not empty
-				if len(feedGroups) > 0 {
-					*allErrs = append(*allErrs, field.Forbidden(field.NewPath("spec").Child("feedGroups"), "feedGroups cannot be used when sources are specified"))
-				}*/
-
 		sourceList := &SourceList{}
 		err := HotNewsClient.Client.List(context.Background(), sourceList, &client.ListOptions{Namespace: r.Namespace})
 		logrus.Println("SourceList: ", sourceList.Items)

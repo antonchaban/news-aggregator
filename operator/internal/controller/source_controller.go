@@ -53,6 +53,20 @@ func (r *SourceReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 		return ctrl.Result{}, err
 	}
 
+	// Check if the source is referenced by any HotNews resources
+	var hotNewsList aggregatorv1.HotNewsList
+	err = r.Client.List(ctx, &hotNewsList, &client.ListOptions{Namespace: source.Namespace})
+	if err != nil {
+		return ctrl.Result{}, err
+	}
+
+	for _, hotNews := range hotNewsList.Items {
+		if slices.Contains(hotNews.Spec.Sources, source.Spec.ShortName) {
+			return ctrl.Result{}, fmt.Errorf("cannot delete source %s as it is referenced by HotNews %s", source.Name, hotNews.Name)
+		}
+	}
+
+	// Handle finalizer and deletion logic
 	if source.ObjectMeta.DeletionTimestamp.IsZero() {
 		if !slices.Contains(source.Finalizers, SrcFinalizer) {
 			source.Finalizers = append(source.Finalizers, SrcFinalizer)
@@ -62,13 +76,10 @@ func (r *SourceReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 		}
 	} else {
 		if slices.Contains(source.Finalizers, SrcFinalizer) {
-			// Before removing the finalizer, check if the Source is referenced by any HotNews
-			if r.isSourceReferenced(ctx, &source) {
-				logrus.Errorf("Cannot delete Source %s because it is referenced by a HotNews resource.", source.Name)
-				return ctrl.Result{}, fmt.Errorf("cannot delete Source %s because it is referenced by a HotNews resource", source.Name)
+			// Proceed with deletion logic
+			if _, err := r.deleteSource(source.Status.ID); err != nil {
+				return ctrl.Result{}, err
 			}
-
-			// Remove finalizer to allow deletion
 			source.Finalizers = slices.Delete(source.Finalizers,
 				slices.Index(source.Finalizers, SrcFinalizer), slices.Index(source.Finalizers, SrcFinalizer)+1)
 			if err := r.Client.Update(ctx, &source); err != nil {
@@ -85,23 +96,6 @@ func (r *SourceReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 	} else {
 		return r.updateSource(ctx, source.Status.ID, &source)
 	}
-}
-
-// Check if the Source is still referenced by any HotNews resources
-func (r *SourceReconciler) isSourceReferenced(ctx context.Context, source *aggregatorv1.Source) bool {
-	var hotNewsList aggregatorv1.HotNewsList
-	err := r.Client.List(ctx, &hotNewsList, client.InNamespace(source.Namespace))
-	if err != nil {
-		logrus.Errorf("Failed to list HotNews resources: %v", err)
-		return false
-	}
-
-	for _, hotNews := range hotNewsList.Items {
-		if slices.Contains(hotNews.Spec.Sources, source.Spec.ShortName) {
-			return true
-		}
-	}
-	return false
 }
 
 // createSource creates a new source in the news aggregator service due to a new Source resource being created.
