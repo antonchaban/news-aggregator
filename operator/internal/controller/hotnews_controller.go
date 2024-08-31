@@ -94,6 +94,9 @@ func (r *HotNewsReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 		}
 	} else {
 		if slices.Contains(hotNews.Finalizers, hotNewsFinalizer) {
+			if err := r.deleteOwnerRef(ctx, hotNews.Namespace, hotNews.Name); err != nil {
+				return ctrl.Result{}, err
+			}
 			hotNews.Finalizers = slices.Delete(hotNews.Finalizers, slices.Index(hotNews.Finalizers, hotNewsFinalizer), slices.Index(hotNews.Finalizers, hotNewsFinalizer)+1)
 			if err := r.Client.Update(ctx, hotNews); err != nil {
 				return ctrl.Result{}, err
@@ -103,6 +106,39 @@ func (r *HotNewsReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 	}
 	// Proceed with normal reconciliation for HotNews
 	return r.reconcileHotNews(ctx, hotNews)
+}
+
+func (r *HotNewsReconciler) deleteOwnerRef(ctx context.Context, namespace, hotNewsName string) error {
+	var sources aggregatorv1.SourceList
+
+	if err := r.Client.List(ctx, &sources, &client.ListOptions{Namespace: namespace}); err != nil {
+		logrus.Errorf("Failed to list Sources: %v", err)
+		return fmt.Errorf("failed to list Sources: %w", err)
+	}
+
+	for _, src := range sources.Items {
+		var newOwnerReferences []metav1.OwnerReference
+		isRemoved := false
+
+		for _, ref := range src.OwnerReferences {
+			if ref.Name == hotNewsName && ref.Kind == "HotNews" {
+				isRemoved = true
+				continue
+			}
+			newOwnerReferences = append(newOwnerReferences, ref)
+		}
+
+		if isRemoved {
+			src.OwnerReferences = newOwnerReferences
+			if err := r.Client.Update(ctx, &src); err != nil {
+				logrus.Errorf("Failed to update Source %s: %v", src.Name, err)
+				return fmt.Errorf("failed to update Source %s: %w", src.Name, err)
+			}
+			logrus.Infof("Owner ref removed from src %s", src.Name)
+		}
+	}
+
+	return nil
 }
 
 // reconcileHotNews performs the actual reconciliation logic for HotNews

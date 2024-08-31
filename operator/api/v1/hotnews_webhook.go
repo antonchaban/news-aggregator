@@ -70,8 +70,6 @@ func (r *HotNews) ValidateUpdate(old runtime.Object) (admission.Warnings, error)
 // ValidateDelete implements webhook.Validator so a webhook will be registered for the type
 func (r *HotNews) ValidateDelete() (admission.Warnings, error) {
 	hotnewslog.Info("validate delete", "name", r.Name)
-
-	// No specific validation needed on delete for now.
 	return nil, nil
 }
 
