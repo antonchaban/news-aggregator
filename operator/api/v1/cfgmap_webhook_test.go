@@ -26,7 +26,6 @@ var _ = Describe("CfgMapValidatorWebHook Tests", func() {
 	)
 
 	BeforeEach(func() {
-		// Initialize scheme and fake client
 		scheme = runtime.NewScheme()
 		Expect(corev1.AddToScheme(scheme)).To(Succeed())
 		Expect(v1.AddToScheme(scheme)).To(Succeed())
@@ -52,7 +51,6 @@ var _ = Describe("CfgMapValidatorWebHook Tests", func() {
 			},
 		}
 
-		// Create a fake source
 		source := &v1.Source{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace: namespace,
@@ -157,18 +155,14 @@ var _ = Describe("CfgMapValidatorWebHook SetupWebhookWithManager", func() {
 	)
 
 	BeforeEach(func() {
-		// Create a new scheme and add corev1 and your API's types to it
 		scheme = runtime.NewScheme()
 		Expect(corev1.AddToScheme(scheme)).To(Succeed())
 		Expect(v1.AddToScheme(scheme)).To(Succeed())
-
-		// Create a new manager with a fake client
 		mgr, setupErr = ctrl.NewManager(ctrl.GetConfigOrDie(), ctrl.Options{
 			Scheme: scheme,
 		})
 		Expect(setupErr).ToNot(HaveOccurred())
 
-		// Initialize the CfgMapValidatorWebHook
 		validator = &v1.CfgMapValidatorWebHook{}
 	})
 
