@@ -45,21 +45,17 @@ func (v *CfgMapValidatorWebHook) validate(ctx context.Context, obj runtime.Objec
 			logrus.Printf("Key: %s, Value: %s\n", key, value)
 			sources := strings.Split(value, ",")
 			logrus.Println("Sources: ", sources)
-			if len(sources) == 0 {
-				allErrs = append(allErrs, field.Invalid(field.NewPath(key), value, "No sources found"))
-			} else {
-				logrus.Printf("ConfigMap %s has sources: %v\n", cm.Name, sources)
-				for _, sourceName := range sources {
-					found := false
-					for _, source := range sourceList.Items {
-						if source.Spec.ShortName == sourceName {
-							found = true
-							break
-						}
+			logrus.Printf("ConfigMap %s has sources: %v\n", cm.Name, sources)
+			for _, sourceName := range sources {
+				found := false
+				for _, source := range sourceList.Items {
+					if source.Spec.ShortName == sourceName {
+						found = true
+						break
 					}
-					if !found {
-						allErrs = append(allErrs, field.Invalid(field.NewPath(key), value, "Source "+sourceName+" not found"))
-					}
+				}
+				if !found {
+					allErrs = append(allErrs, field.Invalid(field.NewPath(key), value, "Source "+sourceName+" not found"))
 				}
 			}
 		}
