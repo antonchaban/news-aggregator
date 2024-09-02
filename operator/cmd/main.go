@@ -129,11 +129,12 @@ func main() {
 		}
 	}
 	if err = (&controller.HotNewsReconciler{
-		Client:        mgr.GetClient(),
-		Scheme:        mgr.GetScheme(),
-		HTTPClient:    httpClient,
-		ArticleSvcURL: newsAggregatorServiceURL,
-		ConfigMapName: cfgMapName,
+		Client:             mgr.GetClient(),
+		Scheme:             mgr.GetScheme(),
+		HTTPClient:         httpClient,
+		ArticleSvcURL:      newsAggregatorServiceURL,
+		ConfigMapName:      cfgMapName,
+		ConfigMapNamespace: cfgMapNameSpace,
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "HotNews")
 		os.Exit(1)
