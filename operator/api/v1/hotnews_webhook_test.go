@@ -1,262 +1,182 @@
-package v1
+package v1_test
 
-/*import (
+import (
+	"com.teamdev/news-aggregator/api/v1"
+	"context"
+	"errors"
+	. "github.com/onsi/ginkgo/v2"
+	. "github.com/onsi/gomega"
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
-	"testing"
-
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/client/fake"
 )
 
-// setupHNewsFakeClient initializes a fake k8sClient with preloaded Source objects
-func setupHNewsFakeClient() client.Client {
-	s := runtime.NewScheme()
-	_ = AddToScheme(s)
+var _ = Describe("HotNews Webhook Tests", func() {
+	var (
+		fakeClient client.Client
+		scheme     *runtime.Scheme
+		ctx        context.Context
+		hotNews    *v1.HotNews
+	)
 
-	existingSourceList := &SourceList{
-		Items: []Source{
-			{
+	BeforeEach(func() {
+		scheme = runtime.NewScheme()
+		Expect(corev1.AddToScheme(scheme)).To(Succeed())
+		Expect(v1.AddToScheme(scheme)).To(Succeed())
+
+		fakeClient = fake.NewClientBuilder().
+			WithScheme(scheme).
+			Build()
+
+		v1.HotNewsClient.Client = fakeClient
+
+		ctx = context.TODO()
+		source1 := &v1.Source{
+			ObjectMeta: metav1.ObjectMeta{
+				Name: "source1",
+			},
+			Spec: v1.SourceSpec{
+				ShortName: "source1",
+			},
+		}
+
+		source2 := &v1.Source{
+			ObjectMeta: metav1.ObjectMeta{
+				Name: "source2",
+			},
+			Spec: v1.SourceSpec{
+				ShortName: "source2",
+			},
+		}
+
+		Expect(fakeClient.Create(ctx, source1)).To(Succeed())
+		Expect(fakeClient.Create(ctx, source2)).To(Succeed())
+
+		hotNews = &v1.HotNews{
+			Spec: v1.HotNewsSpec{
+				Keywords:  []string{"breaking", "urgent"},
+				DateStart: "2023-09-01",
+				DateEnd:   "2023-09-10",
+				Sources:   []string{"source1", "source2"},
+				SummaryConfig: v1.SummaryConfig{
+					TitlesCount: 5,
+				},
+			},
+		}
+	})
+
+	Context("Defaulting", func() {
+		It("should set TitlesCount to 10 if not provided", func() {
+			hotNews.Spec.SummaryConfig.TitlesCount = 0
+			hotNews.Default()
+			Expect(hotNews.Spec.SummaryConfig.TitlesCount).To(Equal(10))
+		})
+
+		It("should not change TitlesCount if already set", func() {
+			hotNews.Spec.SummaryConfig.TitlesCount = 5
+			hotNews.Default()
+			Expect(hotNews.Spec.SummaryConfig.TitlesCount).To(Equal(5))
+		})
+	})
+
+	Context("ValidateCreate", func() {
+		It("should pass validation with valid HotNews", func() {
+			warnings, err := hotNews.ValidateCreate()
+			Expect(err).ToNot(HaveOccurred())
+			Expect(warnings).To(BeNil())
+		})
+
+		It("should fail validation with missing keywords", func() {
+			hotNews.Spec.Keywords = nil
+			warnings, err := hotNews.ValidateCreate()
+			Expect(err).To(HaveOccurred())
+			Expect(err.Error()).To(ContainSubstring("keywords must be present"))
+			Expect(warnings).To(BeNil())
+		})
+
+		It("should fail validation with invalid date format", func() {
+			hotNews.Spec.DateStart = "09-01-2023" // Invalid format
+			warnings, err := hotNews.ValidateCreate()
+			Expect(err).To(HaveOccurred())
+			Expect(err.Error()).To(ContainSubstring("invalid date format, should be YYYY-MM-DD"))
+			Expect(warnings).To(BeNil())
+		})
+
+		It("should fail validation if dateStart is after dateEnd", func() {
+			hotNews.Spec.DateStart = "2023-09-10"
+			hotNews.Spec.DateEnd = "2023-09-01"
+			warnings, err := hotNews.ValidateCreate()
+			Expect(err).To(HaveOccurred())
+			Expect(err.Error()).To(ContainSubstring("dateStart must be before dateEnd"))
+			Expect(warnings).To(BeNil())
+		})
+
+		It("should append an error when List call fails", func() {
+			// Replace the fake client with one that will simulate an error
+			v1.HotNewsClient.Client = &errorFakeClient{}
+			warnings, err := hotNews.ValidateCreate()
+
+			// Assert that an error occurred and contains the expected message
+			Expect(err).To(HaveOccurred())
+			Expect(err.Error()).To(ContainSubstring("unable to fetch SourceList"))
+			Expect(warnings).To(BeNil())
+		})
+
+		It("should fail validation if a source is not found", func() {
+			existingSource := &v1.Source{
 				ObjectMeta: metav1.ObjectMeta{
-					Name:      "bbc-source",
+					Name:      "existing-source",
 					Namespace: "default",
 				},
-				Spec: SourceSpec{
-					Name:      "BBC News",
-					Link:      "https://feeds.bbci.co.uk/news/rss.xml",
-					ShortName: "bbc",
+				Spec: v1.SourceSpec{
+					ShortName: "source1",
 				},
-			},
-			{
-				ObjectMeta: metav1.ObjectMeta{
-					Name:      "abc-source",
-					Namespace: "default",
-				},
-				Spec: SourceSpec{
-					Name:      "ABC News",
-					Link:      "https://abcnews.go.com/abcnews/internationalheadlines",
-					ShortName: "abcnews",
-				},
-			},
-			{
-				ObjectMeta: metav1.ObjectMeta{
-					Name:      "fox-source",
-					Namespace: "default",
-				},
-				Spec: SourceSpec{
-					Name:      "FOX NEWS",
-					Link:      "https://moxie.foxnews.com/google-publisher/world.xml",
-					ShortName: "foxnews",
-				},
-			},
-		},
-	}
+			}
+			Expect(fakeClient.Create(ctx, existingSource)).To(Succeed())
 
-	return fake.NewClientBuilder().WithScheme(s).WithLists(existingSourceList).Build()
+			hotNews.Spec.Sources = []string{"source1", "invalid-source"}
+
+			warnings, err := hotNews.ValidateCreate()
+			Expect(err).To(HaveOccurred())
+			Expect(err.Error()).To(ContainSubstring("invalid-source"))
+			Expect(warnings).To(BeNil())
+		})
+	})
+
+	Context("ValidateUpdate", func() {
+		It("should pass validation with valid updated HotNews", func() {
+			oldHotNews := hotNews.DeepCopy()
+			warnings, err := hotNews.ValidateUpdate(oldHotNews)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(warnings).To(BeNil())
+		})
+
+		It("should fail validation on update with invalid dates", func() {
+			oldHotNews := hotNews.DeepCopy()
+			hotNews.Spec.DateStart = "2023-09-10"
+			hotNews.Spec.DateEnd = "2023-09-01"
+			warnings, err := hotNews.ValidateUpdate(oldHotNews)
+			Expect(err).To(HaveOccurred())
+			Expect(err.Error()).To(ContainSubstring("dateStart must be before dateEnd"))
+			Expect(warnings).To(BeNil())
+		})
+	})
+
+	Context("ValidateDelete", func() {
+		It("should pass validation on delete without errors", func() {
+			warnings, err := hotNews.ValidateDelete()
+			Expect(err).ToNot(HaveOccurred())
+			Expect(warnings).To(BeNil())
+		})
+	})
+})
+
+type errorFakeClient struct {
+	client.Client
 }
 
-func TestHotNews_Default(t *testing.T) {
-	tests := []struct {
-		name   string
-		fields HotNews
-		want   int
-	}{
-		{
-			name: "Test Default TitlesCount",
-			fields: HotNews{
-				Spec: HotNewsSpec{
-					SummaryConfig: SummaryConfig{},
-				},
-			},
-			want: 10,
-		},
-		{
-			name: "Test TitlesCount is set",
-			fields: HotNews{
-				Spec: HotNewsSpec{
-					SummaryConfig: SummaryConfig{TitlesCount: 5},
-				},
-			},
-			want: 5,
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			r := &HotNews{
-				Spec: tt.fields.Spec,
-			}
-			r.Default()
-			if got := r.Spec.SummaryConfig.TitlesCount; got != tt.want {
-				t.Errorf("Default() TitlesCount = %v, want %v", got, tt.want)
-			}
-		})
-	}
+func (e *errorFakeClient) List(ctx context.Context, list client.ObjectList, opts ...client.ListOption) error {
+	return errors.New("simulated list error")
 }
-
-func TestHotNews_ValidateCreate(t *testing.T) {
-	k8sClient = setupHNewsFakeClient()
-
-	tests := []struct {
-		name    string
-		fields  HotNews
-		wantErr bool
-	}{
-		{
-			name: "Test Validate Create - Valid Input",
-			fields: HotNews{
-				Spec: HotNewsSpec{
-					Keywords: []string{"news", "hot"},
-					Sources:  []string{"bbc"},
-				},
-			},
-			wantErr: false,
-		},
-		{
-			name: "Test Validate Create - Missing Keywords",
-			fields: HotNews{
-				Spec: HotNewsSpec{
-					Sources: []string{"source1"},
-				},
-			},
-			wantErr: true,
-		},
-		{
-			name: "Test Validate Create - Invalid Dates",
-			fields: HotNews{
-				Spec: HotNewsSpec{
-					DateStart: "2024-12-31",
-					DateEnd:   "2024-01-01",
-					Keywords:  []string{"news"},
-				},
-			},
-			wantErr: true,
-		},
-		{
-			name: "Test Validate Create - Sources and FeedGroups Conflict",
-			fields: HotNews{
-				Spec: HotNewsSpec{
-					Sources:    []string{"source1"},
-					FeedGroups: []string{"group1"},
-					Keywords:   []string{"news"},
-				},
-			},
-			wantErr: true,
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			r := &HotNews{
-				Spec: tt.fields.Spec,
-			}
-			_, err := r.ValidateCreate()
-			if (err != nil) != tt.wantErr {
-				t.Errorf("ValidateCreate() error = %v, wantErr %v", err, tt.wantErr)
-			}
-		})
-	}
-}
-
-func TestHotNews_ValidateUpdate(t *testing.T) {
-	k8sClient = setupHNewsFakeClient()
-
-	oldHotNews := &HotNews{
-		Spec: HotNewsSpec{
-			DateStart: "2024-01-01",
-			DateEnd:   "2024-12-31",
-			Keywords:  []string{"news"},
-			Sources:   []string{"source1"},
-		},
-	}
-
-	tests := []struct {
-		name    string
-		newSpec HotNewsSpec
-		wantErr bool
-	}{
-		{
-			name: "Test Validate Update - Valid Input",
-			newSpec: HotNewsSpec{
-				DateStart: "2024-01-01",
-				DateEnd:   "2024-12-31",
-				Keywords:  []string{"news"},
-				Sources:   []string{"bbc"},
-			},
-			wantErr: false,
-		},
-		{
-			name: "Test Validate Update - Invalid Date Format",
-			newSpec: HotNewsSpec{
-				DateStart: "invalid-date",
-				DateEnd:   "2024-12-31",
-				Keywords:  []string{"news"},
-			},
-			wantErr: true,
-		},
-		{
-			name: "Test Validate Update - DateStart After DateEnd",
-			newSpec: HotNewsSpec{
-				DateStart: "2024-12-31",
-				DateEnd:   "2024-01-01",
-				Keywords:  []string{"news"},
-			},
-			wantErr: true,
-		},
-		{
-			name: "Test Validate Update - Sources and FeedGroups Conflict",
-			newSpec: HotNewsSpec{
-				DateStart:  "2024-01-01",
-				DateEnd:    "2024-12-31",
-				Keywords:   []string{"news"},
-				Sources:    []string{"source1"},
-				FeedGroups: []string{"group1"},
-			},
-			wantErr: true,
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			r := &HotNews{
-				Spec: tt.newSpec,
-			}
-			_, err := r.ValidateUpdate(oldHotNews)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("ValidateUpdate() error = %v, wantErr %v", err, tt.wantErr)
-			}
-		})
-	}
-}
-
-func TestHotNews_ValidateDelete(t *testing.T) {
-	k8sClient = setupHNewsFakeClient()
-
-	tests := []struct {
-		name    string
-		fields  HotNews
-		wantErr bool
-	}{
-		{
-			name: "Test Validate Delete - No Error",
-			fields: HotNews{
-				Spec: HotNewsSpec{
-					Keywords: []string{"news"},
-				},
-			},
-			wantErr: false,
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			r := &HotNews{
-				Spec: tt.fields.Spec,
-			}
-			_, err := r.ValidateDelete()
-			if (err != nil) != tt.wantErr {
-				t.Errorf("ValidateDelete() error = %v, wantErr %v", err, tt.wantErr)
-			}
-		})
-	}
-}*/
