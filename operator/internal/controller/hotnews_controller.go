@@ -33,7 +33,7 @@ type HotNewsReconciler struct {
 	ConfigMapNamespace string       // Namespace of the ConfigMap
 }
 
-const hotNewsFinalizer = "hotnews.finalizers.teamdev.com"
+const HotNewsFinalizer = "hotnews.finalizers.teamdev.com"
 
 type Article struct {
 	Id          int       `json:"Id"`
@@ -76,18 +76,18 @@ func (r *HotNewsReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 
 	// Handle finalizer logic
 	if hotNews.ObjectMeta.DeletionTimestamp.IsZero() {
-		if !slices.Contains(hotNews.Finalizers, hotNewsFinalizer) {
-			hotNews.Finalizers = append(hotNews.Finalizers, hotNewsFinalizer)
+		if !slices.Contains(hotNews.Finalizers, HotNewsFinalizer) {
+			hotNews.Finalizers = append(hotNews.Finalizers, HotNewsFinalizer)
 			if err := r.Client.Update(ctx, hotNews); err != nil {
 				return ctrl.Result{}, err
 			}
 		}
 	} else {
-		if slices.Contains(hotNews.Finalizers, hotNewsFinalizer) {
+		if slices.Contains(hotNews.Finalizers, HotNewsFinalizer) {
 			if err := r.deleteOwnerRef(ctx, hotNews.Namespace, hotNews.Name); err != nil {
 				return ctrl.Result{}, err
 			}
-			hotNews.Finalizers = slices.Delete(hotNews.Finalizers, slices.Index(hotNews.Finalizers, hotNewsFinalizer), slices.Index(hotNews.Finalizers, hotNewsFinalizer)+1)
+			hotNews.Finalizers = slices.Delete(hotNews.Finalizers, slices.Index(hotNews.Finalizers, HotNewsFinalizer), slices.Index(hotNews.Finalizers, HotNewsFinalizer)+1)
 			if err := r.Client.Update(ctx, hotNews); err != nil {
 				return ctrl.Result{}, err
 			}
@@ -254,8 +254,8 @@ func (r *HotNewsReconciler) reconcileHotNews(ctx context.Context, hotNews *aggre
 	return ctrl.Result{}, nil
 }
 
-// Implement the event handler to map ConfigMap and Source updates to HotNews resources
-func (r *HotNewsReconciler) mapConfigMapToHotNews(ctx context.Context, object client.Object) []reconcile.Request {
+// MapConfigMapToHotNews implement the event handler to map ConfigMap updates to HotNews resources
+func (r *HotNewsReconciler) MapConfigMapToHotNews(ctx context.Context, object client.Object) []reconcile.Request {
 	logrus.Println("Mapping ConfigMap to HotNews")
 	var hotNewsList aggregatorv1.HotNewsList
 	err := r.Client.List(ctx, &hotNewsList, &client.ListOptions{Namespace: r.ConfigMapNamespace})
@@ -304,7 +304,8 @@ func (r *HotNewsReconciler) mapConfigMapToHotNews(ctx context.Context, object cl
 	return requests
 }
 
-func (r *HotNewsReconciler) mapSourceToHotNews(ctx context.Context, object client.Object) []reconcile.Request {
+// MapSourceToHotNews implement the event handler to map Source updates to HotNews resources
+func (r *HotNewsReconciler) MapSourceToHotNews(ctx context.Context, object client.Object) []reconcile.Request {
 	// Fetch the Source object
 	logrus.Println("Mapping Source to HotNews")
 	source := &aggregatorv1.Source{}
@@ -333,29 +334,6 @@ func (r *HotNewsReconciler) mapSourceToHotNews(ctx context.Context, object clien
 				},
 			})
 		}
-		/*else {
-			// Check if the Source is part of any feed groups in the ConfigMap
-			configMap := &corev1.ConfigMap{}
-			err := r.Client.Get(ctx, client.ObjectKey{Namespace: r.ConfigMapNamespace, Name: r.ConfigMapName}, configMap)
-			if err != nil {
-				logrus.Errorf("Failed to get ConfigMap %s: %v", r.ConfigMapName, err)
-				continue
-			}
-			for _, feedGroup := range hotNews.Spec.FeedGroups {
-				if feeds, found := configMap.Data[feedGroup]; found {
-					feedSources := strings.Split(feeds, ",")
-					if slices.Contains(feedSources, source.Spec.ShortName) {
-						requests = append(requests, reconcile.Request{
-							NamespacedName: client.ObjectKey{
-								Namespace: hotNews.Namespace,
-								Name:      hotNews.Name,
-							},
-						})
-						break
-					}
-				}
-			}
-		}*/
 	}
 	return requests
 }
@@ -458,11 +436,11 @@ func (r *HotNewsReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		}).
 		Watches(
 			&corev1.ConfigMap{ObjectMeta: metav1.ObjectMeta{Name: r.ConfigMapName, Namespace: r.ConfigMapNamespace}},
-			handler.EnqueueRequestsFromMapFunc(r.mapConfigMapToHotNews),
+			handler.EnqueueRequestsFromMapFunc(r.MapConfigMapToHotNews),
 		).
 		Watches(
 			&aggregatorv1.Source{},
-			handler.EnqueueRequestsFromMapFunc(r.mapSourceToHotNews),
+			handler.EnqueueRequestsFromMapFunc(r.MapSourceToHotNews),
 		).
 		Complete(r)
 }
