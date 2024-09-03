@@ -238,3 +238,7 @@ tasks:
     desc: "Uninstall Helm chart from Kubernetes cluster"
     cmds:
       - helm uninstall news-alligator --namespace {{.Namespace}}
+
+
+#  AWS
+

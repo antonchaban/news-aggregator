@@ -640,6 +640,54 @@
           "store_path": "/nix/store/jw5dv0yf0h9zpi8rc20dmkxg5b4w1xga-mockgen-0.4.0"
         }
       }
+    },
+    "okta-aws-cli@2.3.0": {
+      "last_modified": "2024-08-14T11:41:26Z",
+      "resolved": "github:NixOS/nixpkgs/0cb2fd7c59fed0cd82ef858cbcbdb552b9a33465#okta-aws-cli",
+      "source": "devbox-search",
+      "version": "2.3.0",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/fmnmg4wj6l1ralaknkl7lfd2wq1fzfrp-okta-aws-cli-2.3.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/fmnmg4wj6l1ralaknkl7lfd2wq1fzfrp-okta-aws-cli-2.3.0"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/hsah6mlk5r2k0x9p4dy3sfrl1hkscaqr-okta-aws-cli-2.3.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/hsah6mlk5r2k0x9p4dy3sfrl1hkscaqr-okta-aws-cli-2.3.0"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/1qx28ansj6hdah418lkyc0y9rva6jyws-okta-aws-cli-2.3.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/1qx28ansj6hdah418lkyc0y9rva6jyws-okta-aws-cli-2.3.0"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/l5g019b4vfssarbv8lal816cqzqc2xy1-okta-aws-cli-2.3.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/l5g019b4vfssarbv8lal816cqzqc2xy1-okta-aws-cli-2.3.0"
+        }
+      }
     }
   }
 }

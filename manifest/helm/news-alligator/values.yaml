@@ -1,9 +1,10 @@
 # Application-specific values
 replicaCount: 1
 containerPort: 443
-imageName: "antohachaban/news-alligator-web:0.2.4"
+imageName: "406477933661.dkr.ecr.us-west-2.amazonaws.com/antohachaban/news-alligator-web:0.2.4"
 namespace: "news-alligator"
 serviceAccount: "news-alligator-sa"
+migrationsImage: "406477933661.dkr.ecr.us-west-2.amazonaws.com/antohachaban/alligator-migrations:0.2"
 
 tlsSecretName: "teamdev-tls-secret"
 certvalues:
@@ -56,7 +57,7 @@ cronjob:
   name: "news-fetcher-cronjob"
   schedule: "0 0 * * *" # Default: Run once a day at midnight
   image:
-    name: "antohachaban/news-fetcher:0.1"
+    name: "406477933661.dkr.ecr.us-west-2.amazonaws.com/antohachaban/news-fetcher:0.1"
   env:
     secretName: "news-alligator-secret"
     configMapName: "news-alligator-config"
