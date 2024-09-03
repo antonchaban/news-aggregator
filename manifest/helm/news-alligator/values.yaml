@@ -22,13 +22,6 @@ resources:
     cpu: "250m"
     memory: "64Mi"
 
-# Autoscaling settings (currently disabled)
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 10
-  targetCPUUtilizationPercentage: 80
-
 # PostgreSQL configuration from the Bitnami chart
 postgresql:
   fullnameOverride: "postgres"
@@ -55,3 +48,20 @@ cronjob:
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 1
 
+
+# Autoscaling settings
+autoscaling:
+  hpa:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 80
+
+  vpa:
+    enabled: true
+    minAllowed:
+      cpu: "200m"
+      memory: "64Mi"
+    maxAllowed:
+      cpu: "2"
+      memory: "1Gi"
