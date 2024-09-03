@@ -44,15 +44,31 @@ type SummaryConfig struct {
 	TitlesCount int `json:"titles_count"`
 }
 
+type HNewsConditionType string
+
+const (
+	HNewsAdded   HNewsConditionType = "Added"
+	HNewsUpdated HNewsConditionType = "Updated"
+)
+
+type HotNewsCondition struct {
+	Type           HNewsConditionType     `json:"type"`
+	Status         metav1.ConditionStatus `json:"status"`
+	LastUpdateTime metav1.Time            `json:"lastUpdateTime,omitempty"`
+	Reason         string                 `json:"reason,omitempty"`
+	Message        string                 `json:"message,omitempty"`
+}
+
 // HotNewsStatus defines the observed state of HotNews
 // Fields:
 // - ArticlesCount: The count of articles by the criteria.
 // - NewsLink: A link to the news-aggregator HTTPS server to get all news by the criteria in JSON format.
 // - ArticlesTitles: The first 'spec.summaryConfig.titlesCount' article titles, sorted by feed name.
 type HotNewsStatus struct {
-	ArticlesCount  int      `json:"articles_count,omitempty"`
-	NewsLink       string   `json:"news_link,omitempty"`
-	ArticlesTitles []string `json:"articles_titles,omitempty"`
+	ArticlesCount  int                `json:"articles_count,omitempty"`
+	NewsLink       string             `json:"news_link,omitempty"`
+	ArticlesTitles []string           `json:"articles_titles,omitempty"`
+	Conditions     []HotNewsCondition `json:"conditions,omitempty"`
 }
 
 // +kubebuilder:object:root=true
