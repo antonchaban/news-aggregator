@@ -228,8 +228,8 @@ tasks:
 
   installChart:
     deps:
-        - createChart
-        - create-namespace
+      - create-namespace
+      - createChart
     desc: "Install Helm chart on Kubernetes cluster"
     cmds:
       - helm upgrade --install news-alligator manifest/helm/charts/news-alligator-*.tgz --namespace {{.Namespace}}
