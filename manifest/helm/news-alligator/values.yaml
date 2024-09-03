@@ -43,7 +43,7 @@ postgresql:
 # CronJob settings
 cronjob:
   enabled: true
-  name: "news-fetcher-cronjob"
+  name: "news-fetcher"
 #  schedule: "0 0 * * *" # Default: Run once a day at midnight
   schedule: "* * * * *" # Run every minute for testing
   image:
