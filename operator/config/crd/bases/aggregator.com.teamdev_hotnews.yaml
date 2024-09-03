@@ -94,6 +94,25 @@ spec:
                 items:
                   type: string
                 type: array
+              conditions:
+                items:
+                  properties:
+                    lastUpdateTime:
+                      format: date-time
+                      type: string
+                    message:
+                      type: string
+                    reason:
+                      type: string
+                    status:
+                      type: string
+                    type:
+                      type: string
+                  required:
+                  - status
+                  - type
+                  type: object
+                type: array
               news_link:
                 type: string
             type: object
