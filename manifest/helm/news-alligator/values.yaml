@@ -22,22 +22,12 @@ resources:
     cpu: "250m"
     memory: "64Mi"
 
-# Autoscaling settings
+# Autoscaling settings (currently disabled)
 autoscaling:
-  hpa:
-    enabled: true
-    minReplicas: 1
-    maxReplicas: 10
-    targetCPUUtilizationPercentage: 80
-
-  vpa:
-    enabled: true
-    minAllowed:
-      cpu: "200m"
-      memory: "64Mi"
-    maxAllowed:
-      cpu: "2"
-      memory: "1Gi"
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
 
 # PostgreSQL configuration from the Bitnami chart
 postgresql:
@@ -54,8 +44,9 @@ postgresql:
 # CronJob settings
 cronjob:
   enabled: true
-  name: "news-fetcher-cronjob"
-  schedule: "0 0 * * *" # Default: Run once a day at midnight
+  name: "news-fetcher"
+#  schedule: "0 0 * * *" # Default: Run once a day at midnight
+  schedule: "* * * * *" # Run every minute for testing
   image:
     name: "406477933661.dkr.ecr.us-west-2.amazonaws.com/antohachaban/news-fetcher:0.1"
   env:
@@ -64,10 +55,3 @@ cronjob:
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 1
 
-metrics-server:
-  defaultArgs:
-    - --cert-dir=/tmp
-    - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
-    - --kubelet-use-node-status-port
-    - --metric-resolution=15s
-    - --kubelet-insecure-tls
