@@ -64,7 +64,6 @@ var _ = Describe("HotNewsReconciler Tests", func() {
 				"group1": "source1,source2",
 			},
 		}
-
 	})
 
 	AfterEach(func() {
@@ -75,7 +74,6 @@ var _ = Describe("HotNewsReconciler Tests", func() {
 
 	Context("Reconciliation", func() {
 		It("should successfully reconcile a HotNews resource", func() {
-
 			source1 := aggregatorv1.Source{
 				ObjectMeta: metav1.ObjectMeta{
 					Name:      "source1",
@@ -101,6 +99,7 @@ var _ = Describe("HotNewsReconciler Tests", func() {
 				WithStatusSubresource(&aggregatorv1.HotNews{}).
 				WithObjects(&hotNews, &configMap, &source1, &source2).
 				Build()
+
 			// Create a fake HTTP server to simulate the external service
 			server = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				if strings.Contains(r.URL.String(), "/articles") {
@@ -145,33 +144,11 @@ var _ = Describe("HotNewsReconciler Tests", func() {
 		})
 
 		It("should handle reconciliation failure due to missing ConfigMap", func() {
-			source1 := aggregatorv1.Source{
-				ObjectMeta: metav1.ObjectMeta{
-					Name:      "source1",
-					Namespace: namespace,
-				},
-				Spec: aggregatorv1.SourceSpec{
-					ShortName: "source1",
-				},
-			}
-
-			source2 := aggregatorv1.Source{
-				ObjectMeta: metav1.ObjectMeta{
-					Name:      "source2",
-					Namespace: namespace,
-				},
-				Spec: aggregatorv1.SourceSpec{
-					ShortName: "source2",
-				},
-			}
-
 			fakeClient = fake.NewClientBuilder().
 				WithScheme(scheme.Scheme).
 				WithStatusSubresource(&aggregatorv1.HotNews{}).
-				WithObjects(&hotNews, &configMap, &source1, &source2).
+				WithObjects(&hotNews).
 				Build()
-
-			Expect(fakeClient.Delete(context.TODO(), &configMap)).To(Succeed())
 
 			reconciler = controller.HotNewsReconciler{
 				Client:             fakeClient,
@@ -197,30 +174,10 @@ var _ = Describe("HotNewsReconciler Tests", func() {
 		})
 
 		It("should handle HTTP request failure during reconciliation", func() {
-			source1 := aggregatorv1.Source{
-				ObjectMeta: metav1.ObjectMeta{
-					Name:      "source1",
-					Namespace: namespace,
-				},
-				Spec: aggregatorv1.SourceSpec{
-					ShortName: "source1",
-				},
-			}
-
-			source2 := aggregatorv1.Source{
-				ObjectMeta: metav1.ObjectMeta{
-					Name:      "source2",
-					Namespace: namespace,
-				},
-				Spec: aggregatorv1.SourceSpec{
-					ShortName: "source2",
-				},
-			}
-
 			fakeClient = fake.NewClientBuilder().
 				WithScheme(scheme.Scheme).
 				WithStatusSubresource(&aggregatorv1.HotNews{}).
-				WithObjects(&hotNews, &configMap, &source1, &source2).
+				WithObjects(&hotNews, &configMap).
 				Build()
 
 			// Simulate HTTP failure by not starting the server
@@ -314,26 +271,6 @@ var _ = Describe("HotNewsReconciler Tests", func() {
 		})
 
 		It("should remove the finalizer when the resource is deleted", func() {
-			source1 := aggregatorv1.Source{
-				ObjectMeta: metav1.ObjectMeta{
-					Name:      "source1",
-					Namespace: namespace,
-				},
-				Spec: aggregatorv1.SourceSpec{
-					ShortName: "source1",
-				},
-			}
-
-			source2 := aggregatorv1.Source{
-				ObjectMeta: metav1.ObjectMeta{
-					Name:      "source2",
-					Namespace: namespace,
-				},
-				Spec: aggregatorv1.SourceSpec{
-					ShortName: "source2",
-				},
-			}
-
 			hotNews = aggregatorv1.HotNews{
 				ObjectMeta: metav1.ObjectMeta{
 					Name:              hotNewsName,
@@ -353,7 +290,7 @@ var _ = Describe("HotNewsReconciler Tests", func() {
 			fakeClient = fake.NewClientBuilder().
 				WithScheme(scheme.Scheme).
 				WithStatusSubresource(&aggregatorv1.HotNews{}).
-				WithObjects(&hotNews, &configMap, &source1, &source2).
+				WithObjects(&hotNews, &configMap).
 				Build()
 
 			reconciler = controller.HotNewsReconciler{
@@ -375,31 +312,10 @@ var _ = Describe("HotNewsReconciler Tests", func() {
 
 	Context("Mapping Functions", func() {
 		It("should map ConfigMap updates to the appropriate HotNews resources", func() {
-
-			source1 := aggregatorv1.Source{
-				ObjectMeta: metav1.ObjectMeta{
-					Name:      "source1",
-					Namespace: namespace,
-				},
-				Spec: aggregatorv1.SourceSpec{
-					ShortName: "source1",
-				},
-			}
-
-			source2 := aggregatorv1.Source{
-				ObjectMeta: metav1.ObjectMeta{
-					Name:      "source2",
-					Namespace: namespace,
-				},
-				Spec: aggregatorv1.SourceSpec{
-					ShortName: "source2",
-				},
-			}
-
 			fakeClient = fake.NewClientBuilder().
 				WithScheme(scheme.Scheme).
 				WithStatusSubresource(&aggregatorv1.HotNews{}).
-				WithObjects(&hotNews, &configMap, &source1, &source2).
+				WithObjects(&hotNews, &configMap).
 				Build()
 
 			reconciler = controller.HotNewsReconciler{
@@ -426,7 +342,6 @@ var _ = Describe("HotNewsReconciler Tests", func() {
 		})
 
 		It("should map Source updates to the appropriate HotNews resources", func() {
-
 			source1 := aggregatorv1.Source{
 				ObjectMeta: metav1.ObjectMeta{
 					Name:      "source1",
@@ -437,20 +352,10 @@ var _ = Describe("HotNewsReconciler Tests", func() {
 				},
 			}
 
-			source2 := aggregatorv1.Source{
-				ObjectMeta: metav1.ObjectMeta{
-					Name:      "source2",
-					Namespace: namespace,
-				},
-				Spec: aggregatorv1.SourceSpec{
-					ShortName: "source2",
-				},
-			}
-
 			fakeClient = fake.NewClientBuilder().
 				WithScheme(scheme.Scheme).
 				WithStatusSubresource(&aggregatorv1.HotNews{}).
-				WithObjects(&hotNews, &configMap, &source1, &source2).
+				WithObjects(&hotNews, &configMap, &source1).
 				Build()
 
 			reconciler = controller.HotNewsReconciler{
@@ -460,7 +365,6 @@ var _ = Describe("HotNewsReconciler Tests", func() {
 				ConfigMapNamespace: configMap.Namespace,
 			}
 
-			// Fetch the latest version of the source object
 			latestSource := &aggregatorv1.Source{}
 			err := fakeClient.Get(context.TODO(), types.NamespacedName{
 				Name:      "source1",
@@ -471,7 +375,6 @@ var _ = Describe("HotNewsReconciler Tests", func() {
 			latestSource.Spec.ShortName = "newsource1"
 			Expect(fakeClient.Update(context.TODO(), latestSource)).To(Succeed())
 
-			// Update HotNews to track the new ShortName
 			updatedHotNews := &aggregatorv1.HotNews{}
 			err = fakeClient.Get(context.TODO(), types.NamespacedName{Name: hotNewsName, Namespace: namespace}, updatedHotNews)
 			Expect(err).NotTo(HaveOccurred())
@@ -479,8 +382,66 @@ var _ = Describe("HotNewsReconciler Tests", func() {
 			Expect(fakeClient.Update(context.TODO(), updatedHotNews)).To(Succeed())
 
 			requests := reconciler.MapSourceToHotNews(context.TODO(), latestSource)
-			Expect(len(requests)).To(Equal(1)) // Should trigger reconciliation for HotNews
+			Expect(len(requests)).To(Equal(1))
 			Expect(requests[0].NamespacedName.Name).To(Equal(hotNewsName))
+		})
+
+		It("should not map unrelated ConfigMap updates", func() {
+			unrelatedConfigMap := &corev1.ConfigMap{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "unrelated-config",
+					Namespace: namespace,
+				},
+				Data: map[string]string{
+					"unrelatedKey": "unrelatedValue",
+				},
+			}
+
+			fakeClient = fake.NewClientBuilder().
+				WithScheme(scheme.Scheme).
+				WithStatusSubresource(&aggregatorv1.HotNews{}).
+				WithObjects(&hotNews, unrelatedConfigMap).
+				Build()
+
+			reconciler = controller.HotNewsReconciler{
+				Client:             fakeClient,
+				Scheme:             scheme.Scheme,
+				ConfigMapName:      configMap.Name,
+				ConfigMapNamespace: configMap.Namespace,
+			}
+
+			requests := reconciler.MapConfigMapToHotNews(context.TODO(), unrelatedConfigMap)
+			Expect(len(requests)).To(Equal(0))
+		})
+
+		It("should handle source deletion properly", func() {
+			source1 := aggregatorv1.Source{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "source1",
+					Namespace: namespace,
+				},
+				Spec: aggregatorv1.SourceSpec{
+					ShortName: "source1",
+				},
+			}
+
+			fakeClient = fake.NewClientBuilder().
+				WithScheme(scheme.Scheme).
+				WithStatusSubresource(&aggregatorv1.HotNews{}).
+				WithObjects(&hotNews, &configMap, &source1).
+				Build()
+
+			reconciler = controller.HotNewsReconciler{
+				Client:             fakeClient,
+				Scheme:             scheme.Scheme,
+				ConfigMapName:      configMap.Name,
+				ConfigMapNamespace: configMap.Namespace,
+			}
+
+			Expect(fakeClient.Delete(context.TODO(), &source1)).To(Succeed())
+
+			requests := reconciler.MapSourceToHotNews(context.TODO(), &source1)
+			Expect(len(requests)).To(Equal(0))
 		})
 	})
 })

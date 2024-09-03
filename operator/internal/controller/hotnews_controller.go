@@ -435,7 +435,7 @@ func (r *HotNewsReconciler) SetupWithManager(mgr ctrl.Manager) error {
 			},
 		}).
 		Watches(
-			&corev1.ConfigMap{ObjectMeta: metav1.ObjectMeta{Name: r.ConfigMapName, Namespace: r.ConfigMapNamespace}},
+			&corev1.ConfigMap{},
 			handler.EnqueueRequestsFromMapFunc(r.MapConfigMapToHotNews),
 		).
 		Watches(
