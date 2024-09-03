@@ -140,11 +140,14 @@ tasks:
   apply-secret:
     deps: [ create-namespace ]
     cmds:
-      - export POSTGRES_USER="admin"
-      - export POSTGRES_PASSWORD="admin"
-      - export POSTGRES_USER_BASE64=$(echo -n $POSTGRES_USER | base64)
-      - export POSTGRES_PASSWORD_BASE64=$(echo -n $POSTGRES_PASSWORD | base64)
-      - envsubst < manifest/postgres/secret.yaml | kubectl apply -f -
+      - |
+        POSTGRES_USER="admin"
+        POSTGRES_PASSWORD="admin"
+        POSTGRES_USER_BASE64=$(echo -n $POSTGRES_USER | base64)
+        POSTGRES_PASSWORD_BASE64=$(echo -n $POSTGRES_PASSWORD | base64)
+        export POSTGRES_USER_BASE64
+        export POSTGRES_PASSWORD_BASE64
+        envsubst < manifest/postgres/secret.yaml | kubectl apply -f -
     desc: Apply the PostgreSQL secret
 
   apply-postgres-manifests:

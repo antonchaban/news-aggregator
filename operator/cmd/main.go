@@ -7,8 +7,6 @@ import (
 	"os"
 	"time"
 
-	// Import all Kubernetes client auth plugins (e.g. Azure, GCP, OIDC, etc.)
-	// to ensure that exec-entrypoint and run can make use of them.
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
 
 	"k8s.io/apimachinery/pkg/runtime"
@@ -47,6 +45,7 @@ func main() {
 	var newsAggregatorSrcServiceURL string
 	var newsAggregatorServiceURL string
 	var cfgMapName string
+	var cfgMapNameSpace string
 	var tlsOpts []func(*tls.Config)
 
 	flag.StringVar(&metricsAddr, "metrics-bind-address", "0", "The address the metrics endpoint binds to. "+
@@ -62,6 +61,7 @@ func main() {
 	flag.StringVar(&newsAggregatorSrcServiceURL, "news-aggregator-src-service-url", "https://news-alligator-service.news-alligator.svc.cluster.local:8443/sources", "The URL of the news aggregator source service")
 	flag.StringVar(&newsAggregatorServiceURL, "news-aggregator-service-url", "https://news-alligator-service.news-alligator.svc.cluster.local:8443/articles", "The URL of the news aggregator service")
 	flag.StringVar(&cfgMapName, "config-map-name", "feed-group-source", "The name of the ConfigMap that contains feed groups")
+	flag.StringVar(&cfgMapNameSpace, "config-map-namespace", "news-alligator", "The namespace of the ConfigMap that contains feed groups")
 	opts := zap.Options{
 		Development: true,
 	}
@@ -95,7 +95,7 @@ func main() {
 	mgr, err := ctrl.NewManager(ctrl.GetConfigOrDie(), ctrl.Options{
 		Scheme:                 scheme,
 		Metrics:                metricsServerOptions,
-		WebhookServer:          webhookServer,
+		WebhookServer:          webhookServer, // Use the webhook server configured above
 		HealthProbeBindAddress: probeAddr,
 		LeaderElection:         enableLeaderElection,
 		LeaderElectionID:       "31e0e430.com.teamdev",
@@ -129,11 +129,12 @@ func main() {
 		}
 	}
 	if err = (&controller.HotNewsReconciler{
-		Client:        mgr.GetClient(),
-		Scheme:        mgr.GetScheme(),
-		HTTPClient:    httpClient,
-		ArticleSvcURL: newsAggregatorServiceURL,
-		ConfigMapName: cfgMapName,
+		Client:             mgr.GetClient(),
+		Scheme:             mgr.GetScheme(),
+		HTTPClient:         httpClient,
+		ArticleSvcURL:      newsAggregatorServiceURL,
+		ConfigMapName:      cfgMapName,
+		ConfigMapNamespace: cfgMapNameSpace,
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "HotNews")
 		os.Exit(1)
@@ -144,6 +145,20 @@ func main() {
 			os.Exit(1)
 		}
 	}
+
+	// Register the ConfigMap webhook
+	if os.Getenv("ENABLE_WEBHOOKS") != "false" {
+		cfgValidator := &aggregatorv1.CfgMapValidatorWebHook{
+			Client:          mgr.GetClient(),
+			CfgMapName:      cfgMapName,
+			CfgMapNamespace: cfgMapNameSpace,
+		}
+		if err = cfgValidator.SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ConfigMap")
+			os.Exit(1)
+		}
+	}
+
 	// +kubebuilder:scaffold:builder
 
 	if err := mgr.AddHealthzCheck("healthz", healthz.Ping); err != nil {

@@ -26,23 +26,28 @@ import (
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
+	"slices"
 )
 
 // log is for logging in this package.
 var sourcelog = logf.Log.WithName("source-resource")
 
-var k8sClient client.Client
+// SourceClientWrapper allows substituting the Kubernetes client with a mock for testing.
+type SourceClientWrapper struct {
+	Client client.Client
+}
+
+var SourceClient SourceClientWrapper
 
 // SetupWebhookWithManager will setup the manager to manage the webhooks
-// This function configures the webhook with the manager.
 func (r *Source) SetupWebhookWithManager(mgr ctrl.Manager) error {
-	k8sClient = mgr.GetClient()
+	SourceClient.Client = mgr.GetClient()
 	return ctrl.NewWebhookManagedBy(mgr).
 		For(r).
 		Complete()
 }
 
-// +kubebuilder:webhook:path=/mutate-aggregator-com-teamdev-v1-source,mutating=true,failurePolicy=fail,sideEffects=None,groups=aggregator.com.teamdev,resources=sources,verbs=create;update,versions=v1,name=msource.kb.io,admissionReviewVersions=v1
+// +kubebuilder:webhook:path=/mutate-aggregator-com-teamdev-v1-source,mutating=true,failurePolicy=fail,sideEffects=None,groups=aggregator.com.teamdev,resources=sources,verbs=create;update;delete,versions=v1,name=msource.kb.io,admissionReviewVersions=v1
 
 var _ webhook.Defaulter = &Source{}
 
@@ -52,7 +57,7 @@ func (r *Source) Default() {
 	sourcelog.Info("default", "name", r.Name)
 }
 
-// +kubebuilder:webhook:path=/validate-aggregator-com-teamdev-v1-source,mutating=false,failurePolicy=fail,sideEffects=None,groups=aggregator.com.teamdev,resources=sources,verbs=create;update,versions=v1,name=vsource.kb.io,admissionReviewVersions=v1
+// +kubebuilder:webhook:path=/validate-aggregator-com-teamdev-v1-source,mutating=false,failurePolicy=fail,sideEffects=None,groups=aggregator.com.teamdev,resources=sources,verbs=create;update;delete,versions=v1,name=vsource.kb.io,admissionReviewVersions=v1
 
 var _ webhook.Validator = &Source{}
 
@@ -74,6 +79,20 @@ func (r *Source) ValidateUpdate(old runtime.Object) (admission.Warnings, error) 
 // This function validates the Source resource upon deletion.
 func (r *Source) ValidateDelete() (admission.Warnings, error) {
 	sourcelog.Info("validate delete", "name", r.Name)
+
+	// Check if the source is referenced by any HotNews resources
+	var hotNewsList HotNewsList
+	err := SourceClient.Client.List(context.Background(), &hotNewsList, &client.ListOptions{Namespace: r.Namespace})
+	if err != nil {
+		return nil, err
+	}
+
+	for _, hotNews := range hotNewsList.Items {
+		if slices.Contains(hotNews.Spec.Sources, r.Spec.ShortName) {
+			return nil, fmt.Errorf("cannot delete Source %s as it is referenced by HotNews %s", r.Spec.ShortName, hotNews.Name)
+		}
+	}
+
 	return nil, nil
 }
 
@@ -96,7 +115,7 @@ func (r *Source) validateSource() (admission.Warnings, error) {
 	}
 
 	// Check for uniqueness within the namespace
-	return r.checkUniqueFields()
+	return r.checkUniqueFields(SourceClient.Client)
 }
 
 // isValidURL checks if the provided link is a valid URL.
@@ -106,12 +125,12 @@ func isValidURL(link string) bool {
 }
 
 // checkUniqueFields ensures that the Name, ShortName, and Link fields are unique within the namespace.
-func (r *Source) checkUniqueFields() (admission.Warnings, error) {
+func (r *Source) checkUniqueFields(cl client.Client) (admission.Warnings, error) {
 	ctx := context.Background()
 
 	var sources SourceList
 	sourcelog.Info("Listing sources in namespace", "namespace", r.Namespace)
-	if err := k8sClient.List(ctx, &sources, client.InNamespace(r.Namespace)); err != nil {
+	if err := cl.List(ctx, &sources, client.InNamespace(r.Namespace)); err != nil {
 		sourcelog.Error(err, "failed to list sources")
 		return nil, err
 	}
@@ -124,7 +143,7 @@ func (r *Source) checkUniqueFields() (admission.Warnings, error) {
 				return nil, fmt.Errorf("name must be unique in the namespace")
 			}
 			if source.Spec.ShortName == r.Spec.ShortName {
-				return nil, fmt.Errorf("short_name must be unique in the namespace")
+				return admission.Warnings{}, fmt.Errorf("short_name must be unique in the namespace")
 			}
 			if source.Spec.Link == r.Spec.Link {
 				return nil, fmt.Errorf("link must be unique in the namespace")

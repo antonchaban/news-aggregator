@@ -17,15 +17,21 @@ import (
 // log is for logging in this package.
 var hotnewslog = logf.Log.WithName("hotnews-resource")
 
+type HotNewsClientWrapper struct {
+	Client client.Client
+}
+
+var HotNewsClient HotNewsClientWrapper
+
 // SetupWebhookWithManager will setup the manager to manage the webhooks
 func (r *HotNews) SetupWebhookWithManager(mgr ctrl.Manager) error {
-	k8sClient = mgr.GetClient() // Set the global k8sClient variable
+	HotNewsClient.Client = mgr.GetClient() // Set the global k8sClient variable
 	return ctrl.NewWebhookManagedBy(mgr).
 		For(r).
 		Complete()
 }
 
-// +kubebuilder:webhook:path=/mutate-aggregator-com-teamdev-v1-hotnews,mutating=true,failurePolicy=fail,sideEffects=None,groups=aggregator.com.teamdev,resources=hotnews,verbs=create;update,versions=v1,name=mhotnews.kb.io,admissionReviewVersions=v1
+// +kubebuilder:webhook:path=/mutate-aggregator-com-teamdev-v1-hotnews,mutating=true,failurePolicy=fail,sideEffects=None,groups=aggregator.com.teamdev,resources=hotnews,verbs=create;update;delete,versions=v1,name=mhotnews.kb.io,admissionReviewVersions=v1
 
 var _ webhook.Defaulter = &HotNews{}
 
@@ -37,7 +43,7 @@ func (r *HotNews) Default() {
 	}
 }
 
-// +kubebuilder:webhook:path=/validate-aggregator-com-teamdev-v1-hotnews,mutating=false,failurePolicy=fail,sideEffects=None,groups=aggregator.com.teamdev,resources=hotnews,verbs=create;update,versions=v1,name=vhotnews.kb.io,admissionReviewVersions=v1
+// +kubebuilder:webhook:path=/validate-aggregator-com-teamdev-v1-hotnews,mutating=false,failurePolicy=fail,sideEffects=None,groups=aggregator.com.teamdev,resources=hotnews,verbs=create;update;delete,versions=v1,name=vhotnews.kb.io,admissionReviewVersions=v1
 
 var _ webhook.Validator = &HotNews{}
 
@@ -64,8 +70,6 @@ func (r *HotNews) ValidateUpdate(old runtime.Object) (admission.Warnings, error)
 // ValidateDelete implements webhook.Validator so a webhook will be registered for the type
 func (r *HotNews) ValidateDelete() (admission.Warnings, error) {
 	hotnewslog.Info("validate delete", "name", r.Name)
-
-	// No specific validation needed on delete for now.
 	return nil, nil
 }
 
@@ -79,53 +83,11 @@ func (r *HotNews) validateHotNews() (admission.Warnings, error) {
 	}
 
 	// Validate dates
-	if r.Spec.DateStart != "" && r.Spec.DateEnd != "" {
-		startTime, err := time.Parse("2006-01-02", r.Spec.DateStart)
-		if err != nil {
-			allErrs = append(allErrs, field.Invalid(field.NewPath("spec").Child("dateStart"), r.Spec.DateStart, "invalid date format, should be YYYY-MM-DD"))
-		}
-		endTime, err := time.Parse("2006-01-02", r.Spec.DateEnd)
-		if err != nil {
-			allErrs = append(allErrs, field.Invalid(field.NewPath("spec").Child("dateEnd"), r.Spec.DateEnd, "invalid date format, should be YYYY-MM-DD"))
-		}
-		if err == nil && startTime.After(endTime) {
-			allErrs = append(allErrs, field.Invalid(field.NewPath("spec").Child("dateStart"), r.Spec.DateStart, "dateStart must be before dateEnd"))
-		}
-	} else {
-		if r.Spec.DateStart != "" {
-			if _, err := time.Parse("2006-01-02", r.Spec.DateStart); err != nil {
-				allErrs = append(allErrs, field.Invalid(field.NewPath("spec").Child("dateStart"), r.Spec.DateStart, "invalid date format, should be YYYY-MM-DD"))
-			}
-		}
-		if r.Spec.DateEnd != "" {
-			if _, err := time.Parse("2006-01-02", r.Spec.DateEnd); err != nil {
-				allErrs = append(allErrs, field.Invalid(field.NewPath("spec").Child("dateEnd"), r.Spec.DateEnd, "invalid date format, should be YYYY-MM-DD"))
-			}
-		}
-	}
+	r.validateDate(r.Spec.DateStart, r.Spec.DateEnd, &allErrs)
 
-	if len(r.Spec.Sources) > 0 {
-		// Check that FeedGroups is empty if Sources is not empty
-		if len(r.Spec.FeedGroups) > 0 {
-			allErrs = append(allErrs, field.Forbidden(field.NewPath("spec").Child("feedGroups"), "feedGroups cannot be used when sources are specified"))
-		}
-
-		sourceList := &SourceList{}
-		err := k8sClient.List(context.Background(), sourceList, &client.ListOptions{Namespace: r.Namespace})
-		logrus.Println("SourceList: ", sourceList.Items)
-		if err != nil {
-			allErrs = append(allErrs, field.Invalid(field.NewPath("spec").Child("sources"), r.Spec.Sources, "unable to fetch SourceList"))
-		} else {
-			validSources := make(map[string]bool)
-			for _, source := range sourceList.Items {
-				validSources[source.Spec.ShortName] = true
-			}
-			for i, source := range r.Spec.Sources {
-				if !validSources[source] {
-					allErrs = append(allErrs, field.NotFound(field.NewPath("spec").Child("sources").Index(i), source))
-				}
-			}
-		}
+	err := r.validateSrc(r.Spec.Sources, &allErrs)
+	if err != nil {
+		allErrs = append(allErrs, field.Invalid(field.NewPath("spec").Child("sources"), r.Spec.Sources, "error in sources"))
 	}
 
 	if len(allErrs) > 0 {
@@ -133,4 +95,55 @@ func (r *HotNews) validateHotNews() (admission.Warnings, error) {
 	}
 
 	return nil, nil
+}
+
+func (r *HotNews) validateDate(dateStart, dateEnd string, allErrs *field.ErrorList) {
+	if dateStart != "" && dateEnd != "" {
+		startTime, err := time.Parse("2006-01-02", dateStart)
+		if err != nil {
+			*allErrs = append(*allErrs, field.Invalid(field.NewPath("spec").Child("dateStart"), dateStart, "invalid date format, should be YYYY-MM-DD"))
+		}
+		endTime, err := time.Parse("2006-01-02", dateEnd)
+		if err != nil {
+			*allErrs = append(*allErrs, field.Invalid(field.NewPath("spec").Child("dateEnd"), dateEnd, "invalid date format, should be YYYY-MM-DD"))
+		}
+		if err == nil && startTime.After(endTime) {
+			*allErrs = append(*allErrs, field.Invalid(field.NewPath("spec").Child("dateStart"), dateStart, "dateStart must be before dateEnd"))
+		}
+	} else {
+		if dateStart != "" {
+			if _, err := time.Parse("2006-01-02", dateStart); err != nil {
+				*allErrs = append(*allErrs, field.Invalid(field.NewPath("spec").Child("dateStart"), dateStart, "invalid date format, should be YYYY-MM-DD"))
+			}
+		}
+		if dateEnd != "" {
+			if _, err := time.Parse("2006-01-02", dateEnd); err != nil {
+				*allErrs = append(*allErrs, field.Invalid(field.NewPath("spec").Child("dateEnd"), dateEnd, "invalid date format, should be YYYY-MM-DD"))
+			}
+		}
+	}
+
+}
+
+func (r *HotNews) validateSrc(sources []string, allErrs *field.ErrorList) error {
+	if len(sources) > 0 {
+
+		sourceList := &SourceList{}
+		err := HotNewsClient.Client.List(context.Background(), sourceList, &client.ListOptions{Namespace: r.Namespace})
+		logrus.Println("SourceList: ", sourceList.Items)
+		if err != nil {
+			*allErrs = append(*allErrs, field.Invalid(field.NewPath("spec").Child("sources"), r.Spec.Sources, "unable to fetch SourceList"))
+		} else {
+			validSources := make(map[string]bool)
+			for _, source := range sourceList.Items {
+				validSources[source.Spec.ShortName] = true
+			}
+			for i, source := range r.Spec.Sources {
+				if !validSources[source] {
+					*allErrs = append(*allErrs, field.NotFound(field.NewPath("spec").Child("sources").Index(i), source))
+				}
+			}
+		}
+	}
+	return nil
 }
