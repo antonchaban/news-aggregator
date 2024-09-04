@@ -5,6 +5,7 @@ imageName: "406477933661.dkr.ecr.us-west-2.amazonaws.com/antohachaban/news-allig
 namespace: "news-alligator"
 serviceAccount: "news-alligator-sa"
 migrationsImage: "406477933661.dkr.ecr.us-west-2.amazonaws.com/antohachaban/alligator-migrations:0.2"
+ecrSecretName: "ecr-secret"
 
 tlsSecretName: "teamdev-tls-secret"
 certvalues:
