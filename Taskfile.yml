@@ -6,6 +6,8 @@ env:
 
 vars:
   Namespace: "news-alligator"
+  REGION: "us-west-2"
+  ACCOUNT_ID: "406477933661"
 
 tasks:
   build:
@@ -243,3 +245,29 @@ tasks:
 
 #  AWS
 
+  ecr-login:
+    desc: "Login to AWS ECR"
+    cmds:
+      - aws ecr get-login-password --region {{.REGION}} | docker login --username AWS --password-stdin {{.ACCOUNT_ID}}.dkr.ecr.{{.REGION}}.amazonaws.com
+
+  # Task to tag the Docker image with ECR repository URI
+  docker-tag:
+    desc: "Tag Docker image for ECR"
+    cmds:
+      - docker tag {{.IMAGE_NAME}} {{.ACCOUNT_ID}}.dkr.ecr.{{.REGION}}.amazonaws.com/{{.IMAGE_NAME}}
+
+  # Task to push Docker image to ECR
+  docker-push:
+    desc: "Push Docker image to ECR"
+    cmds:
+      - docker push {{.ACCOUNT_ID}}.dkr.ecr.{{.REGION}}.amazonaws.com/{{.IMAGE_NAME}}
+
+  # Combined task to build, tag, and push the image to ECR
+  deployAws:
+    deps:
+      - ecr-login
+      - docker-tag
+      - docker-push
+    desc: "Build, tag, and push Docker image to ECR"
+    vars:
+      IMAGE_NAME: ""
