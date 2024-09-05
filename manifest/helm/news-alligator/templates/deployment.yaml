@@ -15,14 +15,24 @@ spec:
     spec:
       serviceAccountName: {{ .Values.serviceAccount | default "default" }}
       imagePullSecrets:
-        - name: {{.Values.ecrSecretName}}
+        - name: {{ .Values.ecrSecretName }}
       initContainers:
         - name: run-migrations
           image: {{ .Values.migrationsImage }}
           command: ["migrate", "-path", "/migrations", "-database", "$(POSTGRESQL_URL)", "goto", "$(VERSION)"]
           env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-secret
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-secret
+                  key: POSTGRES_PASSWORD
             - name: POSTGRESQL_URL
-              value: "postgres://admin:admin@postgres:5432/postgres?sslmode=disable"
+              value: "postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@postgres:5432/postgres?sslmode=disable"
             - name: VERSION
               value: "000002"
       containers:

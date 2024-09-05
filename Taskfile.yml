@@ -232,7 +232,8 @@ tasks:
       - createChart
     desc: "Install Helm chart on Kubernetes cluster"
     cmds:
-      - helm upgrade --install news-alligator manifest/helm/charts/antohachaban-news-alligator-chart-*.tgz --namespace {{.Namespace}}
+      - helm upgrade --install news-alligator manifest/helm/charts/antohachaban-news-alligator-chart-*.tgz --namespace {{.Namespace}} --set postgresql.auth.username=admin --set postgresql.auth.password=admin
+
 
   uninstallChart:
     desc: "Uninstall Helm chart from Kubernetes cluster"

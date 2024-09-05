@@ -28,8 +28,8 @@ postgresql:
   fullnameOverride: "postgres"
   auth:
     database: "postgres"
-    username: "admin"
-    password: "admin"
+    username: ""
+    password: ""
   primary:
     persistence:
       size: 2Gi
