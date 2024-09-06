@@ -26,7 +26,7 @@ jobs:
 
       - name: Set output version
         id: set_output
-        run: echo "version=${{ steps.release.outputs.version }}" >> $GITHUB_ENV
+        run: echo "version=${{ steps.release.outputs.version }}" >> $GITHUB_OUTPUT
 
       - name: Set up Docker Buildx
         if: ${{ steps.release.outputs.release_created }}
@@ -68,7 +68,8 @@ jobs:
       - name: Pull Docker image from Docker Hub
         run: |
           docker pull antohachaban/news-alligator-web:${{ needs.release-please.outputs.version }}
-          
+          docker pull antohachaban/news-alligator-web:latest
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -84,9 +85,9 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: antohachaban/news-alligator-web
-          IMAGE_TAG: antohachaban/news-alligator-web
+          IMAGE_TAG: ${{ needs.release-please.outputs.version }}
         run: |
-          docker tag $IMAGE_TAG:${{ needs.release-please.outputs.version }} $ECR_REGISTRY/$ECR_REPOSITORY:${{ needs.release-please.outputs.version }}
-          docker tag $IMAGE_TAG:latest $ECR_REGISTRY/$ECR_REPOSITORY:latest
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:${{ needs.release-please.outputs.version }}
+          docker tag antohachaban/news-alligator-web:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker tag antohachaban/news-alligator-web:latest $ECR_REGISTRY/$ECR_REPOSITORY:latest
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
