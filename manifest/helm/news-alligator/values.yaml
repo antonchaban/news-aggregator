@@ -6,6 +6,7 @@ namespace: "news-alligator"
 serviceAccount: "news-alligator-sa"
 migrationsImage: "406477933661.dkr.ecr.us-west-2.amazonaws.com/antohachaban/alligator-migrations:0.2"
 ecrSecretName: "ecr-secret"
+ecrOperatorSecretName: "ecr-operator-secret"
 
 tlsSecretName: "teamdev-tls-secret"
 certvalues:
@@ -74,3 +75,9 @@ metrics-server:
     - --kubelet-use-node-status-port
     - --metric-resolution=15s
     - --kubelet-insecure-tls
+
+aws:
+  secretAccessKey: ""
+  accessKeyId: ""
+  accountId: "406477933661"
+  region: "us-west-2"
