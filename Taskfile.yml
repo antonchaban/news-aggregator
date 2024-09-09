@@ -133,10 +133,18 @@ tasks:
       - |
         if ! kubectl get namespace news-alligator > /dev/null 2>&1; then
           kubectl create namespace news-alligator
+          echo "Namespace news-alligator created."
         else
           echo "Namespace news-alligator already exists."
         fi
-    desc: Create a Kubernetes namespace
+  
+        if ! kubectl get namespace operator-system > /dev/null 2>&1; then
+          kubectl create namespace operator-system
+          echo "Namespace operator-system created."
+        else
+          echo "Namespace operator-system already exists."
+        fi
+    desc: Create Kubernetes namespaces if they do not exist
     internal: true
 
   apply-secret:
