@@ -7,8 +7,7 @@ import (
 	"github.com/antonchaban/news-aggregator/pkg/handler/web"
 	"github.com/antonchaban/news-aggregator/pkg/server"
 	"github.com/antonchaban/news-aggregator/pkg/service"
-	"github.com/antonchaban/news-aggregator/pkg/storage"
-	"github.com/antonchaban/news-aggregator/pkg/storage/postgres"
+	"github.com/antonchaban/news-aggregator/pkg/storage/inmemory"
 	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
 	_ "go.uber.org/mock/mockgen/model"
@@ -46,6 +45,10 @@ func init() {
 }
 
 func main() {
+	//os.Setenv(certFileEnvVar, "pkg/server/server.crt")
+	//os.Setenv(keyFileEnvVar, "pkg/server/server.key")
+	//os.Setenv(portEnvVar, "8443")
+	//os.Setenv("SAVES_DIR", "backups")
 	if err := checkEnvVars(
 		certFileEnvVar, keyFileEnvVar, portEnvVar,
 	); err != nil {
@@ -54,19 +57,22 @@ func main() {
 
 	// Initialize in-memory databases
 
-	db, err := storage.NewDB(storage.Config{
-		Host:     dbHost,
-		Username: dbUser,
-		Password: dbPass,
-		DBName:   dbName,
-		SSLMode:  sslMode,
-	})
-	if err != nil {
-		logrus.Fatal("error occurred while connecting to the database: ", err.Error())
-	}
+	//db, err := storage.NewDB(storage.Config{
+	//	Host:     dbHost,
+	//	Username: dbUser,
+	//	Password: dbPass,
+	//	DBName:   dbName,
+	//	SSLMode:  sslMode,
+	//})
+	//if err != nil {
+	//	logrus.Fatal("error occurred while connecting to the database: ", err.Error())
+	//}
 
-	srcDb := postgres.NewSrc(db)
-	artDb := postgres.New(db)
+	//srcDb := postgres.NewSrc(db)
+	//artDb := postgres.New(db)
+
+	artDb := inmemory.New()
+	srcDb := inmemory.NewSrc()
 	articleService := service.New(artDb)
 	sourceService := service.NewSourceService(artDb, srcDb)
 
@@ -78,7 +84,7 @@ func main() {
 
 	// Start the server in a goroutine
 	go func() {
-		if err := srv.Run(os.Getenv(portEnvVar), h.InitRoutes()); err != nil {
+		if err := srv.RunWithFiles(os.Getenv(portEnvVar), h.InitRoutes(), *h); err != nil {
 			logrus.Fatal("error occurred while running http server: ", err.Error())
 		}
 	}()
