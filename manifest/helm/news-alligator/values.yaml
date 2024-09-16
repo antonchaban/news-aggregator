@@ -33,6 +33,7 @@ postgresql:
     password: ""
   primary:
     persistence:
+      storageClass: gp2
       size: 2Gi
       mountPath: /bitnami/postgresql
 
