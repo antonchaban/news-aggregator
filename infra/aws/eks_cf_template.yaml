@@ -1,0 +1,217 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'AWS CloudFormation Template for VPC, Subnets, EKS Cluster, and Node Group'
+
+Parameters:
+  InstanceType:
+    Description: Node instance type
+    Type: String
+    Default: t3.medium
+    AllowedValues:
+      - t3.medium
+      - t2.medium
+      - t2.large
+    ConstraintDescription: Must be a valid type
+
+Resources:
+  antonvpc:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/24
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: antonvpc
+
+  antonsubnet01a:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref antonvpc
+      CidrBlock: 10.0.0.0/26
+      AvailabilityZone: us-west-2a
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: antonsubnet01a
+
+  antonsubnet02b:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref antonvpc
+      CidrBlock: 10.0.0.64/26
+      AvailabilityZone: us-west-2b
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: antonsubnet02b
+
+  antonsubnet03c:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref antonvpc
+      CidrBlock: 10.0.0.128/26
+      AvailabilityZone: us-west-2c
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: antonsubnet03c
+
+  antoninternetgateway:
+    Type: AWS::EC2::InternetGateway
+
+  antonvpcigattachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref antonvpc
+      InternetGatewayId: !Ref antoninternetgateway
+
+  antonroutetable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref antonvpc
+      Tags:
+        - Key: Name
+          Value: antonroutetable
+
+  antonroutes:
+    Type: AWS::EC2::Route
+    DependsOn: antonvpcigattachment
+    Properties:
+      RouteTableId: !Ref antonroutetable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref antoninternetgateway
+
+  antonsubnet01aroutetableassociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref antonsubnet01a
+      RouteTableId: !Ref antonroutetable
+
+  antonsubnet02broutetableassociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref antonsubnet02b
+      RouteTableId: !Ref antonroutetable
+
+  antonsubnet03croutetableassociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref antonsubnet03c
+      RouteTableId: !Ref antonroutetable
+
+  antonclusterrole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: anton-cluster-role
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: eks.amazonaws.com
+            Action: "sts:AssumeRole"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonEKSClusterPolicy
+        - arn:aws:iam::aws:policy/service-role/AmazonECSInfrastructureRolePolicyForVolumes
+
+  antonserversecuritygroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow HTTPS access from the client, SSH, and HTTP
+      VpcId: !Ref antonvpc
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+
+  antonnodegrouprole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: anton-node-group-role
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: "sts:AssumeRole"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+        - arn:aws:iam::aws:policy/AmazonEC2FullAccess
+        - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+        - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
+      Tags:
+        - Key: Name
+          Value: anton-node-group-role
+
+  antonnodegroup:
+    Type: AWS::EKS::Nodegroup
+    Properties:
+      ClusterName: !Ref antonekscluster
+      NodeRole: !GetAtt antonnodegrouprole.Arn
+      Subnets:
+        - !Ref antonsubnet01a
+        - !Ref antonsubnet02b
+        - !Ref antonsubnet03c
+      ScalingConfig:
+        DesiredSize: 2
+        MinSize: 1
+        MaxSize: 10
+      InstanceTypes:
+        - !Ref InstanceType
+      DiskSize: 20
+      AmiType: AL2_x86_64
+      RemoteAccess:
+        Ec2SshKey: anton
+
+  antonekscluster:
+    Type: AWS::EKS::Cluster
+    Properties:
+      Name: anton-eks-cluster
+      RoleArn: !GetAtt antonclusterrole.Arn
+      ResourcesVpcConfig:
+        SubnetIds:
+          - !Ref antonsubnet01a
+          - !Ref antonsubnet02b
+          - !Ref antonsubnet03c
+        SecurityGroupIds:
+          - !Ref antonserversecuritygroup
+
+
+Outputs:
+  EKSClusterName:
+    Description: Name of the EKS Cluster
+    Value: !Ref antonekscluster
+
+  NodeGroupRole:
+    Description: Role associated with EKS Node Group
+    Value: !GetAtt antonnodegrouprole.Arn
+
+  ClusterRole:
+    Description: Role associated with the EKS Cluster
+    Value: !GetAtt antonclusterrole.Arn
+
+  VPCId:
+    Description: VPC ID
+    Value: !Ref antonvpc
+
+  Subnet01a:
+    Description: Subnet 01a ID
+    Value: !Ref antonsubnet01a
+
+  Subnet02b:
+    Description: Subnet 02b ID
+    Value: !Ref antonsubnet02b
+
+  Subnet03c:
+    Description: Subnet 03c ID
+    Value: !Ref antonsubnet03c
