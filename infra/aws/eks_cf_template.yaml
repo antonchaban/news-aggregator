@@ -186,6 +186,34 @@ Resources:
         SecurityGroupIds:
           - !Ref antonserversecuritygroup
 
+  # Add-on: Amazon VPC CNI (Networking)
+  VPCCNIAddon:
+    Type: AWS::EKS::Addon
+    Properties:
+      ClusterName: !Ref antonekscluster
+      AddonName: vpc-cni
+      ResolveConflicts: OVERWRITE
+
+  CoreDNSAddon:
+    Type: AWS::EKS::Addon
+    Properties:
+      ClusterName: !Ref antonekscluster
+      AddonName: coredns
+      ResolveConflicts: OVERWRITE
+
+  KubeProxyAddon:
+    Type: AWS::EKS::Addon
+    Properties:
+      ClusterName: !Ref antonekscluster
+      AddonName: kube-proxy
+      ResolveConflicts: OVERWRITE
+
+  PodIdentityAddon:
+    Type: 'AWS::EKS::Addon'
+    Properties:
+      AddonName: eks-pod-identity-agent
+      ClusterName: !Ref antonekscluster
+      ResolveConflicts: OVERWRITE
 
 Outputs:
   EKSClusterName:
