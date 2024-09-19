@@ -17,8 +17,6 @@ Resources:
     Type: AWS::EC2::VPC
     Properties:
       CidrBlock: 10.0.0.0/24
-      EnableDnsSupport: true
-      EnableDnsHostnames: true
       Tags:
         - Key: Name
           Value: antonvpc
@@ -38,7 +36,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref antonvpc
-      CidrBlock: 10.0.0.64/26
+      CidrBlock: 10.0.0.64/26 #
       AvailabilityZone: us-west-2b
       MapPublicIpOnLaunch: true
       Tags:
@@ -162,7 +160,7 @@ Resources:
         - !Ref antonsubnet01a
         - !Ref antonsubnet02b
         - !Ref antonsubnet03c
-      ScalingConfig:
+      ScalingConfig: # move to parameters
         DesiredSize: 2
         MinSize: 1
         MaxSize: 10
