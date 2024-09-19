@@ -89,6 +89,7 @@ func NewEKSStack(scope constructs.Construct, id string, props *EKSStackProps) aw
 
 	// Create EKS Cluster
 	cluster := awseks.NewCluster(stack, jsii.String("antonekscluster-cdk"), &awseks.ClusterProps{
+		EndpointAccess:  awseks.EndpointAccess_PUBLIC(),
 		ClusterName:     jsii.String("anton-eks-cluster-cdk"),
 		Vpc:             vpc,
 		DefaultCapacity: jsii.Number(0),
@@ -96,46 +97,46 @@ func NewEKSStack(scope constructs.Construct, id string, props *EKSStackProps) aw
 		Version:         awseks.KubernetesVersion_V1_30(),
 		Role:            clusterRole,
 		VpcSubnets: &[]*awsec2.SubnetSelection{
-			{SubnetType: awsec2.SubnetType_PRIVATE_WITH_EGRESS},
+			{SubnetType: awsec2.SubnetType_PUBLIC},
 		},
 	})
 
 	// IAM Role for Node Group
-	nodegRole := awsiam.NewRole(stack, jsii.String("antonnodegrouprole-cdk"), &awsiam.RoleProps{
-		AssumedBy: awsiam.NewServicePrincipal(jsii.String("ec2.amazonaws.com"), nil),
-		ManagedPolicies: &[]awsiam.IManagedPolicy{
-			awsiam.ManagedPolicy_FromAwsManagedPolicyName(jsii.String("AmazonEKSWorkerNodePolicy")),
-			awsiam.ManagedPolicy_FromAwsManagedPolicyName(jsii.String("AmazonEC2ContainerRegistryReadOnly")),
-			awsiam.ManagedPolicy_FromAwsManagedPolicyName(jsii.String("AmazonEC2FullAccess")),
-			awsiam.ManagedPolicy_FromAwsManagedPolicyName(jsii.String("AmazonEKS_CNI_Policy")),
-		},
-	})
+	//nodegRole := awsiam.NewRole(stack, jsii.String("antonnodegrouprole-cdk"), &awsiam.RoleProps{
+	//	AssumedBy: awsiam.NewServicePrincipal(jsii.String("ec2.amazonaws.com"), nil),
+	//	ManagedPolicies: &[]awsiam.IManagedPolicy{
+	//		awsiam.ManagedPolicy_FromAwsManagedPolicyName(jsii.String("AmazonEKSWorkerNodePolicy")),
+	//		awsiam.ManagedPolicy_FromAwsManagedPolicyName(jsii.String("AmazonEC2ContainerRegistryReadOnly")),
+	//		awsiam.ManagedPolicy_FromAwsManagedPolicyName(jsii.String("AmazonEC2FullAccess")),
+	//		awsiam.ManagedPolicy_FromAwsManagedPolicyName(jsii.String("AmazonEKS_CNI_Policy")),
+	//	},
+	//})
 
-	var subnetIds []*string
-	for _, subnet := range *vpc.PublicSubnets() {
-		subnetIds = append(subnetIds, subnet.SubnetId())
-	}
+	//var subnetIds []*string
+	//for _, subnet := range *vpc.PublicSubnets() {
+	//	subnetIds = append(subnetIds, subnet.SubnetId())
+	//}
 
 	// Node group
-	awseks.NewCfnNodegroup(stack, jsii.String("antonnodegroup-cdk"), &awseks.CfnNodegroupProps{
-		ClusterName:   cluster.ClusterName(),
-		NodegroupName: jsii.String("anton-node-group-cdk"),
-		NodeRole:      nodegRole.RoleArn(),
-		Subnets:       &subnetIds,
-		ScalingConfig: &awseks.CfnNodegroup_ScalingConfigProperty{
-			DesiredSize: jsii.Number(2),
-			MaxSize:     jsii.Number(10),
-			MinSize:     jsii.Number(1),
-		},
-		InstanceTypes: &[]*string{
-			jsii.String("t2.medium"),
-		},
-		AmiType:  jsii.String("AL2_x86_64"),
-		DiskSize: jsii.Number(20),
-		RemoteAccess: &awseks.CfnNodegroup_RemoteAccessProperty{
-			Ec2SshKey: jsii.String("anton"),
-		},
-	})
+	//awseks.NewCfnNodegroup(stack, jsii.String("antonnodegroup-cdk"), &awseks.CfnNodegroupProps{
+	//	ClusterName:   cluster.ClusterName(),
+	//	NodegroupName: jsii.String("anton-node-group-cdk"),
+	//	NodeRole:      nodegRole.RoleArn(),
+	//	Subnets:       &subnetIds,
+	//	ScalingConfig: &awseks.CfnNodegroup_ScalingConfigProperty{
+	//		DesiredSize: jsii.Number(2),
+	//		MaxSize:     jsii.Number(10),
+	//		MinSize:     jsii.Number(1),
+	//	},
+	//	InstanceTypes: &[]*string{
+	//		jsii.String("t2.medium"),
+	//	},
+	//	AmiType:  jsii.String("AL2_x86_64"),
+	//	DiskSize: jsii.Number(20),
+	//	RemoteAccess: &awseks.CfnNodegroup_RemoteAccessProperty{
+	//		Ec2SshKey: jsii.String("anton"),
+	//	},
+	//})
 
 	// EKS Add-ons
 	awseks.NewCfnAddon(stack, jsii.String("VPCCNIAddon"), &awseks.CfnAddonProps{
@@ -179,7 +180,7 @@ func NewEKSStack(scope constructs.Construct, id string, props *EKSStackProps) aw
 func main() {
 	app := awscdk.NewApp(nil)
 
-	NewEKSStack(app, "EKSStack", &EKSStackProps{
+	NewEKSStack(app, "anton-EKSStack", &EKSStackProps{
 		StackProps: awscdk.StackProps{
 			Env: env(),
 		},
@@ -191,6 +192,6 @@ func main() {
 func env() *awscdk.Environment {
 	return &awscdk.Environment{
 		Account: jsii.String("406477933661"),
-		Region:  jsii.String("us-east-1"),
+		Region:  jsii.String("us-west-2"),
 	}
 }
