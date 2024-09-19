@@ -36,11 +36,6 @@ func NewEKSStack(scope constructs.Construct, id string, props *EKSStackProps) aw
 		MaxAzs: jsii.Number(3),
 	})
 
-	// gwattachment := awsec2.NewCfnVPCGatewayAttachment(stack, jsii.String("antonigwattachment-cdk"), &awsec2.CfnVPCGatewayAttachmentProps{
-	//     VpcId:             vpc.VpcId(),
-	//     InternetGatewayId: internetGw,
-	// })
-
 	igw := vpc.InternetGatewayId()
 
 	// Create Route Table for public subnets
@@ -54,8 +49,6 @@ func NewEKSStack(scope constructs.Construct, id string, props *EKSStackProps) aw
 		DestinationCidrBlock: jsii.String("0.0.0.0/0"),
 		GatewayId:            igw,
 	})
-
-	// No need to add dependency on gwattachment as it is handled internally by the VPC construct
 
 	// Associate subnets with route table
 	publicSubnets := vpc.PublicSubnets()
@@ -101,42 +94,42 @@ func NewEKSStack(scope constructs.Construct, id string, props *EKSStackProps) aw
 		},
 	})
 
+	iamUserArn := "arn:aws:iam::406477933661:user/anton"
+	cluster.AwsAuth().AddUserMapping(awsiam.User_FromUserArn(stack, jsii.String("anton"), jsii.String(iamUserArn)), &awseks.AwsAuthMapping{
+		Username: jsii.String("anton"),
+		Groups: &[]*string{
+			jsii.String("system:masters"),
+		},
+	})
+
 	// IAM Role for Node Group
-	//nodegRole := awsiam.NewRole(stack, jsii.String("antonnodegrouprole-cdk"), &awsiam.RoleProps{
-	//	AssumedBy: awsiam.NewServicePrincipal(jsii.String("ec2.amazonaws.com"), nil),
-	//	ManagedPolicies: &[]awsiam.IManagedPolicy{
-	//		awsiam.ManagedPolicy_FromAwsManagedPolicyName(jsii.String("AmazonEKSWorkerNodePolicy")),
-	//		awsiam.ManagedPolicy_FromAwsManagedPolicyName(jsii.String("AmazonEC2ContainerRegistryReadOnly")),
-	//		awsiam.ManagedPolicy_FromAwsManagedPolicyName(jsii.String("AmazonEC2FullAccess")),
-	//		awsiam.ManagedPolicy_FromAwsManagedPolicyName(jsii.String("AmazonEKS_CNI_Policy")),
-	//	},
-	//})
+	nodegRole := awsiam.NewRole(stack, jsii.String("antonnodegrouprole-cdk"), &awsiam.RoleProps{
+		AssumedBy: awsiam.NewServicePrincipal(jsii.String("ec2.amazonaws.com"), nil),
+		ManagedPolicies: &[]awsiam.IManagedPolicy{
+			awsiam.ManagedPolicy_FromAwsManagedPolicyName(jsii.String("AmazonEKSWorkerNodePolicy")),
+			awsiam.ManagedPolicy_FromAwsManagedPolicyName(jsii.String("AmazonEC2ContainerRegistryReadOnly")),
+			awsiam.ManagedPolicy_FromAwsManagedPolicyName(jsii.String("AmazonEC2FullAccess")),
+			awsiam.ManagedPolicy_FromAwsManagedPolicyName(jsii.String("AmazonEKS_CNI_Policy")),
+		},
+	})
 
-	//var subnetIds []*string
-	//for _, subnet := range *vpc.PublicSubnets() {
-	//	subnetIds = append(subnetIds, subnet.SubnetId())
-	//}
-
-	// Node group
-	//awseks.NewCfnNodegroup(stack, jsii.String("antonnodegroup-cdk"), &awseks.CfnNodegroupProps{
-	//	ClusterName:   cluster.ClusterName(),
-	//	NodegroupName: jsii.String("anton-node-group-cdk"),
-	//	NodeRole:      nodegRole.RoleArn(),
-	//	Subnets:       &subnetIds,
-	//	ScalingConfig: &awseks.CfnNodegroup_ScalingConfigProperty{
-	//		DesiredSize: jsii.Number(2),
-	//		MaxSize:     jsii.Number(10),
-	//		MinSize:     jsii.Number(1),
-	//	},
-	//	InstanceTypes: &[]*string{
-	//		jsii.String("t2.medium"),
-	//	},
-	//	AmiType:  jsii.String("AL2_x86_64"),
-	//	DiskSize: jsii.Number(20),
-	//	RemoteAccess: &awseks.CfnNodegroup_RemoteAccessProperty{
-	//		Ec2SshKey: jsii.String("anton"),
-	//	},
-	//})
+	cluster.AddNodegroupCapacity(jsii.String("anton-node-group-cdk"), &awseks.NodegroupOptions{
+		InstanceTypes: &[]awsec2.InstanceType{
+			awsec2.NewInstanceType(jsii.String("t2.medium")),
+		},
+		NodeRole:    nodegRole,
+		MinSize:     jsii.Number(1),
+		MaxSize:     jsii.Number(10),
+		DesiredSize: jsii.Number(2),
+		RemoteAccess: &awseks.NodegroupRemoteAccess{
+			SshKeyName: jsii.String("anton"),
+		},
+		Subnets: &awsec2.SubnetSelection{
+			Subnets: publicSubnets,
+		},
+		AmiType:  awseks.NodegroupAmiType_AL2_X86_64,
+		DiskSize: jsii.Number(20),
+	})
 
 	// EKS Add-ons
 	awseks.NewCfnAddon(stack, jsii.String("VPCCNIAddon"), &awseks.CfnAddonProps{
