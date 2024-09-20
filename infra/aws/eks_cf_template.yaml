@@ -2,14 +2,76 @@ AWSTemplateFormatVersion: '2010-09-09'
 Description: 'AWS CloudFormation Template for VPC, Subnets, EKS Cluster, and Node Group'
 
 Parameters:
+  NodeGroupAmiType:
+    Description: The AMI type for the node group
+    Type: String
+    Default: AL2_x86_64
+    AllowedValues:
+      - AL2_x86_64
+      - AL2_x86_64_GPU
+      - AL2_ARM_64
+    ConstraintDescription: Must be a valid AMI type
+  PodIdentityAddonVersion:
+    Description: Version of the Pod Identity Addon
+    Type: String
+    Default: "v1.3.2-eksbuild.2"
+    AllowedValues:
+      - "v1.3.2-eksbuild.2"
+    ConstraintDescription: Must be a valid version
+  KubeProxyAddonVersion:
+    Description: Version of the Kube Proxy Addon
+    Type: String
+    Default: "v1.30.0-eksbuild.3"
+    AllowedValues:
+      - "v1.30.0-eksbuild.3"
+    ConstraintDescription: Must be a valid version
+  CoreDNSAddonVersion:
+    Description: Version of the CoreDNS Addon
+    Type: String
+    Default: "v1.11.1-eksbuild.8"
+    AllowedValues:
+      - "v1.11.1-eksbuild.8"
+    ConstraintDescription: Must be a valid version
+  VPCCniAddonVersion:
+    Description: Version of the VPC CNI Addon
+    Type: String
+    Default: "v1.18.1-eksbuild.3"
+    AllowedValues:
+      - "v1.18.1-eksbuild.3"
+    ConstraintDescription: Must be a valid version
+  ScaleCfg:
+    Description: Desired number of nodes
+    Type: Number
+    Default: 2
+    AllowedValues:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+    ConstraintDescription: Must be between 1 and 10
+  KuberVersion:
+    Description: Kubernetes version
+    Type: String
+    Default: "1.30"
+    AllowedValues:
+      - "1.30"
+    ConstraintDescription: Must be a valid version
   InstanceType:
     Description: Node instance type
     Type: String
-    Default: t3.medium
+    Default: t2.micro
     AllowedValues:
       - t3.medium
       - t2.medium
       - t2.large
+      - t2.micro
+      - t2.small
     ConstraintDescription: Must be a valid type
 
 Resources:
@@ -28,7 +90,7 @@ Resources:
     Properties:
       VpcId: !Ref antonvpc
       CidrBlock: 10.0.0.0/26
-      AvailabilityZone: us-west-2a
+      AvailabilityZone: !Select [ 0, !GetAZs "" ]
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
@@ -39,7 +101,7 @@ Resources:
     Properties:
       VpcId: !Ref antonvpc
       CidrBlock: 10.0.0.64/26
-      AvailabilityZone: us-west-2b
+      AvailabilityZone: !Select [ 1, !GetAZs "" ]
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
@@ -50,7 +112,7 @@ Resources:
     Properties:
       VpcId: !Ref antonvpc
       CidrBlock: 10.0.0.128/26
-      AvailabilityZone: us-west-2c
+      AvailabilityZone: !Select [ 2, !GetAZs "" ]
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
@@ -163,19 +225,21 @@ Resources:
         - !Ref antonsubnet02b
         - !Ref antonsubnet03c
       ScalingConfig:
-        DesiredSize: 2
+        DesiredSize: !Ref ScaleCfg
         MinSize: 1
         MaxSize: 10
       InstanceTypes:
         - !Ref InstanceType
       DiskSize: 20
-      AmiType: AL2_x86_64
+      AmiType: !Ref NodeGroupAmiType
       RemoteAccess:
         Ec2SshKey: anton
 
   antonekscluster:
     Type: AWS::EKS::Cluster
     Properties:
+      UpgradePolicy: { "SupportType": "STANDARD" }
+      Version: !Ref KuberVersion
       Name: anton-eks-cluster
       RoleArn: !GetAtt antonclusterrole.Arn
       ResourcesVpcConfig:
@@ -190,6 +254,7 @@ Resources:
   VPCCNIAddon:
     Type: AWS::EKS::Addon
     Properties:
+      AddonVersion: !Ref VPCCniAddonVersion
       ClusterName: !Ref antonekscluster
       AddonName: vpc-cni
       ResolveConflicts: OVERWRITE
@@ -197,6 +262,7 @@ Resources:
   CoreDNSAddon:
     Type: AWS::EKS::Addon
     Properties:
+      AddonVersion: !Ref CoreDNSAddonVersion
       ClusterName: !Ref antonekscluster
       AddonName: coredns
       ResolveConflicts: OVERWRITE
@@ -204,6 +270,7 @@ Resources:
   KubeProxyAddon:
     Type: AWS::EKS::Addon
     Properties:
+      AddonVersion: !Ref KubeProxyAddonVersion
       ClusterName: !Ref antonekscluster
       AddonName: kube-proxy
       ResolveConflicts: OVERWRITE
@@ -211,6 +278,7 @@ Resources:
   PodIdentityAddon:
     Type: 'AWS::EKS::Addon'
     Properties:
+      AddonVersion: !Ref PodIdentityAddonVersion
       AddonName: eks-pod-identity-agent
       ClusterName: !Ref antonekscluster
       ResolveConflicts: OVERWRITE
