@@ -131,6 +131,75 @@ func NewEKSStack(scope constructs.Construct, id string, props *EKSStackProps) aw
 		DiskSize: jsii.Number(20),
 	})
 
+	awseks.NewKubernetesManifest(stack, jsii.String("CertManagerNamespace"), &awseks.KubernetesManifestProps{
+		Cluster: cluster,
+		Manifest: &[]*map[string]interface{}{
+			{
+				"apiVersion": "v1",
+				"kind":       "Namespace",
+				"metadata": map[string]interface{}{
+					"name": "cert-manager",
+				},
+			},
+		},
+	})
+
+	awseks.NewKubernetesManifest(stack, jsii.String("NewsAlligatorNamespace"), &awseks.KubernetesManifestProps{
+		Cluster: cluster,
+		Manifest: &[]*map[string]interface{}{
+			{
+				"apiVersion": "v1",
+				"kind":       "Namespace",
+				"metadata": map[string]interface{}{
+					"name": "news-alligator",
+				},
+			},
+		},
+	})
+
+	awseks.NewKubernetesManifest(stack, jsii.String("OperatorNamespace"), &awseks.KubernetesManifestProps{
+		Cluster: cluster,
+		Manifest: &[]*map[string]interface{}{
+			{
+				"apiVersion": "v1",
+				"kind":       "Namespace",
+				"metadata": map[string]interface{}{
+					"name": "operator-system",
+				},
+			},
+		},
+	})
+
+	awseks.NewHelmChart(stack, jsii.String("CertManagerHelmChart"), &awseks.HelmChartProps{
+		Cluster:    cluster,
+		Chart:      jsii.String("cert-manager"),
+		Repository: jsii.String("https://charts.jetstack.io"),
+		Release:    jsii.String("cert-manager"),
+		Version:    jsii.String("v1.15.3"),
+		Namespace:  jsii.String("cert-manager"),
+		Values: &map[string]interface{}{
+			"crds": map[string]interface{}{
+				"enabled": true,
+			},
+		},
+	})
+
+	awseks.NewHelmChart(stack, jsii.String("VPAHelmChart"), &awseks.HelmChartProps{
+		Cluster:    cluster,
+		Chart:      jsii.String("vertical-pod-autoscaler"),
+		Repository: jsii.String("https://cowboysysop.github.io/charts/"),
+		Release:    jsii.String("my-release"),
+		Namespace:  jsii.String("default"),
+	})
+
+	awseks.NewHelmChart(stack, jsii.String("EbsCsiDriverHelmChart"), &awseks.HelmChartProps{
+		Cluster:    cluster,
+		Chart:      jsii.String("aws-ebs-csi-driver"),
+		Repository: jsii.String("https://kubernetes-sigs.github.io/aws-ebs-csi-driver"),
+		Release:    jsii.String("aws-ebs-csi"),
+		Namespace:  jsii.String("kube-system"),
+	})
+
 	// EKS Add-ons
 	awseks.NewCfnAddon(stack, jsii.String("VPCCNIAddon"), &awseks.CfnAddonProps{
 		ClusterName:      cluster.ClusterName(),
