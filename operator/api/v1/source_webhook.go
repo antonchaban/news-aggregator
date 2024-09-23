@@ -19,18 +19,16 @@ package v1
 import (
 	"context"
 	"fmt"
+	"github.com/sirupsen/logrus"
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/validation/field"
 	"net/url"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
-	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
+	"time"
 )
-
-// log is for logging in this package.
-var sourcelog = logf.Log.WithName("source-resource")
 
 // SourceClientWrapper allows substituting the Kubernetes client with a mock for testing.
 type SourceClientWrapper struct {
@@ -66,7 +64,7 @@ func (r *Source) SetupWebhookWithManager(mgr ctrl.Manager) error {
 // - admission.Warnings: Returns a list of warnings if applicable
 // - error: Returns an error if validation fails.
 func (r *Source) ValidateCreate() (admission.Warnings, error) {
-	sourcelog.Info("validate create", "name", r.Name)
+	logrus.Println("validate create", "name", r.Name)
 	return r.validateSource()
 }
 
@@ -78,7 +76,7 @@ func (r *Source) ValidateCreate() (admission.Warnings, error) {
 // - admission.Warnings: Returns a list of warnings if applicable (currently returns nil).
 // - error: Returns an error if validation fails.
 func (r *Source) ValidateUpdate(old runtime.Object) (admission.Warnings, error) {
-	sourcelog.Info("validate update", "name", r.Name)
+	logrus.Println("validate update", "name", r.Name)
 	return r.validateSource()
 }
 
@@ -88,7 +86,7 @@ func (r *Source) ValidateUpdate(old runtime.Object) (admission.Warnings, error) 
 // - admission.Warnings: Returns a list of warnings if applicable
 // - error: Returns an error if validation fails.
 func (r *Source) ValidateDelete() (admission.Warnings, error) {
-	sourcelog.Info("validate delete", "name", r.Name)
+	logrus.Println("validate delete", "name", r.Name)
 	return nil, nil
 }
 
@@ -164,18 +162,18 @@ func isValidURL(link string) bool {
 // - admission.Warnings: Returns a list of warnings if applicable (currently returns nil).
 // - error: Returns an error if the Name, ShortName, or Link fields are not unique within the namespace.
 func (r *Source) checkUniqueFields(cl client.Client, allErrs *field.ErrorList) error {
-	ctx := context.Background()
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer cancel()
 
 	var sources SourceList
-	sourcelog.Info("Listing sources in namespace", "namespace", r.Namespace)
+	logrus.Info("Listing sources in namespace", "namespace", r.Namespace)
 	if err := cl.List(ctx, &sources, client.InNamespace(r.Namespace)); err != nil {
-		sourcelog.Error(err, "failed to list sources")
 		return err
 	}
 
-	sourcelog.Info("Sources retrieved", "count", len(sources.Items))
+	logrus.Info("Sources retrieved", "count", len(sources.Items))
 	for _, source := range sources.Items {
-		sourcelog.Info("Source found", "name", source.Name, "shortName", source.Spec.ShortName, "link", source.Spec.Link)
+		logrus.Info("Source found", "name", source.Name, "shortName", source.Spec.ShortName, "link", source.Spec.Link)
 		if source.Name != r.Name {
 			if source.Spec.Name == r.Spec.Name {
 				*allErrs = append(*allErrs, field.Invalid(field.NewPath("spec").Child("name"), r.Spec.Name, "name must be unique in the namespace"))
