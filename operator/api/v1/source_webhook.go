@@ -46,16 +46,6 @@ func (r *Source) SetupWebhookWithManager(mgr ctrl.Manager) error {
 		Complete()
 }
 
-// +kubebuilder:webhook:path=/mutate-aggregator-com-teamdev-v1-source,mutating=true,failurePolicy=fail,sideEffects=None,groups=aggregator.com.teamdev,resources=sources,verbs=create;update,versions=v1,name=msource.kb.io,admissionReviewVersions=v1
-
-var _ webhook.Defaulter = &Source{}
-
-// Default implements webhook.Defaulter so a webhook will be registered for the type
-// This function able to set default values for the Source resource.
-func (r *Source) Default() {
-	sourcelog.Info("default", "name", r.Name)
-}
-
 // +kubebuilder:webhook:path=/validate-aggregator-com-teamdev-v1-source,mutating=false,failurePolicy=fail,sideEffects=None,groups=aggregator.com.teamdev,resources=sources,verbs=create;update,versions=v1,name=vsource.kb.io,admissionReviewVersions=v1
 
 var _ webhook.Validator = &Source{}
