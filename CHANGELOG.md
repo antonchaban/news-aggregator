@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/antonchaban/news-aggregator/compare/news-alligator@v1.0.1...news-alligator@v1.1.0) (2024-09-23)
+
+
+### Features
+
+* Add volumes to k8s cluster ([f77b924](https://github.com/antonchaban/news-aggregator/commit/f77b9245fc4e5eb45100addb096dfc1519948a2a))
+
 ## [1.0.1](https://github.com/antonchaban/news-aggregator/compare/news-alligator-v1.0.0...news-alligator@v1.0.1) (2024-08-01)
 
 
