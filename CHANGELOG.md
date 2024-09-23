@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/antonchaban/news-aggregator/compare/news-alligator@v1.1.0...news-alligator@v1.2.0) (2024-09-23)
+
+
+### Features
+
+* Add DB and separate fetcher service for news fetching as cron job ([12f0d27](https://github.com/antonchaban/news-aggregator/commit/12f0d27d2c8a38964b44cdb0407e8f61d5fc8eb5))
+
 ## [1.1.0](https://github.com/antonchaban/news-aggregator/compare/news-alligator@v1.0.1...news-alligator@v1.1.0) (2024-09-23)
 
 
