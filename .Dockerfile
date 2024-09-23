@@ -23,7 +23,6 @@ COPY pkg/filter /src/pkg/filter
 COPY pkg/handler /src/pkg/handler
 COPY pkg/model /src/pkg/model
 COPY pkg/parser /src/pkg/parser
-COPY pkg/scheduler /src/pkg/scheduler
 COPY pkg/server /src/pkg/server
 COPY pkg/service /src/pkg/service
 COPY pkg/storage /src/pkg/storage
