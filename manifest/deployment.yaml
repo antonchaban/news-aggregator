@@ -19,4 +19,11 @@ spec:
           image: antohachaban/news-alligator-web:0.1.2
           ports:
             - containerPort: 443
+          volumeMounts:
+            - name: news-alligator-storage
+              mountPath: /root/backups  # The path inside the container where the volume will be mounted
           imagePullPolicy: IfNotPresent
+      volumes:
+        - name: news-alligator-storage
+          persistentVolumeClaim:
+            claimName: news-alligator-pvc
