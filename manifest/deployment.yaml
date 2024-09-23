@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: news-alligator-deployment
+  namespace: news-alligator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: news-alligator
+  template:
+    metadata:
+      labels:
+        app: news-alligator
+    spec:
+      serviceAccountName: news-alligator-sa
+      containers:
+        - name: news-alligator
+          image: antohachaban/news-alligator-web:0.1.2
+          ports:
+            - containerPort: 443
+          imagePullPolicy: IfNotPresent

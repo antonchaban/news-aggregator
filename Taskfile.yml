@@ -121,3 +121,30 @@ tasks:
       - task format
       - task vet
       - task tidy
+
+  create-namespace:
+    cmds:
+      - |
+        if ! kubectl get namespace news-alligator > /dev/null 2>&1; then
+          kubectl create namespace news-alligator
+        else
+          echo "Namespace news-alligator already exists."
+        fi
+    desc: Create a Kubernetes namespace
+    internal: true
+
+  deploy:
+    deps: [create-namespace]
+    cmds:
+      - kubectl apply -f ./manifest
+    desc: Apply Kubernetes manifests
+
+  undeploy:
+    cmds:
+      - kubectl delete -f ./manifest
+    desc: Delete Kubernetes manifests
+
+  k8s-port-forward:
+    cmds:
+      - kubectl port-forward svc/news-alligator-service 443:8443 -n news-alligator
+    desc: Port forward to the Kubernetes service
