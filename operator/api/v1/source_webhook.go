@@ -19,12 +19,13 @@ package v1
 import (
 	"context"
 	"fmt"
+	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/apimachinery/pkg/util/validation/field"
 	"net/url"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
-	"sigs.k8s.io/controller-runtime/pkg/webhook"
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )
 
@@ -36,9 +37,18 @@ type SourceClientWrapper struct {
 	Client client.Client
 }
 
+// SourceClient is a global instance of SourceClientWrapper used to interact with the Kubernetes client.
 var SourceClient SourceClientWrapper
 
-// SetupWebhookWithManager will setup the manager to manage the webhooks
+// SetupWebhookWithManager sets up the webhook for the Source resource with the provided manager.
+// It assigns the Kubernetes client from the manager to the SourceClient global variable and
+// configures the webhook for the Source resource using the manager.
+//
+// Parameters:
+// - mgr (ctrl.Manager): The manager that handles the Source resource and its webhooks.
+//
+// Returns:
+// - error: Returns an error if the webhook setup fails.
 func (r *Source) SetupWebhookWithManager(mgr ctrl.Manager) error {
 	SourceClient.Client = mgr.GetClient()
 	return ctrl.NewWebhookManagedBy(mgr).
@@ -48,66 +58,119 @@ func (r *Source) SetupWebhookWithManager(mgr ctrl.Manager) error {
 
 // +kubebuilder:webhook:path=/validate-aggregator-com-teamdev-v1-source,mutating=false,failurePolicy=fail,sideEffects=None,groups=aggregator.com.teamdev,resources=sources,verbs=create;update,versions=v1,name=vsource.kb.io,admissionReviewVersions=v1
 
-var _ webhook.Validator = &Source{}
-
-// ValidateCreate implements webhook.Validator so a webhook will be registered for the type
-// This function validates the Source resource upon creation.
+// ValidateCreate is a webhook method that validates the Source resource upon creation.
+// It checks that the required fields (Name, ShortName, and Link) are non-empty and that their lengths
+// do not exceed the specified limits. It also ensures that these fields are unique within the namespace.
+//
+// Returns:
+// - admission.Warnings: Returns a list of warnings if applicable
+// - error: Returns an error if validation fails.
 func (r *Source) ValidateCreate() (admission.Warnings, error) {
 	sourcelog.Info("validate create", "name", r.Name)
 	return r.validateSource()
 }
 
-// ValidateUpdate implements webhook.Validator so a webhook will be registered for the type
-// This function validates the Source resource upon update.
+// ValidateUpdate is a webhook method that validates the Source resource upon update.
+// It checks that the updated fields (Name, ShortName, and Link) are still non-empty, their lengths are within limits,
+// and their values are unique within the namespace.
+//
+// Returns:
+// - admission.Warnings: Returns a list of warnings if applicable (currently returns nil).
+// - error: Returns an error if validation fails.
 func (r *Source) ValidateUpdate(old runtime.Object) (admission.Warnings, error) {
 	sourcelog.Info("validate update", "name", r.Name)
 	return r.validateSource()
 }
 
-// ValidateDelete implements webhook.Validator so a webhook will be registered for the type
-// This function validates the Source resource upon deletion.
+// ValidateDelete is a webhook method that validates the Source resource upon deletion.
+//
+// Returns:
+// - admission.Warnings: Returns a list of warnings if applicable
+// - error: Returns an error if validation fails.
 func (r *Source) ValidateDelete() (admission.Warnings, error) {
 	sourcelog.Info("validate delete", "name", r.Name)
 	return nil, nil
 }
 
-// validateSource validates the fields of a Source resource.
-// It ensures that the Name, ShortName, and Link fields are non-empty,
-// the Name and ShortName fields are no longer than 20 characters,
-// and the Link field is a valid URL.
-// It also ensures that these fields are unique within the namespace.
+// validateSource performs the actual validation logic for the Source resource.
+// It ensures that the Name, ShortName, and Link fields are non-empty, their lengths do not exceed 20 characters,
+// and that the Link field contains a valid URL. It also checks that these fields are unique within the namespace.
+//
+// Returns:
+// - admission.Warnings: Returns a list of warnings if applicable (currently returns nil).
+// - error: Returns an error if validation fails.
 func (r *Source) validateSource() (admission.Warnings, error) {
-	if len(r.Spec.Name) == 0 || len(r.Spec.ShortName) == 0 || len(r.Spec.Link) == 0 {
-		return nil, fmt.Errorf("name, short_name, and link fields cannot be empty")
+	var allErrs field.ErrorList
+	var warnings admission.Warnings
+
+	// Check if Name, ShortName, and Link are non-empty
+	if len(r.Spec.Name) == 0 {
+		allErrs = append(allErrs, field.Required(field.NewPath("spec").Child("name"), "name must be present"))
+	}
+	if len(r.Spec.ShortName) == 0 {
+		allErrs = append(allErrs, field.Required(field.NewPath("spec").Child("shortName"), "short_name must be present"))
+	}
+	if len(r.Spec.Link) == 0 {
+		allErrs = append(allErrs, field.Required(field.NewPath("spec").Child("link"), "link must be present"))
 	}
 
-	if len(r.Spec.Name) > 20 || len(r.Spec.ShortName) > 20 {
-		return nil, fmt.Errorf("name and short_name cannot be more than 20 characters")
+	// Check if Name and ShortName exceed the length limit
+	if len(r.Spec.Name) > 20 {
+		allErrs = append(allErrs, field.Invalid(field.NewPath("spec").Child("name"), r.Spec.Name, "name cannot be more than 20 characters"))
+	}
+	if len(r.Spec.ShortName) > 20 {
+		allErrs = append(allErrs, field.Invalid(field.NewPath("spec").Child("shortName"), r.Spec.ShortName, "short_name cannot be more than 20 characters"))
 	}
 
+	// Check if the Link is a valid URL
 	if !isValidURL(r.Spec.Link) {
-		return nil, fmt.Errorf("link field must be a valid URL")
+		allErrs = append(allErrs, field.Invalid(field.NewPath("spec").Child("link"), r.Spec.Link, "link must be a valid URL"))
 	}
 
 	// Check for uniqueness within the namespace
-	return r.checkUniqueFields(SourceClient.Client)
+	if err := r.checkUniqueFields(SourceClient.Client, &allErrs); err != nil {
+		allErrs = append(allErrs, field.InternalError(field.NewPath("spec"), fmt.Errorf("failed to check uniqueness: %v", err)))
+	}
+
+	// If there are accumulated errors, return them as an error
+	if len(allErrs) > 0 {
+		return warnings, errors.NewInvalid(GroupVersion.WithKind("Source").GroupKind(), r.Name, allErrs)
+	}
+
+	return warnings, nil
 }
 
 // isValidURL checks if the provided link is a valid URL.
+// It parses the URL and ensures it has a valid scheme and host.
+//
+// Parameters:
+// - link (string): The URL to be validated.
+//
+// Returns:
+// - bool: Returns true if the URL is valid, false otherwise.
 func isValidURL(link string) bool {
 	u, err := url.Parse(link)
 	return err == nil && u.Scheme != "" && u.Host != ""
 }
 
-// checkUniqueFields ensures that the Name, ShortName, and Link fields are unique within the namespace.
-func (r *Source) checkUniqueFields(cl client.Client) (admission.Warnings, error) {
+// checkUniqueFields checks if the Name, ShortName, and Link fields are unique within the namespace.
+// It lists all Source resources in the namespace and compares their fields with the current Source resource.
+//
+// Parameters:
+// - cl (client.Client): The Kubernetes client used to interact with the cluster.
+// - allErrs (*field.ErrorList): A list of errors to append to if any uniqueness violations are found.
+//
+// Returns:
+// - admission.Warnings: Returns a list of warnings if applicable (currently returns nil).
+// - error: Returns an error if the Name, ShortName, or Link fields are not unique within the namespace.
+func (r *Source) checkUniqueFields(cl client.Client, allErrs *field.ErrorList) error {
 	ctx := context.Background()
 
 	var sources SourceList
 	sourcelog.Info("Listing sources in namespace", "namespace", r.Namespace)
 	if err := cl.List(ctx, &sources, client.InNamespace(r.Namespace)); err != nil {
 		sourcelog.Error(err, "failed to list sources")
-		return nil, err
+		return err
 	}
 
 	sourcelog.Info("Sources retrieved", "count", len(sources.Items))
@@ -115,16 +178,16 @@ func (r *Source) checkUniqueFields(cl client.Client) (admission.Warnings, error)
 		sourcelog.Info("Source found", "name", source.Name, "shortName", source.Spec.ShortName, "link", source.Spec.Link)
 		if source.Name != r.Name {
 			if source.Spec.Name == r.Spec.Name {
-				return nil, fmt.Errorf("name must be unique in the namespace")
+				*allErrs = append(*allErrs, field.Invalid(field.NewPath("spec").Child("name"), r.Spec.Name, "name must be unique in the namespace"))
 			}
 			if source.Spec.ShortName == r.Spec.ShortName {
-				return admission.Warnings{}, fmt.Errorf("short_name must be unique in the namespace")
+				*allErrs = append(*allErrs, field.Invalid(field.NewPath("spec").Child("shortName"), r.Spec.ShortName, "short_name must be unique in the namespace"))
 			}
 			if source.Spec.Link == r.Spec.Link {
-				return nil, fmt.Errorf("link must be unique in the namespace")
+				*allErrs = append(*allErrs, field.Invalid(field.NewPath("spec").Child("link"), r.Spec.Link, "link must be unique in the namespace"))
 			}
 		}
 	}
 
-	return nil, nil
+	return nil
 }
