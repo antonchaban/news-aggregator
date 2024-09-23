@@ -9,6 +9,8 @@
     "go-swag@latest",
     "kubectl@1.30.2",
     "kubebuilder@4.1.0",
-    "gettext@0.21.1"
+    "gettext@0.21.1",
+    "kustomize@5.4.3",
+    "kubernetes-controller-tools@0.16.3"
   ]
 }
