@@ -7,6 +7,8 @@ import (
 	"os"
 	"time"
 
+	// Import all Kubernetes client auth plugins (e.g. Azure, GCP, OIDC, etc.)
+	// to ensure that exec-entrypoint and run can make use of them.
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
 
 	"k8s.io/apimachinery/pkg/runtime"
@@ -48,6 +50,7 @@ func main() {
 	var cfgMapNameSpace string
 	var workingNamespace string
 	var tlsOpts []func(*tls.Config)
+	var workingNamespace string
 
 	flag.StringVar(&metricsAddr, "metrics-bind-address", "0", "The address the metrics endpoint binds to. "+
 		"Use :8443 for HTTPS or :8080 for HTTP, or leave as 0 to disable the metrics service.")
@@ -64,6 +67,7 @@ func main() {
 	flag.StringVar(&cfgMapName, "config-map-name", "feed-group-source", "The name of the ConfigMap that contains feed groups")
 	flag.StringVar(&cfgMapNameSpace, "config-map-namespace", "news-alligator", "The namespace of the ConfigMap that contains feed groups")
 	flag.StringVar(&workingNamespace, "working-namespace", "news-alligator", "The namespace where CRDs are created")
+	flag.StringVar(&workingNamespace, "working-namespace", "news-alligator", "The namespace in which CRDs will be watched")
 	opts := zap.Options{
 		Development: true,
 	}
@@ -97,7 +101,7 @@ func main() {
 	mgr, err := ctrl.NewManager(ctrl.GetConfigOrDie(), ctrl.Options{
 		Scheme:                 scheme,
 		Metrics:                metricsServerOptions,
-		WebhookServer:          webhookServer, // Use the webhook server configured above
+		WebhookServer:          webhookServer,
 		HealthProbeBindAddress: probeAddr,
 		LeaderElection:         enableLeaderElection,
 		LeaderElectionID:       "31e0e430.com.teamdev",
@@ -120,6 +124,7 @@ func main() {
 		Scheme:                      mgr.GetScheme(),
 		HTTPClient:                  httpClient,
 		NewsAggregatorSrcServiceURL: newsAggregatorSrcServiceURL,
+		WorkingNamespace:            workingNamespace,
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "Source")
 		os.Exit(1)

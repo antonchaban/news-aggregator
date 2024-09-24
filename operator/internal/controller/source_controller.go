@@ -25,6 +25,7 @@ type SourceReconciler struct {
 	Scheme                      *runtime.Scheme // Scheme for the reconciler.
 	HTTPClient                  *http.Client    // HTTP client for making external requests.
 	NewsAggregatorSrcServiceURL string          // URL of the news aggregator source service.
+	WorkingNamespace            string          // Namespace in which Sources are maintained.
 }
 
 const (
@@ -271,6 +272,6 @@ func (r *SourceReconciler) updateSourceStatus(ctx context.Context, source *aggre
 func (r *SourceReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&aggregatorv1.Source{}).
-		WithEventFilter(predicates.Source()).
+		WithEventFilter(predicates.Source(r.WorkingNamespace)).
 		Complete(r)
 }
