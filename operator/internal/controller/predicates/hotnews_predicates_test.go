@@ -2,88 +2,128 @@ package predicates
 
 import (
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
-	"k8s.io/apimachinery/pkg/runtime/schema"
 	"sigs.k8s.io/controller-runtime/pkg/event"
 	"testing"
 )
 
 func TestHotNewsPredicates(t *testing.T) {
-	pred := HotNews()
+	namespace := "test-namespace"
+	pred := HotNews(namespace)
 
-	t.Run("CreateFunc", func(t *testing.T) {
+	t.Run("CreateFunc Namespace Match", func(t *testing.T) {
 		obj := &unstructured.Unstructured{}
-		obj.SetGroupVersionKind(schema.GroupVersionKind{
-			Group:   "com.teamdev",
-			Version: "v1",
-			Kind:    "HotNews",
-		})
-
+		obj.SetNamespace(namespace)
 		createEvent := event.CreateEvent{
 			Object: obj,
 		}
 
 		if !pred.Create(createEvent) {
-			t.Errorf("CreateFunc should return true for any create event")
+			t.Errorf("CreateFunc should return true when namespace matches")
 		}
 	})
 
-	t.Run("DeleteFunc", func(t *testing.T) {
+	t.Run("CreateFunc Namespace Mismatch", func(t *testing.T) {
 		obj := &unstructured.Unstructured{}
-		obj.SetGroupVersionKind(schema.GroupVersionKind{
-			Group:   "com.teamdev",
-			Version: "v1",
-			Kind:    "HotNews",
-		})
-
-		deleteEventUnknown := event.DeleteEvent{
-			Object:             obj,
-			DeleteStateUnknown: true,
+		obj.SetNamespace("other-namespace")
+		createEvent := event.CreateEvent{
+			Object: obj,
 		}
 
-		if pred.Delete(deleteEventUnknown) {
-			t.Errorf("DeleteFunc should return false when DeleteStateUnknown is true")
+		if pred.Create(createEvent) {
+			t.Errorf("CreateFunc should return false when namespace does not match")
 		}
+	})
 
-		deleteEventKnown := event.DeleteEvent{
+	t.Run("DeleteFunc Namespace Match", func(t *testing.T) {
+		obj := &unstructured.Unstructured{}
+		obj.SetNamespace(namespace)
+		deleteEvent := event.DeleteEvent{
 			Object:             obj,
 			DeleteStateUnknown: false,
 		}
 
-		if !pred.Delete(deleteEventKnown) {
-			t.Errorf("DeleteFunc should return true when DeleteStateUnknown is false")
+		if !pred.Delete(deleteEvent) {
+			t.Errorf("DeleteFunc should return true when namespace matches and DeleteStateUnknown is false")
 		}
 	})
 
-	t.Run("UpdateFunc", func(t *testing.T) {
+	t.Run("DeleteFunc Namespace Mismatch", func(t *testing.T) {
+		obj := &unstructured.Unstructured{}
+		obj.SetNamespace("other-namespace")
+		deleteEvent := event.DeleteEvent{
+			Object:             obj,
+			DeleteStateUnknown: false,
+		}
+
+		if pred.Delete(deleteEvent) {
+			t.Errorf("DeleteFunc should return false when namespace does not match")
+		}
+	})
+
+	t.Run("DeleteFunc DeleteStateUnknown", func(t *testing.T) {
+		obj := &unstructured.Unstructured{}
+		obj.SetNamespace(namespace)
+		deleteEvent := event.DeleteEvent{
+			Object:             obj,
+			DeleteStateUnknown: true,
+		}
+
+		if pred.Delete(deleteEvent) {
+			t.Errorf("DeleteFunc should return false when DeleteStateUnknown is true")
+		}
+	})
+
+	t.Run("UpdateFunc Namespace Match Generation Changed", func(t *testing.T) {
 		objOld := &unstructured.Unstructured{}
-		objOld.SetGroupVersionKind(schema.GroupVersionKind{
-			Group:   "com.teamdev",
-			Version: "v1",
-			Kind:    "HotNews",
-		})
+		objOld.SetNamespace(namespace)
 		objOld.SetGeneration(1)
 
 		objNew := objOld.DeepCopy()
-		objNew.SetGeneration(1) // Same generation as objOld
-
-		updateEventSameGen := event.UpdateEvent{
-			ObjectOld: objOld,
-			ObjectNew: objNew,
-		}
-
-		if pred.Update(updateEventSameGen) {
-			t.Errorf("UpdateFunc should return false when generations are the same")
-		}
-
 		objNew.SetGeneration(2)
 
-		updateEventNewGen := event.UpdateEvent{
+		updateEvent := event.UpdateEvent{
 			ObjectOld: objOld,
 			ObjectNew: objNew,
 		}
 
-		if !pred.Update(updateEventNewGen) {
-			t.Errorf("UpdateFunc should return true when generations are different")
+		if !pred.Update(updateEvent) {
+			t.Errorf("UpdateFunc should return true when namespace matches and generation has changed")
+		}
+	})
+
+	t.Run("UpdateFunc Namespace Mismatch", func(t *testing.T) {
+		objOld := &unstructured.Unstructured{}
+		objOld.SetNamespace("other-namespace")
+		objOld.SetGeneration(1)
+
+		objNew := objOld.DeepCopy()
+		objNew.SetGeneration(2)
+
+		updateEvent := event.UpdateEvent{
+			ObjectOld: objOld,
+			ObjectNew: objNew,
+		}
+
+		if pred.Update(updateEvent) {
+			t.Errorf("UpdateFunc should return false when namespace does not match")
+		}
+	})
+
+	t.Run("UpdateFunc Generation Unchanged", func(t *testing.T) {
+		objOld := &unstructured.Unstructured{}
+		objOld.SetNamespace(namespace)
+		objOld.SetGeneration(1)
+
+		objNew := objOld.DeepCopy()
+		objNew.SetGeneration(1)
+
+		updateEvent := event.UpdateEvent{
+			ObjectOld: objOld,
+			ObjectNew: objNew,
+		}
+
+		if pred.Update(updateEvent) {
+			t.Errorf("UpdateFunc should return false when generation has not changed")
 		}
 	})
 }

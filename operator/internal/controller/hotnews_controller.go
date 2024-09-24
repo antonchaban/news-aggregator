@@ -405,7 +405,7 @@ func (r *HotNewsReconciler) updateHotNewsStatus(ctx context.Context, hotNews *ag
 func (r *HotNewsReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&aggregatorv1.HotNews{}).
-		WithEventFilter(predicates.HotNews()).
+		WithEventFilter(predicates.HotNews(r.WorkingNamespace)).
 		Watches(
 			&corev1.ConfigMap{},
 			handler.EnqueueRequestsFromMapFunc(r.MapConfigMapToHotNews),
