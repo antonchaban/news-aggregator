@@ -2,6 +2,7 @@ package controller
 
 import (
 	aggregatorv1 "com.teamdev/news-aggregator/api/v1"
+	"com.teamdev/news-aggregator/internal/controller/predicates"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -13,10 +14,8 @@ import (
 	"net/http"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
-	"sigs.k8s.io/controller-runtime/pkg/event"
 	"sigs.k8s.io/controller-runtime/pkg/handler"
 	"sigs.k8s.io/controller-runtime/pkg/log"
-	"sigs.k8s.io/controller-runtime/pkg/predicate"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 	"slices"
 	"strings"
@@ -423,17 +422,7 @@ func (r *HotNewsReconciler) updateHotNewsStatus(ctx context.Context, hotNews *ag
 func (r *HotNewsReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&aggregatorv1.HotNews{}).
-		WithEventFilter(predicate.Funcs{
-			CreateFunc: func(e event.CreateEvent) bool {
-				return true
-			},
-			DeleteFunc: func(e event.DeleteEvent) bool {
-				return !e.DeleteStateUnknown
-			},
-			UpdateFunc: func(e event.UpdateEvent) bool {
-				return e.ObjectNew.GetGeneration() != e.ObjectOld.GetGeneration()
-			},
-		}).
+		WithEventFilter(predicates.HotNews()).
 		Watches(
 			&corev1.ConfigMap{},
 			handler.EnqueueRequestsFromMapFunc(r.MapConfigMapToHotNews),
