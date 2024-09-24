@@ -260,7 +260,7 @@ func (r *SourceReconciler) updateSourceStatus(ctx context.Context, source *aggre
 		Message:        message,
 	}
 
-	source.Status.Conditions = append(source.Status.Conditions, newCondition)
+	source.Status.SetCondition(newCondition)
 	return r.Client.Status().Update(ctx, source)
 }
 

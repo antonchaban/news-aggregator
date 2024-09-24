@@ -90,6 +90,16 @@ type SourceList struct {
 	Items           []Source `json:"items"`
 }
 
+func (s *SourceStatus) SetCondition(condition SourceCondition) {
+	for i, c := range s.Conditions {
+		if c.Type == condition.Type {
+			s.Conditions[i] = condition
+			return
+		}
+	}
+	s.Conditions = append(s.Conditions, condition)
+}
+
 func init() {
 	SchemeBuilder.Register(&Source{}, &SourceList{})
 }
