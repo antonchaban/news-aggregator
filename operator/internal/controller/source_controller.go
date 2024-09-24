@@ -35,6 +35,10 @@ const (
 	ReasonSuccessUpd = "SuccessfulUpdate"              // Reason for a successful update.
 )
 
+// +kubebuilder:rbac:groups=aggregator.com.teamdev,resources=sources,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=aggregator.com.teamdev,resources=sources/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=aggregator.com.teamdev,resources=sources/finalizers,verbs=update
+
 // Reconcile is the main logic for reconciling a Source resource.
 // It handles creating, updating, and deleting sources in the news aggregator service.
 // - Retrieves the Source resource specified in the reconcile request.
