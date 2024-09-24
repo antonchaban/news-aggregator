@@ -144,23 +144,40 @@ var _ = Describe("HotNewsReconciler Tests", func() {
 			Expect(conditions[0].Status).To(Equal(metav1.ConditionTrue))
 		})
 
-		It("should handle reconciliation failure due to missing ConfigMap", func() {
+		It("should parse articles from specified Source, if ConfigMap not presented", func() {
 			fakeClient = fake.NewClientBuilder().
 				WithScheme(scheme.Scheme).
 				WithStatusSubresource(&aggregatorv1.HotNews{}).
 				WithObjects(&hotNews).
 				Build()
 
+			// Create a fake HTTP server to simulate the external service
+			server = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				if strings.Contains(r.URL.String(), "/articles") {
+					articles := []models.Article{
+						{Title: "Breaking News", Link: "http://example.com/article1"},
+						{Title: "More News", Link: "http://example.com/article2"},
+					}
+					respData, err := json.Marshal(articles)
+					Expect(err).NotTo(HaveOccurred())
+					w.WriteHeader(http.StatusOK)
+					w.Write(respData)
+				} else {
+					w.WriteHeader(http.StatusMethodNotAllowed)
+				}
+			}))
+
 			reconciler = controller.HotNewsReconciler{
 				Client:             fakeClient,
 				Scheme:             scheme.Scheme,
-				ArticleSvcURL:      "http://example.com/articles",
+				HTTPClient:         server.Client(),
+				ArticleSvcURL:      server.URL + "/articles",
 				ConfigMapName:      configMap.Name,
 				ConfigMapNamespace: configMap.Namespace,
 			}
 
 			result, err := reconciler.Reconcile(context.TODO(), reconcile.Request{NamespacedName: typeNamespacedName})
-			Expect(err).To(HaveOccurred())
+			Expect(err).NotTo(HaveOccurred())
 			Expect(result.Requeue).To(BeFalse())
 
 			updatedHotNews := &aggregatorv1.HotNews{}
@@ -168,10 +185,10 @@ var _ = Describe("HotNewsReconciler Tests", func() {
 			Expect(err).NotTo(HaveOccurred())
 
 			conditions := updatedHotNews.Status.Conditions
-			Expect(len(conditions)).To(Equal(1))
 			Expect(conditions[0].Type).To(Equal(aggregatorv1.HNewsAdded))
 			Expect(conditions[0].Status).To(Equal(metav1.ConditionFalse))
-			Expect(conditions[0].Reason).To(Equal("ConfigMapNotFound"))
+			Expect(conditions[0].Message).To(Equal("ConfigMap not found, proceeding without feed groups"))
+
 		})
 
 		It("should handle HTTP request failure during reconciliation", func() {

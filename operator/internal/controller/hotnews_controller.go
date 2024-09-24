@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"github.com/sirupsen/logrus"
 	corev1 "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
@@ -132,27 +133,42 @@ func removeOwnerReference(ownerRefs []metav1.OwnerReference, name, kind string) 
 
 // reconcileHotNews performs the actual reconciliation logic for HotNews
 func (r *HotNewsReconciler) reconcileHotNews(ctx context.Context, hotNews *aggregatorv1.HotNews) (ctrl.Result, error) {
-	// Fetch the ConfigMap containing feed groups
 	configMap, err := r.fetchConfigMap(ctx)
 	if err != nil {
-		logrus.Error(err, "Failed to fetch ConfigMap")
-		r.updateStatusCondition(ctx, hotNews, metav1.ConditionFalse, "ConfigMapNotFound", "ConfigMap not found")
-		return ctrl.Result{}, err
+		if errors.IsNotFound(err) {
+			logrus.Warn("ConfigMap not found, proceeding without resolving feed groups")
+			r.updateStatusCondition(ctx, hotNews, metav1.ConditionFalse, "ConfigMapNotFound", "ConfigMap not found, proceeding without feed groups")
+			configMap = nil
+		} else {
+			logrus.Error(err, "Failed to fetch ConfigMap")
+			r.updateStatusCondition(ctx, hotNews, metav1.ConditionFalse, "ConfigMapFetchFailed", "Failed to fetch ConfigMap")
+			return ctrl.Result{}, err
+		}
+
 	}
 
-	// Resolve FeedGroups to actual source names
+	// Combine sources from Spec.Sources and resolved FeedGroups
+	combinedSources := make([]string, 0)
+	combinedSources = append(combinedSources, hotNews.Spec.Sources...)
+
+	// Resolve FeedGroups to actual source names without modifying Spec.Sources
 	if len(hotNews.Spec.FeedGroups) > 0 {
-		resolvedSources := r.resolveFeedGroups(hotNews.Spec.FeedGroups, configMap)
-		hotNews.Spec.Sources = append(hotNews.Spec.Sources, resolvedSources...)
+		if configMap != nil {
+			resolvedSources := r.resolveFeedGroups(hotNews.Spec.FeedGroups, configMap)
+			combinedSources = append(combinedSources, resolvedSources...)
+		} else {
+			logrus.Warn("ConfigMap not available, cannot resolve feed groups")
+			r.updateStatusCondition(ctx, hotNews, metav1.ConditionFalse, "ConfigMapNotFound", "ConfigMap not found, feed groups cannot be resolved")
+		}
 	}
 
-	// Set OwnerReferences for each source using ShortName
-	if err := r.setOwnerReferences(ctx, hotNews, hotNews.Spec.Sources); err != nil {
+	// Set OwnerReferences for each source using combinedSources
+	if err := r.setOwnerReferences(ctx, hotNews, combinedSources); err != nil {
 		return ctrl.Result{}, err
 	}
 
 	// Build query parameters and fetch articles
-	reqURL := fmt.Sprintf("%s?%s", r.ArticleSvcURL, buildQueryParams(hotNews))
+	reqURL := fmt.Sprintf("%s?%s", r.ArticleSvcURL, r.buildQueryParams(hotNews, combinedSources))
 	logrus.Println("Request URL:", reqURL)
 
 	articles, err := r.fetchArticles(reqURL)
@@ -230,7 +246,7 @@ func hasOwnerReference(ownerRefs []metav1.OwnerReference, uid types.UID) bool {
 }
 
 // buildQueryParams constructs the query parameters for the HTTP request.
-func buildQueryParams(hotNews *aggregatorv1.HotNews) string {
+func (r *HotNewsReconciler) buildQueryParams(hotNews *aggregatorv1.HotNews, combinedSources []string) string {
 	params := map[string]string{}
 	if len(hotNews.Spec.Keywords) > 0 {
 		params["keywords"] = strings.Join(hotNews.Spec.Keywords, ",")
@@ -241,8 +257,8 @@ func buildQueryParams(hotNews *aggregatorv1.HotNews) string {
 	if hotNews.Spec.DateEnd != "" {
 		params["date_end"] = hotNews.Spec.DateEnd
 	}
-	if len(hotNews.Spec.Sources) > 0 {
-		params["sources"] = strings.Join(hotNews.Spec.Sources, ",")
+	if len(combinedSources) > 0 {
+		params["sources"] = strings.Join(combinedSources, ",")
 	}
 	return buildQuery(params)
 }

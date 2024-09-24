@@ -2,6 +2,8 @@ package v1
 
 import (
 	"context"
+	"fmt"
+	corev1 "k8s.io/api/core/v1"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -22,7 +24,10 @@ type HotNewsClientWrapper struct {
 // HotNewsClient is a global client wrapper for accessing Kubernetes resources.
 var HotNewsClient HotNewsClientWrapper
 
-const dateFormat = "2006-01-02"
+const (
+	dateFormat             = "2006-01-02"
+	feedGroupConfigMapName = "feed-group-source"
+)
 
 // SetupWebhookWithManager sets up the webhook with the controller manager.
 // It initializes the HotNewsClient and registers the webhook for the HotNews resource.
@@ -87,6 +92,9 @@ func (r *HotNews) validateHotNews() (admission.Warnings, error) {
 	// Validate sources
 	r.validateSrc(r.Spec.Sources, &allErrs)
 
+	// Validate feed groups
+	r.validateFeedGroups(r.Spec.FeedGroups, &allErrs)
+
 	if len(allErrs) > 0 {
 		return nil, errors.NewInvalid(GroupVersion.WithKind("HotNews").GroupKind(), r.Name, allErrs)
 	}
@@ -144,6 +152,29 @@ func (r *HotNews) validateSrc(sources []string, allErrs *field.ErrorList) {
 	for i, source := range r.Spec.Sources {
 		if !validSources[source] {
 			*allErrs = append(*allErrs, field.NotFound(field.NewPath("spec").Child("sources").Index(i), source))
+		}
+	}
+}
+
+// validateFeedGroups validates that the specified feed groups exist in the ConfigMap.
+func (r *HotNews) validateFeedGroups(feedGroups []string, allErrs *field.ErrorList) {
+	if len(feedGroups) == 0 {
+		return
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer cancel()
+	configMap := &corev1.ConfigMap{}
+	err := HotNewsClient.Client.Get(ctx, client.ObjectKey{
+		Namespace: r.Namespace,
+		Name:      feedGroupConfigMapName,
+	}, configMap)
+	if err != nil {
+		*allErrs = append(*allErrs, field.Invalid(field.NewPath("spec").Child("feedGroups"), feedGroups, fmt.Sprintf("unable to fetch ConfigMap %s/%s: %v", r.Namespace, feedGroupConfigMapName, err)))
+		return
+	}
+	for i, group := range feedGroups {
+		if _, found := configMap.Data[group]; !found {
+			*allErrs = append(*allErrs, field.NotFound(field.NewPath("spec").Child("feedGroups").Index(i), group))
 		}
 	}
 }
