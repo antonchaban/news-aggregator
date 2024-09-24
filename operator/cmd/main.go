@@ -46,6 +46,7 @@ func main() {
 	var enableHTTP2 bool
 	var newsAggregatorSrcServiceURL string
 	var tlsOpts []func(*tls.Config)
+	var workingNamespace string
 
 	flag.StringVar(&metricsAddr, "metrics-bind-address", "0", "The address the metrics endpoint binds to. "+
 		"Use :8443 for HTTPS or :8080 for HTTP, or leave as 0 to disable the metrics service.")
@@ -58,6 +59,7 @@ func main() {
 	flag.BoolVar(&enableHTTP2, "enable-http2", false,
 		"If set, HTTP/2 will be enabled for the metrics and webhook servers")
 	flag.StringVar(&newsAggregatorSrcServiceURL, "news-aggregator-src-service-url", "https://news-alligator-service.news-alligator.svc.cluster.local:8443/sources", "The URL of the news aggregator source service")
+	flag.StringVar(&workingNamespace, "working-namespace", "news-alligator", "The namespace in which CRDs will be watched")
 	opts := zap.Options{
 		Development: true,
 	}
@@ -114,6 +116,7 @@ func main() {
 		Scheme:                      mgr.GetScheme(),
 		HTTPClient:                  httpClient,
 		NewsAggregatorSrcServiceURL: newsAggregatorSrcServiceURL,
+		WorkingNamespace:            workingNamespace,
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "Source")
 		os.Exit(1)
