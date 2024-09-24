@@ -343,16 +343,16 @@ func (r *HotNewsReconciler) updateStatusCondition(ctx context.Context, hotNews *
 func (r *HotNewsReconciler) MapConfigMapToHotNews(ctx context.Context, object client.Object) []reconcile.Request {
 	logrus.Println("Mapping ConfigMap to HotNews")
 	var hotNewsList aggregatorv1.HotNewsList
-	if err := r.Client.List(ctx, &hotNewsList, &client.ListOptions{Namespace: r.ConfigMapNamespace}); err != nil {
+	if err := r.Client.List(ctx, &hotNewsList); err != nil {
 		logrus.Errorf("Failed to list HotNews resources: %v", err)
 		return nil
 	}
 
 	var requests []reconcile.Request
-	configMap := object.(*corev1.ConfigMap)
 
 	for _, hotNews := range hotNewsList.Items {
-		if r.shouldReconcileConfigMap(hotNews, configMap) {
+		// If the HotNews uses any feedGroups, we need to reconcile it
+		if len(hotNews.Spec.FeedGroups) > 0 {
 			requests = append(requests, reconcile.Request{
 				NamespacedName: client.ObjectKey{
 					Namespace: hotNews.Namespace,
@@ -364,33 +364,37 @@ func (r *HotNewsReconciler) MapConfigMapToHotNews(ctx context.Context, object cl
 	return requests
 }
 
-// shouldReconcileConfigMap determines if a HotNews resource should be reconciled based on a ConfigMap update.
-func (r *HotNewsReconciler) shouldReconcileConfigMap(hotNews aggregatorv1.HotNews, configMap *corev1.ConfigMap) bool {
-	if r.ConfigMapName == configMap.Name {
-		return true
-	}
-	for _, feedGroup := range hotNews.Spec.FeedGroups {
-		if _, found := configMap.Data[feedGroup]; found {
-			return true
-		}
-	}
-	return false
-}
-
 // MapSourceToHotNews maps Source updates to HotNews resources.
 func (r *HotNewsReconciler) MapSourceToHotNews(ctx context.Context, object client.Object) []reconcile.Request {
 	logrus.Println("Mapping Source to HotNews")
 	source := object.(*aggregatorv1.Source)
 
 	var hotNewsList aggregatorv1.HotNewsList
-	if err := r.Client.List(ctx, &hotNewsList, &client.ListOptions{Namespace: source.Namespace}); err != nil {
+	if err := r.Client.List(ctx, &hotNewsList); err != nil {
 		logrus.Errorf("Failed to list HotNews resources: %v", err)
 		return nil
 	}
 
+	// Fetch the ConfigMap containing feed groups
+	configMap, err := r.fetchConfigMap(ctx)
+	if err != nil {
+		logrus.Warn("ConfigMap not found or error fetching it")
+		configMap = nil // Proceed without ConfigMap
+	}
+
 	var requests []reconcile.Request
 	for _, hotNews := range hotNewsList.Items {
-		if slices.Contains(hotNews.Spec.Sources, source.Spec.ShortName) {
+		// Combine sources from Spec.Sources and resolved FeedGroups
+		combinedSources := make([]string, 0)
+		combinedSources = append(combinedSources, hotNews.Spec.Sources...)
+
+		if len(hotNews.Spec.FeedGroups) > 0 && configMap != nil {
+			resolvedSources := r.resolveFeedGroups(hotNews.Spec.FeedGroups, configMap)
+			combinedSources = append(combinedSources, resolvedSources...)
+		}
+
+		// Check if the updated Source's ShortName is in combinedSources
+		if slices.Contains(combinedSources, source.Spec.ShortName) {
 			requests = append(requests, reconcile.Request{
 				NamespacedName: client.ObjectKey{
 					Namespace: hotNews.Namespace,
