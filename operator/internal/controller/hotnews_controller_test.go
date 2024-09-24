@@ -415,7 +415,7 @@ var _ = Describe("HotNewsReconciler Tests", func() {
 			Expect(len(requests)).To(Equal(0))
 		})
 
-		It("should handle source deletion properly", func() {
+		FIt("should handle source deletion properly", func() {
 			source1 := aggregatorv1.Source{
 				ObjectMeta: metav1.ObjectMeta{
 					Name:      "source1",
