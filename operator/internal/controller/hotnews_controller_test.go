@@ -3,6 +3,7 @@ package controller_test
 import (
 	aggregatorv1 "com.teamdev/news-aggregator/api/v1"
 	"com.teamdev/news-aggregator/internal/controller"
+	"com.teamdev/news-aggregator/internal/controller/models"
 	"context"
 	"encoding/json"
 	. "github.com/onsi/ginkgo/v2"
@@ -103,7 +104,7 @@ var _ = Describe("HotNewsReconciler Tests", func() {
 			// Create a fake HTTP server to simulate the external service
 			server = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				if strings.Contains(r.URL.String(), "/articles") {
-					articles := []controller.Article{
+					articles := []models.Article{
 						{Title: "Breaking News", Link: "http://example.com/article1"},
 						{Title: "More News", Link: "http://example.com/article2"},
 					}
@@ -237,7 +238,7 @@ var _ = Describe("HotNewsReconciler Tests", func() {
 			// Create a fake HTTP server to simulate the external service
 			server = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				if strings.Contains(r.URL.String(), "/articles") {
-					articles := []controller.Article{
+					articles := []models.Article{
 						{Title: "Breaking News", Link: "http://example.com/article1"},
 						{Title: "More News", Link: "http://example.com/article2"},
 					}

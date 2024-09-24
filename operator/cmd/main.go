@@ -46,6 +46,7 @@ func main() {
 	var newsAggregatorServiceURL string
 	var cfgMapName string
 	var cfgMapNameSpace string
+	var workingNamespace string
 	var tlsOpts []func(*tls.Config)
 
 	flag.StringVar(&metricsAddr, "metrics-bind-address", "0", "The address the metrics endpoint binds to. "+
@@ -62,6 +63,7 @@ func main() {
 	flag.StringVar(&newsAggregatorServiceURL, "news-aggregator-service-url", "https://news-alligator-service.news-alligator.svc.cluster.local:8443/articles", "The URL of the news aggregator service")
 	flag.StringVar(&cfgMapName, "config-map-name", "feed-group-source", "The name of the ConfigMap that contains feed groups")
 	flag.StringVar(&cfgMapNameSpace, "config-map-namespace", "news-alligator", "The namespace of the ConfigMap that contains feed groups")
+	flag.StringVar(&workingNamespace, "working-namespace", "news-alligator", "The namespace where CRDs are created")
 	opts := zap.Options{
 		Development: true,
 	}
@@ -135,6 +137,7 @@ func main() {
 		ArticleSvcURL:      newsAggregatorServiceURL,
 		ConfigMapName:      cfgMapName,
 		ConfigMapNamespace: cfgMapNameSpace,
+		WorkingNamespace:   workingNamespace,
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "HotNews")
 		os.Exit(1)
