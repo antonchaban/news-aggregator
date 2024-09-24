@@ -1,6 +1,11 @@
 # operator
 Operator for managing the lifecycle of a custom resource in a Kubernetes cluster. 
-Source resource is a custom resource that is created by the user. The operator watches for the creation/update/deletion of the custom resource and takes appropriate actions in news aggregator service.
+
+Source resource is a custom resource that is created by the user. The operator watches for the creation/update/deletion of the custom resource and 
+takes appropriate actions in news aggregator service.
+
+HotNews resource is a custom resource that is created by the user. The operator watches for the creation/update/deletion of the custom resource and 
+fetches the latest news from the news aggregator service and stores it in the HotNews resource due to specified criteria.
 
 ## Description
 Source CRD is used for creating sources which will be maintained by news aggregator service.
@@ -9,6 +14,25 @@ if a user updates Source - it updates corresponding source in the news-aggregato
 if a user deletes Source - it removes the source from the news-aggregator.
 Current Source statuses are displayed in the Source CRD Status field with last changes timestamp.
 
+HotNews CRD is used for creating hot news which will be maintained by news aggregator service.
+It uses such fields for defining the criteria for fetching news:
+```go
+type HotNewsSpec struct {
+	// - Keywords: A list of keywords to filter news, must be always required.
+	Keywords []string `json:"keywords"`
+	// - DateStart: The start date for the news filter, can be empty.
+	DateStart string `json:"date_start,omitempty"`
+	// - DateEnd: The end date for the news filter, can be empty.
+	DateEnd string `json:"date_end,omitempty"`
+	// - Sources: All source names in the current namespace, if empty, will watch ALL available feeds. This should be names of Source resources.
+	Sources []string `json:"sources,omitempty"`
+	// - FeedGroups: Available sections of feeds from the 'feed-group-source' ConfigMap.
+	FeedGroups []string `json:"feed_groups,omitempty"`
+	// - SummaryConfig: Configuration for how the status will show the summary of observed hot news.
+	SummaryConfig SummaryConfig `json:"summary_config"`
+}
+```
+Then all the news that matches the criteria will be stored in the HotNews status field.
 
 ## Getting Started
 

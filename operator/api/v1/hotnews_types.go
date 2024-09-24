@@ -22,28 +22,28 @@ import (
 
 // HotNewsSpec defines the desired state of HotNews
 // Fields:
-// - Keywords: A list of keywords to filter news, must be always required.
-// - DateStart: The start date for the news filter, can be empty.
-// - DateEnd: The end date for the news filter, can be empty.
-// - Sources: All source names in the current namespace, if empty, will watch ALL available feeds. This should be names of Source resources.
-// - FeedGroups: Available sections of feeds from the 'feed-group-source' ConfigMap.
-// - SummaryConfig: Configuration for how the status will show the summary of observed hot news.
 type HotNewsSpec struct {
-	Keywords      []string      `json:"keywords"`
-	DateStart     string        `json:"date_start,omitempty"`
-	DateEnd       string        `json:"date_end,omitempty"`
-	Sources       []string      `json:"sources,omitempty"`
-	FeedGroups    []string      `json:"feed_groups,omitempty"`
+	// - Keywords: A list of keywords to filter news, must be always required.
+	Keywords []string `json:"keywords"`
+	// - DateStart: The start date for the news filter, can be empty.
+	DateStart string `json:"date_start,omitempty"`
+	// - DateEnd: The end date for the news filter, can be empty.
+	DateEnd string `json:"date_end,omitempty"`
+	// - Sources: All source names in the current namespace, if empty, will watch ALL available feeds. This should be names of Source resources.
+	Sources []string `json:"sources,omitempty"`
+	// - FeedGroups: Available sections of feeds from the 'feed-group-source' ConfigMap.
+	FeedGroups []string `json:"feed_groups,omitempty"`
+	// - SummaryConfig: Configuration for how the status will show the summary of observed hot news.
 	SummaryConfig SummaryConfig `json:"summary_config"`
 }
 
 // SummaryConfig defines the summary configuration
-// Fields:
-// - TitlesCount: The number of article titles to include in the summary.
 type SummaryConfig struct {
+	// - TitlesCount: The number of article titles to include in the summary.
 	TitlesCount int `json:"titles_count"`
 }
 
+// HNewsConditionType is a type to define the condition type for HotNews.
 type HNewsConditionType string
 
 const (
@@ -59,16 +59,18 @@ type HotNewsCondition struct {
 	Message        string                 `json:"message,omitempty"`
 }
 
-// HotNewsStatus defines the observed state of HotNews
-// Fields:
-// - ArticlesCount: The count of articles by the criteria.
-// - NewsLink: A link to the news-aggregator HTTPS server to get all news by the criteria in JSON format.
-// - ArticlesTitles: The first 'spec.summaryConfig.titlesCount' article titles, sorted by feed name.
+// HotNewsStatus shows info about the HotNews resource, such
+// as the count of articles, a link to the news-aggregator HTTPS server,
+// the first specified amount of article titles, and conditions.
 type HotNewsStatus struct {
-	ArticlesCount  int                `json:"articles_count,omitempty"`
-	NewsLink       string             `json:"news_link,omitempty"`
-	ArticlesTitles []string           `json:"articles_titles,omitempty"`
-	Conditions     []HotNewsCondition `json:"conditions,omitempty"`
+	// - ArticlesCount: The count of articles by the criteria.
+	ArticlesCount int `json:"articles_count,omitempty"`
+	// - NewsLink: A link to the news-aggregator HTTPS server to get all news by the criteria in JSON format.
+	NewsLink string `json:"news_link,omitempty"`
+	// - ArticlesTitles: The first 'spec.summaryConfig.titlesCount' article titles, sorted by feed name.
+	ArticlesTitles []string `json:"articles_titles,omitempty"`
+	// - Conditions: Conditions of the HotNews resource.
+	Conditions []HotNewsCondition `json:"conditions,omitempty"`
 }
 
 // +kubebuilder:object:root=true
@@ -87,11 +89,20 @@ type HotNews struct {
 // +kubebuilder:object:root=true
 
 // HotNewsList contains a list of HotNews
-// It is a list of HotNews resources.
 type HotNewsList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
 	Items           []HotNews `json:"items"`
+}
+
+func (s *HotNewsStatus) SetCondition(condition HotNewsCondition) {
+	for i, c := range s.Conditions {
+		if c.Type == condition.Type {
+			s.Conditions[i] = condition
+			return
+		}
+	}
+	s.Conditions = append(s.Conditions, condition)
 }
 
 func init() {

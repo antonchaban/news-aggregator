@@ -42,36 +42,41 @@ spec:
             description: |-
               HotNewsSpec defines the desired state of HotNews
               Fields:
-              - Keywords: A list of keywords to filter news, must be always required.
-              - DateStart: The start date for the news filter, can be empty.
-              - DateEnd: The end date for the news filter, can be empty.
-              - Sources: All source names in the current namespace, if empty, will watch ALL available feeds. This should be names of Source resources.
-              - FeedGroups: Available sections of feeds from the 'feed-group-source' ConfigMap.
-              - SummaryConfig: Configuration for how the status will show the summary of observed hot news.
             properties:
               date_end:
+                description: '- DateEnd: The end date for the news filter, can be
+                  empty.'
                 type: string
               date_start:
+                description: '- DateStart: The start date for the news filter, can
+                  be empty.'
                 type: string
               feed_groups:
+                description: '- FeedGroups: Available sections of feeds from the ''feed-group-source''
+                  ConfigMap.'
                 items:
                   type: string
                 type: array
               keywords:
+                description: '- Keywords: A list of keywords to filter news, must
+                  be always required.'
                 items:
                   type: string
                 type: array
               sources:
+                description: '- Sources: All source names in the current namespace,
+                  if empty, will watch ALL available feeds. This should be names of
+                  Source resources.'
                 items:
                   type: string
                 type: array
               summary_config:
-                description: |-
-                  SummaryConfig defines the summary configuration
-                  Fields:
-                  - TitlesCount: The number of article titles to include in the summary.
+                description: '- SummaryConfig: Configuration for how the status will
+                  show the summary of observed hot news.'
                 properties:
                   titles_count:
+                    description: '- TitlesCount: The number of article titles to include
+                      in the summary.'
                     type: integer
                 required:
                 - titles_count
@@ -82,19 +87,21 @@ spec:
             type: object
           status:
             description: |-
-              HotNewsStatus defines the observed state of HotNews
-              Fields:
-              - ArticlesCount: The count of articles by the criteria.
-              - NewsLink: A link to the news-aggregator HTTPS server to get all news by the criteria in JSON format.
-              - ArticlesTitles: The first 'spec.summaryConfig.titlesCount' article titles, sorted by feed name.
+              HotNewsStatus shows info about the HotNews resource, such
+              as the count of articles, a link to the news-aggregator HTTPS server,
+              the first specified amount of article titles, and conditions.
             properties:
               articles_count:
+                description: '- ArticlesCount: The count of articles by the criteria.'
                 type: integer
               articles_titles:
+                description: '- ArticlesTitles: The first ''spec.summaryConfig.titlesCount''
+                  article titles, sorted by feed name.'
                 items:
                   type: string
                 type: array
               conditions:
+                description: '- Conditions: Conditions of the HotNews resource.'
                 items:
                   properties:
                     lastUpdateTime:
@@ -107,6 +114,8 @@ spec:
                     status:
                       type: string
                     type:
+                      description: HNewsConditionType is a type to define the condition
+                        type for HotNews.
                       type: string
                   required:
                   - status
@@ -114,6 +123,8 @@ spec:
                   type: object
                 type: array
               news_link:
+                description: '- NewsLink: A link to the news-aggregator HTTPS server
+                  to get all news by the criteria in JSON format.'
                 type: string
             type: object
         type: object
