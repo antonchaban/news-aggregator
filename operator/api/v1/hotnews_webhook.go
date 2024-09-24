@@ -2,30 +2,32 @@ package v1
 
 import (
 	"context"
+	"time"
+
 	"github.com/sirupsen/logrus"
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/validation/field"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
-	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
-	"time"
 )
 
-// log is for logging in this package.
-var hotnewslog = logf.Log.WithName("hotnews-resource")
-
+// HotNewsClientWrapper wraps a Kubernetes client for use in validation functions.
 type HotNewsClientWrapper struct {
 	Client client.Client
 }
 
+// HotNewsClient is a global client wrapper for accessing Kubernetes resources.
 var HotNewsClient HotNewsClientWrapper
 
-// SetupWebhookWithManager will setup the manager to manage the webhooks
+const dateFormat = "2006-01-02"
+
+// SetupWebhookWithManager sets up the webhook with the controller manager.
+// It initializes the HotNewsClient and registers the webhook for the HotNews resource.
 func (r *HotNews) SetupWebhookWithManager(mgr ctrl.Manager) error {
-	HotNewsClient.Client = mgr.GetClient() // Set the global k8sClient variable
+	HotNewsClient.Client = mgr.GetClient() // Set the global client
 	return ctrl.NewWebhookManagedBy(mgr).
 		For(r).
 		Complete()
@@ -35,9 +37,10 @@ func (r *HotNews) SetupWebhookWithManager(mgr ctrl.Manager) error {
 
 var _ webhook.Defaulter = &HotNews{}
 
-// Default implements webhook.Defaulter so a webhook will be registered for the type
+// Default sets default values for the HotNews resource.
+// It ensures that TitlesCount is set to a default value if not provided.
 func (r *HotNews) Default() {
-	hotnewslog.Info("default", "name", r.Name)
+	logrus.Info("default", "name", r.Name)
 	if r.Spec.SummaryConfig.TitlesCount == 0 {
 		r.Spec.SummaryConfig.TitlesCount = 10
 	}
@@ -47,35 +50,31 @@ func (r *HotNews) Default() {
 
 var _ webhook.Validator = &HotNews{}
 
-// ValidateCreate implements webhook.Validator so a webhook will be registered for the type
+// ValidateCreate validates the creation of a HotNews resource.
+// It ensures that all required fields are present and valid.
 func (r *HotNews) ValidateCreate() (admission.Warnings, error) {
-	hotnewslog.Info("validate create", "name", r.Name)
-
-	if warnings, err := r.validateHotNews(); err != nil {
-		return warnings, err
-	}
-	return nil, nil
+	logrus.Info("validate create", "name", r.Name)
+	return r.validateHotNews()
 }
 
-// ValidateUpdate implements webhook.Validator so a webhook will be registered for the type
+// ValidateUpdate validates the update of a HotNews resource.
+// It ensures that all required fields remain valid after an update.
 func (r *HotNews) ValidateUpdate(old runtime.Object) (admission.Warnings, error) {
-	hotnewslog.Info("validate update", "name", r.Name)
-
-	if warnings, err := r.validateHotNews(); err != nil {
-		return warnings, err
-	}
-	return nil, nil
+	logrus.Info("validate update", "name", r.Name)
+	return r.validateHotNews()
 }
 
-// ValidateDelete implements webhook.Validator so a webhook will be registered for the type
+// ValidateDelete validates the deletion of a HotNews resource.
+// Currently, it does not perform any validation on deletion.
 func (r *HotNews) ValidateDelete() (admission.Warnings, error) {
-	hotnewslog.Info("validate delete", "name", r.Name)
+	logrus.Info("validate delete", "name", r.Name)
 	return nil, nil
 }
 
+// validateHotNews performs validation on the HotNews resource.
+// It checks that required fields are present and valid.
 func (r *HotNews) validateHotNews() (admission.Warnings, error) {
 	var allErrs field.ErrorList
-	var warnings admission.Warnings
 
 	// Ensure keywords are present
 	if len(r.Spec.Keywords) == 0 {
@@ -85,65 +84,66 @@ func (r *HotNews) validateHotNews() (admission.Warnings, error) {
 	// Validate dates
 	r.validateDate(r.Spec.DateStart, r.Spec.DateEnd, &allErrs)
 
-	err := r.validateSrc(r.Spec.Sources, &allErrs)
-	if err != nil {
-		allErrs = append(allErrs, field.Invalid(field.NewPath("spec").Child("sources"), r.Spec.Sources, "error in sources"))
-	}
+	// Validate sources
+	r.validateSrc(r.Spec.Sources, &allErrs)
 
 	if len(allErrs) > 0 {
-		return warnings, errors.NewInvalid(GroupVersion.WithKind("HotNews").GroupKind(), r.Name, allErrs)
+		return nil, errors.NewInvalid(GroupVersion.WithKind("HotNews").GroupKind(), r.Name, allErrs)
 	}
-
 	return nil, nil
 }
 
+// validateDate validates the dateStart and dateEnd fields.
+// It ensures that the dates are in the correct format and that dateStart is before dateEnd.
 func (r *HotNews) validateDate(dateStart, dateEnd string, allErrs *field.ErrorList) {
-	if dateStart != "" && dateEnd != "" {
-		startTime, err := time.Parse("2006-01-02", dateStart)
+	var startTime, endTime time.Time
+	var err error
+
+	if dateStart != "" {
+		startTime, err = time.Parse(dateFormat, dateStart)
 		if err != nil {
 			*allErrs = append(*allErrs, field.Invalid(field.NewPath("spec").Child("dateStart"), dateStart, "invalid date format, should be YYYY-MM-DD"))
 		}
-		endTime, err := time.Parse("2006-01-02", dateEnd)
+	}
+
+	if dateEnd != "" {
+		endTime, err = time.Parse(dateFormat, dateEnd)
 		if err != nil {
 			*allErrs = append(*allErrs, field.Invalid(field.NewPath("spec").Child("dateEnd"), dateEnd, "invalid date format, should be YYYY-MM-DD"))
 		}
-		if err == nil && startTime.After(endTime) {
+	}
+
+	// If both dates are provided and valid, check their order
+	if !startTime.IsZero() && !endTime.IsZero() {
+		if startTime.After(endTime) {
 			*allErrs = append(*allErrs, field.Invalid(field.NewPath("spec").Child("dateStart"), dateStart, "dateStart must be before dateEnd"))
 		}
-	} else {
-		if dateStart != "" {
-			if _, err := time.Parse("2006-01-02", dateStart); err != nil {
-				*allErrs = append(*allErrs, field.Invalid(field.NewPath("spec").Child("dateStart"), dateStart, "invalid date format, should be YYYY-MM-DD"))
-			}
-		}
-		if dateEnd != "" {
-			if _, err := time.Parse("2006-01-02", dateEnd); err != nil {
-				*allErrs = append(*allErrs, field.Invalid(field.NewPath("spec").Child("dateEnd"), dateEnd, "invalid date format, should be YYYY-MM-DD"))
-			}
-		}
 	}
-
 }
 
-func (r *HotNews) validateSrc(sources []string, allErrs *field.ErrorList) error {
-	if len(sources) > 0 {
+// validateSrc validates the sources field.
+// It ensures that the specified sources exist in the cluster.
+func (r *HotNews) validateSrc(sources []string, allErrs *field.ErrorList) {
+	if len(sources) <= 0 {
+		return
+	}
 
-		sourceList := &SourceList{}
-		err := HotNewsClient.Client.List(context.Background(), sourceList, &client.ListOptions{Namespace: r.Namespace})
-		logrus.Println("SourceList: ", sourceList.Items)
-		if err != nil {
-			*allErrs = append(*allErrs, field.Invalid(field.NewPath("spec").Child("sources"), r.Spec.Sources, "unable to fetch SourceList"))
-		} else {
-			validSources := make(map[string]bool)
-			for _, source := range sourceList.Items {
-				validSources[source.Spec.ShortName] = true
-			}
-			for i, source := range r.Spec.Sources {
-				if !validSources[source] {
-					*allErrs = append(*allErrs, field.NotFound(field.NewPath("spec").Child("sources").Index(i), source))
-				}
-			}
+	sourceList := &SourceList{}
+	err := HotNewsClient.Client.List(context.Background(), sourceList, &client.ListOptions{Namespace: r.Namespace})
+	logrus.Println("SourceList: ", sourceList.Items)
+	if err != nil {
+		*allErrs = append(*allErrs, field.Invalid(field.NewPath("spec").Child("sources"), r.Spec.Sources, "unable to fetch SourceList"))
+		return
+	}
+
+	validSources := make(map[string]bool)
+	for _, source := range sourceList.Items {
+		validSources[source.Spec.ShortName] = true
+	}
+
+	for i, source := range r.Spec.Sources {
+		if !validSources[source] {
+			*allErrs = append(*allErrs, field.NotFound(field.NewPath("spec").Child("sources").Index(i), source))
 		}
 	}
-	return nil
 }
