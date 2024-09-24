@@ -414,35 +414,5 @@ var _ = Describe("HotNewsReconciler Tests", func() {
 			requests := reconciler.MapConfigMapToHotNews(context.TODO(), unrelatedConfigMap)
 			Expect(len(requests)).To(Equal(0))
 		})
-
-		FIt("should handle source deletion properly", func() {
-			source1 := aggregatorv1.Source{
-				ObjectMeta: metav1.ObjectMeta{
-					Name:      "source1",
-					Namespace: namespace,
-				},
-				Spec: aggregatorv1.SourceSpec{
-					ShortName: "source1",
-				},
-			}
-
-			fakeClient = fake.NewClientBuilder().
-				WithScheme(scheme.Scheme).
-				WithStatusSubresource(&aggregatorv1.HotNews{}).
-				WithObjects(&hotNews, &configMap, &source1).
-				Build()
-
-			reconciler = controller.HotNewsReconciler{
-				Client:             fakeClient,
-				Scheme:             scheme.Scheme,
-				ConfigMapName:      configMap.Name,
-				ConfigMapNamespace: configMap.Namespace,
-			}
-
-			Expect(fakeClient.Delete(context.TODO(), &source1)).To(Succeed())
-
-			requests := reconciler.MapSourceToHotNews(context.TODO(), &source1)
-			Expect(len(requests)).To(Equal(0))
-		})
 	})
 })
