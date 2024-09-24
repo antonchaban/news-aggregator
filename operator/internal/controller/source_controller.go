@@ -3,6 +3,7 @@ package controller
 import (
 	"bytes"
 	aggregatorv1 "com.teamdev/news-aggregator/api/v1"
+	"com.teamdev/news-aggregator/internal/controller/predicates"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -13,8 +14,6 @@ import (
 	"net/http"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
-	"sigs.k8s.io/controller-runtime/pkg/event"
-	"sigs.k8s.io/controller-runtime/pkg/predicate"
 	"slices"
 	"time"
 )
@@ -54,14 +53,7 @@ func (r *SourceReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 	}
 
 	// Handle resource finalization logic
-	if source.ObjectMeta.DeletionTimestamp.IsZero() {
-		if !slices.Contains(source.Finalizers, SrcFinalizer) {
-			source.Finalizers = append(source.Finalizers, SrcFinalizer)
-			if err := r.Client.Update(ctx, &source); err != nil {
-				return ctrl.Result{}, err
-			}
-		}
-	} else {
+	if !source.ObjectMeta.DeletionTimestamp.IsZero() {
 		if slices.Contains(source.Finalizers, SrcFinalizer) {
 			if _, err := r.deleteSource(source.Status.ID); err != nil {
 				return ctrl.Result{}, err
@@ -75,15 +67,21 @@ func (r *SourceReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 		return ctrl.Result{}, nil
 	}
 
+	if !slices.Contains(source.Finalizers, SrcFinalizer) {
+		source.Finalizers = append(source.Finalizers, SrcFinalizer)
+		if err := r.Client.Update(ctx, &source); err != nil {
+			return ctrl.Result{}, err
+		}
+	}
+
 	logrus.Info("Reconciling Source", "ID", source.Status.ID, "Name", source.Spec.Name, "Link", source.Spec.Link)
 
 	// If source ID is not set, create a new source in the news aggregator
 	if source.Status.ID == 0 {
 		return r.createSource(ctx, &source)
-	} else {
-		// Update the existing source in the news aggregator
-		return r.updateSource(ctx, source.Status.ID, &source)
 	}
+	// Update the existing source in the news aggregator
+	return r.updateSource(ctx, source.Status.ID, &source)
 }
 
 // createSource creates a new source in the news aggregator service due to a new Source resource being created.
@@ -266,20 +264,10 @@ func (r *SourceReconciler) updateSourceStatus(ctx context.Context, source *aggre
 
 // SetupWithManager sets up the controller with the Manager and uses predicates to filter events.
 // - Registers the controller with the Manager for the Source resource.
-// - Adds event filters to optimize reconciliation by reacting only to relevant events.
+// - Adds event filters to optimize reconciliation using the Source predicates.
 func (r *SourceReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&aggregatorv1.Source{}).
-		WithEventFilter(predicate.Funcs{
-			CreateFunc: func(e event.CreateEvent) bool {
-				return true // Trigger reconciliation on create events
-			},
-			DeleteFunc: func(e event.DeleteEvent) bool {
-				return !e.DeleteStateUnknown // Trigger reconciliation if the delete state is known
-			},
-			UpdateFunc: func(e event.UpdateEvent) bool {
-				return e.ObjectNew.GetGeneration() != e.ObjectOld.GetGeneration() // Trigger reconciliation on spec changes
-			},
-		}).
+		WithEventFilter(predicates.Source()).
 		Complete(r)
 }
