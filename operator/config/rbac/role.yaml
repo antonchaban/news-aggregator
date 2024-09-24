@@ -31,6 +31,32 @@ rules:
   - patch
   - update
 - apiGroups:
+  - aggregator.com.teamdev
+  resources:
+  - sources
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - aggregator.com.teamdev
+  resources:
+  - sources/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - aggregator.com.teamdev
+  resources:
+  - sources/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
   - ""
   resources:
   - configmaps
