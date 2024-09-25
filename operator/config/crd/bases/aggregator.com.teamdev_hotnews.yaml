@@ -40,43 +40,59 @@ spec:
             type: object
           spec:
             description: |-
-              HotNewsSpec defines the desired state of HotNews
-              Fields:
+              HotNewsSpec defines the desired state of HotNews.
+              It contains specifications for filtering news articles based on keywords,
+              dates, sources, and feed groups, as well as summary configuration.
             properties:
               date_end:
-                description: '- DateEnd: The end date for the news filter, can be
-                  empty.'
+                description: |-
+                  DateEnd is the end date for filtering news articles.
+                  Format must be YYYY-MM-DD.
+                  This field is optional.
+                pattern: ^\d{4}-\d{2}-\d{2}$
                 type: string
               date_start:
-                description: '- DateStart: The start date for the news filter, can
-                  be empty.'
+                description: |-
+                  DateStart is the start date for filtering news articles.
+                  Format must be YYYY-MM-DD.
+                  This field is optional.
+                pattern: ^\d{4}-\d{2}-\d{2}$
                 type: string
               feed_groups:
-                description: '- FeedGroups: Available sections of feeds from the ''feed-group-source''
-                  ConfigMap.'
+                description: |-
+                  FeedGroups specifies the feed groups defined in the 'feed-group-source' ConfigMap
+                  in the 'news-alligator' namespace. The feeds in these groups will be used to filter news.
+                  The specified feed groups must exist in the ConfigMap; otherwise, validation will fail.
+                  This field is optional.
                 items:
                   type: string
                 type: array
               keywords:
-                description: '- Keywords: A list of keywords to filter news, must
-                  be always required.'
+                description: |-
+                  Keywords is a list of keywords to filter news articles.
+                  This field is required and must contain at least one keyword.
                 items:
                   type: string
+                minItems: 1
                 type: array
               sources:
-                description: '- Sources: All source names in the current namespace,
-                  if empty, will watch ALL available feeds. This should be names of
-                  Source resources.'
+                description: |-
+                  Sources specifies the short names of Source resources to filter news from.
+                  These should match the 'spec.shortName' field of Source resources in the same namespace.
+                  If empty, all available feeds will be used.
+                  This field is optional.
                 items:
                   type: string
                 type: array
               summary_config:
-                description: '- SummaryConfig: Configuration for how the status will
-                  show the summary of observed hot news.'
+                description: SummaryConfig defines the configuration for the summary
+                  in the status.
                 properties:
                   titles_count:
-                    description: '- TitlesCount: The number of article titles to include
-                      in the summary.'
+                    description: |-
+                      TitlesCount is the number of article titles to include in the summary.
+                      Must be greater than or equal to 1.
+                      Defaults to 10 if not specified.
                     type: integer
                 required:
                 - titles_count
@@ -87,9 +103,9 @@ spec:
             type: object
           status:
             description: |-
-              HotNewsStatus shows info about the HotNews resource, such
-              as the count of articles, a link to the news-aggregator HTTPS server,
-              the first specified amount of article titles, and conditions.
+              HotNewsStatus represents the observed state of HotNews.
+              It contains information about the count of articles, a link to the news aggregator,
+              a summary of article titles, and conditions.
             properties:
               articles_count:
                 description: '- ArticlesCount: The count of articles by the criteria.'
@@ -103,6 +119,8 @@ spec:
               conditions:
                 description: '- Conditions: Conditions of the HotNews resource.'
                 items:
+                  description: HotNewsCondition represents the condition of a HotNews
+                    resource.
                   properties:
                     lastUpdateTime:
                       format: date-time
@@ -114,8 +132,8 @@ spec:
                     status:
                       type: string
                     type:
-                      description: HNewsConditionType is a type to define the condition
-                        type for HotNews.
+                      description: HNewsConditionType is a string representing the
+                        condition type for HotNews.
                       type: string
                   required:
                   - status
