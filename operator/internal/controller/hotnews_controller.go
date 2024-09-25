@@ -2,6 +2,7 @@ package controller
 
 import (
 	aggregatorv1 "com.teamdev/news-aggregator/api/v1"
+	"com.teamdev/news-aggregator/internal/controller/handlers"
 	"com.teamdev/news-aggregator/internal/controller/models"
 	"com.teamdev/news-aggregator/internal/controller/predicates"
 	"context"
@@ -17,7 +18,6 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/handler"
-	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 	"slices"
 	"strings"
 	"time"
@@ -339,73 +339,6 @@ func (r *HotNewsReconciler) updateStatusCondition(ctx context.Context, hotNews *
 	}
 }
 
-// MapConfigMapToHotNews maps ConfigMap updates to HotNews resources.
-func (r *HotNewsReconciler) MapConfigMapToHotNews(ctx context.Context, object client.Object) []reconcile.Request {
-	logrus.Println("Mapping ConfigMap to HotNews")
-	var hotNewsList aggregatorv1.HotNewsList
-	if err := r.Client.List(ctx, &hotNewsList); err != nil {
-		logrus.Errorf("Failed to list HotNews resources: %v", err)
-		return nil
-	}
-
-	var requests []reconcile.Request
-
-	for _, hotNews := range hotNewsList.Items {
-		// If the HotNews uses any feedGroups, we need to reconcile it
-		if len(hotNews.Spec.FeedGroups) > 0 {
-			requests = append(requests, reconcile.Request{
-				NamespacedName: client.ObjectKey{
-					Namespace: hotNews.Namespace,
-					Name:      hotNews.Name,
-				},
-			})
-		}
-	}
-	return requests
-}
-
-// MapSourceToHotNews maps Source updates to HotNews resources.
-func (r *HotNewsReconciler) MapSourceToHotNews(ctx context.Context, object client.Object) []reconcile.Request {
-	logrus.Println("Mapping Source to HotNews")
-	source := object.(*aggregatorv1.Source)
-
-	var hotNewsList aggregatorv1.HotNewsList
-	if err := r.Client.List(ctx, &hotNewsList); err != nil {
-		logrus.Errorf("Failed to list HotNews resources: %v", err)
-		return nil
-	}
-
-	// Fetch the ConfigMap containing feed groups
-	configMap, err := r.fetchConfigMap(ctx)
-	if err != nil {
-		logrus.Warn("ConfigMap not found or error fetching it")
-		configMap = nil // Proceed without ConfigMap
-	}
-
-	var requests []reconcile.Request
-	for _, hotNews := range hotNewsList.Items {
-		// Combine sources from Spec.Sources and resolved FeedGroups
-		combinedSources := make([]string, 0)
-		combinedSources = append(combinedSources, hotNews.Spec.Sources...)
-
-		if len(hotNews.Spec.FeedGroups) > 0 && configMap != nil {
-			resolvedSources := r.resolveFeedGroups(hotNews.Spec.FeedGroups, configMap)
-			combinedSources = append(combinedSources, resolvedSources...)
-		}
-
-		// Check if the updated Source's ShortName is in combinedSources
-		if slices.Contains(combinedSources, source.Spec.ShortName) {
-			requests = append(requests, reconcile.Request{
-				NamespacedName: client.ObjectKey{
-					Namespace: hotNews.Namespace,
-					Name:      hotNews.Name,
-				},
-			})
-		}
-	}
-	return requests
-}
-
 // SetupWithManager sets up the controller with the Manager.
 func (r *HotNewsReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
@@ -413,11 +346,15 @@ func (r *HotNewsReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		WithEventFilter(predicates.HotNews(r.WorkingNamespace)).
 		Watches(
 			&corev1.ConfigMap{},
-			handler.EnqueueRequestsFromMapFunc(r.MapConfigMapToHotNews),
+			handler.EnqueueRequestsFromMapFunc(
+				handlers.MapConfigMapToHotNews(r.Client, r.ConfigMapName, r.ConfigMapNamespace),
+			),
 		).
 		Watches(
 			&aggregatorv1.Source{},
-			handler.EnqueueRequestsFromMapFunc(r.MapSourceToHotNews),
+			handler.EnqueueRequestsFromMapFunc(
+				handlers.MapSourceToHotNews(r.Client, r.fetchConfigMap),
+			),
 		).
 		Complete(r)
 }
