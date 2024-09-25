@@ -2,7 +2,6 @@ version: '3'
 
 env:
   DOCKER_IMAGE_NAME: antohachaban/news-alligator-web
-  POSTGRES_PASSWORD: qwerty
 
 vars:
   Namespace: "news-alligator"
@@ -83,19 +82,6 @@ tasks:
       - docker pull postgres
     desc: Pull the PostgreSQL Docker image
     internal: true
-
-  run-postgres:
-    deps: [install-postgres]
-    env:
-      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
-    cmds:
-      - docker run --name=news-alligator-db -e POSTGRES_PASSWORD={{.POSTGRES_PASSWORD}} -p 5436:5432 -d --rm postgres
-    desc: Run the PostgreSQL container
-
-  init-db:
-    cmds:
-      - migrate -path ./schema -database 'postgres://postgres:qwerty@0.0.0.0:5436/postgres?sslmode=disable' up
-    desc: Initialize the database
 
   format:
     cmds:
@@ -227,12 +213,15 @@ tasks:
       - mv *.tgz manifest/helm/charts
 
   installChart:
+    vars:
+      DB_PASSWORD: '{{.DB_PASSWORD | default "admin"}}'
+      DB_USER: '{{.DB_USER | default "admin"}}'
     deps:
         - createChart
         - create-namespace
     desc: "Install Helm chart on Kubernetes cluster"
     cmds:
-      - helm upgrade --install news-alligator manifest/helm/charts/news-alligator-*.tgz --namespace {{.Namespace}}
+      - helm upgrade --install news-alligator manifest/helm/charts/news-alligator-*.tgz --namespace {{.Namespace}} --set postgresql.auth.username={{.DB_USER}} --set postgresql.auth.password={{.DB_PASSWORD}}
 
   uninstallChart:
     desc: "Uninstall Helm chart from Kubernetes cluster"
