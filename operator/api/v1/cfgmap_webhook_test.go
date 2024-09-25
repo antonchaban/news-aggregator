@@ -24,7 +24,6 @@ var _ = Describe("CfgMapValidatorWebHook Tests", func() {
 		configMap  *corev1.ConfigMap
 		namespace  = "news-alligator"
 	)
-
 	BeforeEach(func() {
 		scheme = runtime.NewScheme()
 		Expect(corev1.AddToScheme(scheme)).To(Succeed())
@@ -39,6 +38,7 @@ var _ = Describe("CfgMapValidatorWebHook Tests", func() {
 		validator = &v1.CfgMapValidatorWebHook{
 			Client:          fakeClient,
 			CfgMapNamespace: namespace,
+			CfgMapName:      "test-configmap",
 		}
 
 		configMap = &corev1.ConfigMap{
@@ -74,10 +74,10 @@ var _ = Describe("CfgMapValidatorWebHook Tests", func() {
 		})
 
 		It("should fail validation when ConfigMap has no data", func() {
-			configMap.Data = nil
+			configMap.Data = map[string]string{}
 			warnings, err := validator.ValidateCreate(ctx, configMap)
 			Expect(err).To(HaveOccurred())
-			Expect(err.Error()).To(ContainSubstring("ConfigMap test-configmap has no data"))
+			Expect(err.Error()).To(ContainSubstring("ConfigMap news-alligator/test-configmap has no data"))
 			Expect(warnings).To(BeNil())
 		})
 
@@ -85,10 +85,16 @@ var _ = Describe("CfgMapValidatorWebHook Tests", func() {
 			configMap.Data = map[string]string{
 				"source1": "NonExistentSource",
 			}
-
 			warnings, err := validator.ValidateCreate(ctx, configMap)
 			Expect(err).To(HaveOccurred())
-			Expect(err.Error()).To(ContainSubstring("Source NonExistentSource not found"))
+			Expect(err.Error()).To(ContainSubstring(`Invalid value: "NonExistentSource": source not found`))
+			Expect(warnings).To(BeNil())
+		})
+
+		It("should skip validation for non-target ConfigMap", func() {
+			configMap.Name = "other-configmap"
+			warnings, err := validator.ValidateCreate(ctx, configMap)
+			Expect(err).ToNot(HaveOccurred())
 			Expect(warnings).To(BeNil())
 		})
 	})
@@ -107,7 +113,7 @@ var _ = Describe("CfgMapValidatorWebHook Tests", func() {
 
 			warnings, err := validator.ValidateUpdate(ctx, configMap, configMap)
 			Expect(err).To(HaveOccurred())
-			Expect(err.Error()).To(ContainSubstring("Source InvalidSource not found"))
+			Expect(err.Error()).To(ContainSubstring(`Invalid value: "InvalidSource": source not found`))
 			Expect(warnings).To(BeNil())
 		})
 	})
@@ -118,13 +124,32 @@ var _ = Describe("CfgMapValidatorWebHook Tests", func() {
 			Expect(err).ToNot(HaveOccurred())
 			Expect(warnings).To(BeNil())
 		})
+
+		It("should fail deletion, because configmap is in use", func() {
+			hotNews := &v1.HotNews{
+				ObjectMeta: metav1.ObjectMeta{
+					Namespace: namespace,
+					Name:      "hot-news",
+				},
+				Spec: v1.HotNewsSpec{
+					FeedGroups: []string{"source1"},
+				},
+			}
+			Expect(fakeClient.Create(ctx, hotNews)).To(Succeed())
+
+			warnings, err := validator.ValidateDelete(ctx, configMap)
+			Expect(err).To(HaveOccurred())
+			Expect(err.Error()).To(ContainSubstring("Cannot delete ConfigMap news-alligator/test-configmap because HotNews news-alligator/hot-news depends on it"))
+			Expect(warnings).To(BeNil())
+		})
+
 	})
 
 	Context("validate function", func() {
 		It("should return error when passed object is not a ConfigMap", func() {
 			warnings, err := validator.ValidateCreate(ctx, &corev1.Pod{})
 			Expect(err).To(HaveOccurred())
-			Expect(err.Error()).To(ContainSubstring("expected a Config Map but got a *v1.Pod"))
+			Expect(err.Error()).To(ContainSubstring("expected a ConfigMap but got a *v1.Pod"))
 			Expect(warnings).To(BeNil())
 		})
 
@@ -132,15 +157,14 @@ var _ = Describe("CfgMapValidatorWebHook Tests", func() {
 			configMap.Data = map[string]string{}
 			warnings, err := validator.ValidateCreate(ctx, configMap)
 			Expect(err).To(HaveOccurred())
-			Expect(err.Error()).To(ContainSubstring("has no data"))
+			Expect(err.Error()).To(ContainSubstring("ConfigMap news-alligator/test-configmap has no data"))
 			Expect(warnings).To(BeNil())
 		})
 
-		It("should fail validation when source list cannot be retrieved", func() {
-			validator.CfgMapNamespace = "invalid-namespace"
+		It("should skip validation when ConfigMap is not the target one", func() {
+			validator.CfgMapName = "other-configmap"
 			warnings, err := validator.ValidateCreate(ctx, configMap)
-			Expect(err).To(HaveOccurred())
-			Expect(err.Error()).To(ContainSubstring("validation failed"))
+			Expect(err).ToNot(HaveOccurred())
 			Expect(warnings).To(BeNil())
 		})
 	})
