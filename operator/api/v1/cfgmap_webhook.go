@@ -15,7 +15,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )
 
-// +kubebuilder:webhook:path=/validate--v1-configmap,mutating=false,failurePolicy=fail,sideEffects=None,groups="",resources=configmaps,verbs=create;update,versions=v1,name=vconfigmap.kb.io,admissionReviewVersions=v1
+// +kubebuilder:webhook:path=/validate--v1-configmap,mutating=false,failurePolicy=fail,sideEffects=None,groups="",resources=configmaps,verbs=create;update;delete,versions=v1,name=vconfigmap.kb.io,admissionReviewVersions=v1
 
 // CfgMapValidatorWebHook validates a specific ConfigMap.
 type CfgMapValidatorWebHook struct {
@@ -37,8 +37,37 @@ func (v *CfgMapValidatorWebHook) ValidateUpdate(ctx context.Context, oldObj, new
 }
 
 // ValidateDelete function for validating the deletion of the ConfigMap.
+// ValidateDelete validates the deletion of the ConfigMap.
+// It prevents deletion if there are any HotNews resources that depend on it.
 func (v *CfgMapValidatorWebHook) ValidateDelete(ctx context.Context, obj runtime.Object) (admission.Warnings, error) {
-	// No validation needed on delete
+	logrus.Println("Validating ConfigMap Delete")
+	cm, ok := obj.(*corev1.ConfigMap)
+	if !ok {
+		return nil, fmt.Errorf("expected a ConfigMap but got a %T", obj)
+	}
+
+	// Check if the ConfigMap is for feed-groups before validating
+	if cm.Name != v.CfgMapName || cm.Namespace != v.CfgMapNamespace {
+		logrus.Printf("ConfigMap %s/%s is not the target ConfigMap; skipping delete validation", cm.Namespace, cm.Name)
+		return nil, nil
+	}
+
+	logrus.Printf("Validating deletion of ConfigMap %s/%s", cm.Namespace, cm.Name)
+
+	var hotNewsList HotNewsList
+	if err := v.Client.List(ctx, &hotNewsList); err != nil {
+		logrus.Errorf("Failed to list HotNews resources: %v", err)
+		return nil, fmt.Errorf("failed to list HotNews resources: %v", err)
+	}
+
+	// Check if any HotNews resource depends on this ConfigMap
+	for _, hotNews := range hotNewsList.Items {
+		if len(hotNews.Spec.FeedGroups) > 0 {
+			// HotNews depends on the ConfigMap
+			errMsg := fmt.Sprintf("Cannot delete ConfigMap %s/%s because HotNews %s/%s depends on it", cm.Namespace, cm.Name, hotNews.Namespace, hotNews.Name)
+			return nil, fmt.Errorf(errMsg)
+		}
+	}
 	return nil, nil
 }
 

@@ -124,6 +124,25 @@ var _ = Describe("CfgMapValidatorWebHook Tests", func() {
 			Expect(err).ToNot(HaveOccurred())
 			Expect(warnings).To(BeNil())
 		})
+
+		It("should fail deletion, because configmap is in use", func() {
+			hotNews := &v1.HotNews{
+				ObjectMeta: metav1.ObjectMeta{
+					Namespace: namespace,
+					Name:      "hot-news",
+				},
+				Spec: v1.HotNewsSpec{
+					FeedGroups: []string{"source1"},
+				},
+			}
+			Expect(fakeClient.Create(ctx, hotNews)).To(Succeed())
+
+			warnings, err := validator.ValidateDelete(ctx, configMap)
+			Expect(err).To(HaveOccurred())
+			Expect(err.Error()).To(ContainSubstring("Cannot delete ConfigMap news-alligator/test-configmap because HotNews news-alligator/hot-news depends on it"))
+			Expect(warnings).To(BeNil())
+		})
+
 	})
 
 	Context("validate function", func() {
