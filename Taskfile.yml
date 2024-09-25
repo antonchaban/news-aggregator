@@ -233,7 +233,7 @@ tasks:
       - createChart
     desc: "Install Helm chart on Kubernetes cluster"
     cmds:
-      - helm upgrade --install news-alligator manifest/helm/charts/antohachaban-news-alligator-chart-*.tgz --namespace {{.Namespace}} --set aws.accessKeyId={{.ACCESS_KEY_ID}} --set aws.secretAccessKey={{.SECRET_ACCESS_KEY}} --set postgresql.auth.username={{.DB_USER}} --set postgresql.auth.password={{.DB_PASSWORD}}
+      - helm upgrade --install news-alligator oci://{{.ACCOUNT_ID}}.dkr.ecr.{{.REGION}}.amazonaws.com/antohachaban-news-alligator-chart --namespace {{.Namespace}} --set aws.accessKeyId={{.ACCESS_KEY_ID}} --set aws.secretAccessKey={{.SECRET_ACCESS_KEY}} --set postgresql.auth.username={{.DB_USER}} --set postgresql.auth.password={{.DB_PASSWORD}}
 
 
   uninstallChart:
