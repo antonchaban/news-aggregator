@@ -24,7 +24,7 @@ metadata:
   name: fox-source
   namespace: news-alligator
 spec:
-  name: "FOX NEWS2"
+  name: "FOX NEWS"
   link: "https://moxie.foxnews.com/google-publisher/world.xml"
   short_name: "foxnews"
 ---

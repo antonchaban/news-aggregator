@@ -10,10 +10,10 @@ ecrOperatorSecretName: "ecr-operator-secret"
 
 tlsSecretName: "teamdev-tls-secret"
 certvalues:
-  commonName: "https://teamdev.com/"
+  commonName: "https://news-alligator-service.news-alligator.svc.cluster.local"
   duration: "8760h"
-  organization: "Team Dev"
-  dnsName: "teamdev.com"
+  organization: "News Alligator"
+  dnsName: "news-alligator-service.news-alligator.svc.cluster.local"
 
 # Resource requests and limits for the application container
 resources:

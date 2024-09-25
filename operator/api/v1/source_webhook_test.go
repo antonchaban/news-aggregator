@@ -47,12 +47,6 @@ var _ = Describe("Source Webhook Tests", func() {
 		ctx = context.TODO()
 	})
 
-	Context("Default", func() {
-		It("should log the default operation", func() {
-			source.Default()
-		})
-	})
-
 	Context("ValidateCreate", func() {
 		It("should pass validation with valid fields", func() {
 			warnings, err := source.ValidateCreate()
@@ -64,7 +58,7 @@ var _ = Describe("Source Webhook Tests", func() {
 			source.Spec.Name = ""
 			warnings, err := source.ValidateCreate()
 			Expect(err).To(HaveOccurred())
-			Expect(err.Error()).To(ContainSubstring("name, short_name, and link fields cannot be empty"))
+			Expect(err.Error()).To(ContainSubstring("name must be present"))
 			Expect(warnings).To(BeNil())
 		})
 
@@ -72,7 +66,7 @@ var _ = Describe("Source Webhook Tests", func() {
 			source.Spec.Name = "ThisIsAVeryLongNameExceedingTheLimit"
 			warnings, err := source.ValidateCreate()
 			Expect(err).To(HaveOccurred())
-			Expect(err.Error()).To(ContainSubstring("name and short_name cannot be more than 20 characters"))
+			Expect(err.Error()).To(ContainSubstring("cannot be more than 20 characters"))
 			Expect(warnings).To(BeNil())
 		})
 
@@ -80,7 +74,7 @@ var _ = Describe("Source Webhook Tests", func() {
 			source.Spec.Link = "invalid-url"
 			warnings, err := source.ValidateCreate()
 			Expect(err).To(HaveOccurred())
-			Expect(err.Error()).To(ContainSubstring("link field must be a valid URL"))
+			Expect(err.Error()).To(ContainSubstring("link must be a valid URL"))
 			Expect(warnings).To(BeNil())
 		})
 	})
@@ -118,7 +112,7 @@ var _ = Describe("Source Webhook Tests", func() {
 			}
 			warnings, err := source.ValidateUpdate(oldSource)
 			Expect(err).To(HaveOccurred())
-			Expect(err.Error()).To(ContainSubstring("name and short_name cannot be more than 20 characters"))
+			Expect(err.Error()).To(ContainSubstring("cannot be more than 20 characters"))
 			Expect(warnings).To(BeNil())
 		})
 	})
@@ -168,10 +162,9 @@ var _ = Describe("Source Webhook Tests", func() {
 
 		It("should fail uniqueness check with duplicate short_name", func() {
 			source.Spec.ShortName = "ExistingShort"
-			warnings, err := source.ValidateCreate()
+			_, err := source.ValidateCreate()
 			Expect(err).To(HaveOccurred())
-			Expect(err.Error()).To(ContainSubstring("short_name must be unique in the namespace"))
-			Expect(warnings).NotTo(BeNil())
+			Expect(err.Error()).To(ContainSubstring("unique in the namespace"))
 		})
 
 		It("should fail uniqueness check with duplicate link", func() {

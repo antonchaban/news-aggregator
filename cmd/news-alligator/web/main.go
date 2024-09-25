@@ -85,17 +85,12 @@ func main() {
 
 	logrus.Print("news-alligator 🐊 started")
 
-	//newScheduler := scheduler.NewScheduler(articleService, sourceService)
-	//newScheduler.Start()
-
 	// Wait for a signal to quit
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
 	<-quit
 
 	logrus.Print("news-alligator 🐊 shutting down")
-
-	//newScheduler.Stop()
 
 	// Retrieve all articles before shutting down
 	articles, err := articleService.GetAll()

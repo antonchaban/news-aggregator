@@ -593,6 +593,102 @@
         }
       }
     },
+    "kubernetes-controller-tools@0.16.3": {
+      "last_modified": "2024-09-20T05:11:28Z",
+      "resolved": "github:NixOS/nixpkgs/79454ee9aacc9714653a4e7eb2a52b717728caff#kubernetes-controller-tools",
+      "source": "devbox-search",
+      "version": "0.16.3",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/24sqlf1gyalqyk2snz3z8v1anf93dlhv-controller-tools-0.16.3",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/24sqlf1gyalqyk2snz3z8v1anf93dlhv-controller-tools-0.16.3"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/gvazic2i7321i6sydf5n2akx5d8wda1k-controller-tools-0.16.3",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/gvazic2i7321i6sydf5n2akx5d8wda1k-controller-tools-0.16.3"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/gskss3768r1xy2c2z92pyc74xghhz60d-controller-tools-0.16.3",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/gskss3768r1xy2c2z92pyc74xghhz60d-controller-tools-0.16.3"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/hk41w7aqqmv0r86ajsvj534ppxxk9gj6-controller-tools-0.16.3",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/hk41w7aqqmv0r86ajsvj534ppxxk9gj6-controller-tools-0.16.3"
+        }
+      }
+    },
+    "kustomize@5.4.3": {
+      "last_modified": "2024-09-10T15:01:03Z",
+      "resolved": "github:NixOS/nixpkgs/5ed627539ac84809c78b2dd6d26a5cebeb5ae269#kustomize",
+      "source": "devbox-search",
+      "version": "5.4.3",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/cj6162hcll6jw4lp0cvlh78jlwb42kvc-kustomize-5.4.3",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/cj6162hcll6jw4lp0cvlh78jlwb42kvc-kustomize-5.4.3"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/bfz8np8k8l4xn6qq4qacwcqgmnx57vy7-kustomize-5.4.3",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/bfz8np8k8l4xn6qq4qacwcqgmnx57vy7-kustomize-5.4.3"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/fklmq6hmq8fq5ggxk59yrqhqrjkpb5nn-kustomize-5.4.3",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/fklmq6hmq8fq5ggxk59yrqhqrjkpb5nn-kustomize-5.4.3"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/1xp4g0r29lkd2c8f3qmhw3flv873z20q-kustomize-5.4.3",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/1xp4g0r29lkd2c8f3qmhw3flv873z20q-kustomize-5.4.3"
+        }
+      }
+    },
     "mockgen@latest": {
       "last_modified": "2024-07-07T07:43:47Z",
       "resolved": "github:NixOS/nixpkgs/b60793b86201040d9dee019a05089a9150d08b5b#mockgen",
