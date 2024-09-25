@@ -213,12 +213,15 @@ tasks:
       - mv *.tgz manifest/helm/charts
 
   installChart:
+    vars:
+      DB_PASSWORD: '{{.DB_PASSWORD | default "admin"}}'
+      DB_USER: '{{.DB_USER | default "admin"}}'
     deps:
         - createChart
         - create-namespace
     desc: "Install Helm chart on Kubernetes cluster"
     cmds:
-      - helm upgrade --install news-alligator manifest/helm/charts/news-alligator-*.tgz --namespace {{.Namespace}}
+      - helm upgrade --install news-alligator manifest/helm/charts/news-alligator-*.tgz --namespace {{.Namespace}} --set postgresql.auth.username={{.DB_USER}} --set postgresql.auth.password={{.DB_PASSWORD}}
 
   uninstallChart:
     desc: "Uninstall Helm chart from Kubernetes cluster"
