@@ -2,12 +2,10 @@ version: '3'
 
 vars:
   IMG: "antohachaban/alligator-operator:0.2.4"
-  ENVTEST_K8S_VERSION: "1.30.0"
   CONTAINER_TOOL: "docker"
   KUBECTL: "kubectl"
   KUSTOMIZE_VERSION: "v5.4.2"
   CONTROLLER_TOOLS_VERSION: "v0.15.0"
-  ENVTEST_VERSION: "release-0.18"
   GOLANGCI_LINT_VERSION: "v1.59.1"
   PLATFORMS: "linux/arm64,linux/amd64,linux/s390x,linux/ppc64le"
   ignore_not_found: "false"
@@ -58,36 +56,6 @@ tasks:
     cmds:
       - "go vet ./..."
 
-  test:
-    desc: "Run tests."
-    cmds:
-      - |
-        LOCALBIN=$(pwd)/bin
-        ENVTEST=$LOCALBIN/setup-envtest
-        KUBEBUILDER_ASSETS="$($ENVTEST use {{.ENVTEST_K8S_VERSION}} --bin-dir $LOCALBIN -p path)" \
-        go test $(go list ./... | grep -v /e2e) -coverprofile cover.out
-
-  test-e2e:
-    desc: "Run the e2e tests against a Kind k8s instance that is spun up."
-    cmds:
-      - "go test ./test/e2e/ -v -ginkgo.v"
-
-  lint:
-    desc: "Run golangci-lint linter"
-    cmds:
-      - |
-        LOCALBIN=$(pwd)/bin
-        GOLANGCI_LINT=$LOCALBIN/golangci-lint
-        $GOLANGCI_LINT run
-
-  lint-fix:
-    desc: "Run golangci-lint linter and perform fixes"
-    cmds:
-      - |
-        LOCALBIN=$(pwd)/bin
-        GOLANGCI_LINT=$LOCALBIN/golangci-lint
-        $GOLANGCI_LINT run --fix
-
   build:
     desc: "Build manager binary."
     cmds:
@@ -96,15 +64,6 @@ tasks:
       - task: fmt
       - task: vet
       - "go build -o bin/manager cmd/main.go"
-
-  run:
-    desc: "Run a controller from your host."
-    cmds:
-      - task: manifests
-      - task: generate
-      - task: fmt
-      - task: vet
-      - "go run ./cmd/main.go"
 
   docker-build:
     desc: "Build docker image with the manager."
@@ -115,28 +74,6 @@ tasks:
     desc: "Push docker image with the manager."
     cmds:
       - "{{.CONTAINER_TOOL}} push {{.IMG}}"
-
-  docker-buildx:
-    desc: "Build and push docker image for the manager for cross-platform support."
-    cmds:
-      - |
-        sed -e '1 s/^FROM/FROM --platform=$${BUILDPLATFORM}/; t' -e '1,// s//FROM --platform=$${BUILDPLATFORM}/' Dockerfile > Dockerfile.cross
-        {{.CONTAINER_TOOL}} buildx create --name operator-builder
-        {{.CONTAINER_TOOL}} buildx use operator-builder
-        {{.CONTAINER_TOOL}} buildx build --push --platform={{.PLATFORMS}} --tag {{.IMG}} -f Dockerfile.cross .
-        {{.CONTAINER_TOOL}} buildx rm operator-builder
-        rm Dockerfile.cross
-
-  build-installer:
-    desc: "Generate a consolidated YAML with CRDs and deployment."
-    cmds:
-      - task: manifests
-      - task: generate
-      - task: kustomize
-      - |
-        mkdir -p dist
-        cd config/manager && {{.KUSTOMIZE}} edit set image controller={{.IMG}}
-        {{.KUSTOMIZE}} build config/default > dist/install.yaml
 
   install:
     desc: "Install CRDs into the K8s cluster specified in ~/.kube/config."
@@ -197,29 +134,3 @@ tasks:
           mv $LOCALBIN/controller-gen $LOCALBIN/controller-gen-{{.CONTROLLER_TOOLS_VERSION}}; \
         fi
         ln -sf $LOCALBIN/controller-gen-{{.CONTROLLER_TOOLS_VERSION}} $LOCALBIN/controller-gen
-
-  envtest:
-    desc: "Download setup-envtest locally if necessary."
-    cmds:
-      - |
-        LOCALBIN=$(pwd)/bin
-        if [ ! -f "$LOCALBIN/setup-envtest-{{.ENVTEST_VERSION}}"]; then \
-          echo "Downloading setup-envtest"; \
-          rm -f "$LOCALBIN/setup-envtest" || true; \
-          GOBIN=$LOCALBIN go install sigs.k8s.io/controller-runtime/tools/setup-envtest@{{.ENVTEST_VERSION}} ;\
-          mv $LOCALBIN/setup-envtest $LOCALBIN/setup-envtest-{{.ENVTEST_VERSION}}; \
-        fi
-        ln -sf $LOCALBIN/setup-envtest-{{.ENVTEST_VERSION}} $LOCALBIN/setup-envtest
-
-  golangci-lint:
-    desc: "Download golangci-lint locally if necessary."
-    cmds:
-      - |
-        LOCALBIN=$(pwd)/bin
-        if [ ! -f "$LOCALBIN/golangci-lint-{{.GOLANGCI_LINT_VERSION}}"]; then \
-          echo "Downloading golangci-lint"; \
-          rm -f "$LOCALBIN/golangci-lint" || true; \
-          GOBIN=$LOCALBIN go install github.com/golangci/golangci-lint/cmd/golangci-lint@{{.GOLANGCI_LINT_VERSION}} ;\
-          mv $LOCALBIN/golangci-lint $LOCALBIN/golangci-lint-{{.GOLANGCI_LINT_VERSION}}; \
-        fi
-        ln -sf $LOCALBIN/golangci-lint-{{.GOLANGCI_LINT_VERSION}} $LOCALBIN/golangci-lint
