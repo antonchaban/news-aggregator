@@ -27,11 +27,11 @@ import (
 type HotNewsReconciler struct {
 	Client             client.Client   // Client for interacting with the Kubernetes API.
 	Scheme             *runtime.Scheme // Scheme for the reconciler.
-	HTTPClient         *http.Client    // HTTP client for making external requests
-	ArticleSvcURL      string          // URL of the news aggregator source service
-	ConfigMapName      string          // Name of the ConfigMap that contains feed groups
-	ConfigMapNamespace string          // Namespace of the ConfigMap
-	WorkingNamespace   string          // Namespace where CRDs are created
+	HTTPClient         *http.Client    // HTTP client for making external requests.
+	ArticleSvcURL      string          // URL of the news aggregator service.
+	ConfigMapName      string          // Name of the ConfigMap that contains feed groups.
+	ConfigMapNamespace string          // Namespace of the ConfigMap.
+	WorkingNamespace   string          // Namespace where CRDs are created.
 }
 
 const HotNewsFinalizer = "hotnews.finalizers.teamdev.com"
@@ -43,10 +43,9 @@ const HotNewsFinalizer = "hotnews.finalizers.teamdev.com"
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.
-// Modify the Reconcile function to compare the state specified by
-// the HotNews object against the actual cluster state, and then
-// perform operations to make the cluster state reflect the state specified by
-// the user.
+// It receives specified HotNews resource and
+// tries to receive articles from the news aggregator service due to specified parameters.
+// If resource is being deleted, it removes owner references from the sources and removes finalizer.
 func (r *HotNewsReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	logrus.Println("Reconciling HotNews")
 	var hotNews aggregatorv1.HotNews
@@ -71,6 +70,8 @@ func (r *HotNewsReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 	return r.reconcileHotNews(ctx, &hotNews)
 }
 
+// Manages the addition and removal of the finalizer on the HotNews resource.
+// Ensures that owner references are cleaned up before the resource is deleted.
 func (r *HotNewsReconciler) handleFinalizer(ctx context.Context, hotNews *aggregatorv1.HotNews) (bool, error) {
 	if !hotNews.ObjectMeta.DeletionTimestamp.IsZero() {
 		// The object is being deleted
@@ -98,6 +99,8 @@ func (r *HotNewsReconciler) handleFinalizer(ctx context.Context, hotNews *aggreg
 	return false, nil
 }
 
+// Removes the owner reference to the HotNews resource from all Source resources in the namespace.
+// Ensures that Source resources are not left with dangling owner references after the HotNews resource is deleted.
 func (r *HotNewsReconciler) deleteOwnerReferences(ctx context.Context, namespace, hotNewsName string) error {
 	var sources aggregatorv1.SourceList
 	if err := r.Client.List(ctx, &sources, &client.ListOptions{Namespace: namespace}); err != nil {
@@ -119,7 +122,7 @@ func (r *HotNewsReconciler) deleteOwnerReferences(ctx context.Context, namespace
 	return nil
 }
 
-// removeOwnerReference removes a specific owner reference from the list.
+// Utility function to remove a specific owner reference from a slice of owner references.
 func removeOwnerReference(ownerRefs []metav1.OwnerReference, name, kind string) []metav1.OwnerReference {
 	var updatedRefs []metav1.OwnerReference
 	for _, ref := range ownerRefs {
@@ -131,7 +134,8 @@ func removeOwnerReference(ownerRefs []metav1.OwnerReference, name, kind string) 
 	return updatedRefs
 }
 
-// reconcileHotNews performs the actual reconciliation logic for HotNews
+// Performs the main reconciliation logic for the HotNews resource.
+// Resolves feed groups, sets owner references, fetches articles, and updates the status.
 func (r *HotNewsReconciler) reconcileHotNews(ctx context.Context, hotNews *aggregatorv1.HotNews) (ctrl.Result, error) {
 	configMap, err := r.fetchConfigMap(ctx)
 	if err != nil {
@@ -185,7 +189,7 @@ func (r *HotNewsReconciler) reconcileHotNews(ctx context.Context, hotNews *aggre
 	return ctrl.Result{}, nil
 }
 
-// fetchConfigMap retrieves the ConfigMap containing feed groups.
+// Retrieves the ConfigMap that contains feed group definitions.
 func (r *HotNewsReconciler) fetchConfigMap(ctx context.Context) (*corev1.ConfigMap, error) {
 	configMap := &corev1.ConfigMap{}
 	err := r.Client.Get(ctx, client.ObjectKey{Namespace: r.ConfigMapNamespace, Name: r.ConfigMapName}, configMap)
@@ -195,7 +199,8 @@ func (r *HotNewsReconciler) fetchConfigMap(ctx context.Context) (*corev1.ConfigM
 	return configMap, nil
 }
 
-// setOwnerReferences sets OwnerReferences for Sources based on ShortNames.
+// Sets the HotNews resource as an owner reference on the relevant Source resources.
+// Ensures that the Source resources are properly tracked and cannot be deleted while the HotNews resource exists.
 func (r *HotNewsReconciler) setOwnerReferences(ctx context.Context, hotNews *aggregatorv1.HotNews, sources []string) error {
 	// Fetch all sources once
 	var sourceList aggregatorv1.SourceList
@@ -263,7 +268,7 @@ func (r *HotNewsReconciler) buildQueryParams(hotNews *aggregatorv1.HotNews, comb
 	return buildQuery(params)
 }
 
-// buildQuery builds a query string from a map of parameters.
+// Converts a map of query parameters into a URL-encoded query string.
 func buildQuery(params map[string]string) string {
 	var query []string
 	for k, v := range params {
@@ -272,7 +277,7 @@ func buildQuery(params map[string]string) string {
 	return strings.Join(query, "&")
 }
 
-// resolveFeedGroups resolves feed groups to feed names using the ConfigMap.
+// Resolves feed group names to actual source names using the data in the ConfigMap.
 func (r *HotNewsReconciler) resolveFeedGroups(feedGroups []string, configMap *corev1.ConfigMap) []string {
 	var feedNames []string
 	for _, group := range feedGroups {
@@ -283,7 +288,7 @@ func (r *HotNewsReconciler) resolveFeedGroups(feedGroups []string, configMap *co
 	return feedNames
 }
 
-// fetchArticles fetches articles from the given URL.
+// Fetches articles from the news aggregator service using the constructed URL.
 func (r *HotNewsReconciler) fetchArticles(url string) ([]models.Article, error) {
 	resp, err := r.HTTPClient.Get(url)
 	if err != nil {
@@ -300,14 +305,14 @@ func (r *HotNewsReconciler) fetchArticles(url string) ([]models.Article, error) 
 	return articles, nil
 }
 
-// updateHotNewsStatus updates the HotNews status with articles information.
+// Updates the HotNews status fields with information about the articles retrieved.
 func (r *HotNewsReconciler) updateHotNewsStatus(hotNews *aggregatorv1.HotNews, articles []models.Article, reqURL string) {
 	hotNews.Status.ArticlesCount = len(articles)
 	hotNews.Status.NewsLink = reqURL
 	hotNews.Status.ArticlesTitles = getTitles(articles, hotNews.Spec.SummaryConfig.TitlesCount)
 }
 
-// getTitles extracts the titles of the articles.
+// Extracts the titles of a specified number of articles.
 func getTitles(articles []models.Article, count int) []string {
 	titles := make([]string, 0, count)
 	for i, article := range articles {
@@ -319,7 +324,7 @@ func getTitles(articles []models.Article, count int) []string {
 	return titles
 }
 
-// updateStatusCondition updates the HotNews status condition.
+// Updates the Conditions field in the HotNews status with the provided condition.
 func (r *HotNewsReconciler) updateStatusCondition(ctx context.Context, hotNews *aggregatorv1.HotNews, status metav1.ConditionStatus, reason, message string) {
 	conditionType := aggregatorv1.HNewsUpdated
 	if len(hotNews.Status.Conditions) == 0 {
