@@ -2,6 +2,9 @@ package controller
 
 import (
 	aggregatorv1 "com.teamdev/news-aggregator/api/v1"
+	"com.teamdev/news-aggregator/internal/controller/handlers"
+	"com.teamdev/news-aggregator/internal/controller/models"
+	"com.teamdev/news-aggregator/internal/controller/predicates"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -10,14 +13,11 @@ import (
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/apimachinery/pkg/types"
 	"net/http"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
-	"sigs.k8s.io/controller-runtime/pkg/event"
 	"sigs.k8s.io/controller-runtime/pkg/handler"
-	"sigs.k8s.io/controller-runtime/pkg/log"
-	"sigs.k8s.io/controller-runtime/pkg/predicate"
-	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 	"slices"
 	"strings"
 	"time"
@@ -25,30 +25,16 @@ import (
 
 // HotNewsReconciler reconciles a HotNews object
 type HotNewsReconciler struct {
-	Client             client.Client
-	Scheme             *runtime.Scheme
-	HTTPClient         *http.Client // HTTP client for making external requests
-	ArticleSvcURL      string       // URL of the news aggregator source service
-	ConfigMapName      string       // Name of the ConfigMap that contains feed groups
-	ConfigMapNamespace string       // Namespace of the ConfigMap
+	Client             client.Client   // Client for interacting with the Kubernetes API.
+	Scheme             *runtime.Scheme // Scheme for the reconciler.
+	HTTPClient         *http.Client    // HTTP client for making external requests.
+	ArticleSvcURL      string          // URL of the news aggregator service.
+	ConfigMapName      string          // Name of the ConfigMap that contains feed groups.
+	ConfigMapNamespace string          // Namespace of the ConfigMap.
+	WorkingNamespace   string          // Namespace where CRDs are created.
 }
 
 const HotNewsFinalizer = "hotnews.finalizers.teamdev.com"
-
-type Article struct {
-	Id          int       `json:"Id"`
-	Title       string    `json:"Title"`
-	Description string    `json:"Description"`
-	Link        string    `json:"Link"`
-	Source      Source    `json:"Source"`
-	PubDate     time.Time `json:"PubDate"`
-}
-type Source struct {
-	Id        int    `json:"id"`
-	Name      string `json:"name"`
-	Link      string `json:"link"`
-	ShortName string `json:"short_name"`
-}
 
 // +kubebuilder:rbac:groups=aggregator.com.teamdev,resources=hotnews,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=aggregator.com.teamdev,resources=hotnews/status,verbs=get;update;patch
@@ -57,139 +43,188 @@ type Source struct {
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.
-// Modify the Reconcile function to compare the state specified by
-// the HotNews object against the actual cluster state, and then
-// perform operations to make the cluster state reflect the state specified by
-// the user.
+// It receives specified HotNews resource and
+// tries to receive articles from the news aggregator service due to specified parameters.
+// If resource is being deleted, it removes owner references from the sources and removes finalizer.
 func (r *HotNewsReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	logrus.Println("Reconciling HotNews")
-	hotNews := &aggregatorv1.HotNews{}
-	err := r.Client.Get(ctx, req.NamespacedName, hotNews)
-	if err != nil {
+	var hotNews aggregatorv1.HotNews
+	if err := r.Client.Get(ctx, req.NamespacedName, &hotNews); err != nil {
 		if client.IgnoreNotFound(err) != nil {
-			log.FromContext(ctx).Error(err, "Failed to get HotNews")
 			return ctrl.Result{}, err
 		}
-		logrus.Infof("HotNews resource not found, possibly deleted. In namespace: %s", req.Namespace)
+		logrus.Infof("HotNews resource not found, possibly deleted. Namespace: %s", req.Namespace)
 		return ctrl.Result{}, nil
 	}
 
 	// Handle finalizer logic
-	if hotNews.ObjectMeta.DeletionTimestamp.IsZero() {
-		if !slices.Contains(hotNews.Finalizers, HotNewsFinalizer) {
-			hotNews.Finalizers = append(hotNews.Finalizers, HotNewsFinalizer)
-			if err := r.Client.Update(ctx, hotNews); err != nil {
-				return ctrl.Result{}, err
-			}
-		}
-	} else {
-		if slices.Contains(hotNews.Finalizers, HotNewsFinalizer) {
-			if err := r.deleteOwnerRef(ctx, hotNews.Namespace, hotNews.Name); err != nil {
-				return ctrl.Result{}, err
-			}
-			hotNews.Finalizers = slices.Delete(hotNews.Finalizers, slices.Index(hotNews.Finalizers, HotNewsFinalizer), slices.Index(hotNews.Finalizers, HotNewsFinalizer)+1)
-			if err := r.Client.Update(ctx, hotNews); err != nil {
-				return ctrl.Result{}, err
-			}
-		}
+	deleted, err := r.handleFinalizer(ctx, &hotNews)
+	if err != nil {
+		return ctrl.Result{}, err
+	}
+	if deleted {
 		return ctrl.Result{}, nil
 	}
 
 	// Proceed with normal reconciliation for HotNews
-	return r.reconcileHotNews(ctx, hotNews)
+	return r.reconcileHotNews(ctx, &hotNews)
 }
 
-func (r *HotNewsReconciler) deleteOwnerRef(ctx context.Context, namespace, hotNewsName string) error {
-	var sources aggregatorv1.SourceList
+// Manages the addition and removal of the finalizer on the HotNews resource.
+// Ensures that owner references are cleaned up before the resource is deleted.
+func (r *HotNewsReconciler) handleFinalizer(ctx context.Context, hotNews *aggregatorv1.HotNews) (bool, error) {
+	if !hotNews.ObjectMeta.DeletionTimestamp.IsZero() {
+		// The object is being deleted
+		if slices.Contains(hotNews.Finalizers, HotNewsFinalizer) {
+			if err := r.deleteOwnerReferences(ctx, hotNews.Namespace, hotNews.Name); err != nil {
+				return false, err
+			}
+			hotNews.Finalizers = slices.Delete(hotNews.Finalizers,
+				slices.Index(hotNews.Finalizers, HotNewsFinalizer),
+				slices.Index(hotNews.Finalizers, HotNewsFinalizer)+1)
+			if err := r.Client.Update(ctx, hotNews); err != nil {
+				return false, err
+			}
+		}
+		return true, nil
+	}
 
+	// Add finalizer if not present
+	if !slices.Contains(hotNews.Finalizers, HotNewsFinalizer) {
+		hotNews.Finalizers = append(hotNews.Finalizers, HotNewsFinalizer)
+		if err := r.Client.Update(ctx, hotNews); err != nil {
+			return false, err
+		}
+	}
+	return false, nil
+}
+
+// Removes the owner reference to the HotNews resource from all Source resources in the namespace.
+// Ensures that Source resources are not left with dangling owner references after the HotNews resource is deleted.
+func (r *HotNewsReconciler) deleteOwnerReferences(ctx context.Context, namespace, hotNewsName string) error {
+	var sources aggregatorv1.SourceList
 	if err := r.Client.List(ctx, &sources, &client.ListOptions{Namespace: namespace}); err != nil {
 		logrus.Errorf("Failed to list Sources: %v", err)
 		return fmt.Errorf("failed to list Sources: %w", err)
 	}
 
 	for _, src := range sources.Items {
-		var newOwnerReferences []metav1.OwnerReference
-		isRemoved := false
-
-		for _, ref := range src.OwnerReferences {
-			if ref.Name == hotNewsName && ref.Kind == "HotNews" {
-				isRemoved = true
-				continue
-			}
-			newOwnerReferences = append(newOwnerReferences, ref)
-		}
-
-		if isRemoved {
-			src.OwnerReferences = newOwnerReferences
+		updatedOwnerRefs := removeOwnerReference(src.OwnerReferences, hotNewsName, "HotNews")
+		if len(updatedOwnerRefs) != len(src.OwnerReferences) {
+			src.OwnerReferences = updatedOwnerRefs
 			if err := r.Client.Update(ctx, &src); err != nil {
 				logrus.Errorf("Failed to update Source %s: %v", src.Name, err)
 				return fmt.Errorf("failed to update Source %s: %w", src.Name, err)
 			}
-			logrus.Infof("Owner ref removed from src %s", src.Name)
+			logrus.Infof("Owner reference removed from Source %s", src.Name)
 		}
 	}
-
 	return nil
 }
 
-// reconcileHotNews performs the actual reconciliation logic for HotNews
-func (r *HotNewsReconciler) reconcileHotNews(ctx context.Context, hotNews *aggregatorv1.HotNews) (ctrl.Result, error) {
-	logger := log.FromContext(ctx)
+// Utility function to remove a specific owner reference from a slice of owner references.
+func removeOwnerReference(ownerRefs []metav1.OwnerReference, name, kind string) []metav1.OwnerReference {
+	var updatedRefs []metav1.OwnerReference
+	for _, ref := range ownerRefs {
+		if ref.Name == name && ref.Kind == kind {
+			continue
+		}
+		updatedRefs = append(updatedRefs, ref)
+	}
+	return updatedRefs
+}
 
-	// Fetch the ConfigMap containing feed groups
-	configMap := &corev1.ConfigMap{}
-	err := r.Client.Get(ctx, client.ObjectKey{Namespace: r.ConfigMapNamespace, Name: r.ConfigMapName}, configMap)
+// Performs the main reconciliation logic for the HotNews resource.
+// Resolves feed groups, sets owner references, fetches articles, and updates the status.
+func (r *HotNewsReconciler) reconcileHotNews(ctx context.Context, hotNews *aggregatorv1.HotNews) (ctrl.Result, error) {
+	configMap, err := r.fetchConfigMap(ctx)
 	if err != nil {
 		if errors.IsNotFound(err) {
-			logger.Error(err, "ConfigMap not found")
-			errUp := r.selectStatus(ctx, hotNews, metav1.ConditionFalse, "ConfigMapNotFound", "ConfigMap not found")
-			if errUp != nil {
-				return ctrl.Result{}, errUp
-			}
+			logrus.Warn("ConfigMap not found, proceeding without resolving feed groups")
+			r.updateStatusCondition(ctx, hotNews, metav1.ConditionFalse, "ConfigMapNotFound", "ConfigMap not found, proceeding without feed groups")
+			configMap = nil
+		} else {
+			logrus.Error(err, "Failed to fetch ConfigMap")
+			r.updateStatusCondition(ctx, hotNews, metav1.ConditionFalse, "ConfigMapFetchFailed", "Failed to fetch ConfigMap")
 			return ctrl.Result{}, err
 		}
+
+	}
+
+	// Combine sources from Spec.Sources and resolved FeedGroups
+	combinedSources := make([]string, 0)
+	combinedSources = append(combinedSources, hotNews.Spec.Sources...)
+
+	// Resolve FeedGroups to actual source names without modifying Spec.Sources
+	if len(hotNews.Spec.FeedGroups) > 0 {
+		if configMap != nil {
+			resolvedSources := r.resolveFeedGroups(hotNews.Spec.FeedGroups, configMap)
+			combinedSources = append(combinedSources, resolvedSources...)
+		} else {
+			logrus.Warn("ConfigMap not available, cannot resolve feed groups")
+			r.updateStatusCondition(ctx, hotNews, metav1.ConditionFalse, "ConfigMapNotFound", "ConfigMap not found, feed groups cannot be resolved")
+		}
+	}
+
+	// Set OwnerReferences for each source using combinedSources
+	if err := r.setOwnerReferences(ctx, hotNews, combinedSources); err != nil {
 		return ctrl.Result{}, err
 	}
 
-	// Resolve FeedGroups to actual source names
-	if len(hotNews.Spec.FeedGroups) > 0 {
-		resolvedSources := r.resolveFeedGroups(hotNews.Spec.FeedGroups, configMap)
-		hotNews.Spec.Sources = append(hotNews.Spec.Sources, resolvedSources...)
+	// Build query parameters and fetch articles
+	reqURL := fmt.Sprintf("%s?%s", r.ArticleSvcURL, r.buildQueryParams(hotNews, combinedSources))
+	logrus.Println("Request URL:", reqURL)
+
+	articles, err := r.fetchArticles(reqURL)
+	if err != nil {
+		logrus.Error(err, "Unable to fetch articles")
+		r.updateStatusCondition(ctx, hotNews, metav1.ConditionFalse, "FetchArticlesFailed", "Failed to fetch articles")
+		return ctrl.Result{}, err
 	}
 
-	// Set OwnerReferences for each source using ShortName
-	for _, sourceShortName := range hotNews.Spec.Sources {
-		var sourceList aggregatorv1.SourceList
-		err := r.Client.List(ctx, &sourceList, &client.ListOptions{Namespace: hotNews.Namespace})
-		if err != nil {
-			logger.Error(err, "Failed to list Sources")
+	// Update HotNews status
+	r.updateHotNewsStatus(hotNews, articles, reqURL)
+	r.updateStatusCondition(ctx, hotNews, metav1.ConditionTrue, "Reconciled", "Successfully reconciled HotNews")
+	logrus.Info("Successfully reconciled HotNews", "Name", hotNews.Name)
+	return ctrl.Result{}, nil
+}
+
+// Retrieves the ConfigMap that contains feed group definitions.
+func (r *HotNewsReconciler) fetchConfigMap(ctx context.Context) (*corev1.ConfigMap, error) {
+	configMap := &corev1.ConfigMap{}
+	err := r.Client.Get(ctx, client.ObjectKey{Namespace: r.ConfigMapNamespace, Name: r.ConfigMapName}, configMap)
+	if err != nil {
+		return nil, err
+	}
+	return configMap, nil
+}
+
+// Sets the HotNews resource as an owner reference on the relevant Source resources.
+// Ensures that the Source resources are properly tracked and cannot be deleted while the HotNews resource exists.
+func (r *HotNewsReconciler) setOwnerReferences(ctx context.Context, hotNews *aggregatorv1.HotNews, sources []string) error {
+	// Fetch all sources once
+	var sourceList aggregatorv1.SourceList
+	if err := r.Client.List(ctx, &sourceList, &client.ListOptions{Namespace: hotNews.Namespace}); err != nil {
+		logrus.Error(err, "Failed to list Sources")
+		return err
+	}
+
+	// Build a map from ShortName to Source
+	sourceMap := make(map[string]*aggregatorv1.Source)
+	for i := range sourceList.Items {
+		src := &sourceList.Items[i]
+		sourceMap[src.Spec.ShortName] = src
+	}
+
+	for _, sourceShortName := range sources {
+		source, found := sourceMap[sourceShortName]
+		if !found {
+			logrus.Errorf("Source with ShortName %s not found", sourceShortName)
 			continue
-		}
-
-		var source *aggregatorv1.Source
-		for _, src := range sourceList.Items {
-			if src.Spec.ShortName == sourceShortName {
-				source = &src
-				break
-			}
-		}
-
-		if source == nil {
-			logger.Error(fmt.Errorf("source with short_name %s not found", sourceShortName), "Failed to find Source")
-			continue
-		}
-
-		// Check if the owner reference already exists
-		ownerExists := false
-		for _, owner := range source.OwnerReferences {
-			if owner.UID == hotNews.UID {
-				ownerExists = true
-				break
-			}
 		}
 
 		// Add owner reference if not exists
-		if !ownerExists {
+		if !hasOwnerReference(source.OwnerReferences, hotNews.UID) {
 			source.OwnerReferences = append(source.OwnerReferences, metav1.OwnerReference{
 				APIVersion: hotNews.APIVersion,
 				Kind:       hotNews.Kind,
@@ -197,147 +232,43 @@ func (r *HotNewsReconciler) reconcileHotNews(ctx context.Context, hotNews *aggre
 				UID:        hotNews.UID,
 			})
 			if err := r.Client.Update(ctx, source); err != nil {
-				logger.Error(err, "Failed to update Source with owner reference", "ShortName", sourceShortName)
-				return ctrl.Result{}, err
+				logrus.Error(err, "Failed to update Source with owner reference", "ShortName", sourceShortName)
+				return err
 			}
 		}
 	}
+	return nil
+}
 
-	// Build query parameters for the HTTP request
-	queryParams := make(map[string]string)
+// hasOwnerReference checks if the owner reference already exists.
+func hasOwnerReference(ownerRefs []metav1.OwnerReference, uid types.UID) bool {
+	for _, owner := range ownerRefs {
+		if owner.UID == uid {
+			return true
+		}
+	}
+	return false
+}
+
+// buildQueryParams constructs the query parameters for the HTTP request.
+func (r *HotNewsReconciler) buildQueryParams(hotNews *aggregatorv1.HotNews, combinedSources []string) string {
+	params := map[string]string{}
 	if len(hotNews.Spec.Keywords) > 0 {
-		queryParams["keywords"] = strings.Join(hotNews.Spec.Keywords, ",")
+		params["keywords"] = strings.Join(hotNews.Spec.Keywords, ",")
 	}
 	if hotNews.Spec.DateStart != "" {
-		queryParams["date_start"] = hotNews.Spec.DateStart
+		params["date_start"] = hotNews.Spec.DateStart
 	}
 	if hotNews.Spec.DateEnd != "" {
-		queryParams["date_end"] = hotNews.Spec.DateEnd
+		params["date_end"] = hotNews.Spec.DateEnd
 	}
-	if len(hotNews.Spec.Sources) > 0 {
-		queryParams["sources"] = strings.Join(hotNews.Spec.Sources, ",")
+	if len(combinedSources) > 0 {
+		params["sources"] = strings.Join(combinedSources, ",")
 	}
-	reqURL := fmt.Sprintf("%s?%s", r.ArticleSvcURL, buildQuery(queryParams))
-	logrus.Println("Request URL: ", reqURL)
-	// Fetch news from the aggregator
-	articles, err := r.fetchArticles(reqURL)
-	if err != nil {
-		logger.Error(err, "unable to fetch articles")
-		errUp := r.selectStatus(ctx, hotNews, metav1.ConditionFalse, "FetchArticlesFailed", "Failed to fetch articles")
-		if errUp != nil {
-			return ctrl.Result{}, errUp
-		}
-		return ctrl.Result{}, err
-	}
-
-	// Update status
-	hotNews.Status.ArticlesCount = len(articles)
-	hotNews.Status.NewsLink = reqURL
-	hotNews.Status.ArticlesTitles = getTitles(articles, hotNews.Spec.SummaryConfig.TitlesCount)
-
-	// Update the HotNews status
-	err = r.Client.Status().Update(ctx, hotNews)
-	if err != nil {
-		logger.Error(err, "unable to update HotNews status")
-		errUp := r.selectStatus(ctx, hotNews, metav1.ConditionFalse, "UpdateStatusFailed", "Failed to update HotNews status")
-		if errUp != nil {
-			return ctrl.Result{}, errUp
-		}
-		return ctrl.Result{}, err
-	}
-
-	errUp := r.selectStatus(ctx, hotNews, metav1.ConditionTrue, "Reconciled", "Successfully reconciled HotNews")
-	if errUp != nil {
-		return ctrl.Result{}, errUp
-	}
-	logger.Info("Successfully reconciled HotNews", "Name", hotNews.Name)
-	return ctrl.Result{}, nil
+	return buildQuery(params)
 }
 
-// MapConfigMapToHotNews implement the event handler to map ConfigMap updates to HotNews resources
-func (r *HotNewsReconciler) MapConfigMapToHotNews(ctx context.Context, object client.Object) []reconcile.Request {
-	logrus.Println("Mapping ConfigMap to HotNews")
-	var hotNewsList aggregatorv1.HotNewsList
-	err := r.Client.List(ctx, &hotNewsList, &client.ListOptions{Namespace: r.ConfigMapNamespace})
-	if err != nil {
-		logrus.Errorf("Failed to list HotNews resources: %v", err)
-		return nil
-	}
-
-	var requests []reconcile.Request
-	configMap := object.(*corev1.ConfigMap)
-
-	// Iterate over each HotNews resource in the same namespace
-	for _, hotNews := range hotNewsList.Items {
-		shouldReconcile := false
-
-		// Check if the ConfigMap name matches the one specified in the HotNews resource
-		if r.ConfigMapName == configMap.Name {
-			// If the ConfigMap directly referenced by HotNews was updated
-			resolvedSources := r.resolveFeedGroups(hotNews.Spec.FeedGroups, configMap)
-			logrus.Println("Resolved sources: ", resolvedSources)
-			if len(resolvedSources) > 0 {
-				hotNews.Spec.Sources = append(hotNews.Spec.Sources, resolvedSources...)
-				shouldReconcile = true
-			}
-		} else {
-			// Check if any feed group in HotNews references a source in this ConfigMap
-			for _, feedGroup := range hotNews.Spec.FeedGroups {
-				if feeds, found := configMap.Data[feedGroup]; found {
-					feedSources := strings.Split(feeds, ",")
-					if len(feedSources) > 0 {
-						shouldReconcile = true
-					}
-				}
-			}
-		}
-
-		if shouldReconcile {
-			requests = append(requests, reconcile.Request{
-				NamespacedName: client.ObjectKey{
-					Namespace: hotNews.Namespace,
-					Name:      hotNews.Name,
-				},
-			})
-		}
-	}
-	return requests
-}
-
-// MapSourceToHotNews implement the event handler to map Source updates to HotNews resources
-func (r *HotNewsReconciler) MapSourceToHotNews(ctx context.Context, object client.Object) []reconcile.Request {
-	// Fetch the Source object
-	logrus.Println("Mapping Source to HotNews")
-	source := &aggregatorv1.Source{}
-	err := r.Client.Get(ctx, client.ObjectKey{Namespace: object.GetNamespace(), Name: object.GetName()}, source)
-	if err != nil {
-		logrus.Errorf("Failed to fetch Source %s: %v", object.GetName(), err)
-		return nil
-	}
-
-	// Now list all HotNews objects in the same namespace
-	var hotNewsList aggregatorv1.HotNewsList
-	err = r.Client.List(ctx, &hotNewsList, &client.ListOptions{Namespace: object.GetNamespace()})
-	if err != nil {
-		logrus.Errorf("Failed to list HotNews resources: %v", err)
-		return nil
-	}
-
-	var requests []reconcile.Request
-	for _, hotNews := range hotNewsList.Items {
-		// Check if the Source's ShortName is in the HotNews Spec.Sources list
-		if slices.Contains(hotNews.Spec.Sources, source.Spec.ShortName) {
-			requests = append(requests, reconcile.Request{
-				NamespacedName: client.ObjectKey{
-					Namespace: hotNews.Namespace,
-					Name:      hotNews.Name,
-				},
-			})
-		}
-	}
-	return requests
-}
-
+// Converts a map of query parameters into a URL-encoded query string.
 func buildQuery(params map[string]string) string {
 	var query []string
 	for k, v := range params {
@@ -346,7 +277,7 @@ func buildQuery(params map[string]string) string {
 	return strings.Join(query, "&")
 }
 
-// resolveFeedGroups resolves feed groups to feed names
+// Resolves feed group names to actual source names using the data in the ConfigMap.
 func (r *HotNewsReconciler) resolveFeedGroups(feedGroups []string, configMap *corev1.ConfigMap) []string {
 	var feedNames []string
 	for _, group := range feedGroups {
@@ -357,8 +288,8 @@ func (r *HotNewsReconciler) resolveFeedGroups(feedGroups []string, configMap *co
 	return feedNames
 }
 
-// fetchArticles fetches articles from the given URL
-func (r *HotNewsReconciler) fetchArticles(url string) ([]Article, error) {
+// Fetches articles from the news aggregator service using the constructed URL.
+func (r *HotNewsReconciler) fetchArticles(url string) ([]models.Article, error) {
 	resp, err := r.HTTPClient.Get(url)
 	if err != nil {
 		return nil, err
@@ -367,16 +298,23 @@ func (r *HotNewsReconciler) fetchArticles(url string) ([]Article, error) {
 	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("failed to get articles from news aggregator: %s", resp.Status)
 	}
-	var articles []Article
+	var articles []models.Article
 	if err := json.NewDecoder(resp.Body).Decode(&articles); err != nil {
 		return nil, err
 	}
 	return articles, nil
 }
 
-// getTitles extracts the titles of the articles
-func getTitles(articles []Article, count int) []string {
-	var titles []string
+// Updates the HotNews status fields with information about the articles retrieved.
+func (r *HotNewsReconciler) updateHotNewsStatus(hotNews *aggregatorv1.HotNews, articles []models.Article, reqURL string) {
+	hotNews.Status.ArticlesCount = len(articles)
+	hotNews.Status.NewsLink = reqURL
+	hotNews.Status.ArticlesTitles = getTitles(articles, hotNews.Spec.SummaryConfig.TitlesCount)
+}
+
+// Extracts the titles of a specified number of articles.
+func getTitles(articles []models.Article, count int) []string {
+	titles := make([]string, 0, count)
 	for i, article := range articles {
 		if i >= count {
 			break
@@ -386,25 +324,12 @@ func getTitles(articles []Article, count int) []string {
 	return titles
 }
 
-func (r *HotNewsReconciler) selectStatus(ctx context.Context, hotNews *aggregatorv1.HotNews, cndStatus metav1.ConditionStatus, reason, message string) error {
+// Updates the Conditions field in the HotNews status with the provided condition.
+func (r *HotNewsReconciler) updateStatusCondition(ctx context.Context, hotNews *aggregatorv1.HotNews, status metav1.ConditionStatus, reason, message string) {
+	conditionType := aggregatorv1.HNewsUpdated
 	if len(hotNews.Status.Conditions) == 0 {
-		err := r.updateHotNewsStatus(ctx, hotNews, aggregatorv1.HNewsAdded, cndStatus, reason, message)
-		if err != nil {
-			return err
-		}
-	} else {
-		err := r.updateHotNewsStatus(ctx, hotNews, aggregatorv1.HNewsUpdated, cndStatus, reason, message)
-		if err != nil {
-			return err
-		}
+		conditionType = aggregatorv1.HNewsAdded
 	}
-	return nil
-}
-
-// updateHotNewsStatus updates the SourceStatus of a source resource with the given condition.
-func (r *HotNewsReconciler) updateHotNewsStatus(ctx context.Context, hotNews *aggregatorv1.HotNews, conditionType aggregatorv1.HNewsConditionType, status metav1.ConditionStatus, reason, message string) error {
-	logrus.Println("Updating HotNews status")
-	logrus.Println("HotNews status: ", hotNews.Status)
 	newCondition := aggregatorv1.HotNewsCondition{
 		Type:           conditionType,
 		Status:         status,
@@ -412,35 +337,29 @@ func (r *HotNewsReconciler) updateHotNewsStatus(ctx context.Context, hotNews *ag
 		Reason:         reason,
 		Message:        message,
 	}
-
-	hotNews.Status.Conditions = append(hotNews.Status.Conditions, newCondition)
-	logrus.Println("Appending new condition")
-	logrus.Println("HotNews status: ", hotNews.Status)
-	return r.Client.Status().Update(ctx, hotNews)
+	hotNews.Status.SetCondition(newCondition)
+	if err := r.Client.Status().Update(ctx, hotNews); err != nil {
+		logrus.Error(err, "Unable to update HotNews status")
+		r.updateStatusCondition(ctx, hotNews, metav1.ConditionFalse, "UpdateStatusFailed", "Failed to update HotNews status")
+	}
 }
 
 // SetupWithManager sets up the controller with the Manager.
 func (r *HotNewsReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&aggregatorv1.HotNews{}).
-		WithEventFilter(predicate.Funcs{
-			CreateFunc: func(e event.CreateEvent) bool {
-				return true
-			},
-			DeleteFunc: func(e event.DeleteEvent) bool {
-				return !e.DeleteStateUnknown
-			},
-			UpdateFunc: func(e event.UpdateEvent) bool {
-				return e.ObjectNew.GetGeneration() != e.ObjectOld.GetGeneration()
-			},
-		}).
+		WithEventFilter(predicates.HotNews(r.WorkingNamespace)).
 		Watches(
 			&corev1.ConfigMap{},
-			handler.EnqueueRequestsFromMapFunc(r.MapConfigMapToHotNews),
+			handler.EnqueueRequestsFromMapFunc(
+				handlers.MapConfigMapToHotNews(r.Client, r.ConfigMapName, r.ConfigMapNamespace),
+			),
 		).
 		Watches(
 			&aggregatorv1.Source{},
-			handler.EnqueueRequestsFromMapFunc(r.MapSourceToHotNews),
+			handler.EnqueueRequestsFromMapFunc(
+				handlers.MapSourceToHotNews(r.Client, r.fetchConfigMap),
+			),
 		).
 		Complete(r)
 }
