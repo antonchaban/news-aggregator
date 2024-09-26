@@ -105,3 +105,16 @@ tasks:
         LOCALBIN=$(pwd)/bin
         KUSTOMIZE=$LOCALBIN/kustomize
         $KUSTOMIZE build config/default | {{.KUBECTL}} delete --ignore-not-found={{.ignore_not_found}} -f -
+
+  controller-gen:
+    desc: "Download controller-gen locally if necessary."
+    cmds:
+      - |
+        LOCALBIN=$(pwd)/bin
+        if [ ! -f "$LOCALBIN/controller-gen-{{.CONTROLLER_TOOLS_VERSION}}" ]; then \
+          echo "Downloading controller-gen"; \
+          rm -f "$LOCALBIN/controller-gen" || true; \
+          GOBIN=$LOCALBIN go install sigs.k8s.io/controller-tools/cmd/controller-gen@{{.CONTROLLER_TOOLS_VERSION}} ;\
+          mv $LOCALBIN/controller-gen $LOCALBIN/controller-gen-{{.CONTROLLER_TOOLS_VERSION}}; \
+        fi
+        ln -sf $LOCALBIN/controller-gen-{{.CONTROLLER_TOOLS_VERSION}} $LOCALBIN/controller-gen
