@@ -82,7 +82,7 @@ const docTemplate = `{
         },
         "/sources": {
             "get": {
-                "description": "Get all sources",
+                "description": "Gets all currently available sources for fetching news",
                 "consumes": [
                     "application/json"
                 ],
