@@ -79,21 +79,18 @@ tasks:
     desc: "Install CRDs into the K8s cluster specified in ~/.kube/config."
     cmds:
       - task: manifests
-      - task: kustomize
       - "{{.KUSTOMIZE}} build config/crd | {{.KUBECTL}} apply -f -"
 
   uninstall:
     desc: "Uninstall CRDs from the K8s cluster specified in ~/.kube/config."
     cmds:
       - task: manifests
-      - task: kustomize
       - "{{.KUSTOMIZE}} build config/crd | {{.KUBECTL}} delete --ignore-not-found={{.ignore_not_found}} -f -"
 
   deploy:
     desc: "Deploy controller to the K8s cluster specified in ~/.kube/config."
     cmds:
       - task: manifests
-      - task: kustomize
       - |
         LOCALBIN=$(pwd)/bin
         KUSTOMIZE=$LOCALBIN/kustomize
@@ -108,19 +105,6 @@ tasks:
         LOCALBIN=$(pwd)/bin
         KUSTOMIZE=$LOCALBIN/kustomize
         $KUSTOMIZE build config/default | {{.KUBECTL}} delete --ignore-not-found={{.ignore_not_found}} -f -
-
-  kustomize:
-    desc: "Download kustomize locally if necessary."
-    cmds:
-      - |
-        LOCALBIN=$(pwd)/bin
-        if [ ! -f "$LOCALBIN/kustomize-{{.KUSTOMIZE_VERSION}}" ]; then \
-          echo "Downloading kustomize"; \
-          rm -f "$LOCALBIN/kustomize" || true; \
-          GOBIN=$LOCALBIN go install sigs.k8s.io/kustomize/kustomize/v5@{{.KUSTOMIZE_VERSION}} ;\
-          mv $LOCALBIN/kustomize $LOCALBIN/kustomize-{{.KUSTOMIZE_VERSION}}; \
-        fi
-        ln -sf $LOCALBIN/kustomize-{{.KUSTOMIZE_VERSION}} $LOCALBIN/kustomize
 
   controller-gen:
     desc: "Download controller-gen locally if necessary."
