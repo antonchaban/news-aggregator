@@ -2,5 +2,5 @@
 .env
 .run
 .mirrord
-manifest/helm/charts
-manifest/helm/news-alligator/charts
+manifest/helm/**/charts/
+manifest/helm/**/Chart.lock
