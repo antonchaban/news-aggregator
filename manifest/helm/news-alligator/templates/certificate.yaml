@@ -1,7 +1,7 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: teamdev-cert
+  name: news-alligator-cert
   namespace: {{ .Values.namespace }}
 spec:
   secretName: {{ .Values.tlsSecretName }}
@@ -14,5 +14,5 @@ spec:
   dnsNames:
     - {{ .Values.certvalues.dnsName }}
   issuerRef:
-    name: teamdev-issuer
+    name: news-alligator-issuer
     kind: Issuer

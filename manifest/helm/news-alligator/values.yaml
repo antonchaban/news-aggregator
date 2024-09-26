@@ -7,7 +7,7 @@ serviceAccount: "news-alligator-sa"
 migrationsImage: "antohachaban/alligator-migrations:0.2"
 migrationVersion: "000002"
 
-tlsSecretName: "teamdev-tls-secret"
+tlsSecretName: "news-alligator-tls-secret"
 certvalues:
   commonName: "https://news-alligator-service.news-alligator.svc.cluster.local"
   duration: "8760h"
