@@ -7,6 +7,7 @@ serviceAccount: "news-alligator-sa"
 migrationsImage: "406477933661.dkr.ecr.us-west-2.amazonaws.com/antohachaban/alligator-migrations:0.2"
 ecrSecretName: "ecr-secret"
 ecrOperatorSecretName: "ecr-operator-secret"
+ecrSchedule: "0 */10 * * *"
 
 tlsSecretName: "teamdev-tls-secret"
 certvalues:
