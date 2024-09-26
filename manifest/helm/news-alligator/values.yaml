@@ -4,6 +4,8 @@ containerPort: 443
 imageName: "antohachaban/news-alligator-web:0.2.3"
 namespace: "news-alligator"
 serviceAccount: "news-alligator-sa"
+migrationsImage: "antohachaban/alligator-migrations:0.2"
+migrationVersion: "000002"
 
 # Resource requests and limits for the application container
 resources:
