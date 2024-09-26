@@ -4,11 +4,12 @@ containerPort: 443
 imageName: "406477933661.dkr.ecr.us-west-2.amazonaws.com/antohachaban/news-alligator-web:0.2.4"
 namespace: "news-alligator"
 serviceAccount: "news-alligator-sa"
+migrationVersion: "000002"
 migrationsImage: "406477933661.dkr.ecr.us-west-2.amazonaws.com/antohachaban/alligator-migrations:0.2"
 ecrSecretName: "ecr-secret"
 ecrOperatorSecretName: "ecr-operator-secret"
 
-tlsSecretName: "teamdev-tls-secret"
+tlsSecretName: "news-alligator-tls-secret"
 certvalues:
   commonName: "https://news-alligator-service.news-alligator.svc.cluster.local"
   duration: "8760h"
