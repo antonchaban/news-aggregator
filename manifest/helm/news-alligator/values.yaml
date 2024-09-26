@@ -4,8 +4,10 @@ containerPort: 443
 imageName: "antohachaban/news-alligator-web:0.2.4"
 namespace: "news-alligator"
 serviceAccount: "news-alligator-sa"
+migrationsImage: "antohachaban/alligator-migrations:0.2"
+migrationVersion: "000002"
 
-tlsSecretName: "teamdev-tls-secret"
+tlsSecretName: "news-alligator-tls-secret"
 certvalues:
   commonName: "https://news-alligator-service.news-alligator.svc.cluster.local"
   duration: "8760h"

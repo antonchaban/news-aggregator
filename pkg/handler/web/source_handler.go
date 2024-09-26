@@ -128,7 +128,7 @@ func (h *Handler) updateSource(c *gin.Context) {
 }
 
 // @Summary Get all sources
-// @Description Get all sources
+// @Description Gets all currently available sources for fetching news
 // @Tags sources
 // @ID get-all-sources
 // @Accept json
