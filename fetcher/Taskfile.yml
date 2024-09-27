@@ -1,0 +1,13 @@
+version: '3'
+
+vars:
+  FETCHER_IMAGE_NAME: "antohachaban/news-fetcher:0.1"
+
+tasks:
+  build:
+    cmds:
+      - docker build -t {{.FETCHER_IMAGE_NAME}} -f Dockerfile.fetcher .
+
+  push:
+    cmds:
+      - docker push {{.FETCHER_IMAGE_NAME}}

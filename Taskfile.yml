@@ -1,8 +1,5 @@
 version: '3'
 
-env:
-  DOCKER_IMAGE_NAME: antohachaban/news-alligator-web
-
 vars:
   ACCESS_KEY_ID: '{{.ACCESS_KEY_ID | default ""}}'
   SECRET_ACCESS_KEY: '{{.SECRET_ACCESS_KEY | default ""}}'
@@ -11,14 +8,21 @@ vars:
   NAMESPACE: '{{.Namespace | default "news-alligator"}}'
   REGION: "us-west-2"
   ACCOUNT_ID: "406477933661"
+  VERSION: '{{.VERSION}}'
+  DOCKER_IMAGE_NAME: "antohachaban/news-alligator-web:{{.VERSION}}"
+
+includes:
+  operator:
+    taskfile: ./operator/Taskfile.yml
+  fetcher:
+    taskfile: ./fetcher/Taskfile.yml
+
 
 tasks:
   build:
     cmds:
-      - docker build . -f ./.Dockerfile -t {{.DOCKER_IMAGE_NAME}}:{{.VERSION}}
-    vars:
-      VERSION: '{{.VERSION | default "latest"}}'
-    desc: "Build the Docker image, example: task build VERSION=0.1.2"
+      - docker build . -f ./.Dockerfile -t {{.DOCKER_IMAGE_NAME}}
+    desc: "Build the Docker image"
 
   run-docker:
     cmds:
@@ -309,3 +313,17 @@ tasks:
             echo "No Helm charts found to push."
           fi
         done
+
+  # Build and push all images
+  build-all:
+    cmds:
+      - task operator:docker-build-root
+      - task build DOCKER_IMAGE_NAME={{.DOCKER_IMAGE_NAME}}
+      - task fetcher:build
+
+  push-all:
+    deps: [build-all]
+    cmds:
+      - task operator:docker-push
+      - task push-docker DOCKER_IMAGE_NAME={{.DOCKER_IMAGE_NAME}}
+      - task fetcher:push
