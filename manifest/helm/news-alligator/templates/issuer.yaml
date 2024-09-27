@@ -1,7 +1,7 @@
 apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
-  name: teamdev-issuer
+  name: news-alligator-issuer
   namespace: {{ .Values.namespace }}
 spec:
   selfSigned: {}

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ecr-registry-helper-cm
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "0"
+data:
+  AWS_REGION: "{{ .Values.aws.region }}"
+  DOCKER_SECRET_NAME: "{{ .Values.ecrSecretName }}"

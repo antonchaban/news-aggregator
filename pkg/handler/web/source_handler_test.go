@@ -1,11 +1,13 @@
 package web
 
 import (
+	"errors"
 	service_mocks "github.com/antonchaban/news-aggregator/pkg/handler/web/mocks"
 	"github.com/antonchaban/news-aggregator/pkg/model"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/mock/gomock"
+	"net/http"
 	"net/http/httptest"
 	"strconv"
 	"strings"
@@ -292,30 +294,31 @@ func TestHandler_getAllSources(t *testing.T) {
 			expectedCode:         200,
 			expectedResponseBody: `[{"id":1,"name":"CNN","link":"http://cnn.com","short_name":"cnn"},{"id":2,"name":"BBC","link":"http://bbc.com","short_name":"bbc"}]`,
 		},
+		{
+			name: "Service Error",
+			mockBehavior: func(r *service_mocks.MockSourceService) {
+				r.EXPECT().GetAll().Return(nil, errors.New("internal server error"))
+			},
+			expectedCode:         http.StatusInternalServerError,
+			expectedResponseBody: `{"message":"internal server error"}`,
+		},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			// Init Dependencies
 			c := gomock.NewController(t)
 			defer c.Finish()
 
 			srcSvc := service_mocks.NewMockSourceService(c)
 			test.mockBehavior(srcSvc)
-
-			// Init Endpoint
 			r := gin.New()
 			r.GET("/source", NewHandler(nil, srcSvc).getAllSources)
-
-			// Create Request
 			w := httptest.NewRecorder()
 			req := httptest.NewRequest("GET", "/source", nil)
 
-			// Make Request
 			r.ServeHTTP(w, req)
 
-			// Assert
-			assert.Equal(t, w.Code, test.expectedCode)
-			assert.JSONEq(t, w.Body.String(), test.expectedResponseBody)
+			assert.Equal(t, test.expectedCode, w.Code)
+			assert.JSONEq(t, test.expectedResponseBody, w.Body.String())
 		})
 	}
 }
