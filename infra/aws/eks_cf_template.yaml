@@ -73,6 +73,18 @@ Parameters:
       - t2.micro
       - t2.small
     ConstraintDescription: Must be a valid type
+  NumberOfSubnets:
+    Description: Number of subnets to create (2 or 3)
+    Type: Number
+    Default: 2
+    AllowedValues:
+      - 2
+      - 3
+    ConstraintDescription: Must be 2 or 3
+
+Conditions:
+  CreateSubnet2: !Or [ !Equals [ !Ref NumberOfSubnets, 2 ], !Equals [ !Ref NumberOfSubnets, 3 ] ]
+  CreateSubnet3: !Equals [ !Ref NumberOfSubnets, 3 ]
 
 Resources:
   antonvpc:
@@ -97,6 +109,7 @@ Resources:
           Value: antonsubnet01a
 
   antonsubnet02b:
+    Condition: CreateSubnet2
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref antonvpc
@@ -108,6 +121,7 @@ Resources:
           Value: antonsubnet02b
 
   antonsubnet03c:
+    Condition: CreateSubnet3
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref antonvpc
@@ -150,12 +164,14 @@ Resources:
       RouteTableId: !Ref antonroutetable
 
   antonsubnet02broutetableassociation:
+    Condition: CreateSubnet2
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       SubnetId: !Ref antonsubnet02b
       RouteTableId: !Ref antonroutetable
 
   antonsubnet03croutetableassociation:
+    Condition: CreateSubnet3
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       SubnetId: !Ref antonsubnet03c
@@ -221,9 +237,20 @@ Resources:
       ClusterName: !Ref antonekscluster
       NodeRole: !GetAtt antonnodegrouprole.Arn
       Subnets:
-        - !Ref antonsubnet01a
-        - !Ref antonsubnet02b
-        - !Ref antonsubnet03c
+        !If
+        - CreateSubnet3
+        -
+          - !Ref antonsubnet01a
+          - !Ref antonsubnet02b
+          - !Ref antonsubnet03c
+        -
+          !If
+          - CreateSubnet2
+          -
+            - !Ref antonsubnet01a
+            - !Ref antonsubnet02b
+          -
+            - !Ref antonsubnet01a
       ScalingConfig:
         DesiredSize: !Ref ScaleCfg
         MinSize: 1
@@ -244,9 +271,20 @@ Resources:
       RoleArn: !GetAtt antonclusterrole.Arn
       ResourcesVpcConfig:
         SubnetIds:
-          - !Ref antonsubnet01a
-          - !Ref antonsubnet02b
-          - !Ref antonsubnet03c
+          !If
+          - CreateSubnet3
+          -
+            - !Ref antonsubnet01a
+            - !Ref antonsubnet02b
+            - !Ref antonsubnet03c
+          -
+            !If
+            - CreateSubnet2
+            -
+              - !Ref antonsubnet01a
+              - !Ref antonsubnet02b
+            -
+              - !Ref antonsubnet01a
         SecurityGroupIds:
           - !Ref antonserversecuritygroup
 
@@ -305,9 +343,11 @@ Outputs:
     Value: !Ref antonsubnet01a
 
   Subnet02b:
+    Condition: CreateSubnet2
     Description: Subnet 02b ID
     Value: !Ref antonsubnet02b
 
   Subnet03c:
+    Condition: CreateSubnet3
     Description: Subnet 03c ID
     Value: !Ref antonsubnet03c
