@@ -1,7 +1,7 @@
 version: '3'
 
 vars:
-  IMG: "antohachaban/alligator-operator:0.2.4"
+  IMG: "406477933661.dkr.ecr.us-west-2.amazonaws.com/antohachaban/alligator-operator"
   CONTAINER_TOOL: "docker"
   KUBECTL: "kubectl"
   KUSTOMIZE_VERSION: "v5.4.2"
