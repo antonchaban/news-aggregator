@@ -1,58 +1,63 @@
 # operator
-// TODO(user): Add simple overview of use/purpose
+Operator for managing the lifecycle of a custom resource in a Kubernetes cluster. 
+
+Source resource is a custom resource that is created by the user. The operator watches for the creation/update/deletion of the custom resource and 
+takes appropriate actions in news aggregator service.
+
+HotNews resource is a custom resource that is created by the user. The operator watches for the creation/update/deletion of the custom resource and 
+fetches the latest news from the news aggregator service and stores it in the HotNews resource due to specified criteria.
 
 ## Description
-// TODO(user): An in-depth paragraph about your project and overview of use
+Source CRD is used for creating sources which will be maintained by news aggregator service.
+if a user creates Source — it creates new sources in the news-aggregator;
+if a user updates Source - it updates corresponding source in the news-aggregator;
+if a user deletes Source - it removes the source from the news-aggregator.
+Current Source statuses are displayed in the Source CRD Status field with last changes timestamp.
+
+HotNews CRD is used for creating hot news which will be maintained by news aggregator service.
+It uses such fields for defining the criteria for fetching news:
+```go
+type HotNewsSpec struct {
+	// - Keywords: A list of keywords to filter news, must be always required.
+	Keywords []string `json:"keywords"`
+	// - DateStart: The start date for the news filter, can be empty.
+	DateStart string `json:"date_start,omitempty"`
+	// - DateEnd: The end date for the news filter, can be empty.
+	DateEnd string `json:"date_end,omitempty"`
+	// - Sources: All source names in the current namespace, if empty, will watch ALL available feeds. This should be names of Source resources.
+	Sources []string `json:"sources,omitempty"`
+	// - FeedGroups: Available sections of feeds from the 'feed-group-source' ConfigMap.
+	FeedGroups []string `json:"feed_groups,omitempty"`
+	// - SummaryConfig: Configuration for how the status will show the summary of observed hot news.
+	SummaryConfig SummaryConfig `json:"summary_config"`
+}
+```
+Then all the news that matches the criteria will be stored in the HotNews status field.
 
 ## Getting Started
 
 ### Prerequisites
 - go version v1.22.0+
-- docker version 17.03+.
+- docker version 24.0.0+.
 - kubectl version v1.11.3+.
-- Access to a Kubernetes v1.11.3+ cluster.
+- Access to a Kubernetes v1.30+ cluster.
 
 ### To Deploy on the cluster
-**Build and push your image to the location specified by `IMG`:**
+**Build and push your image:**
 
 ```sh
-make docker-build docker-push IMG=<some-registry>/operator:tag
-```
-
-**NOTE:** This image ought to be published in the personal registry you specified.
-And it is required to have access to pull the image from the working environment.
-Make sure you have the proper permission to the registry if the above commands don’t work.
-
-**Install the CRDs into the cluster:**
-
-```sh
-make install
+docker build . -f Dockerfile -t image-name
+docker push image-name
 ```
 
 **Deploy the Manager to the cluster with the image specified by `IMG`:**
 
 ```sh
-make deploy IMG=<some-registry>/operator:tag
+make deploy
 ```
 
 > **NOTE**: If you encounter RBAC errors, you may need to grant yourself cluster-admin
 privileges or be logged in as admin.
-
-**Create instances of your solution**
-You can apply the samples (examples) from the config/sample:
-
-```sh
-kubectl apply -k config/samples/
-```
-
->**NOTE**: Ensure that the samples has default values to test it out.
-
-### To Uninstall
-**Delete the instances (CRs) from the cluster:**
-
-```sh
-kubectl delete -k config/samples/
-```
 
 **Delete the APIs(CRDs) from the cluster:**
 
@@ -66,35 +71,6 @@ make uninstall
 make undeploy
 ```
 
-## Project Distribution
-
-Following are the steps to build the installer and distribute this project to users.
-
-1. Build the installer for the image built and published in the registry:
-
-```sh
-make build-installer IMG=<some-registry>/operator:tag
-```
-
-NOTE: The makefile target mentioned above generates an 'install.yaml'
-file in the dist directory. This file contains all the resources built
-with Kustomize, which are necessary to install this project without
-its dependencies.
-
-2. Using the installer
-
-Users can just run kubectl apply -f <URL for YAML BUNDLE> to install the project, i.e.:
-
-```sh
-kubectl apply -f https://raw.githubusercontent.com/<org>/operator/<tag or branch>/dist/install.yaml
-```
-
-## Contributing
-// TODO(user): Add detailed information on how you would like others to contribute to this project
-
-**NOTE:** Run `make help` for more information on all potential `make` targets
-
-More information can be found via the [Kubebuilder Documentation](https://book.kubebuilder.io/introduction.html)
 
 ## License
 

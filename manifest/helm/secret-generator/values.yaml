@@ -1,0 +1,13 @@
+# Default values for secret-generator.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+ecrSecretName: "ecr-secret"
+ecrOperatorSecretName: "ecr-operator-secret"
+#ecrSchedule: "0 */10 * * *"
+ecrSchedule: "* * * * *"
+
+aws:
+  secretAccessKey: ""
+  accessKeyId: ""
+  accountId: "406477933661"
+  region: "us-west-2"

@@ -85,7 +85,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Get all sources
+      description: Gets all currently available sources for fetching news
       operationId: get-all-sources
       produces:
       - application/json

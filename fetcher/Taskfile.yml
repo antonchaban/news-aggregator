@@ -1,0 +1,13 @@
+version: '3'
+
+vars:
+  FETCHER_IMAGE_NAME: "406477933661.dkr.ecr.us-west-2.amazonaws.com/antohachaban/news-fetcher"
+
+tasks:
+  build:
+    cmds:
+      - docker build -t {{.FETCHER_IMAGE_NAME}} -f Dockerfile.fetcher .
+
+  push:
+    cmds:
+      - docker push {{.FETCHER_IMAGE_NAME}}

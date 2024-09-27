@@ -1,7 +1,50 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: 'AWS CloudFormation Template for VPC, Subnets, EKS Cluster, and Node Group'
 
+Mappings:
+  KubernetesAddonVersions:
+    '1.28':
+      VpcCniAddonVersion: 'v1.18.3-eksbuild.3'
+      KubeProxyAddonVersion: 'v1.28.12-eksbuild.5'
+      CoreDnsAddonVersion: 'v1.10.1-eksbuild.13'
+      PodIdentityAddonVersion: 'v1.2.0-eksbuild.1'
+    '1.29':
+      VpcCniAddonVersion: 'v1.18.3-eksbuild.3'
+      KubeProxyAddonVersion: 'v1.29.7-eksbuild.5'
+      CoreDnsAddonVersion: 'v1.11.3-eksbuild.1'
+      PodIdentityAddonVersion: 'v1.3.2-eksbuild.2'
+    '1.30':
+      VpcCniAddonVersion: 'v1.18.3-eksbuild.3'
+      KubeProxyAddonVersion: 'v1.30.3-eksbuild.5'
+      CoreDnsAddonVersion: 'v1.11.3-eksbuild.1'
+      PodIdentityAddonVersion: 'v1.3.2-eksbuild.2'
+
 Parameters:
+  NodeGroupAmiType:
+    Description: The AMI type for the node group
+    Type: String
+    Default: AL2_x86_64
+    AllowedValues:
+      - AL2_x86_64
+      - AL2_x86_64_GPU
+      - AL2_ARM_64
+    ConstraintDescription: Must be a valid AMI type
+  KuberVersion:
+    Description: Kubernetes version
+    Type: String
+    Default: '1.30'
+    AllowedValues:
+      - '1.28'
+      - '1.29'
+      - '1.30'
+    ConstraintDescription: Must be a valid version
+  ScaleCfg:
+    Description: Desired number of nodes (1-10)
+    Type: Number
+    Default: 2
+    MinValue: 1
+    MaxValue: 10
+    ConstraintDescription: Must be between 1 and 10
   InstanceType:
     Description: Node instance type
     Type: String
@@ -10,7 +53,20 @@ Parameters:
       - t3.medium
       - t2.medium
       - t2.large
+      - t2.micro
+      - t2.small
     ConstraintDescription: Must be a valid type
+  NumberOfSubnets:
+    Description: Number of subnets to create (2 or 3)
+    Type: Number
+    Default: 2
+    AllowedValues:
+      - 2
+      - 3
+    ConstraintDescription: Must be 2 or 3
+Conditions:
+  CreateSubnet2: !Or [ !Equals [ !Ref NumberOfSubnets, 2 ], !Equals [ !Ref NumberOfSubnets, 3 ] ]
+  CreateSubnet3: !Equals [ !Ref NumberOfSubnets, 3 ]
 
 Resources:
   antonvpc:
@@ -26,29 +82,31 @@ Resources:
     Properties:
       VpcId: !Ref antonvpc
       CidrBlock: 10.0.0.0/26
-      AvailabilityZone: us-west-2a
+      AvailabilityZone: !Select [ 0, !GetAZs "" ]
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
           Value: antonsubnet01a
 
   antonsubnet02b:
+    Condition: CreateSubnet2
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref antonvpc
-      CidrBlock: 10.0.0.64/26 #
-      AvailabilityZone: us-west-2b
+      CidrBlock: 10.0.0.64/26
+      AvailabilityZone: !Select [ 1, !GetAZs "" ]
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
           Value: antonsubnet02b
 
   antonsubnet03c:
+    Condition: CreateSubnet3
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref antonvpc
       CidrBlock: 10.0.0.128/26
-      AvailabilityZone: us-west-2c
+      AvailabilityZone: !Select [ 2, !GetAZs "" ]
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
@@ -86,12 +144,14 @@ Resources:
       RouteTableId: !Ref antonroutetable
 
   antonsubnet02broutetableassociation:
+    Condition: CreateSubnet2
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       SubnetId: !Ref antonsubnet02b
       RouteTableId: !Ref antonroutetable
 
   antonsubnet03croutetableassociation:
+    Condition: CreateSubnet3
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       SubnetId: !Ref antonsubnet03c
@@ -157,30 +217,54 @@ Resources:
       ClusterName: !Ref antonekscluster
       NodeRole: !GetAtt antonnodegrouprole.Arn
       Subnets:
-        - !Ref antonsubnet01a
-        - !Ref antonsubnet02b
-        - !Ref antonsubnet03c
-      ScalingConfig: # move to parameters
-        DesiredSize: 2
+        !If
+        - CreateSubnet3
+        -
+          - !Ref antonsubnet01a
+          - !Ref antonsubnet02b
+          - !Ref antonsubnet03c
+        -
+          !If
+          - CreateSubnet2
+          -
+            - !Ref antonsubnet01a
+            - !Ref antonsubnet02b
+          -
+            - !Ref antonsubnet01a
+      ScalingConfig:
+        DesiredSize: !Ref ScaleCfg
         MinSize: 1
         MaxSize: 10
       InstanceTypes:
         - !Ref InstanceType
       DiskSize: 20
-      AmiType: AL2_x86_64
+      AmiType: !Ref NodeGroupAmiType
       RemoteAccess:
         Ec2SshKey: anton
 
   antonekscluster:
     Type: AWS::EKS::Cluster
     Properties:
+      UpgradePolicy: { "SupportType": "STANDARD" }
+      Version: !Ref KuberVersion
       Name: anton-eks-cluster
       RoleArn: !GetAtt antonclusterrole.Arn
       ResourcesVpcConfig:
         SubnetIds:
-          - !Ref antonsubnet01a
-          - !Ref antonsubnet02b
-          - !Ref antonsubnet03c
+          !If
+          - CreateSubnet3
+          -
+            - !Ref antonsubnet01a
+            - !Ref antonsubnet02b
+            - !Ref antonsubnet03c
+          -
+            !If
+            - CreateSubnet2
+            -
+              - !Ref antonsubnet01a
+              - !Ref antonsubnet02b
+            -
+              - !Ref antonsubnet01a
         SecurityGroupIds:
           - !Ref antonserversecuritygroup
 
@@ -188,6 +272,7 @@ Resources:
   VPCCNIAddon:
     Type: AWS::EKS::Addon
     Properties:
+      AddonVersion: !FindInMap [ KubernetesAddonVersions, !Ref KuberVersion, VpcCniAddonVersion ]
       ClusterName: !Ref antonekscluster
       AddonName: vpc-cni
       ResolveConflicts: OVERWRITE
@@ -195,6 +280,7 @@ Resources:
   CoreDNSAddon:
     Type: AWS::EKS::Addon
     Properties:
+      AddonVersion: !FindInMap [ KubernetesAddonVersions, !Ref KuberVersion, CoreDnsAddonVersion ]
       ClusterName: !Ref antonekscluster
       AddonName: coredns
       ResolveConflicts: OVERWRITE
@@ -202,6 +288,7 @@ Resources:
   KubeProxyAddon:
     Type: AWS::EKS::Addon
     Properties:
+      AddonVersion: !FindInMap [ KubernetesAddonVersions, !Ref KuberVersion, KubeProxyAddonVersion ]
       ClusterName: !Ref antonekscluster
       AddonName: kube-proxy
       ResolveConflicts: OVERWRITE
@@ -209,6 +296,7 @@ Resources:
   PodIdentityAddon:
     Type: 'AWS::EKS::Addon'
     Properties:
+      AddonVersion: !FindInMap [ KubernetesAddonVersions, !Ref KuberVersion, PodIdentityAddonVersion ]
       AddonName: eks-pod-identity-agent
       ClusterName: !Ref antonekscluster
       ResolveConflicts: OVERWRITE
@@ -235,9 +323,11 @@ Outputs:
     Value: !Ref antonsubnet01a
 
   Subnet02b:
+    Condition: CreateSubnet2
     Description: Subnet 02b ID
     Value: !Ref antonsubnet02b
 
   Subnet03c:
+    Condition: CreateSubnet3
     Description: Subnet 03c ID
     Value: !Ref antonsubnet03c
