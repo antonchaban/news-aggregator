@@ -257,7 +257,6 @@ tasks:
       - helm uninstall news-alligator --namespace {{.Namespace}}
       - helm uninstall secret-generator --namespace {{.Namespace}}
 
-
 #  AWS
 
   ecr-login:
@@ -286,3 +285,27 @@ tasks:
     desc: "Build, tag, and push Docker image to ECR"
     vars:
       IMAGE_NAME: ""
+
+  # Tasks to push helm charts
+
+  ecrHelmLogin:
+    desc: "Login to AWS ECR"
+    cmds:
+      - aws ecr get-login-password --region {{.REGION}} | helm registry login --username AWS --password-stdin {{.ACCOUNT_ID}}.dkr.ecr.{{.REGION}}.amazonaws.com
+
+  helmPush2Ecr:
+    deps:
+      - ecrHelmLogin
+      - createChart
+    desc: "Push Helm charts to ECR"
+    dir: manifest/helm/charts
+    cmds:
+      - |
+        for chart in *.tgz; do
+          if [ -f "$chart" ]; then
+            echo "Pushing $chart to ECR"
+            helm push "$chart" oci://{{.ACCOUNT_ID}}.dkr.ecr.{{.REGION}}.amazonaws.com
+          else
+            echo "No Helm charts found to push."
+          fi
+        done
