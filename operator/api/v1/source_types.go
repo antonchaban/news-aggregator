@@ -23,8 +23,6 @@ import (
 // SourceSpec defines the desired state of Source,
 // includes fields for source creation and management in the news aggregator.
 type SourceSpec struct {
-	// - Id: Unique identifier for the source.
-	Id int `json:"id,omitempty"`
 	// - Name: full name of the source, as it appears in the news aggregator.
 	Name string `json:"name,omitempty"`
 	// - Link: URL link to the source.
