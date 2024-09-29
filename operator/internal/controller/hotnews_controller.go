@@ -150,18 +150,22 @@ func (r *HotNewsReconciler) reconcileHotNews(ctx context.Context, hotNews *aggre
 	if err != nil {
 		if errors.IsNotFound(err) {
 			logrus.Warnf("ConfigMap %s not found in namespace %s, proceeding without resolving feed groups", r.ConfigMapName, hotNews.Namespace)
-			r.updateStatusCondition(ctx, hotNews, metav1.ConditionFalse, "ConfigMapNotFound", fmt.Sprintf("ConfigMap %s not found in namespace %s", r.ConfigMapName, hotNews.Namespace))
+			r.updateStatusCondition(hotNews, metav1.ConditionFalse, "ConfigMapNotFound", fmt.Sprintf("ConfigMap %s not found in namespace %s", r.ConfigMapName, hotNews.Namespace))
 			configMap = nil
 		} else {
 			logrus.Errorf("Failed to fetch ConfigMap: %v", err)
-			r.updateStatusCondition(ctx, hotNews, metav1.ConditionFalse, "ConfigMapFetchFailed", "Failed to fetch ConfigMap")
+			r.updateStatusCondition(hotNews, metav1.ConditionFalse, "ConfigMapFetchFailed", "Failed to fetch ConfigMap")
+			// Update the status before returning
+			if err := r.Client.Status().Update(ctx, hotNews); err != nil {
+				logrus.Error(err, "Failed to update HotNews status")
+				return ctrl.Result{}, err
+			}
 			return ctrl.Result{}, err
 		}
 	}
 
 	// Combine sources from Spec.Sources and resolved FeedGroups
-	combinedSources := make([]string, 0)
-	combinedSources = append(combinedSources, hotNews.Spec.Sources...)
+	combinedSources := append([]string{}, hotNews.Spec.Sources...)
 
 	// Resolve FeedGroups to actual source names without modifying Spec.Sources
 	if len(hotNews.Spec.FeedGroups) > 0 {
@@ -170,12 +174,15 @@ func (r *HotNewsReconciler) reconcileHotNews(ctx context.Context, hotNews *aggre
 			combinedSources = append(combinedSources, resolvedSources...)
 		} else {
 			logrus.Warn("ConfigMap not available, cannot resolve feed groups")
-			r.updateStatusCondition(ctx, hotNews, metav1.ConditionFalse, "ConfigMapNotFound", "ConfigMap not found, feed groups cannot be resolved")
+			r.updateStatusCondition(hotNews, metav1.ConditionFalse, "ConfigMapNotFound", "ConfigMap not found, feed groups cannot be resolved")
 		}
 	}
 
 	// Set OwnerReferences for each source using combinedSources
 	if err := r.setOwnerReferences(ctx, hotNews, combinedSources); err != nil {
+		if errStatus := r.Client.Status().Update(ctx, hotNews); errStatus != nil {
+			return ctrl.Result{}, err
+		}
 		return ctrl.Result{}, err
 	}
 
@@ -186,13 +193,23 @@ func (r *HotNewsReconciler) reconcileHotNews(ctx context.Context, hotNews *aggre
 	articles, err := r.fetchArticles(reqURL)
 	if err != nil {
 		logrus.Error(err, "Unable to fetch articles")
-		r.updateStatusCondition(ctx, hotNews, metav1.ConditionFalse, "FetchArticlesFailed", "Failed to fetch articles")
+		r.updateStatusCondition(hotNews, metav1.ConditionFalse, "FetchArticlesFailed", "Failed to fetch articles")
+		if err := r.Client.Status().Update(ctx, hotNews); err != nil { // upd status before return
+			logrus.Error(err, "Failed to update HotNews status")
+			return ctrl.Result{}, err
+		}
 		return ctrl.Result{}, err
 	}
 
-	// Update HotNews status
+	// Update HotNews status fields
 	r.updateHotNewsStatus(hotNews, articles, reqURL)
-	r.updateStatusCondition(ctx, hotNews, metav1.ConditionTrue, "Reconciled", "Successfully reconciled HotNews")
+	r.updateStatusCondition(hotNews, metav1.ConditionTrue, "Reconciled", "Successfully reconciled HotNews")
+
+	if err := r.Client.Status().Update(ctx, hotNews); err != nil {
+		logrus.Error(err, "Failed to update HotNews status")
+		return ctrl.Result{}, err
+	}
+
 	logrus.Info("Successfully reconciled HotNews", "Name", hotNews.Name)
 	return ctrl.Result{}, nil
 }
@@ -240,7 +257,6 @@ func (r *HotNewsReconciler) setOwnerReferences(ctx context.Context, hotNews *agg
 				UID:        hotNews.UID,
 			})
 			if err := r.Client.Update(ctx, source); err != nil {
-				logrus.Error(err, "Failed to update Source with owner reference", "ShortName", sourceShortName)
 				return err
 			}
 		}
@@ -333,7 +349,7 @@ func getTitles(articles []models.Article, count int) []string {
 }
 
 // Updates the Conditions field in the HotNews status with the provided condition.
-func (r *HotNewsReconciler) updateStatusCondition(ctx context.Context, hotNews *aggregatorv1.HotNews, status metav1.ConditionStatus, reason, message string) {
+func (r *HotNewsReconciler) updateStatusCondition(hotNews *aggregatorv1.HotNews, status metav1.ConditionStatus, reason, message string) {
 	conditionType := aggregatorv1.HNewsUpdated
 	if len(hotNews.Status.Conditions) == 0 {
 		conditionType = aggregatorv1.HNewsAdded
@@ -346,10 +362,6 @@ func (r *HotNewsReconciler) updateStatusCondition(ctx context.Context, hotNews *
 		Message:        message,
 	}
 	hotNews.Status.SetCondition(newCondition)
-	if err := r.Client.Status().Update(ctx, hotNews); err != nil {
-		logrus.Error(err, "Unable to update HotNews status")
-		r.updateStatusCondition(ctx, hotNews, metav1.ConditionFalse, "UpdateStatusFailed", "Failed to update HotNews status")
-	}
 }
 
 // SetupWithManager sets up the controller with the Manager.
