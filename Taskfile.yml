@@ -281,7 +281,7 @@ tasks:
       - docker push {{.ACCOUNT_ID}}.dkr.ecr.{{.REGION}}.amazonaws.com/{{.IMAGE_NAME}}
 
   # Combined task to build, tag, and push the image to ECR
-  deployAws:
+  imgPushToEcr:
     deps:
       - ecr-login
       - docker-tag
