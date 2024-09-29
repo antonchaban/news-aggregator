@@ -74,30 +74,41 @@ func (r *HotNewsReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 // Manages the addition and removal of the finalizer on the HotNews resource.
 // Ensures that owner references are cleaned up before the resource is deleted.
 func (r *HotNewsReconciler) handleFinalizer(ctx context.Context, hotNews *aggregatorv1.HotNews) (bool, error) {
-	if !hotNews.ObjectMeta.DeletionTimestamp.IsZero() {
-		// The object is being deleted
-		if slices.Contains(hotNews.Finalizers, HotNewsFinalizer) {
-			if err := r.deleteOwnerReferences(ctx, hotNews.Namespace, hotNews.Name); err != nil {
-				return false, err
-			}
-			hotNews.Finalizers = slices.Delete(hotNews.Finalizers,
-				slices.Index(hotNews.Finalizers, HotNewsFinalizer),
-				slices.Index(hotNews.Finalizers, HotNewsFinalizer)+1)
-			if err := r.Client.Update(ctx, hotNews); err != nil {
-				return false, err
-			}
-		}
+	if hotNews.ObjectMeta.DeletionTimestamp.IsZero() {
+		return r.isFinalizerPresent(ctx, hotNews)
+	}
+	return r.handleDeletion(ctx, hotNews)
+}
+
+// Checks if the finalizer is present on the HotNews resource.
+func (r *HotNewsReconciler) isFinalizerPresent(ctx context.Context, hotNews *aggregatorv1.HotNews) (bool, error) {
+	if slices.Contains(hotNews.Finalizers, HotNewsFinalizer) {
+		return false, nil
+	}
+
+	hotNews.Finalizers = append(hotNews.Finalizers, HotNewsFinalizer)
+	if err := r.Client.Update(ctx, hotNews); err != nil {
+		return false, err
+	}
+	return false, nil
+}
+
+// Handles the deletion of the HotNews resource.
+func (r *HotNewsReconciler) handleDeletion(ctx context.Context, hotNews *aggregatorv1.HotNews) (bool, error) {
+	if !slices.Contains(hotNews.Finalizers, HotNewsFinalizer) {
 		return true, nil
 	}
 
-	// Add finalizer if not present
-	if !slices.Contains(hotNews.Finalizers, HotNewsFinalizer) {
-		hotNews.Finalizers = append(hotNews.Finalizers, HotNewsFinalizer)
-		if err := r.Client.Update(ctx, hotNews); err != nil {
-			return false, err
-		}
+	if err := r.deleteOwnerReferences(ctx, hotNews.Namespace, hotNews.Name); err != nil {
+		return false, err
 	}
-	return false, nil
+
+	index := slices.Index(hotNews.Finalizers, HotNewsFinalizer)
+	hotNews.Finalizers = slices.Delete(hotNews.Finalizers, index, index+1)
+	if err := r.Client.Update(ctx, hotNews); err != nil {
+		return false, err
+	}
+	return true, nil
 }
 
 // Removes the owner reference to the HotNews resource from all Source resources in the namespace.
