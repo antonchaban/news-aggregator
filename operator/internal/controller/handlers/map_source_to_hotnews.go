@@ -11,22 +11,32 @@ import (
 	"strings"
 )
 
-// MapSourceToHotNews maps Source updates to HotNews resources.
-func MapSourceToHotNews(c client.Client, fetchConfigMap func(context.Context) (*corev1.ConfigMap, error)) handler.MapFunc {
+// MapSourceToHotNews maps Source updates to HotNews resources in the same namespace.
+func MapSourceToHotNews(
+	c client.Client,
+	fetchConfigMap func(ctx context.Context, namespace string) (*corev1.ConfigMap, error),
+) handler.MapFunc {
 	return func(ctx context.Context, object client.Object) []reconcile.Request {
 		logrus.Println("Mapping Source to HotNews")
-		source := object.(*aggregatorv1.Source)
+		source, ok := object.(*aggregatorv1.Source)
+		if !ok {
+			logrus.Errorf("Expected a Source object, but got: %T", object)
+			return nil
+		}
+
+		namespace := source.Namespace
 
 		var hotNewsList aggregatorv1.HotNewsList
-		if err := c.List(ctx, &hotNewsList); err != nil {
+		// List all HotNews resources in the same namespace as the Source
+		if err := c.List(ctx, &hotNewsList, &client.ListOptions{Namespace: namespace}); err != nil {
 			logrus.Errorf("Failed to list HotNews resources: %v", err)
 			return nil
 		}
 
-		// Fetch the ConfigMap containing feed groups
-		configMap, err := fetchConfigMap(ctx)
+		// Fetch the ConfigMap containing feed groups from the same namespace
+		configMap, err := fetchConfigMap(ctx, namespace)
 		if err != nil {
-			logrus.Warn("ConfigMap not found or error fetching it")
+			logrus.Warnf("ConfigMap not found or error fetching it in namespace %s: %v", namespace, err)
 			configMap = nil // Proceed without ConfigMap
 		}
 

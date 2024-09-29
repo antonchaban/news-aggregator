@@ -36,9 +36,8 @@ var _ = Describe("CfgMapValidatorWebHook Tests", func() {
 		ctx = context.TODO()
 
 		validator = &v1.CfgMapValidatorWebHook{
-			Client:          fakeClient,
-			CfgMapNamespace: namespace,
-			CfgMapName:      "test-configmap",
+			Client:     fakeClient,
+			CfgMapName: "test-configmap",
 		}
 
 		configMap = &corev1.ConfigMap{

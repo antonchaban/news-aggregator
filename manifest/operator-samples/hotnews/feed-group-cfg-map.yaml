@@ -5,4 +5,4 @@ metadata:
   namespace: news-alligator
 data:
 #  category1: "abcnews"
-  westMedias: "bbc,foxnews,abcnews"
+  westMedias: "foxnews,abcnews"

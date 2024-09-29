@@ -2,7 +2,8 @@ apiVersion: aggregator.com.teamdev/v1
 kind: Source
 metadata:
   name: test-source
+  namespace: operator-system
 spec:
   name: "BBC News"
   link: "https://feeds.bbci.co.uk/news/rss.xml"
-  short_name: "bbc"
+  short_name: "bbc-os"

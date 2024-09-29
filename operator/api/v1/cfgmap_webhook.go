@@ -19,9 +19,8 @@ import (
 
 // CfgMapValidatorWebHook validates a specific ConfigMap.
 type CfgMapValidatorWebHook struct {
-	Client          client.Client
-	CfgMapName      string
-	CfgMapNamespace string
+	Client     client.Client
+	CfgMapName string
 }
 
 // ValidateCreate validates the creation of the ConfigMap, checks does it use existing sources.
@@ -47,7 +46,7 @@ func (v *CfgMapValidatorWebHook) ValidateDelete(ctx context.Context, obj runtime
 	}
 
 	// Check if the ConfigMap is for feed-groups before validating
-	if cm.Name != v.CfgMapName || cm.Namespace != v.CfgMapNamespace {
+	if cm.Name != v.CfgMapName {
 		logrus.Printf("ConfigMap %s/%s is not the target ConfigMap; skipping delete validation", cm.Namespace, cm.Name)
 		return nil, nil
 	}
@@ -79,7 +78,7 @@ func (v *CfgMapValidatorWebHook) validate(ctx context.Context, obj runtime.Objec
 	}
 
 	// Check if the ConfigMap is with required name and namespace before validating
-	if cm.Name != v.CfgMapName || cm.Namespace != v.CfgMapNamespace {
+	if cm.Name != v.CfgMapName {
 		logrus.Printf("ConfigMap %s/%s is not the target ConfigMap; skipping validation", cm.Namespace, cm.Name)
 		return nil, nil
 	}
@@ -93,7 +92,7 @@ func (v *CfgMapValidatorWebHook) validate(ctx context.Context, obj runtime.Objec
 
 	// List the sources in the specified namespace
 	var sourceList SourceList
-	err := v.Client.List(ctx, &sourceList, &client.ListOptions{Namespace: v.CfgMapNamespace})
+	err := v.Client.List(ctx, &sourceList, &client.ListOptions{Namespace: cm.Namespace})
 	if err != nil {
 		return nil, fmt.Errorf("failed to list sources: %v", err)
 	}

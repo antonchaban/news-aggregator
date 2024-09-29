@@ -118,12 +118,11 @@ var _ = Describe("HotNewsReconciler Tests", func() {
 			}))
 
 			reconciler = controller.HotNewsReconciler{
-				Client:             fakeClient,
-				Scheme:             scheme.Scheme,
-				HTTPClient:         server.Client(),
-				ArticleSvcURL:      server.URL + "/articles",
-				ConfigMapName:      configMap.Name,
-				ConfigMapNamespace: configMap.Namespace,
+				Client:        fakeClient,
+				Scheme:        scheme.Scheme,
+				HTTPClient:    server.Client(),
+				ArticleSvcURL: server.URL + "/articles",
+				ConfigMapName: configMap.Name,
 			}
 
 			result, err := reconciler.Reconcile(context.TODO(), reconcile.Request{NamespacedName: typeNamespacedName})
@@ -168,12 +167,11 @@ var _ = Describe("HotNewsReconciler Tests", func() {
 			}))
 
 			reconciler = controller.HotNewsReconciler{
-				Client:             fakeClient,
-				Scheme:             scheme.Scheme,
-				HTTPClient:         server.Client(),
-				ArticleSvcURL:      server.URL + "/articles",
-				ConfigMapName:      configMap.Name,
-				ConfigMapNamespace: configMap.Namespace,
+				Client:        fakeClient,
+				Scheme:        scheme.Scheme,
+				HTTPClient:    server.Client(),
+				ArticleSvcURL: server.URL + "/articles",
+				ConfigMapName: configMap.Name,
 			}
 
 			result, err := reconciler.Reconcile(context.TODO(), reconcile.Request{NamespacedName: typeNamespacedName})
@@ -187,7 +185,7 @@ var _ = Describe("HotNewsReconciler Tests", func() {
 			conditions := updatedHotNews.Status.Conditions
 			Expect(conditions[0].Type).To(Equal(aggregatorv1.HNewsAdded))
 			Expect(conditions[0].Status).To(Equal(metav1.ConditionFalse))
-			Expect(conditions[0].Message).To(Equal("ConfigMap not found, proceeding without feed groups"))
+			Expect(conditions[0].Reason).To(Equal("ConfigMapNotFound"))
 
 		})
 
@@ -200,12 +198,11 @@ var _ = Describe("HotNewsReconciler Tests", func() {
 
 			// Simulate HTTP failure by not starting the server
 			reconciler = controller.HotNewsReconciler{
-				Client:             fakeClient,
-				Scheme:             scheme.Scheme,
-				HTTPClient:         http.DefaultClient, // DefaultClient without a server will fail
-				ArticleSvcURL:      "http://localhost:1234/articles",
-				ConfigMapName:      configMap.Name,
-				ConfigMapNamespace: configMap.Namespace,
+				Client:        fakeClient,
+				Scheme:        scheme.Scheme,
+				HTTPClient:    http.DefaultClient, // DefaultClient without a server will fail
+				ArticleSvcURL: "http://localhost:1234/articles",
+				ConfigMapName: configMap.Name,
 			}
 
 			result, err := reconciler.Reconcile(context.TODO(), reconcile.Request{NamespacedName: typeNamespacedName})
@@ -269,12 +266,11 @@ var _ = Describe("HotNewsReconciler Tests", func() {
 			}))
 
 			reconciler = controller.HotNewsReconciler{
-				Client:             fakeClient,
-				Scheme:             scheme.Scheme,
-				HTTPClient:         server.Client(),
-				ArticleSvcURL:      server.URL + "/articles",
-				ConfigMapName:      configMap.Name,
-				ConfigMapNamespace: configMap.Namespace,
+				Client:        fakeClient,
+				Scheme:        scheme.Scheme,
+				HTTPClient:    server.Client(),
+				ArticleSvcURL: server.URL + "/articles",
+				ConfigMapName: configMap.Name,
 			}
 
 			result, err := reconciler.Reconcile(context.TODO(), reconcile.Request{NamespacedName: typeNamespacedName})
@@ -312,11 +308,10 @@ var _ = Describe("HotNewsReconciler Tests", func() {
 				Build()
 
 			reconciler = controller.HotNewsReconciler{
-				Client:             fakeClient,
-				Scheme:             scheme.Scheme,
-				ArticleSvcURL:      "http://example.com/articles",
-				ConfigMapName:      configMap.Name,
-				ConfigMapNamespace: configMap.Namespace,
+				Client:        fakeClient,
+				Scheme:        scheme.Scheme,
+				ArticleSvcURL: "http://example.com/articles",
+				ConfigMapName: configMap.Name,
 			}
 
 			_, err := reconciler.Reconcile(context.TODO(), reconcile.Request{NamespacedName: typeNamespacedName})
