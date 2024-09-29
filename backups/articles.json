@@ -1,3 +1,1874 @@
 [
-
+  {
+    "Id": 1,
+    "Title": "All injured children in Southport attack out of hospital",
+    "Description": "All children admitted to Alder Hey Children's Hospital have now been safely discharged.",
+    "Link": "https://www.bbc.com/news/articles/c7033y4yxdyo",
+    "Source": {
+      "id": 1,
+      "name": "BBC News",
+      "link": "https://feeds.bbci.co.uk/news/rss.xml",
+      "short_name": "bbc"
+    },
+    "PubDate": "2024-08-06T13:53:55Z"
+  },
+  {
+    "Id": 2,
+    "Title": "The ex-football coach and teacher - now Harris's VP pick",
+    "Description": "The Minnesota governor is a former public school teacher, National Guardsman and member of Congress.",
+    "Link": "https://www.bbc.com/news/articles/cleyjp5qldno",
+    "Source": {
+      "id": 1,
+      "name": "BBC News",
+      "link": "https://feeds.bbci.co.uk/news/rss.xml",
+      "short_name": "bbc"
+    },
+    "PubDate": "2024-08-06T13:03:35Z"
+  },
+  {
+    "Id": 3,
+    "Title": "Anxious pupils' results 'relief' after Scotland exam results email error",
+    "Description": "Youngsters have complained after being sent an email from the SQA that did not include their grades.",
+    "Link": "https://www.bbc.com/news/articles/c5y884n5zrro",
+    "Source": {
+      "id": 1,
+      "name": "BBC News",
+      "link": "https://feeds.bbci.co.uk/news/rss.xml",
+      "short_name": "bbc"
+    },
+    "PubDate": "2024-08-06T13:00:02Z"
+  },
+  {
+    "Id": 4,
+    "Title": "Second Banksy artwork in two days appears in London",
+    "Description": "The elusive artist unveils an elephants stencil piece in Chelsea, south-west London.",
+    "Link": "https://www.bbc.com/news/articles/c9wjjex5qw7o",
+    "Source": {
+      "id": 1,
+      "name": "BBC News",
+      "link": "https://feeds.bbci.co.uk/news/rss.xml",
+      "short_name": "bbc"
+    },
+    "PubDate": "2024-08-06T13:14:55Z"
+  },
+  {
+    "Id": 5,
+    "Title": "'Hero' father killed in crocodile attack",
+    "Description": "Dr David Hogbin was walking when a path gave way and he fell into water, before being taken by a crocodile. ",
+    "Link": "https://www.bbc.com/news/articles/c3ejjxv3qeqo",
+    "Source": {
+      "id": 1,
+      "name": "BBC News",
+      "link": "https://feeds.bbci.co.uk/news/rss.xml",
+      "short_name": "bbc"
+    },
+    "PubDate": "2024-08-06T12:31:31Z"
+  },
+  {
+    "Id": 6,
+    "Title": "Israel and Hezbollah trade strikes as tensions simmer",
+    "Description": "An Israeli air strike kills four in southern Lebanon, while Hezbollah drones injure two in Israel.",
+    "Link": "https://www.bbc.com/news/articles/cgedd00pn1zo",
+    "Source": {
+      "id": 1,
+      "name": "BBC News",
+      "link": "https://feeds.bbci.co.uk/news/rss.xml",
+      "short_name": "bbc"
+    },
+    "PubDate": "2024-08-06T11:53:49Z"
+  },
+  {
+    "Id": 7,
+    "Title": "Bangladesh parliament dissolved after PM flees country",
+    "Description": "The dissolution of parliament, a key demand of protesters, paves the way for an interim government.",
+    "Link": "https://www.bbc.com/news/articles/c0499xpnp1yo",
+    "Source": {
+      "id": 1,
+      "name": "BBC News",
+      "link": "https://feeds.bbci.co.uk/news/rss.xml",
+      "short_name": "bbc"
+    },
+    "PubDate": "2024-08-06T13:15:29Z"
+  },
+  {
+    "Id": 8,
+    "Title": "Water firms to be punished for years of sewage leaks",
+    "Description": "Thames Water, Northumbrian Water and Yorkshire Water face fines for repeated sewage leaks.",
+    "Link": "https://www.bbc.com/news/articles/c5ypp032le0o",
+    "Source": {
+      "id": 1,
+      "name": "BBC News",
+      "link": "https://feeds.bbci.co.uk/news/rss.xml",
+      "short_name": "bbc"
+    },
+    "PubDate": "2024-08-06T10:00:04Z"
+  },
+  {
+    "Id": 9,
+    "Title": "Nurse 'scared to stay' in Belfast due to disorder",
+    "Description": "The staff nurse from India said she was scared and families are really frightened.",
+    "Link": "https://www.bbc.com/news/articles/cp8nn63n52jo",
+    "Source": {
+      "id": 1,
+      "name": "BBC News",
+      "link": "https://feeds.bbci.co.uk/news/rss.xml",
+      "short_name": "bbc"
+    },
+    "PubDate": "2024-08-06T15:01:04Z"
+  },
+  {
+    "Id": 10,
+    "Title": "'Nowhere to hide' for influencers behind disorder - top prosecutor",
+    "Description": "Stephen Parkinson said anybody involved in the violence would face severe charges, including terrorism",
+    "Link": "https://www.bbc.com/news/articles/c75nn9dr0rvo",
+    "Source": {
+      "id": 1,
+      "name": "BBC News",
+      "link": "https://feeds.bbci.co.uk/news/rss.xml",
+      "short_name": "bbc"
+    },
+    "PubDate": "2024-08-06T13:12:57Z"
+  },
+  {
+    "Id": 11,
+    "Title": "BMW set upon and Eastern European men inside attacked - how violence surged in one city",
+    "Description": "Footage of an angry crowd swarming around a car and targeting its occupants is analysed by BBC Verify.",
+    "Link": "https://www.bbc.com/news/articles/cj622z0w7n0o",
+    "Source": {
+      "id": 1,
+      "name": "BBC News",
+      "link": "https://feeds.bbci.co.uk/news/rss.xml",
+      "short_name": "bbc"
+    },
+    "PubDate": "2024-08-06T10:00:09Z"
+  },
+  {
+    "Id": 12,
+    "Title": "Musk hits back after PM criticises UK 'civil war' post",
+    "Description": "The prime minister's spokesperson previously said there was \"no justification\" for the comments.",
+    "Link": "https://www.bbc.com/news/articles/c5ydddy3qzgo",
+    "Source": {
+      "id": 1,
+      "name": "BBC News",
+      "link": "https://feeds.bbci.co.uk/news/rss.xml",
+      "short_name": "bbc"
+    },
+    "PubDate": "2024-08-06T13:49:06Z"
+  },
+  {
+    "Id": 13,
+    "Title": "Protests reveal deep-rooted anger, but UK is not at boiling point",
+    "Description": "The rhetoric taps into genuine frustration yet the UK is safer and more tolerant than ever.",
+    "Link": "https://www.bbc.com/news/articles/czx66dkx3wlo",
+    "Source": {
+      "id": 1,
+      "name": "BBC News",
+      "link": "https://feeds.bbci.co.uk/news/rss.xml",
+      "short_name": "bbc"
+    },
+    "PubDate": "2024-08-05T14:25:43Z"
+  },
+  {
+    "Id": 14,
+    "Title": "Footage shows seven days of violence and disorder",
+    "Description": "A wave of unrest has spread in the UK in the days after the Southport stabbing attack.\n",
+    "Link": "https://www.bbc.com/news/videos/cgrjjw1y0z1o",
+    "Source": {
+      "id": 1,
+      "name": "BBC News",
+      "link": "https://feeds.bbci.co.uk/news/rss.xml",
+      "short_name": "bbc"
+    },
+    "PubDate": "2024-08-05T13:56:26Z"
+  },
+  {
+    "Id": 15,
+    "Title": "Top five stories from Paris Olympics day 11",
+    "Description": "Team GB miss out on more equestrian medals in the individual jumping, Laura Muir and Georgia Bell qualify for the women's 1500m semis, the skateboarding gets under way, plus more.",
+    "Link": "https://www.bbc.com/sport/olympics/articles/cjdkkrv7ym1o",
+    "Source": {
+      "id": 1,
+      "name": "BBC News",
+      "link": "https://feeds.bbci.co.uk/news/rss.xml",
+      "short_name": "bbc"
+    },
+    "PubDate": "2024-08-06T13:00:06Z"
+  },
+  {
+    "Id": 16,
+    "Title": "'Our gold medals are squeaky clean' - China responds to doping doubts",
+    "Description": "The team's medals were received with doubts from their peers from other countries at Paris 2024.",
+    "Link": "https://www.bbc.com/news/articles/ce4qp5ny0eeo",
+    "Source": {
+      "id": 1,
+      "name": "BBC News",
+      "link": "https://feeds.bbci.co.uk/news/rss.xml",
+      "short_name": "bbc"
+    },
+    "PubDate": "2024-08-06T09:50:54Z"
+  },
+  {
+    "Id": 17,
+    "Title": "Paris swim session cancelled for fifth time over pollution",
+    "Description": "Paris 2024 organisers cancel training for open water swimming on Tuesday because of pollution in the River Seine.",
+    "Link": "https://www.bbc.com/sport/olympics/articles/c3ejj29exzjo",
+    "Source": {
+      "id": 1,
+      "name": "BBC News",
+      "link": "https://feeds.bbci.co.uk/news/rss.xml",
+      "short_name": "bbc"
+    },
+    "PubDate": "2024-08-06T12:10:15Z"
+  },
+  {
+    "Id": 18,
+    "Title": "What can you watch today? Check our guide",
+    "Description": "Your day-by-day guide to what is happening when - and who to watch out for - at the Paris 2024 Olympics.",
+    "Link": "https://www.bbc.com/sport/articles/c1dmp9krz91o",
+    "Source": {
+      "id": 1,
+      "name": "BBC News",
+      "link": "https://feeds.bbci.co.uk/news/rss.xml",
+      "short_name": "bbc"
+    },
+    "PubDate": "2024-08-05T21:17:49Z"
+  },
+  {
+    "Id": 19,
+    "Title": "Freddie Flintoff: I have nightmares, I have flashbacks",
+    "Description": "The former England all-rounder reveals his struggle with anxiety after the Top Gear crash he says changed his life forever.",
+    "Link": "https://www.bbc.com/sport/cricket/articles/c51yn7p142jo",
+    "Source": {
+      "id": 1,
+      "name": "BBC News",
+      "link": "https://feeds.bbci.co.uk/news/rss.xml",
+      "short_name": "bbc"
+    },
+    "PubDate": "2024-08-05T18:04:50Z"
+  },
+  {
+    "Id": 20,
+    "Title": "Dead bear another strange twist in RFK Jr's faltering campaign",
+    "Description": "Bizarre headlines, a new opponent and limited cash have left the independent candidate struggling.",
+    "Link": "https://www.bbc.com/news/articles/c0mnn8zneppo",
+    "Source": {
+      "id": 1,
+      "name": "BBC News",
+      "link": "https://feeds.bbci.co.uk/news/rss.xml",
+      "short_name": "bbc"
+    },
+    "PubDate": "2024-08-05T23:38:44Z"
+  },
+  {
+    "Id": 21,
+    "Title": "'How do you tell your children you have cancer?'",
+    "Description": "A new service based in a hospital helps support families after a cancer diagnosis.",
+    "Link": "https://www.bbc.com/news/articles/c06k6e5ke1do",
+    "Source": {
+      "id": 1,
+      "name": "BBC News",
+      "link": "https://feeds.bbci.co.uk/news/rss.xml",
+      "short_name": "bbc"
+    },
+    "PubDate": "2024-08-06T05:38:14Z"
+  },
+  {
+    "Id": 22,
+    "Title": "Why Mario and Sonic didn't make it to Paris 2024",
+    "Description": "Two famous faces who've been associated with the games since 2008 are absent in 2024, but why?",
+    "Link": "https://www.bbc.com/news/articles/cx2ggw315g2o",
+    "Source": {
+      "id": 1,
+      "name": "BBC News",
+      "link": "https://feeds.bbci.co.uk/news/rss.xml",
+      "short_name": "bbc"
+    },
+    "PubDate": "2024-08-06T08:19:58Z"
+  },
+  {
+    "Id": 23,
+    "Title": "Sheikh Hasina: The pro-democracy icon who became an autocrat",
+    "Description": "Sheikh Hasina is credited for the country's economic progress but also accused of authoritarianism.",
+    "Link": "https://www.bbc.com/news/articles/cg3ee303yxpo",
+    "Source": {
+      "id": 1,
+      "name": "BBC News",
+      "link": "https://feeds.bbci.co.uk/news/rss.xml",
+      "short_name": "bbc"
+    },
+    "PubDate": "2024-08-06T03:43:14Z"
+  },
+  {
+    "Id": 24,
+    "Title": "Download now",
+    "Description": "Top stories, breaking news, live reporting, and follow news topics that match your interests",
+    "Link": "https://www.bbc.co.uk/news/10628994",
+    "Source": {
+      "id": 1,
+      "name": "BBC News",
+      "link": "https://feeds.bbci.co.uk/news/rss.xml",
+      "short_name": "bbc"
+    },
+    "PubDate": "2023-06-13T10:25:22Z"
+  },
+  {
+    "Id": 25,
+    "Title": "NHS soup and shake diet can beat type 2 diabetes",
+    "Description": "People can reverse the condition by going on a strict  liquid diet of 900 calories a day.",
+    "Link": "https://www.bbc.com/news/articles/czjyy7280lzo",
+    "Source": {
+      "id": 1,
+      "name": "BBC News",
+      "link": "https://feeds.bbci.co.uk/news/rss.xml",
+      "short_name": "bbc"
+    },
+    "PubDate": "2024-08-05T23:05:29Z"
+  },
+  {
+    "Id": 26,
+    "Title": "US stock markets rise after days of turmoil",
+    "Description": "Shares in the US opened higher but markets in the UK and Europe stayed down after a cautious open.",
+    "Link": "https://www.bbc.com/news/articles/c1d77xe2p26o",
+    "Source": {
+      "id": 1,
+      "name": "BBC News",
+      "link": "https://feeds.bbci.co.uk/news/rss.xml",
+      "short_name": "bbc"
+    },
+    "PubDate": "2024-08-06T14:31:07Z"
+  },
+  {
+    "Id": 27,
+    "Title": "Ministers start to roll back Tory strike restrictions",
+    "Description": "Employers will be told not to enforce legal minimum service levels, which Labour plans to abolish.",
+    "Link": "https://www.bbc.com/news/articles/cwy77dl399mo",
+    "Source": {
+      "id": 1,
+      "name": "BBC News",
+      "link": "https://feeds.bbci.co.uk/news/rss.xml",
+      "short_name": "bbc"
+    },
+    "PubDate": "2024-08-06T14:02:44Z"
+  },
+  {
+    "Id": 28,
+    "Title": "Eluned Morgan confirmed as first minister of Wales",
+    "Description": "Eluned Morgan becomes the first woman to lead the Welsh government, following a Senedd vote.",
+    "Link": "https://www.bbc.com/news/articles/cq5dd7y9vqxo",
+    "Source": {
+      "id": 1,
+      "name": "BBC News",
+      "link": "https://feeds.bbci.co.uk/news/rss.xml",
+      "short_name": "bbc"
+    },
+    "PubDate": "2024-08-06T11:41:53Z"
+  },
+  {
+    "Id": 29,
+    "Title": "Nigerian protesters arrested for waving Russian flag ",
+    "Description": "The army chief warns that it is a \"treasonable offence\" to fly the flag of a foreign country.",
+    "Link": "https://www.bbc.com/news/articles/cgl22630pzeo",
+    "Source": {
+      "id": 1,
+      "name": "BBC News",
+      "link": "https://feeds.bbci.co.uk/news/rss.xml",
+      "short_name": "bbc"
+    },
+    "PubDate": "2024-08-06T11:47:28Z"
+  },
+  {
+    "Id": 30,
+    "Title": "Brain drain threatens film and TV, says Boat Story actor",
+    "Description": "Boat Story's Ethan Lawrence says there are struggles across the industry as workers can't afford their jobs.",
+    "Link": "https://www.bbc.com/news/articles/cd1934gz91wo",
+    "Source": {
+      "id": 1,
+      "name": "BBC News",
+      "link": "https://feeds.bbci.co.uk/news/rss.xml",
+      "short_name": "bbc"
+    },
+    "PubDate": "2024-08-06T14:13:41Z"
+  },
+  {
+    "Id": 31,
+    "Title": "Toyah Willcox joins Strictly Come Dancing line-up",
+    "Description": "Toyah Willcox, Wynne Evans and Dr Punam Krishan will be taking to the floor. ",
+    "Link": "https://www.bbc.com/news/articles/c39kklz2nzxo",
+    "Source": {
+      "id": 1,
+      "name": "BBC News",
+      "link": "https://feeds.bbci.co.uk/news/rss.xml",
+      "short_name": "bbc"
+    },
+    "PubDate": "2024-08-06T10:32:12Z"
+  },
+  {
+    "Id": 32,
+    "Title": "The riots - Policing your social platforms",
+    "Description": "The role of social media in the violent disorder and how to recognise what's not true.",
+    "Link": "https://www.bbc.co.uk/sounds/play/p0jgt22h",
+    "Source": {
+      "id": 1,
+      "name": "BBC News",
+      "link": "https://feeds.bbci.co.uk/news/rss.xml",
+      "short_name": "bbc"
+    },
+    "PubDate": "2024-08-06T14:58:30Z"
+  },
+  {
+    "Id": 33,
+    "Title": "The Riots, the Rioters and the Response",
+    "Description": "PM holds emergency Cobra meeting after weekend of violence.",
+    "Link": "https://www.bbc.co.uk/sounds/play/p0jgp8k4",
+    "Source": {
+      "id": 1,
+      "name": "BBC News",
+      "link": "https://feeds.bbci.co.uk/news/rss.xml",
+      "short_name": "bbc"
+    },
+    "PubDate": "2024-08-05T20:30:00Z"
+  },
+  {
+    "Id": 34,
+    "Title": "GB's Spendolini-Sirieix misses out on historic diving medal",
+    "Description": "Teenager Andrea Spendolini-Sirieix finishes sixth in the 10m platform final after attempting to become first British woman to win two Olympic diving medals.",
+    "Link": "https://www.bbc.com/sport/olympics/articles/c4gll9z2z3qo",
+    "Source": {
+      "id": 1,
+      "name": "BBC News",
+      "link": "https://feeds.bbci.co.uk/news/rss.xml",
+      "short_name": "bbc"
+    },
+    "PubDate": "2024-08-06T14:20:42Z"
+  },
+  {
+    "Id": 35,
+    "Title": "Atletico agree £81.5m deal for Man City's Alvarez",
+    "Description": "Manchester City have accepted an £81.5m proposal from Atletico Madrid for Julian Alvarez.",
+    "Link": "https://www.bbc.com/sport/football/articles/clywwgzv51vo",
+    "Source": {
+      "id": 1,
+      "name": "BBC News",
+      "link": "https://feeds.bbci.co.uk/news/rss.xml",
+      "short_name": "bbc"
+    },
+    "PubDate": "2024-08-06T09:17:01Z"
+  },
+  {
+    "Id": 36,
+    "Title": "How Hodgkinson achieved Olympic 800m gold",
+    "Description": "The story of how Great Britain's Keely Hodgkinson claimed the Olympic 800m title at Paris 2024 to end her wait for a global title.",
+    "Link": "https://www.bbc.com/sport/olympics/articles/cvg33xk9pdko",
+    "Source": {
+      "id": 1,
+      "name": "BBC News",
+      "link": "https://feeds.bbci.co.uk/news/rss.xml",
+      "short_name": "bbc"
+    },
+    "PubDate": "2024-08-06T05:32:52Z"
+  },
+  {
+    "Id": 37,
+    "Title": "RFU has not 'sold out' by renaming Twickenham - Sweeney",
+    "Description": "The RFU has not \"sold out\" by renaming Twickenham the Allianz Stadium in a sponsorship deal worth more than a £100m, says the organisation's chief executive Bill Sweeney.",
+    "Link": "https://www.bbc.com/sport/rugby-union/articles/cx2881lkz44o",
+    "Source": {
+      "id": 1,
+      "name": "BBC News",
+      "link": "https://feeds.bbci.co.uk/news/rss.xml",
+      "short_name": "bbc"
+    },
+    "PubDate": "2024-08-06T12:50:12Z"
+  },
+  {
+    "Id": 38,
+    "Title": "UFC fighter survives drive-by shooting in Florida",
+    "Description": "UFC fighter Ramon Taveras says a \"group of armed men\" tried to shoot him outside his mother's house in Duval, Florida.",
+    "Link": "https://www.bbc.com/sport/mixed-martial-arts/articles/c36nnre273do",
+    "Source": {
+      "id": 1,
+      "name": "BBC News",
+      "link": "https://feeds.bbci.co.uk/news/rss.xml",
+      "short_name": "bbc"
+    },
+    "PubDate": "2024-08-06T11:03:44Z"
+  },
+  {
+    "Id": 39,
+    "Title": "Fresh allegations over airport police kick incident",
+    "Description": "A solicitor for the man stamped on at Manchester Airport make further claims of police mistreatment. ",
+    "Link": "https://www.bbc.com/news/articles/c624468nrd1o",
+    "Source": {
+      "id": 1,
+      "name": "BBC News",
+      "link": "https://feeds.bbci.co.uk/news/rss.xml",
+      "short_name": "bbc"
+    },
+    "PubDate": "2024-08-06T13:31:55Z"
+  },
+  {
+    "Id": 41,
+    "Title": " Egypt’s currency edges higher against the US dollar after price hikes",
+    "Description": "Egypt's local currency is sliding against the U.S. dollar after recent increases in fuel prices and subway fares",
+    "Link": "https://abcnews.go.com/International/wireStory/egypts-currency-edges-higher-us-dollar-after-price-112609498",
+    "Source": {
+      "id": 2,
+      "name": "ABC News: International",
+      "link": "https://abcnews.go.com/abcnews/internationalheadlines",
+      "short_name": "abcnews"
+    },
+    "PubDate": "2024-08-06T15:10:21Z"
+  },
+  {
+    "Id": 42,
+    "Title": " How a student-run uprising led to the ouster of Bangladesh’s longest-serving prime minister",
+    "Description": "Analysts say the anger that pushed Bangladeshi Prime Minister Sheikh Hasina from power is rooted in deep economic distress felt by the majority of people in the country, as well as the perception that while they suffered, the elites aligned with Hasina...",
+    "Link": "https://abcnews.go.com/International/wireStory/student-run-uprising-led-ouster-bangladeshs-longest-serving-112608837",
+    "Source": {
+      "id": 2,
+      "name": "ABC News: International",
+      "link": "https://abcnews.go.com/abcnews/internationalheadlines",
+      "short_name": "abcnews"
+    },
+    "PubDate": "2024-08-06T15:34:20Z"
+  },
+  {
+    "Id": 43,
+    "Title": " More than 120 people died in Tokyo from heatstroke in July as average temperatures hit record highs",
+    "Description": "More than 120 people died of heatstroke in the Tokyo metropolitan area in July, when the nation\u0026rsquo;s average temperature hit record highs and heat warnings were in effect much of the month",
+    "Link": "https://abcnews.go.com/International/wireStory/120-people-died-tokyo-heatstroke-july-average-temperatures-112606099",
+    "Source": {
+      "id": 2,
+      "name": "ABC News: International",
+      "link": "https://abcnews.go.com/abcnews/internationalheadlines",
+      "short_name": "abcnews"
+    },
+    "PubDate": "2024-08-06T14:06:26Z"
+  },
+  {
+    "Id": 44,
+    "Title": " Putin calls for a project to promote 'traditional Russian values' overseas",
+    "Description": "Russian President Vladimir Putin is calling for the government to develop a program for overseas promotion of \u0026ldquo;traditional Russian spiritual and moral values.\u0026rdquo;",
+    "Link": "https://abcnews.go.com/International/wireStory/putin-calls-project-promote-traditional-russian-values-overseas-112604905",
+    "Source": {
+      "id": 2,
+      "name": "ABC News: International",
+      "link": "https://abcnews.go.com/abcnews/internationalheadlines",
+      "short_name": "abcnews"
+    },
+    "PubDate": "2024-08-06T12:30:26Z"
+  },
+  {
+    "Id": 45,
+    "Title": " Protesters who toppled Hasina want a Nobel laureate to lead Bangladesh. Who is Muhammad Yunus?",
+    "Description": "After Bangladesh\u0026rsquo;s prime minister resigned in the face of violent unrest, one name has emerged as a possible caretaker until new elections are announced",
+    "Link": "https://abcnews.go.com/International/wireStory/protesters-toppled-hasina-nobel-laureate-lead-bangladesh-muhammad-112604091",
+    "Source": {
+      "id": 2,
+      "name": "ABC News: International",
+      "link": "https://abcnews.go.com/abcnews/internationalheadlines",
+      "short_name": "abcnews"
+    },
+    "PubDate": "2024-08-06T13:42:14Z"
+  },
+  {
+    "Id": 46,
+    "Title": " Part of Frankfurt Airport's power supply cut overnight by a dormouse, limited effect",
+    "Description": "Officials say part of Frankfurt Airport's power supply was cut off for several hours during the night after a dormouse caused a short-circuit at an electricity substation",
+    "Link": "https://abcnews.go.com/International/wireStory/part-frankfurt-airports-power-supply-cut-overnight-dormouse-112602816",
+    "Source": {
+      "id": 2,
+      "name": "ABC News: International",
+      "link": "https://abcnews.go.com/abcnews/internationalheadlines",
+      "short_name": "abcnews"
+    },
+    "PubDate": "2024-08-06T11:31:46Z"
+  },
+  {
+    "Id": 47,
+    "Title": " President Mohammed Shahabuddin dissolves parliament, clearing way for new elections after longtime PM resigns",
+    "Description": "President Mohammed Shahabuddin dissolves parliament, clearing way for new elections after longtime PM resigns",
+    "Link": "https://abcnews.go.com/International/wireStory/president-mohammed-shahabuddin-dissolves-parliament-clearing-new-elections-112601861",
+    "Source": {
+      "id": 2,
+      "name": "ABC News: International",
+      "link": "https://abcnews.go.com/abcnews/internationalheadlines",
+      "short_name": "abcnews"
+    },
+    "PubDate": "2024-08-06T10:22:01Z"
+  },
+  {
+    "Id": 48,
+    "Title": " China launches rocket carrying new constellation of satellites",
+    "Description": "China says it has launched a rocket carrying a constellation of a reported 18 satellites as part of efforts to assert its presence in space",
+    "Link": "https://abcnews.go.com/International/wireStory/china-launches-rocket-carrying-new-constellation-satellites-112601769",
+    "Source": {
+      "id": 2,
+      "name": "ABC News: International",
+      "link": "https://abcnews.go.com/abcnews/internationalheadlines",
+      "short_name": "abcnews"
+    },
+    "PubDate": "2024-08-06T10:01:10Z"
+  },
+  {
+    "Id": 49,
+    "Title": " Trial starts for a Polish man accused of punching Danish prime minister in Copenhagen",
+    "Description": "The trial of a Polish man accused of punching Danish Prime Minister Mette Frederiksen in the shoulder in June has begun, with Frederiksen not expected to appear in court",
+    "Link": "https://abcnews.go.com/International/wireStory/trial-starts-polish-man-accused-punching-danish-prime-112601859",
+    "Source": {
+      "id": 2,
+      "name": "ABC News: International",
+      "link": "https://abcnews.go.com/abcnews/internationalheadlines",
+      "short_name": "abcnews"
+    },
+    "PubDate": "2024-08-06T13:26:20Z"
+  },
+  {
+    "Id": 50,
+    "Title": " Australian state orders public servants to stop remote working after campaign",
+    "Description": "Public employees in Australia's most populous state have been told to end remote working in a directive from the premier of New South Wales as he seeks to reverse work-from-home habits established during the pandemic",
+    "Link": "https://abcnews.go.com/International/wireStory/australian-state-orders-public-servants-stop-remote-working-112601586",
+    "Source": {
+      "id": 2,
+      "name": "ABC News: International",
+      "link": "https://abcnews.go.com/abcnews/internationalheadlines",
+      "short_name": "abcnews"
+    },
+    "PubDate": "2024-08-06T10:03:31Z"
+  },
+  {
+    "Id": 51,
+    "Title": " Cruise ship rescues 77 migrants in sailing boat found southwest of Greece",
+    "Description": "Greek authorities say a cruise ship has rescued 77 migrants found overnight in a sailing boat far off the southwestern coast of Greece, and was transporting them to a port in southern Greece",
+    "Link": "https://abcnews.go.com/International/wireStory/cruise-ship-rescues-77-migrants-sailing-boat-found-112601478",
+    "Source": {
+      "id": 2,
+      "name": "ABC News: International",
+      "link": "https://abcnews.go.com/abcnews/internationalheadlines",
+      "short_name": "abcnews"
+    },
+    "PubDate": "2024-08-06T09:33:57Z"
+  },
+  {
+    "Id": 52,
+    "Title": " Israel-Hamas war latest: Palestinians killed in West Bank as world leaders try to avoid regional war",
+    "Description": "Palestinian officials say Israeli fire during military raids in the occupied West Bank has killed 10 Palestinians, including four teenagers, and wounded another 10",
+    "Link": "https://abcnews.go.com/International/wireStory/israel-hamas-war-latest-palestinians-killed-west-bank-112601223",
+    "Source": {
+      "id": 2,
+      "name": "ABC News: International",
+      "link": "https://abcnews.go.com/abcnews/internationalheadlines",
+      "short_name": "abcnews"
+    },
+    "PubDate": "2024-08-06T15:34:18Z"
+  },
+  {
+    "Id": 53,
+    "Title": " Sierra Leone not long ago still chained mental health patients. A transformation is underway",
+    "Description": "Abdul Jalloh was the only practicing psychiatrist in Sierra Leone when he took over the country\u0026rsquo;s sole psychiatric hospital on the outskirts of the capital",
+    "Link": "https://abcnews.go.com/International/wireStory/sierra-leone-long-ago-chained-mental-health-patients-112601019",
+    "Source": {
+      "id": 2,
+      "name": "ABC News: International",
+      "link": "https://abcnews.go.com/abcnews/internationalheadlines",
+      "short_name": "abcnews"
+    },
+    "PubDate": "2024-08-06T11:02:18Z"
+  },
+  {
+    "Id": 54,
+    "Title": " Aramco reports lower half-year profits as economic worries dampen energy prices",
+    "Description": "Saudi oil giant Aramco has reported half-year profits of $56.3 billion, down from the year before due to weakening volumes sold amid worries about the global economy",
+    "Link": "https://abcnews.go.com/International/wireStory/saudi-arabias-aramco-reports-lower-half-year-profits-112600839",
+    "Source": {
+      "id": 2,
+      "name": "ABC News: International",
+      "link": "https://abcnews.go.com/abcnews/internationalheadlines",
+      "short_name": "abcnews"
+    },
+    "PubDate": "2024-08-06T11:18:17Z"
+  },
+  {
+    "Id": 55,
+    "Title": " French imports of Russia's liquified natural gas surge, and Ukraine supporters seek a stop",
+    "Description": "New analyses of trade data show that shipments of Russian liquified natural gas to France more than doubled the first half of this year",
+    "Link": "https://abcnews.go.com/International/wireStory/french-imports-russias-liquified-natural-gas-surge-ukraine-112600828",
+    "Source": {
+      "id": 2,
+      "name": "ABC News: International",
+      "link": "https://abcnews.go.com/abcnews/internationalheadlines",
+      "short_name": "abcnews"
+    },
+    "PubDate": "2024-08-06T06:14:29Z"
+  },
+  {
+    "Id": 56,
+    "Title": " India has pushed hard for solar. But as its billions demand more power, coal always gets the call",
+    "Description": "India has been significantly increasing its renewable energy capacity in recent years, but when demand for electricity surges, it still goes back to its most trusted source of power",
+    "Link": "https://abcnews.go.com/International/wireStory/india-pushed-hard-solar-billions-demand-power-coal-112600831",
+    "Source": {
+      "id": 2,
+      "name": "ABC News: International",
+      "link": "https://abcnews.go.com/abcnews/internationalheadlines",
+      "short_name": "abcnews"
+    },
+    "PubDate": "2024-08-06T06:14:21Z"
+  },
+  {
+    "Id": 57,
+    "Title": " Bangladesh’s president dissolves Parliament, clearing the way for elections to replace ousted leader",
+    "Description": "Bangladesh\u0026rsquo;s president has dissolved Parliament, clearing the way for new elections to replace the longtime prime minister who resigned and fled the country following weeks of demonstrations against her rule that descended into violence",
+    "Link": "https://abcnews.go.com/International/wireStory/bangladesh-protesters-nobel-peace-prize-laureate-yunus-lead-112600379",
+    "Source": {
+      "id": 2,
+      "name": "ABC News: International",
+      "link": "https://abcnews.go.com/abcnews/internationalheadlines",
+      "short_name": "abcnews"
+    },
+    "PubDate": "2024-08-06T15:18:57Z"
+  },
+  {
+    "Id": 58,
+    "Title": " An organizer of Bangladesh's student protests says they want Nobel Peace Prize laureate Yunus to lead the country",
+    "Description": "An organizer of Bangladesh's student protests says they want Nobel Peace Prize laureate Yunus to lead the country",
+    "Link": "https://abcnews.go.com/International/wireStory/organizer-bangladeshs-student-protests-nobel-peace-prize-laureate-112600290",
+    "Source": {
+      "id": 2,
+      "name": "ABC News: International",
+      "link": "https://abcnews.go.com/abcnews/internationalheadlines",
+      "short_name": "abcnews"
+    },
+    "PubDate": "2024-08-06T04:46:03Z"
+  },
+  {
+    "Id": 59,
+    "Title": " Chad's military was responsible for deaths of detainees after protests in 2022, a rights group says",
+    "Description": "Human Rights Watch says Chad\u0026rsquo;s military was responsible for the deaths of several detainees who were arrested after protests in October 2022",
+    "Link": "https://abcnews.go.com/International/wireStory/chads-military-responsible-deaths-detainees-after-protests-2022-112600276",
+    "Source": {
+      "id": 2,
+      "name": "ABC News: International",
+      "link": "https://abcnews.go.com/abcnews/internationalheadlines",
+      "short_name": "abcnews"
+    },
+    "PubDate": "2024-08-06T04:22:13Z"
+  },
+  {
+    "Id": 60,
+    "Title": " Human remains found inside a crocodile in Australia believed to be that of a 40-year-old tourist",
+    "Description": "Police say human remains have been found inside a large crocodile suspected of killing a tourist in Australia\u0026rsquo;s second fatal attack in about a month",
+    "Link": "https://abcnews.go.com/International/wireStory/human-remains-found-after-australias-fatal-crocodile-attack-112599365",
+    "Source": {
+      "id": 2,
+      "name": "ABC News: International",
+      "link": "https://abcnews.go.com/abcnews/internationalheadlines",
+      "short_name": "abcnews"
+    },
+    "PubDate": "2024-08-06T14:37:53Z"
+  },
+  {
+    "Id": 61,
+    "Title": " Hiroshima governor says nuclear disarmament must be tackled as a pressing issue, not an ideal",
+    "Description": "Hiroshima officials are urging world leaders to stop relying on nuclear weapons as deterrence and take immediate action toward abolishment \u0026mdash; not as an ideal, but to remove the risk of atomic war amid the conflicts in Ukraine and the Middle East",
+    "Link": "https://abcnews.go.com/International/wireStory/hiroshima-governor-nuclear-disarmament-tackled-pressing-issue-ideal-112599268",
+    "Source": {
+      "id": 2,
+      "name": "ABC News: International",
+      "link": "https://abcnews.go.com/abcnews/internationalheadlines",
+      "short_name": "abcnews"
+    },
+    "PubDate": "2024-08-06T07:18:17Z"
+  },
+  {
+    "Id": 62,
+    "Title": " Brazilian authorities reinforce troops after clashes between Indigenous peoples and landowners",
+    "Description": "Brazil\u0026rsquo;s Ministry of Justice is sending more law enforcement agents to Mato Grosso do Sul state after clashes between Indigenous peoples and farmers over the weekend",
+    "Link": "https://abcnews.go.com/International/wireStory/brazilian-authorities-reinforce-troops-after-clashes-indigenous-peoples-112594732",
+    "Source": {
+      "id": 2,
+      "name": "ABC News: International",
+      "link": "https://abcnews.go.com/abcnews/internationalheadlines",
+      "short_name": "abcnews"
+    },
+    "PubDate": "2024-08-06T00:54:21Z"
+  },
+  {
+    "Id": 63,
+    "Title": " Venezuela's AG says opposition's González and Machado are under investigation over calls on armed forces to ditch Maduro",
+    "Description": "Venezuela's AG says opposition's Gonz\u0026aacute;lez and Machado are under investigation over calls on armed forces to ditch Maduro",
+    "Link": "https://abcnews.go.com/International/wireStory/venezuelas-ag-oppositions-gonzlez-machado-investigation-calls-armed-112594522",
+    "Source": {
+      "id": 2,
+      "name": "ABC News: International",
+      "link": "https://abcnews.go.com/abcnews/internationalheadlines",
+      "short_name": "abcnews"
+    },
+    "PubDate": "2024-08-05T22:14:01Z"
+  },
+  {
+    "Id": 64,
+    "Title": " Mali cuts diplomatic ties with Ukraine, accusing it of aiding a rebel attack in the African country",
+    "Description": "Mali's government says it has diplomatic ties with Ukraine accusing Kyiv of aiding a rebel attack that killed dozens of Wagner mercenaries and Malian soldiers in July",
+    "Link": "https://abcnews.go.com/International/wireStory/mali-cuts-diplomatic-ties-ukraine-accusing-aiding-rebel-112593510",
+    "Source": {
+      "id": 2,
+      "name": "ABC News: International",
+      "link": "https://abcnews.go.com/abcnews/internationalheadlines",
+      "short_name": "abcnews"
+    },
+    "PubDate": "2024-08-06T00:45:59Z"
+  },
+  {
+    "Id": 65,
+    "Title": " Venezuela's top prosecutor announces criminal probe against opposition leaders González, Machado",
+    "Description": "Venezuela\u0026rsquo;s top prosecutor has announced a criminal investigation against the opposition\u0026rsquo;s presidential candidate Edmundo Gonz\u0026aacute;lez and its leader Maria Corina Machado over their call on the armed forces to abandon their support for President Nicol\u0026aacute;s Ma...",
+    "Link": "https://abcnews.go.com/International/wireStory/venezuelas-opposition-calls-armed-forces-ditch-support-maduro-112591257",
+    "Source": {
+      "id": 2,
+      "name": "ABC News: International",
+      "link": "https://abcnews.go.com/abcnews/internationalheadlines",
+      "short_name": "abcnews"
+    },
+    "PubDate": "2024-08-06T02:54:15Z"
+  },
+  {
+    "Id": 66,
+    "Title": "Trial starts for a Polish man accused of punching Danish prime minister in Copenhagen",
+    "Description": "The trial of a Polish man accused of punching Danish Prime Minister Mette Frederiksen in the shoulder in June began Tuesday, with Frederiksen not expected to appear in court.",
+    "Link": "https://www.washingtontimes.com/news/2024/aug/6/trial-begins-for-polish-man-accused-of-punching-da/?utm_source=RSS_Feed\u0026utm_medium=RSS",
+    "Source": {
+      "id": 3,
+      "name": "The Washington Times stories: World",
+      "link": "https://www.washingtontimes.com/rss/headlines/news/world/",
+      "short_name": "washingtontimes"
+    },
+    "PubDate": "2024-08-06T13:09:27Z"
+  },
+  {
+    "Id": 67,
+    "Title": "China's government clamps down on fentanyl chemicals, White House says",
+    "Description": "China's communist government will put tighter restrictions on three chemicals used to produce fentanyl, the White House said Tuesday, hailing it as a step that will save lives in the U.S.",
+    "Link": "https://www.washingtontimes.com/news/2024/aug/6/chinas-government-clamps-down-on-fentanyl-chemical/?utm_source=RSS_Feed\u0026utm_medium=RSS",
+    "Source": {
+      "id": 3,
+      "name": "The Washington Times stories: World",
+      "link": "https://www.washingtontimes.com/rss/headlines/news/world/",
+      "short_name": "washingtontimes"
+    },
+    "PubDate": "2024-08-06T12:57:45Z"
+  },
+  {
+    "Id": 68,
+    "Title": "More than 120 people died in Tokyo from heatstroke in July as average temperatures hit record highs",
+    "Description": "More than 120 people died of heatstroke in the Tokyo metropolitan area in July, when the nation's average temperature hit record highs and heat warnings were in effect much of the month, Japanese authorities said Tuesday.",
+    "Link": "https://www.washingtontimes.com/news/2024/aug/6/more-than-120-people-in-tokyo-died-from-heatstroke/?utm_source=RSS_Feed\u0026utm_medium=RSS",
+    "Source": {
+      "id": 3,
+      "name": "The Washington Times stories: World",
+      "link": "https://www.washingtontimes.com/rss/headlines/news/world/",
+      "short_name": "washingtontimes"
+    },
+    "PubDate": "2024-08-06T12:50:23Z"
+  },
+  {
+    "Id": 69,
+    "Title": "Russian disinformation slams Paris and amplifies Khelif claims to undermine the Olympics",
+    "Description": "The actor in the viral music video denouncing the 2024 Olympics looks a lot like French President Emmanuel Macron. The images of rats, trash and the sewage, however, were dreamed up by artificial intelligence.",
+    "Link": "https://www.washingtontimes.com/news/2024/aug/6/russian-disinformation-slams-paris-and-amplifies-i/?utm_source=RSS_Feed\u0026utm_medium=RSS",
+    "Source": {
+      "id": 3,
+      "name": "The Washington Times stories: World",
+      "link": "https://www.washingtontimes.com/rss/headlines/news/world/",
+      "short_name": "washingtontimes"
+    },
+    "PubDate": "2024-08-06T12:50:12Z"
+  },
+  {
+    "Id": 70,
+    "Title": "Pentagon IG launches another probe into Gaza floating pier operation",
+    "Description": "The Pentagon's watchdog agency has launched another review of the temporary floating pier off the Gaza Strip that was intended to ferry humanitarian relief to Palestinian civilians caught in the crossfire between Israel and Hamas militants.",
+    "Link": "https://www.washingtontimes.com/news/2024/aug/6/pentagon-ig-launches-another-probe-into-gaza-float/?utm_source=RSS_Feed\u0026utm_medium=RSS",
+    "Source": {
+      "id": 3,
+      "name": "The Washington Times stories: World",
+      "link": "https://www.washingtontimes.com/rss/headlines/news/world/",
+      "short_name": "washingtontimes"
+    },
+    "PubDate": "2024-08-06T12:23:57Z"
+  },
+  {
+    "Id": 71,
+    "Title": "Putin calls for a project to promote 'traditional Russian values' overseas",
+    "Description": "Russian President Vladimir Putin on Tuesday called for the government to develop a program for overseas promotion of \"traditional Russian spiritual and moral values,\" a theme that the Kremlin has increasingly sounded in recent years.",
+    "Link": "https://www.washingtontimes.com/news/2024/aug/6/vladimir-putin-calls-for-project-to-promote-tradit/?utm_source=RSS_Feed\u0026utm_medium=RSS",
+    "Source": {
+      "id": 3,
+      "name": "The Washington Times stories: World",
+      "link": "https://www.washingtontimes.com/rss/headlines/news/world/",
+      "short_name": "washingtontimes"
+    },
+    "PubDate": "2024-08-06T12:12:56Z"
+  },
+  {
+    "Id": 72,
+    "Title": "Part of Frankfurt Airport's power supply cut overnight by a dormouse, but effect on flights limited",
+    "Description": "Part of Frankfurt Airport's power supply was cut off for several hours during the night after a dormouse caused a short-circuit at an electricity substation, officials said Tuesday. The power cut had only a limited effect on flights.",
+    "Link": "https://www.washingtontimes.com/news/2024/aug/6/part-of-frankfurt-airport-power-supply-cut-overnig/?utm_source=RSS_Feed\u0026utm_medium=RSS",
+    "Source": {
+      "id": 3,
+      "name": "The Washington Times stories: World",
+      "link": "https://www.washingtontimes.com/rss/headlines/news/world/",
+      "short_name": "washingtontimes"
+    },
+    "PubDate": "2024-08-06T10:42:13Z"
+  },
+  {
+    "Id": 73,
+    "Title": "Saudi Arabia's Aramco reports lower half-year profits as economic worries dampen energy prices",
+    "Description": "Saudi oil giant Aramco reported half-year profits Tuesday of $56.3 billion, down from the year before amid worries about a slowing global economy.",
+    "Link": "https://www.washingtontimes.com/news/2024/aug/6/saudi-arabia-oil-giant-aramco-reports-lower-half-y/?utm_source=RSS_Feed\u0026utm_medium=RSS",
+    "Source": {
+      "id": 3,
+      "name": "The Washington Times stories: World",
+      "link": "https://www.washingtontimes.com/rss/headlines/news/world/",
+      "short_name": "washingtontimes"
+    },
+    "PubDate": "2024-08-06T10:40:54Z"
+  },
+  {
+    "Id": 74,
+    "Title": "French museum network hit by ransomware attack, but no disruptions are reported at Olympic events",
+    "Description": "A ransomware attack has targeted the central data systems of Paris' Grand Palais and other museums in the Reunion des Musees Nationaux network, the Paris prosecutor's office said Tuesday. Some of the venues in the network are hosting competitions for the Summer Olympics.",
+    "Link": "https://www.washingtontimes.com/news/2024/aug/6/france-museum-network-hit-by-ransomware-attack-but/?utm_source=RSS_Feed\u0026utm_medium=RSS",
+    "Source": {
+      "id": 3,
+      "name": "The Washington Times stories: World",
+      "link": "https://www.washingtontimes.com/rss/headlines/news/world/",
+      "short_name": "washingtontimes"
+    },
+    "PubDate": "2024-08-06T10:24:49Z"
+  },
+  {
+    "Id": 75,
+    "Title": "Bangladesh's president dissolves parliament, clearing the way for elections to replace ousted leader",
+    "Description": "Bangladesh's president dissolved parliament Tuesday, clearing the way for new elections to replace the longtime prime minister who resigned and fled the country following weeks of demonstrations against her rule that descended into violent unrest.",
+    "Link": "https://www.washingtontimes.com/news/2024/aug/6/bangladeshs-leader-dissolves-parliament-clearing-w/?utm_source=RSS_Feed\u0026utm_medium=RSS",
+    "Source": {
+      "id": 3,
+      "name": "The Washington Times stories: World",
+      "link": "https://www.washingtontimes.com/rss/headlines/news/world/",
+      "short_name": "washingtontimes"
+    },
+    "PubDate": "2024-08-06T10:21:02Z"
+  },
+  {
+    "Id": 76,
+    "Title": "Israel-Hamas war latest: Palestinians killed in West Bank as world leaders try to avoid regional war",
+    "Description": "Eight Palestinians were killed, including four teenagers, and another seven were wounded by Israeli fire during military raids in the occupied West Bank, Palestinian officials said Tuesday, as world leaders try to stop tensions in the Middle East from boiling over into a regional war.",
+    "Link": "https://www.washingtontimes.com/news/2024/aug/6/palestinians-killed-in-west-bank-as-world-leaders-/?utm_source=RSS_Feed\u0026utm_medium=RSS",
+    "Source": {
+      "id": 3,
+      "name": "The Washington Times stories: World",
+      "link": "https://www.washingtontimes.com/rss/headlines/news/world/",
+      "short_name": "washingtontimes"
+    },
+    "PubDate": "2024-08-06T10:04:06Z"
+  },
+  {
+    "Id": 77,
+    "Title": "Australian state orders public servants to stop remote working after a newspaper campaign against it",
+    "Description": "The government of Australia's most populous state ordered all public employees to work from their offices by default beginning Tuesday and urged stricter limits on remote work, after news outlets provoked a fraught debate about work-from-home habits established during the pandemic.",
+    "Link": "https://www.washingtontimes.com/news/2024/aug/6/australia-state-orders-public-servants-to-stop-rem/?utm_source=RSS_Feed\u0026utm_medium=RSS",
+    "Source": {
+      "id": 3,
+      "name": "The Washington Times stories: World",
+      "link": "https://www.washingtontimes.com/rss/headlines/news/world/",
+      "short_name": "washingtontimes"
+    },
+    "PubDate": "2024-08-06T09:24:07Z"
+  },
+  {
+    "Id": 78,
+    "Title": "Japan's Nikkei 225 soars 10% and other world markets are mixed after the week's rollercoaster start",
+    "Description": "Japan's benchmark Nikkei 225 index soared more than 10% on Tuesday, rebounding after a rollercoaster start to the week that sent markets tumbling in Europe and on Wall Street.",
+    "Link": "https://www.washingtontimes.com/news/2024/aug/6/japans-nikkei-225-index-soars-more-than-10-after-p/?utm_source=RSS_Feed\u0026utm_medium=RSS",
+    "Source": {
+      "id": 3,
+      "name": "The Washington Times stories: World",
+      "link": "https://www.washingtontimes.com/rss/headlines/news/world/",
+      "short_name": "washingtontimes"
+    },
+    "PubDate": "2024-08-06T08:21:51Z"
+  },
+  {
+    "Id": 79,
+    "Title": "Gunmen kill New Zealand helicopter pilot in another attack in Indonesia's restive Papua region",
+    "Description": "Gunmen stormed a helicopter and killed its New Zealand pilot shortly after it landed in Indonesia's restive Papua region on Monday, and they released two health workers and two children it was carrying, police said.",
+    "Link": "https://www.washingtontimes.com/news/2024/aug/6/gunmen-kill-new-zealand-chopper-pilot-in-another-a/?utm_source=RSS_Feed\u0026utm_medium=RSS",
+    "Source": {
+      "id": 3,
+      "name": "The Washington Times stories: World",
+      "link": "https://www.washingtontimes.com/rss/headlines/news/world/",
+      "short_name": "washingtontimes"
+    },
+    "PubDate": "2024-08-06T08:18:33Z"
+  },
+  {
+    "Id": 80,
+    "Title": "Hiroshima governor says nuclear disarmament must be tackled as a pressing issue, not an ideal",
+    "Description": "Hiroshima officials urged world leaders Tuesday to stop relying on nuclear weapons as deterrence and take immediate action toward abolishment -- not as an ideal, but to remove the risk of atomic war amid conflicts in Ukraine and the Middle East and rising tensions in East Asia.",
+    "Link": "https://www.washingtontimes.com/news/2024/aug/6/hiroshima-gov-hidehiko-yuzaki-nuke-disarmament-mus/?utm_source=RSS_Feed\u0026utm_medium=RSS",
+    "Source": {
+      "id": 3,
+      "name": "The Washington Times stories: World",
+      "link": "https://www.washingtontimes.com/rss/headlines/news/world/",
+      "short_name": "washingtontimes"
+    },
+    "PubDate": "2024-08-06T06:12:45Z"
+  },
+  {
+    "Id": 81,
+    "Title": "Sierra Leone not long ago still chained mental health patients. A transformation is underway",
+    "Description": "Abdul Jalloh was the only practicing psychiatrist in Sierra Leone when he took over the country's sole psychiatric hospital on the outskirts of the capital. Now six years later, the young doctor is leading a transformation of mental health services in the West African nation.",
+    "Link": "https://www.washingtontimes.com/news/2024/aug/6/not-long-ago-sierra-leone-still-chained-mental-hea/?utm_source=RSS_Feed\u0026utm_medium=RSS",
+    "Source": {
+      "id": 3,
+      "name": "The Washington Times stories: World",
+      "link": "https://www.washingtontimes.com/rss/headlines/news/world/",
+      "short_name": "washingtontimes"
+    },
+    "PubDate": "2024-08-06T05:54:30Z"
+  },
+  {
+    "Id": 82,
+    "Title": "French imports of Russia's liquified natural gas surge, and Ukraine supporters seek a stop",
+    "Description": "Shipments of Russian liquified natural gas to France more than doubled the first half of this year, according to new analyses of trade data, at a time when Europe has tried to pull back from energy purchases that help finance the Kremlin's invasion of Ukraine.",
+    "Link": "https://www.washingtontimes.com/news/2024/aug/6/frances-imports-of-russias-liquified-natural-gas-s/?utm_source=RSS_Feed\u0026utm_medium=RSS",
+    "Source": {
+      "id": 3,
+      "name": "The Washington Times stories: World",
+      "link": "https://www.washingtontimes.com/rss/headlines/news/world/",
+      "short_name": "washingtontimes"
+    },
+    "PubDate": "2024-08-06T05:05:29Z"
+  },
+  {
+    "Id": 83,
+    "Title": "India has pushed hard for solar. But as its billions demand more power, coal always gets the call",
+    "Description": "India Prime Minister Narendra Modi was in the midst of a monthslong reelection campaign this April when he took to social media to trumpet a \"remarkable feat!\" and a \"historic milestone\" for his country: crossing 1 billion metric tons of coal and lignite production. It was proof, Modi said, of India's \"commitment to ensuring a vibrant coal sector.\"",
+    "Link": "https://www.washingtontimes.com/news/2024/aug/6/india-has-pressed-hard-for-solar-but-as-its-billio/?utm_source=RSS_Feed\u0026utm_medium=RSS",
+    "Source": {
+      "id": 3,
+      "name": "The Washington Times stories: World",
+      "link": "https://www.washingtontimes.com/rss/headlines/news/world/",
+      "short_name": "washingtontimes"
+    },
+    "PubDate": "2024-08-06T05:04:15Z"
+  },
+  {
+    "Id": 84,
+    "Title": "Chad's military was responsible for deaths of detainees after protests in 2022, a rights group says",
+    "Description": "Chad's military was responsible for the deaths of several detainees arrested following protests in October 2022, Human Rights Watch said Tuesday.",
+    "Link": "https://www.washingtontimes.com/news/2024/aug/6/chad-military-was-responsible-for-deaths-of-detain/?utm_source=RSS_Feed\u0026utm_medium=RSS",
+    "Source": {
+      "id": 3,
+      "name": "The Washington Times stories: World",
+      "link": "https://www.washingtontimes.com/rss/headlines/news/world/",
+      "short_name": "washingtontimes"
+    },
+    "PubDate": "2024-08-06T04:05:12Z"
+  },
+  {
+    "Id": 85,
+    "Title": "North Korea marks the delivery of 250 nuclear-capable missile launchers to frontline units",
+    "Description": "North Korea marked the delivery of 250 nuclear-capable missile launchers to frontline military units at a ceremony where leader Kim Jong Un called for a ceaseless expansion of his military's nuclear program to counter perceived U.S. threats, state media said Monday.",
+    "Link": "https://www.washingtontimes.com/news/2024/aug/5/north-korea-marks-delivery-of-250-nuclear-capable-/?utm_source=RSS_Feed\u0026utm_medium=RSS",
+    "Source": {
+      "id": 3,
+      "name": "The Washington Times stories: World",
+      "link": "https://www.washingtontimes.com/rss/headlines/news/world/",
+      "short_name": "washingtontimes"
+    },
+    "PubDate": "2024-08-06T03:11:14Z"
+  },
+  {
+    "Id": 86,
+    "Title": "The story behind historic prisoner exchange with Russia | The Excerpt",
+    "Description": "Plus: ice President Kamala Harris officially becomes the 2024 Democratic presidential nominee. U.S. hiring slowed substantially in July.",
+    "Link": "https://www.usatoday.com/story/news/world/2024/08/05/historic-prisoner-exchange-russia-the-excerpt/74676580007/",
+    "Source": {
+      "id": 4,
+      "name": "USA TODAY",
+      "link": "https://www.usatoday.com/news/world/",
+      "short_name": "usatoday"
+    },
+    "PubDate": "2024-08-06T15:38:07.906442Z"
+  },
+  {
+    "Id": 87,
+    "Title": "Feared Iranian attack on Israel stokes Middle East tension",
+    "Description": "The Middle East has been on edge since the recent assassinations of senior, Iranian-backed militant leaders in Beirut and Tehran.",
+    "Link": "https://www.usatoday.com/story/news/world/israel-hamas/2024/08/05/israel-iran-attack-middle-east-tensions/74674656007/",
+    "Source": {
+      "id": 4,
+      "name": "USA TODAY",
+      "link": "https://www.usatoday.com/news/world/",
+      "short_name": "usatoday"
+    },
+    "PubDate": "2024-08-06T15:38:07.906442Z"
+  },
+  {
+    "Id": 88,
+    "Title": "Iran says it does not want regional escalation but must 'punish' Israel",
+    "Description": "Iran is not looking to escalate regional tensions but believes it needs to punish Israel to prevent further instability, the foreign ministry spokesperson said on Monday.",
+    "Link": "https://www.usatoday.com/story/news/world/israel-hamas/2024/08/05/iran-israel-hamas-2024-united-states/74673855007/",
+    "Source": {
+      "id": 4,
+      "name": "USA TODAY",
+      "link": "https://www.usatoday.com/news/world/",
+      "short_name": "usatoday"
+    },
+    "PubDate": "2024-08-06T15:38:07.906442Z"
+  },
+  {
+    "Id": 89,
+    "Title": "US recognizes opposition candidate as winner of Venezuela’s election",
+    "Description": "The U.S. has officially recognized opposition candidate Edmundo González as the winner of Venezuela's election.",
+    "Link": "https://www.usatoday.com/videos/news/world/2024/08/05/us-recognizes-opposition-candidate-as-winner-of-venezuelas-election/74644242007/",
+    "Source": {
+      "id": 4,
+      "name": "USA TODAY",
+      "link": "https://www.usatoday.com/news/world/",
+      "short_name": "usatoday"
+    },
+    "PubDate": "2024-08-06T15:38:07.906442Z"
+  },
+  {
+    "Id": 90,
+    "Title": "American hostages released in prisoner swap | The Excerpt",
+    "Description": "Plus: From outrage to agreement, families react to 9/11 terrorist plea deals announced earlier in the week. It's all on The Excerpt.",
+    "Link": "https://www.usatoday.com/story/news/world/2024/08/02/american-hostages-released-in-prisoner-swap-the-excerpt/74646005007/",
+    "Source": {
+      "id": 4,
+      "name": "USA TODAY",
+      "link": "https://www.usatoday.com/news/world/",
+      "short_name": "usatoday"
+    },
+    "PubDate": "2024-08-06T15:38:07.906442Z"
+  },
+  {
+    "Id": 91,
+    "Title": "Russian prisoners Evan Gershkovich, Paul Whelan, Alsu Kurmasheva safe on US soil",
+    "Description": "The freed prisoners arrived at Joint Base Andrews in Maryland Thursday night as part of a six-nation deal that was the biggest prisoner exchange between Washington and Moscow since the Cold War.",
+    "Link": "https://www.usatoday.com/picture-gallery/news/world/2024/08/01/russian-prisoners-evan-gershkovich-paul-whelan-alsu-kurmasheva-safe-on-us-soil/74642097007/",
+    "Source": {
+      "id": 4,
+      "name": "USA TODAY",
+      "link": "https://www.usatoday.com/news/world/",
+      "short_name": "usatoday"
+    },
+    "PubDate": "2024-08-06T15:38:07.906442Z"
+  },
+  {
+    "Id": 92,
+    "Title": "Russia prisoner swap: What to know about dissident Vladimir Kara-Murza",
+    "Description": "Russian-born Vladimir Kara-Murza, a journalist and critic of Moscow, was among those released Thursday in a massive East-West prisoner swap.",
+    "Link": "https://www.usatoday.com/story/news/world/2024/08/01/vladimir-kara-murza-prisoner-swap-russia/74635301007/",
+    "Source": {
+      "id": 4,
+      "name": "USA TODAY",
+      "link": "https://www.usatoday.com/news/world/",
+      "short_name": "usatoday"
+    },
+    "PubDate": "2024-08-06T15:38:07.906442Z"
+  },
+  {
+    "Id": 93,
+    "Title": "Russian prisoners swap: What to know about the historic deal",
+    "Description": "Evan Gershkovich and Paul Whelan have been released in a prisoner swap with Russia. Look at Donald Trump and Joe Biden's history on prisoner exchanges",
+    "Link": "https://www.usatoday.com/story/news/world/2024/08/01/russia-us-prisoner-swap-paul-whelan-evan-gershkovich/74631297007/",
+    "Source": {
+      "id": 4,
+      "name": "USA TODAY",
+      "link": "https://www.usatoday.com/news/world/",
+      "short_name": "usatoday"
+    },
+    "PubDate": "2024-08-06T15:38:07.906442Z"
+  },
+  {
+    "Id": 94,
+    "Title": "Former US Marine Paul Whelan released into US custody",
+    "Description": "Paul Whelan, a former US Marine accused of spying and arrested in Russia was released into US custody on Aug. 1, 2024.",
+    "Link": "https://www.usatoday.com/picture-gallery/news/world/2024/08/01/former-us-marine-paul-whelan-released-from-russian-prison-into-us-custody/74632462007/",
+    "Source": {
+      "id": 4,
+      "name": "USA TODAY",
+      "link": "https://www.usatoday.com/news/world/",
+      "short_name": "usatoday"
+    },
+    "PubDate": "2024-08-06T15:38:07.906442Z"
+  },
+  {
+    "Id": 95,
+    "Title": "Who is Evan Gershkovich? WSJ journalist freed in Russia prisoner swap",
+    "Description": "Wall Street Journal reporter Evan Gershkovich had been detained in Russia on espionage charges since 2023. He was freed in a prisoner swap.",
+    "Link": "https://www.usatoday.com/story/news/world/2024/08/01/who-is-evan-gershkovich/74630193007/",
+    "Source": {
+      "id": 4,
+      "name": "USA TODAY",
+      "link": "https://www.usatoday.com/news/world/",
+      "short_name": "usatoday"
+    },
+    "PubDate": "2024-08-06T15:38:07.906442Z"
+  },
+  {
+    "Id": 96,
+    "Title": "Evan Gershkovich, Paul Whelan freed by Russia in prisoner swap",
+    "Description": "Wall Street Journal reporter Evan Gershkovich and former U.S. Marine Paul Whelan were among a number of high-profile Russian detainees freed Thursday.",
+    "Link": "https://www.usatoday.com/story/news/world/2024/08/01/evan-gershkovich-paul-whelan-russia-prisoner-swap-updates/74628748007/",
+    "Source": {
+      "id": 4,
+      "name": "USA TODAY",
+      "link": "https://www.usatoday.com/news/world/",
+      "short_name": "usatoday"
+    },
+    "PubDate": "2024-08-06T15:38:07.906442Z"
+  },
+  {
+    "Id": 97,
+    "Title": "Israel says it killed Mohammed Deif, architect of Oct. 7 attack",
+    "Description": "Mohammed Deif, the commander of Hamas’ military wing, was killed in an airstrike in the southern Gaza Strip last month, the Israeli military said.",
+    "Link": "https://www.usatoday.com/story/news/world/israel-hamas/2024/08/01/mohammed-deif-architect-attack-killed-israel-war-updates/74629186007/",
+    "Source": {
+      "id": 4,
+      "name": "USA TODAY",
+      "link": "https://www.usatoday.com/news/world/",
+      "short_name": "usatoday"
+    },
+    "PubDate": "2024-08-06T15:38:07.906442Z"
+  },
+  {
+    "Id": 98,
+    "Title": "Biggest prisoner swap since the Cold War could be underway",
+    "Description": "Prisoner movements in Russia, US, Europe and elsewhere suggest a swap could happen soon.",
+    "Link": "https://www.usatoday.com/story/news/world/2024/07/31/big-prisoner-swap-may-be-coming/74625720007/",
+    "Source": {
+      "id": 4,
+      "name": "USA TODAY",
+      "link": "https://www.usatoday.com/news/world/",
+      "short_name": "usatoday"
+    },
+    "PubDate": "2024-08-06T15:38:07.906442Z"
+  },
+  {
+    "Id": 99,
+    "Title": "Concern grows in Venezuelan election as protesters take to streets",
+    "Description": "G7 foreign ministers called on \"Venezuelan representatives to publish detailed election results in full transparency.\"",
+    "Link": "https://www.usatoday.com/story/news/world/2024/07/31/venezuela-foreign-ministers/74620012007/",
+    "Source": {
+      "id": 4,
+      "name": "USA TODAY",
+      "link": "https://www.usatoday.com/news/world/",
+      "short_name": "usatoday"
+    },
+    "PubDate": "2024-08-06T15:38:07.906442Z"
+  },
+  {
+    "Id": 100,
+    "Title": "Hamas' top political leader Ismail Haniyeh killed | The Excerpt",
+    "Description": "Plus: Some new clues emerge about Vice President Kamala Harris' timeline and choice for running mate. | U.S. women's gymnastics team lands gold medal.",
+    "Link": "https://www.usatoday.com/story/news/world/2024/07/31/hamas-iran-ismail-haniyeh-killed-the-excerpt/74617106007/",
+    "Source": {
+      "id": 4,
+      "name": "USA TODAY",
+      "link": "https://www.usatoday.com/news/world/",
+      "short_name": "usatoday"
+    },
+    "PubDate": "2024-08-06T15:38:07.906442Z"
+  },
+  {
+    "Id": 101,
+    "Title": "Top Hamas leader Ismail Haniyeh killed in raid",
+    "Description": "Hamas' top political leader Ismail Haniyeh was killed Wednesday in an apparent assassination at his residence in Iran.",
+    "Link": "https://www.usatoday.com/picture-gallery/news/world/2024/07/31/hamas-leader-killed-raid-iran-photos/74616475007/",
+    "Source": {
+      "id": 4,
+      "name": "USA TODAY",
+      "link": "https://www.usatoday.com/news/world/",
+      "short_name": "usatoday"
+    },
+    "PubDate": "2024-08-06T15:38:07.906442Z"
+  },
+  {
+    "Id": 102,
+    "Title": "Hamas leader Ismail Haniyeh killed in Iran was known as tough talker",
+    "Description": "Appointed to the Hamas top job in 2017, Haniyeh moved between Turkey and Qatar's capital Doha, escaping the travel curbs of the blockaded Gaza Strip.",
+    "Link": "https://www.usatoday.com/story/news/world/2024/07/31/hamas-leader-iran-israel/74615028007/",
+    "Source": {
+      "id": 4,
+      "name": "USA TODAY",
+      "link": "https://www.usatoday.com/news/world/",
+      "short_name": "usatoday"
+    },
+    "PubDate": "2024-08-06T15:38:07.906442Z"
+  },
+  {
+    "Id": 103,
+    "Title": "'Sweet legacy': Tiramisu creator Roberto Linguanotto dies at 81",
+    "Description": "Roberto \"Loli\" Linguanotto said he invented tiramisu at the Le Beccherie alongside co-creator Alba Campeol. It's now one of the most popular desserts in the world.",
+    "Link": "https://www.usatoday.com/story/news/world/2024/07/30/tiramisu-inventor-roberto-linguanotto-death/74611121007/",
+    "Source": {
+      "id": 4,
+      "name": "USA TODAY",
+      "link": "https://www.usatoday.com/news/world/",
+      "short_name": "usatoday"
+    },
+    "PubDate": "2024-08-06T15:38:07.906442Z"
+  },
+  {
+    "Id": 104,
+    "Title": "Surfer loses leg during attack with 10-foot great white shark",
+    "Description": "Australian surfer Kai McKenzie shared his story on social media after losing his leg during an attack with a 10-foot great white shark.",
+    "Link": "https://www.usatoday.com/story/news/world/2024/07/30/surfer-kai-mckenzie-loses-leg-shark-attack/74603265007/",
+    "Source": {
+      "id": 4,
+      "name": "USA TODAY",
+      "link": "https://www.usatoday.com/news/world/",
+      "short_name": "usatoday"
+    },
+    "PubDate": "2024-08-06T15:38:07.906442Z"
+  },
+  {
+    "Id": 105,
+    "Title": "Israel strikes Beirut, says it killed Hezbollah commander",
+    "Description": "Israel said it carried out an airstrike in Beirut and killed a senior Hezbollah commander responsible for killing 12 children in the Golan Heights.",
+    "Link": "https://www.usatoday.com/story/news/world/2024/07/30/israel-hezbollah-airstrike-beirut/74604990007/",
+    "Source": {
+      "id": 4,
+      "name": "USA TODAY",
+      "link": "https://www.usatoday.com/news/world/",
+      "short_name": "usatoday"
+    },
+    "PubDate": "2024-08-06T15:38:07.906442Z"
+  },
+  {
+    "Id": 106,
+    "Title": "Gunmen on jet skis kill 12-year-old boy when aiming at drug rivals",
+    "Description": "A 12-year-old boy was shot and killed Sunday in Cancun when gunmen on jet skis unleashed a barrage of bullets apparently aimed at rival drug dealers.",
+    "Link": "https://www.usatoday.com/story/news/world/2024/07/30/boy-killed-drug-dealers-cancun-beach/74599477007/",
+    "Source": {
+      "id": 4,
+      "name": "USA TODAY",
+      "link": "https://www.usatoday.com/news/world/",
+      "short_name": "usatoday"
+    },
+    "PubDate": "2024-08-06T15:38:07.906442Z"
+  },
+  {
+    "Id": 107,
+    "Title": "Shipwreck loaded with Champagne bottles",
+    "Description": "Divers discovered a 19th-century shipwreck well-stocked with over 100 bottles of Champagne and mineral water, just off the coast of Sweden.",
+    "Link": "https://www.usatoday.com/videos/news/world/2024/07/29/dozens-of-champagne-bottles-found-on-19th-century-shipwreck/74595468007/",
+    "Source": {
+      "id": 4,
+      "name": "USA TODAY",
+      "link": "https://www.usatoday.com/news/world/",
+      "short_name": "usatoday"
+    },
+    "PubDate": "2024-08-06T15:38:07.906442Z"
+  },
+  {
+    "Id": 108,
+    "Title": "Blinken address Venezuela election controversy",
+    "Description": "Secretary of State Antony Blinken says the U.S. has 'serious concerns' about Venezuela's presidential election.",
+    "Link": "https://www.usatoday.com/videos/news/world/2024/07/29/blinken-says-u-s-has-serious-concerns-about-venezuela-election/74590871007/",
+    "Source": {
+      "id": 4,
+      "name": "USA TODAY",
+      "link": "https://www.usatoday.com/news/world/",
+      "short_name": "usatoday"
+    },
+    "PubDate": "2024-08-06T15:38:07.906442Z"
+  },
+  {
+    "Id": 109,
+    "Title": "'It will be harsh': Netanyahu warns Hezbollah of retaliation",
+    "Description": "\"The state of Israel will not and cannot let this pass,\" Prime Minister Benjamin Netanyahu said of the soccer field attack that killed 12 youths.",
+    "Link": "https://www.usatoday.com/story/news/world/israel-hamas/2024/07/29/israel-war-updates-netanyahu-warns-hezbollah/74584748007/",
+    "Source": {
+      "id": 4,
+      "name": "USA TODAY",
+      "link": "https://www.usatoday.com/news/world/",
+      "short_name": "usatoday"
+    },
+    "PubDate": "2024-08-06T15:38:07.906442Z"
+  },
+  {
+    "Id": 110,
+    "Title": "Venezuela's president, opposition rival both claim election victory",
+    "Description": "President Nicolas Maduro and opposition rival Edmundo Gonzalez both claimed victory in Venezuela's presidential election as other countries cast doubt on official results.",
+    "Link": "https://www.usatoday.com/story/news/world/2024/07/29/venezuelas-president-maduro-2024-election/74585323007/",
+    "Source": {
+      "id": 4,
+      "name": "USA TODAY",
+      "link": "https://www.usatoday.com/news/world/",
+      "short_name": "usatoday"
+    },
+    "PubDate": "2024-08-06T15:38:07.906442Z"
+  },
+  {
+    "Id": 111,
+    "Title": "Party bound? Shipwreck discovered in Baltic Sea 'loaded' with Champagne",
+    "Description": "A Polish diving crew found a 19th century shipwreck in the Baltic Sea, loaded with bottles of Champagne, wine and mineral water.",
+    "Link": "https://www.usatoday.com/story/news/world/2024/07/29/champagne-found-19th-century-shipwreck-baltic-sea/74573547007/",
+    "Source": {
+      "id": 4,
+      "name": "USA TODAY",
+      "link": "https://www.usatoday.com/news/world/",
+      "short_name": "usatoday"
+    },
+    "PubDate": "2024-08-06T15:38:07.906442Z"
+  },
+  {
+    "Id": 112,
+    "Title": "Israeli response to soccer field attack could 'tear Lebanon apart'",
+    "Description": "Israel pledged a tough response to an attack on a soccer field that killed 12 kids. The US is urging restraint.",
+    "Link": "https://www.usatoday.com/story/news/world/israel-hamas/2024/07/28/israel-war-updates-lebanon-hezbollah/74578721007/",
+    "Source": {
+      "id": 4,
+      "name": "USA TODAY",
+      "link": "https://www.usatoday.com/news/world/",
+      "short_name": "usatoday"
+    },
+    "PubDate": "2024-08-06T15:38:07.906442Z"
+  },
+  {
+    "Id": 113,
+    "Title": "Israel says Hezbollah rocket kills 11 at football ground, vows response",
+    "Description": "Hezbollah denied any responsibility for the strike, the deadliest in Israel or Israeli-annexed territory since the start of the conflict in Gaza.",
+    "Link": "https://www.usatoday.com/story/news/world/2024/07/27/rocket-hits-sports-field-in-israeli-occupied-golan-israel-media-says/74572477007/",
+    "Source": {
+      "id": 4,
+      "name": "USA TODAY",
+      "link": "https://www.usatoday.com/news/world/",
+      "short_name": "usatoday"
+    },
+    "PubDate": "2024-08-06T15:38:07.906442Z"
+  },
+  {
+    "Id": 114,
+    "Title": "At least 30 killed in Israeli strike on school, Gaza officials say",
+    "Description": "The Israeli military said in a statement it had targeted a \"Hamas command and control center inside the Khadija school compound in central Gaza\".",
+    "Link": "https://www.usatoday.com/story/news/world/israel-hamas/2024/07/27/at-least-30-killed-in-israeli-strike-on-school-gaza-officials-say/74570861007/",
+    "Source": {
+      "id": 4,
+      "name": "USA TODAY",
+      "link": "https://www.usatoday.com/news/world/",
+      "short_name": "usatoday"
+    },
+    "PubDate": "2024-08-06T15:38:07.906442Z"
+  },
+  {
+    "Id": 115,
+    "Title": "Man struck by lightning dies at highest mountain in Germany: Reports",
+    "Description": "An 18-year-old man died after he was struck by lightning near Zugspitze, the highest peak in Germany.",
+    "Link": "https://www.usatoday.com/story/news/world/2024/07/26/fatal-lightning-strike-germany/74521011007/",
+    "Source": {
+      "id": 4,
+      "name": "USA TODAY",
+      "link": "https://www.usatoday.com/news/world/",
+      "short_name": "usatoday"
+    },
+    "PubDate": "2024-08-06T15:38:07.906442Z"
+  },
+  {
+    "Id": 116,
+    "Title": "Wildfire smoke blankets western Alberta amid destructive wildfires",
+    "Description": "Wildfire smoke shrouded parts of western Alberta, Canada, as destructive wildfires burned in the region, local media reported.",
+    "Link": "https://www.usatoday.com/videos/news/world/2024/07/26/wildfire-smoke-blankets-western-alberta-amid-destructive-wildfires/74549200007/",
+    "Source": {
+      "id": 4,
+      "name": "USA TODAY",
+      "link": "https://www.usatoday.com/news/world/",
+      "short_name": "usatoday"
+    },
+    "PubDate": "2024-08-06T15:38:07.906442Z"
+  },
+  {
+    "Id": 117,
+    "Title": "Polar bear drowns after 'rough play' at Canada zoo",
+    "Description": "Baffin, a 7-year-old male polar bear, was playing with another polar bear at an \"intensity\" of play that was normal for the bears when he was injured.",
+    "Link": "https://www.usatoday.com/story/news/world/2024/07/26/baffin-polar-bear-dies-calgary-zoo-canada/74554901007/",
+    "Source": {
+      "id": 4,
+      "name": "USA TODAY",
+      "link": "https://www.usatoday.com/news/world/",
+      "short_name": "usatoday"
+    },
+    "PubDate": "2024-08-06T15:38:07.906442Z"
+  },
+  {
+    "Id": 118,
+    "Title": "Time Magazine reveals 2024 World’s Greatest Places: See list",
+    "Description": "Time Magazine released the 2024 World's Greatest Places list on Thursday. It's an eclectic mix of unique locations across the globe, like a chocolate factory in India",
+    "Link": "https://www.usatoday.com/story/news/world/2024/07/25/time-magazines-2024-greatest-places-list/74552825007/",
+    "Source": {
+      "id": 4,
+      "name": "USA TODAY",
+      "link": "https://www.usatoday.com/news/world/",
+      "short_name": "usatoday"
+    },
+    "PubDate": "2024-08-06T15:38:07.906442Z"
+  },
+  {
+    "Id": 119,
+    "Title": "Bangladesh dissolves Parliament; protesters call for Nobel laureate to lead",
+    "Description": "The student protesters behind the ouster of Prime Minister Sheikh Hasina rejected army rule and backed peace prize winner Muhammad Yunus to head the interim government.",
+    "Link": "https://www.washingtonpost.com/world/2024/08/06/bangladesh-yunus-government-military-hasina/",
+    "Source": {
+      "id": 5,
+      "name": "The Washington Post",
+      "link": "http://feeds.washingtonpost.com/rss/world",
+      "short_name": "washingtonpost"
+    },
+    "PubDate": "2024-08-06T15:31:28Z"
+  },
+  {
+    "Id": 120,
+    "Title": "U.S. stock indexes move higher the day after global market rout",
+    "Description": "Japan’s benchmark Nikkei 225 index ended the day up 10.23 percent on Tuesday, after its biggest single-day point drop Monday.",
+    "Link": "https://www.washingtonpost.com/business/2024/08/06/japan-us-stock-market-news/",
+    "Source": {
+      "id": 5,
+      "name": "The Washington Post",
+      "link": "http://feeds.washingtonpost.com/rss/world",
+      "short_name": "washingtonpost"
+    },
+    "PubDate": "2024-08-06T14:44:13Z"
+  },
+  {
+    "Id": 121,
+    "Title": "U.S. says several troops hurt in Iraq attack",
+    "Description": "U.S. troops at Al Assad air base in Iraq were wounded in a rocket attack Monday, the Pentagon said.",
+    "Link": "https://www.washingtonpost.com/national-security/2024/08/05/us-troops-attacked-asad-iraq/",
+    "Source": {
+      "id": 5,
+      "name": "The Washington Post",
+      "link": "http://feeds.washingtonpost.com/rss/world",
+      "short_name": "washingtonpost"
+    },
+    "PubDate": "2024-08-06T14:31:44Z"
+  },
+  {
+    "Id": 122,
+    "Title": "Why has the Japanese stock market been on a roller coaster ride?",
+    "Description": "Record fall one day, record rise the next. The Japanese stock market is gyrating in part because the country’s currency has been weakening — until last month.",
+    "Link": "https://www.washingtonpost.com/world/2024/08/06/japan-stock-market-yen-carry-trade/",
+    "Source": {
+      "id": 5,
+      "name": "The Washington Post",
+      "link": "http://feeds.washingtonpost.com/rss/world",
+      "short_name": "washingtonpost"
+    },
+    "PubDate": "2024-08-06T09:16:45Z"
+  },
+  {
+    "Id": 123,
+    "Title": "TikTok to remove feature for some users after E.U. says it’s addictive",
+    "Description": "TikTok Lite is removing a rewards program in E.U. countries after regulators accused the company of creating addictive features that could harm children.",
+    "Link": "https://www.washingtonpost.com/world/2024/08/05/tiktok-lite-rewards-program-eu/",
+    "Source": {
+      "id": 5,
+      "name": "The Washington Post",
+      "link": "http://feeds.washingtonpost.com/rss/world",
+      "short_name": "washingtonpost"
+    },
+    "PubDate": "2024-08-06T02:45:15Z"
+  },
+  {
+    "Id": 124,
+    "Title": "Bangladesh’s Hasina faces the revenge of history",
+    "Description": "What comes next in Bangladesh is far from certain. The specter of further political violence is real.",
+    "Link": "https://www.washingtonpost.com/world/2024/08/05/bangladesh-hasina-resignation-history/",
+    "Source": {
+      "id": 5,
+      "name": "The Washington Post",
+      "link": "http://feeds.washingtonpost.com/rss/world",
+      "short_name": "washingtonpost"
+    },
+    "PubDate": "2024-08-06T00:33:29Z"
+  },
+  {
+    "Id": 125,
+    "Title": "U.N. fires Gaza staff, citing possible involvement in attack on Israel",
+    "Description": "The U.N. fired nine employees of UNRWA, a key relief agency in Gaza, after determining they “may have been involved” in the Oct. 7 Hamas-led attack on Israel.",
+    "Link": "https://www.washingtonpost.com/national-security/2024/08/05/unrwa-october-7-israel-hamas-gaza/",
+    "Source": {
+      "id": 5,
+      "name": "The Washington Post",
+      "link": "http://feeds.washingtonpost.com/rss/world",
+      "short_name": "washingtonpost"
+    },
+    "PubDate": "2024-08-05T22:36:47Z"
+  },
+  {
+    "Id": 126,
+    "Title": "Houthi drone expert among those killed in U.S. strike in Iraq",
+    "Description": "A Houthi commander’s death in Iraq illustrates the cooperation among Iran-backed groups in the Middle East as the region faces the threat of worsening violence.",
+    "Link": "https://www.washingtonpost.com/national-security/2024/08/05/us-strike-iraq-houthi-drone/",
+    "Source": {
+      "id": 5,
+      "name": "The Washington Post",
+      "link": "http://feeds.washingtonpost.com/rss/world",
+      "short_name": "washingtonpost"
+    },
+    "PubDate": "2024-08-05T21:10:11Z"
+  },
+  {
+    "Id": 127,
+    "Title": "Israel on alert for retaliation; U.S. officials say attack may be imminent",
+    "Description": "Prime Minister Benjamin Netanyahu discussed preparations for counterstrikes with his security cabinet. Hamas and Iran blame Israel for the killing of a Hamas leader.",
+    "Link": "https://www.washingtonpost.com/world/2024/08/05/israel-gaza-strike-hezbollah-iran/",
+    "Source": {
+      "id": 5,
+      "name": "The Washington Post",
+      "link": "http://feeds.washingtonpost.com/rss/world",
+      "short_name": "washingtonpost"
+    },
+    "PubDate": "2024-08-05T20:26:54Z"
+  },
+  {
+    "Id": 128,
+    "Title": "Mali cuts ties with Ukraine, claiming Kyiv’s involvement in rebel attacks",
+    "Description": "Kyiv said Mali failed to provide evidence of any Ukrainian involvement in the attacks by Tuareg rebels in northern Mali that killed Russian and Malian troops.",
+    "Link": "https://www.washingtonpost.com/world/2024/08/05/ukraine-mali-wagner-mercenaries-russia/",
+    "Source": {
+      "id": 5,
+      "name": "The Washington Post",
+      "link": "http://feeds.washingtonpost.com/rss/world",
+      "short_name": "washingtonpost"
+    },
+    "PubDate": "2024-08-05T19:35:01Z"
+  },
+  {
+    "Id": 129,
+    "Title": "Maduro perdió las elecciones según actas recopiladas por la oposición",
+    "Description": "Edmundo González habría vencido al presidente Nicolás Maduro el 28 de julio por millones de votos, según muestra un análisis de datos de las actas electorales.",
+    "Link": "https://www.washingtonpost.com/world/2024/08/04/maduro-gonzalez-election-actas-analysis-2/",
+    "Source": {
+      "id": 5,
+      "name": "The Washington Post",
+      "link": "http://feeds.washingtonpost.com/rss/world",
+      "short_name": "washingtonpost"
+    },
+    "PubDate": "2024-08-05T19:20:40Z"
+  },
+  {
+    "Id": 130,
+    "Title": "Bangladeshi Prime Minister Sheikh Hasina resigns and flees country",
+    "Description": "Hasina’s resignation, announced by Gen. Waker-Uz-Zaman, comes after hundreds have been killed in clashes between protesters and security forces in recent weeks.",
+    "Link": "https://www.washingtonpost.com/world/2024/08/05/bangladesh-prime-minister-hasina-resigns/",
+    "Source": {
+      "id": 5,
+      "name": "The Washington Post",
+      "link": "http://feeds.washingtonpost.com/rss/world",
+      "short_name": "washingtonpost"
+    },
+    "PubDate": "2024-08-05T18:57:16Z"
+  },
+  {
+    "Id": 131,
+    "Title": "How the U.S. military cultivated — and then lost — a key African ally",
+    "Description": "A timeline of key events in the lead-up to the U.S. troop withdrawal on Monday from the West African country of Niger.",
+    "Link": "https://www.washingtonpost.com/world/2024/08/05/niger-agadez-us-military-timeline/",
+    "Source": {
+      "id": 5,
+      "name": "The Washington Post",
+      "link": "http://feeds.washingtonpost.com/rss/world",
+      "short_name": "washingtonpost"
+    },
+    "PubDate": "2024-08-05T17:44:03Z"
+  },
+  {
+    "Id": 132,
+    "Title": "U.S. troops withdraw from strategic West African base as militant threat grows",
+    "Description": "The U.S. military pullout from the sprawling Agadez base in Niger deals a setback to efforts at countering Islamist insurgents and resisting Russian influence.",
+    "Link": "https://www.washingtonpost.com/world/2024/08/05/niger-agadez-sahel-military-bases/",
+    "Source": {
+      "id": 5,
+      "name": "The Washington Post",
+      "link": "http://feeds.washingtonpost.com/rss/world",
+      "short_name": "washingtonpost"
+    },
+    "PubDate": "2024-08-05T16:00:01Z"
+  },
+  {
+    "Id": 133,
+    "Title": "Who is Sheikh Hasina, Bangladeshi leader who fled protests?",
+    "Description": "Sheikh Hasina resigned as Bangladesh’s prime minister following deadly protests, fleeing to India on Monday.",
+    "Link": "https://www.washingtonpost.com/world/2024/08/05/sheikh-hasina-bangladesh-prime-minister-protests/",
+    "Source": {
+      "id": 5,
+      "name": "The Washington Post",
+      "link": "http://feeds.washingtonpost.com/rss/world",
+      "short_name": "washingtonpost"
+    },
+    "PubDate": "2024-08-05T15:59:49Z"
+  },
+  {
+    "Id": 134,
+    "Title": "Taiwan celebrates Olympic gold (and China tries to ignore it)",
+    "Description": "This came after repeated cheers for “Taiwan” — officially “Chinese Taipei” at the Olympics — and an incident in which a sign was snatched at the Paris Games.",
+    "Link": "https://www.washingtonpost.com/world/2024/08/05/olympics-china-taiwan-badminton-sign/",
+    "Source": {
+      "id": 5,
+      "name": "The Washington Post",
+      "link": "http://feeds.washingtonpost.com/rss/world",
+      "short_name": "washingtonpost"
+    },
+    "PubDate": "2024-08-05T12:03:28Z"
+  },
+  {
+    "Id": 135,
+    "Title": "In photos: The scene in Bangladesh after clashes between protesters, security forces",
+    "Description": "Weeks of violence between Bangladeshi security forces and anti-government demonstrators intensified this weekend.",
+    "Link": "https://www.washingtonpost.com/world/2024/08/05/photos-after-hundreds-killed-clashes-between-protesters-security-forces-bangladeshi-prime-minister-resigns/",
+    "Source": {
+      "id": 5,
+      "name": "The Washington Post",
+      "link": "http://feeds.washingtonpost.com/rss/world",
+      "short_name": "washingtonpost"
+    },
+    "PubDate": "2024-08-05T11:40:29Z"
+  },
+  {
+    "Id": 136,
+    "Title": "Thailand may soon take another backward step",
+    "Description": "On Aug. 7, Thailand’s constitutional court may rule to effectively disqualify Pita Limjaroenrat — arguably the country’s most popular politician — from holding office in the near future.",
+    "Link": "https://www.washingtonpost.com/world/2024/08/05/thailand-court-ruling-pita-limjaroenrat/",
+    "Source": {
+      "id": 5,
+      "name": "The Washington Post",
+      "link": "http://feeds.washingtonpost.com/rss/world",
+      "short_name": "washingtonpost"
+    },
+    "PubDate": "2024-08-05T04:00:50Z"
+  },
+  {
+    "Id": 137,
+    "Title": "Maduro lost election, tallies collected by Venezuela’s opposition show",
+    "Description": "Edmundo González likely beat President Nicolás Maduro in the July 28 election by millions of votes, a review of data from election receipts shows.",
+    "Link": "https://www.washingtonpost.com/world/2024/08/04/maduro-gonzalez-election-actas-analysis/",
+    "Source": {
+      "id": 5,
+      "name": "The Washington Post",
+      "link": "http://feeds.washingtonpost.com/rss/world",
+      "short_name": "washingtonpost"
+    },
+    "PubDate": "2024-08-04T23:31:26Z"
+  },
+  {
+    "Id": 138,
+    "Title": "First F-16 fighter jets have arrived in Ukraine, Zelensky confirms",
+    "Description": "The planes are unlikely to fly near the front lines, officials said, as there are too few of them — and too many Russian defense systems that can shoot them down.",
+    "Link": "https://www.washingtonpost.com/world/2024/08/04/ukraine-f16-fighter-jets-russia-war/",
+    "Source": {
+      "id": 5,
+      "name": "The Washington Post",
+      "link": "http://feeds.washingtonpost.com/rss/world",
+      "short_name": "washingtonpost"
+    },
+    "PubDate": "2024-08-04T20:53:59Z"
+  },
+  {
+    "Id": 139,
+    "Title": "Far-right protesters attack hotel housing asylum seekers in violent weekend",
+    "Description": "Demonstrations in Rotherham, Liverpool, Hull and Bristol turned violent, prompting arrests. Misinformation about a deadly knife attack in Southport, England, spurred far-right protests.",
+    "Link": "https://www.washingtonpost.com/world/2024/08/04/uk-riots-protests-southport-stabbing-arrests/",
+    "Source": {
+      "id": 5,
+      "name": "The Washington Post",
+      "link": "http://feeds.washingtonpost.com/rss/world",
+      "short_name": "washingtonpost"
+    },
+    "PubDate": "2024-08-04T20:32:06Z"
+  },
+  {
+    "Id": 140,
+    "Title": "Dozens killed as anti-government protests resume in Bangladesh",
+    "Description": "A nationwide curfew was imposed in Bangladesh as fresh protests in the country turned violent.",
+    "Link": "https://www.washingtonpost.com/world/2024/08/04/bangladesh-protests-cufew-death-toll/",
+    "Source": {
+      "id": 5,
+      "name": "The Washington Post",
+      "link": "http://feeds.washingtonpost.com/rss/world",
+      "short_name": "washingtonpost"
+    },
+    "PubDate": "2024-08-04T17:41:49Z"
+  },
+  {
+    "Id": 141,
+    "Title": "Strikes in Gaza, stabbing near Tel Aviv amid fears of wider Mideast war",
+    "Description": "At least 30 people were killed in Israeli strikes at schools housing displaced people, Gazan authorities said. The IDF said the schools were used by Hamas.",
+    "Link": "https://www.washingtonpost.com/world/2024/08/04/israel-gaza-strikes-holon-stabbing-war/",
+    "Source": {
+      "id": 5,
+      "name": "The Washington Post",
+      "link": "http://feeds.washingtonpost.com/rss/world",
+      "short_name": "washingtonpost"
+    },
+    "PubDate": "2024-08-04T16:26:22Z"
+  },
+  {
+    "Id": 152,
+    "Title": " Indonesia recovers body of New Zealand helicopter pilot killed in Papua attack",
+    "Description": "Indonesian security forces have recovered the body of New Zealand pilot who was killed in an alleged separatist attack in Indonesia\u0026rsquo;s restive Papua region",
+    "Link": "https://abcnews.go.com/International/wireStory/indonesia-recovers-body-new-zealand-helicopter-pilot-killed-112611315",
+    "Source": {
+      "id": 2,
+      "name": "ABC News: International",
+      "link": "https://abcnews.go.com/abcnews/internationalheadlines",
+      "short_name": "abcnews"
+    },
+    "PubDate": "2024-08-06T15:42:46Z"
+  },
+  {
+    "Id": 167,
+    "Title": "See video, photos of Banksy's latest street art, a goat in London",
+    "Description": "The work depicts a goat painted on a ledge as rocks fall beneath its feet. It's painted on the side of a building in the Kew neighborhood of west London.",
+    "Link": "https://www.usatoday.com/story/news/world/2024/08/05/banksy-london-art-goat-kew/74682340007/",
+    "Source": {
+      "id": 4,
+      "name": "USA TODAY",
+      "link": "https://www.usatoday.com/news/world/",
+      "short_name": "usatoday"
+    },
+    "PubDate": "2024-08-06T15:55:36.950656Z"
+  },
+  {
+    "Id": 188,
+    "Title": " Brazil, Colombia and Mexico in talks with Venezuelan government and opposition on election crisis",
+    "Description": "Following Venezuela\u0026rsquo;s disputed presidential election nine days ago, officials from Brazil, Colombia and Mexico have been in constant contact with representatives of both President Nicol\u0026aacute;s Maduro and opposition candidate Edmundo Gonz\u0026aacute;lez to seek a solut...",
+    "Link": "https://abcnews.go.com/International/wireStory/brazil-colombia-mexico-talks-venezuelan-government-opposition-election-112611837",
+    "Source": {
+      "id": 2,
+      "name": "ABC News: International",
+      "link": "https://abcnews.go.com/abcnews/internationalheadlines",
+      "short_name": "abcnews"
+    },
+    "PubDate": "2024-08-06T15:58:52Z"
+  },
+  {
+    "Id": 189,
+    "Title": " Russia says it's fighting a cross-border attack by Ukrainian forces. Kyiv officials have no comment",
+    "Description": "Russian authorities claim that a Ukrainian force launched a cross-border incursion into Russia\u0026rsquo;s Kursk region but was being beaten back by troops and local border guards",
+    "Link": "https://abcnews.go.com/International/wireStory/russia-fighting-cross-border-attack-ukrainian-forces-kyiv-112611747",
+    "Source": {
+      "id": 2,
+      "name": "ABC News: International",
+      "link": "https://abcnews.go.com/abcnews/internationalheadlines",
+      "short_name": "abcnews"
+    },
+    "PubDate": "2024-08-06T15:58:00Z"
+  }
 ]

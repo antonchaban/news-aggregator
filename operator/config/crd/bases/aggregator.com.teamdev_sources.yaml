@@ -1,0 +1,104 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.15.0
+  name: sources.aggregator.com.teamdev
+spec:
+  group: aggregator.com.teamdev
+  names:
+    kind: Source
+    listKind: SourceList
+    plural: sources
+    singular: source
+  scope: Namespaced
+  versions:
+  - name: v1
+    schema:
+      openAPIV3Schema:
+        description: |-
+          Source is the Schema for the sources API
+          It represents a source resource from news aggregator in the k8s cluster.
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: |-
+              SourceSpec defines the desired state of Source,
+              includes fields for source creation and management in the news aggregator.
+            properties:
+              link:
+                description: '- Link: URL link to the source.'
+                type: string
+              name:
+                description: '- Name: full name of the source, as it appears in the
+                  news aggregator.'
+                type: string
+              short_name:
+                description: '- ShortName: Shortened name of the source for search
+                  purposes.'
+                type: string
+            type: object
+          status:
+            description: |-
+              SourceStatus defines the observed state of Source
+              It contains the current status of the Source resource, including conditions.
+              Fields:
+              - ID: Unique identifier for the source.
+              - Conditions: List of conditions associated with the source.
+            properties:
+              conditions:
+                items:
+                  description: SourceCondition defines the current condition of Source,
+                    at the moment of condition creation.
+                  properties:
+                    lastUpdateTime:
+                      description: '- LastUpdateTime: represents the last time the
+                        condition was updated.'
+                      format: date-time
+                      type: string
+                    message:
+                      description: 'Message: provides a human-readable message indicating
+                        details about the last transition.'
+                      type: string
+                    reason:
+                      description: '- Reason: indicates the reason for the condition''s
+                        last transition.'
+                      type: string
+                    status:
+                      description: '- Status: shows status of the condition, one of
+                        True or False depending on its success.'
+                      type: string
+                    type:
+                      description: '- Type: stands for type of condition (e.g., Added,
+                        Updated).'
+                      type: string
+                  required:
+                  - status
+                  - type
+                  type: object
+                type: array
+              id:
+                type: integer
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

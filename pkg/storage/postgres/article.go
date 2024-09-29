@@ -18,7 +18,7 @@ func New(db *sqlx.DB) service.ArticleStorage {
 func (pa *postgresArticleStorage) GetAll() ([]model.Article, error) {
 	var articles []model.Article
 	query := `SELECT a.id, a.title, a.description, a.link, a.pub_date,
-			       s.id AS source_id, s.name AS source_name, s.link AS source_link
+			       s.id AS source_id, s.name AS source_name, s.link AS source_link, s.short_name AS source_short_name
 			FROM articles a
 			JOIN sources s ON a.source_id = s.id`
 	rows, err := pa.db.Queryx(query)
@@ -32,7 +32,7 @@ func (pa *postgresArticleStorage) GetAll() ([]model.Article, error) {
 		var source model.Source
 
 		err := rows.Scan(&article.Id, &article.Title, &article.Description, &article.Link, &article.PubDate,
-			&source.Id, &source.Name, &source.Link)
+			&source.Id, &source.Name, &source.Link, &source.ShortName)
 		if err != nil {
 			return nil, err
 		}
@@ -99,7 +99,7 @@ func (pa *postgresArticleStorage) GetByFilter(query string, args []interface{}) 
 
 		err := rows.Scan(
 			&article.Id, &article.Title, &article.Description, &article.Link, &article.PubDate,
-			&source.Id, &source.Name, &source.Link,
+			&source.Id, &source.Name, &source.Link, &source.ShortName,
 		)
 		if err != nil {
 			return nil, fmt.Errorf("error scanning row: %w", err)

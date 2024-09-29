@@ -112,7 +112,7 @@ func (a *articleService) getByFilterInMemory(f filter.Filters) ([]model.Article,
 func (a *articleService) getByFilterDB(f filter.Filters) ([]model.Article, error) {
 	baseQuery := `
 		SELECT a.id, a.title, a.description, a.link, a.pub_date,
-		       s.id, s.name, s.link
+		       s.id, s.name, s.link, s.short_name
 		FROM articles a
 		JOIN sources s ON a.source_id = s.id
 		WHERE 1=1

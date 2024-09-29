@@ -1,0 +1,29 @@
+apiVersion: aggregator.com.teamdev/v1
+kind: Source
+metadata:
+  name: bbc-source
+  namespace: news-alligator
+spec:
+  name: "BBC News"
+  link: "https://feeds.bbci.co.uk/news/rss.xml"
+  short_name: "bbc"
+---
+apiVersion: aggregator.com.teamdev/v1
+kind: Source
+metadata:
+  name: abc-source
+  namespace: news-alligator
+spec:
+  name: "ABC News"
+  link: "https://abcnews.go.com/abcnews/internationalheadlines"
+  short_name: "abcnews"
+---
+apiVersion: aggregator.com.teamdev/v1
+kind: Source
+metadata:
+  name: fox-source
+  namespace: news-alligator
+spec:
+  name: "FOX NEWS"
+  link: "https://moxie.foxnews.com/google-publisher/world.xml"
+  short_name: "foxnews"

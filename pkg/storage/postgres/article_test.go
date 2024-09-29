@@ -18,11 +18,11 @@ func TestPostgresArticleStorage_GetAll(t *testing.T) {
 
 	storage := New(db)
 
-	rows := sqlmock.NewRows([]string{"id", "title", "description", "link", "pub_date", "source_id", "source_name", "source_link"}).
-		AddRow(1, "title1", "description1", "link1", time.Now(), 1, "source1", "source_link1").
-		AddRow(2, "title2", "description2", "link2", time.Now(), 2, "source2", "source_link2")
+	rows := sqlmock.NewRows([]string{"id", "title", "description", "link", "pub_date", "source_id", "source_name", "source_link", "source_short_name"}).
+		AddRow(1, "title1", "description1", "link1", time.Date(2023, 6, 1, 0, 0, 0, 0, time.UTC), 1, "source1", "source_link1", "short1").
+		AddRow(2, "title2", "description2", "link2", time.Date(2024, 6, 1, 0, 0, 0, 0, time.UTC), 2, "source2", "source_link2", "short2")
 
-	mock.ExpectQuery("SELECT a.id, a.title, a.description, a.link, a.pub_date, s.id AS source_id, s.name AS source_name, s.link AS source_link FROM articles a JOIN sources s ON a.source_id = s.id").
+	mock.ExpectQuery("SELECT a.id, a.title, a.description, a.link, a.pub_date, s.id AS source_id, s.name AS source_name, s.link AS source_link, s.short_name AS source_short_name FROM articles a JOIN sources s ON a.source_id = s.id").
 		WillReturnRows(rows)
 
 	articles, err := storage.GetAll()
@@ -35,11 +35,12 @@ func TestPostgresArticleStorage_GetAll(t *testing.T) {
 			Title:       "title1",
 			Description: "description1",
 			Link:        "link1",
-			PubDate:     time.Now(),
+			PubDate:     time.Date(2023, 6, 1, 0, 0, 0, 0, time.UTC),
 			Source: model.Source{
-				Id:   1,
-				Name: "source1",
-				Link: "source_link1",
+				Id:        1,
+				Name:      "source1",
+				Link:      "source_link1",
+				ShortName: "short1",
 			},
 		},
 		{
@@ -47,11 +48,12 @@ func TestPostgresArticleStorage_GetAll(t *testing.T) {
 			Title:       "title2",
 			Description: "description2",
 			Link:        "link2",
-			PubDate:     time.Now(),
+			PubDate:     time.Date(2024, 6, 1, 0, 0, 0, 0, time.UTC),
 			Source: model.Source{
-				Id:   2,
-				Name: "source2",
-				Link: "source_link2",
+				Id:        2,
+				Name:      "source2",
+				Link:      "source_link2",
+				ShortName: "short2",
 			},
 		},
 	}
@@ -65,6 +67,7 @@ func TestPostgresArticleStorage_GetAll(t *testing.T) {
 		assert.Equal(t, expectedArticles[i].Source.Id, article.Source.Id)
 		assert.Equal(t, expectedArticles[i].Source.Name, article.Source.Name)
 		assert.Equal(t, expectedArticles[i].Source.Link, article.Source.Link)
+		assert.Equal(t, expectedArticles[i].Source.ShortName, article.Source.ShortName)
 	}
 
 	assert.NoError(t, mock.ExpectationsWereMet())

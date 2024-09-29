@@ -83,6 +83,21 @@ func (mr *MockSourceStorageMockRecorder) GetByID(arg0 any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByID", reflect.TypeOf((*MockSourceStorage)(nil).GetByID), arg0)
 }
 
+// GetByShortName mocks base method.
+func (m *MockSourceStorage) GetByShortName(arg0 string) (model.Source, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetByShortName", arg0)
+	ret0, _ := ret[0].(model.Source)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetByShortName indicates an expected call of GetByShortName.
+func (mr *MockSourceStorageMockRecorder) GetByShortName(arg0 any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByShortName", reflect.TypeOf((*MockSourceStorage)(nil).GetByShortName), arg0)
+}
+
 // Save mocks base method.
 func (m *MockSourceStorage) Save(arg0 model.Source) (model.Source, error) {
 	m.ctrl.T.Helper()

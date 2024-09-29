@@ -35,7 +35,7 @@ spec:
               value: "000002"
       containers:
         - name: news-alligator
-          image: antohachaban/news-alligator-web:0.2.1
+          image: antohachaban/news-alligator-web:0.2.2
           ports:
             - containerPort: 443
           volumeMounts:

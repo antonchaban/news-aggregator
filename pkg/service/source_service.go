@@ -26,6 +26,7 @@ type SourceStorage interface {
 	Delete(id int) error
 	GetByID(id int) (model.Source, error)
 	Update(id int, src model.Source) (model.Source, error)
+	GetByShortName(shortName string) (model.Source, error)
 }
 
 // sourceService is the implementation of the SourceService interface.

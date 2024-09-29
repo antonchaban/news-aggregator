@@ -2,26 +2,31 @@
   {
     "id": 1,
     "name": "BBC News",
-    "link": "https://feeds.bbci.co.uk/news/rss.xml"
+    "link": "https://feeds.bbci.co.uk/news/rss.xml",
+    "short_name": "bbc"
   },
   {
     "id": 2,
     "name": "ABC News: International",
-    "link": "https://abcnews.go.com/abcnews/internationalheadlines"
+    "link": "https://abcnews.go.com/abcnews/internationalheadlines",
+    "short_name": "abcnews"
   },
   {
     "id": 3,
     "name": "The Washington Times stories: World",
-    "link": "https://www.washingtontimes.com/rss/headlines/news/world/"
+    "link": "https://www.washingtontimes.com/rss/headlines/news/world/",
+    "short_name": "washingtontimes"
   },
   {
     "id": 4,
     "name": "USA TODAY",
-    "link": "https://www.usatoday.com/news/world/"
+    "link": "https://www.usatoday.com/news/world/",
+    "short_name": "usatoday"
   },
   {
     "id": 5,
     "name": "The Washington Post",
-    "link": "http://feeds.washingtonpost.com/rss/world"
+    "link": "http://feeds.washingtonpost.com/rss/world",
+    "short_name": "washingtonpost"
   }
 ]

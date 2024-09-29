@@ -306,6 +306,9 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
+                },
+                "short_name": {
+                    "type": "string"
                 }
             }
         },
