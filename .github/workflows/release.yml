@@ -50,20 +50,6 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Build and push Docker image using Taskfile
+      - name: Build and push images to ECR using Taskfile
         run: |
-          task build-all VERSION=${{ needs.release-please.outputs.version }}
-
-      - name: Tag and push Docker image to ECR
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ALLIGATOR_REPOSITORY: antohachaban/news-alligator-web
-          OPERATOR_REPOSITORY: antohachaban/alligator-operator
-          FETCHER_REPOSITORY: antohachaban/news-fetcher
-          IMAGE_TAG: ${{ needs.release-please.outputs.version }}
-        run: |
-          docker push $ECR_REGISTRY/$ALLIGATOR_REPOSITORY:$IMAGE_TAG
-          docker tag $ECR_REGISTRY/$OPERATOR_REPOSITORY $ECR_REGISTRY/$OPERATOR_REPOSITORY:$IMAGE_TAG
-          docker push $ECR_REGISTRY/$OPERATOR_REPOSITORY:$IMAGE_TAG
-          docker tag $ECR_REGISTRY/$FETCHER_REPOSITORY $ECR_REGISTRY/$FETCHER_REPOSITORY:$IMAGE_TAG
-          docker push $ECR_REGISTRY/$FETCHER_REPOSITORY:$IMAGE_TAG
+          task push-all VERSION=${{ needs.release-please.outputs.version }}

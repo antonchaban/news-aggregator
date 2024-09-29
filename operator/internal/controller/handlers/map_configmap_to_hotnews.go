@@ -9,18 +9,21 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 )
 
-// MapConfigMapToHotNews maps ConfigMap updates to HotNews resources.
-func MapConfigMapToHotNews(c client.Client, configMapName, configMapNamespace string) handler.MapFunc {
+// MapConfigMapToHotNews maps ConfigMap updates to HotNews resources in the same namespace.
+func MapConfigMapToHotNews(c client.Client, configMapName string) handler.MapFunc {
 	return func(ctx context.Context, object client.Object) []reconcile.Request {
 		logrus.Println("Mapping ConfigMap to HotNews")
 
 		// Only proceed if the ConfigMap is the one we're interested in
-		if object.GetName() != configMapName || object.GetNamespace() != configMapNamespace {
+		if object.GetName() != configMapName {
 			return nil
 		}
 
+		namespace := object.GetNamespace()
+
 		var hotNewsList aggregatorv1.HotNewsList
-		if err := c.List(ctx, &hotNewsList); err != nil {
+		// List all HotNews resources in the same namespace as the ConfigMap
+		if err := c.List(ctx, &hotNewsList, &client.ListOptions{Namespace: namespace}); err != nil {
 			logrus.Errorf("Failed to list HotNews resources: %v", err)
 			return nil
 		}

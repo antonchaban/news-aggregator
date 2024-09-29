@@ -1,7 +1,8 @@
 version: '3'
 
 vars:
-  IMG: "406477933661.dkr.ecr.us-west-2.amazonaws.com/antohachaban/alligator-operator"
+  VERSION: '{{.VERSION | default "latest"}}'
+  IMG: "406477933661.dkr.ecr.us-west-2.amazonaws.com/antohachaban/alligator-operator:{{.VERSION}}"
   CONTAINER_TOOL: "docker"
   KUBECTL: "kubectl"
   KUSTOMIZE_VERSION: "v5.4.2"
@@ -69,12 +70,6 @@ tasks:
     desc: "Build docker image with the manager."
     cmds:
       - "{{.CONTAINER_TOOL}} build -t {{.IMG}} ."
-
-  docker-build-root:
-    desc: "Build docker image with the manager."
-    cmds:
-      - "{{.CONTAINER_TOOL}} build -t {{.IMG}} -f operator/Dockerfile ."
-
   docker-push:
     desc: "Push docker image with the manager."
     cmds:
