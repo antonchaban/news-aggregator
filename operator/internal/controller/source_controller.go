@@ -3,6 +3,7 @@ package controller
 import (
 	"bytes"
 	aggregatorv1 "com.teamdev/news-aggregator/api/v1"
+	"com.teamdev/news-aggregator/internal/controller/models"
 	"com.teamdev/news-aggregator/internal/controller/predicates"
 	"context"
 	"encoding/json"
@@ -39,14 +40,6 @@ const (
 // +kubebuilder:rbac:groups=aggregator.com.teamdev,resources=sources,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=aggregator.com.teamdev,resources=sources/status,verbs=get;update;patch
 // +kubebuilder:rbac:groups=aggregator.com.teamdev,resources=sources/finalizers,verbs=update
-
-// Source is a struct that represents a source resource from the news aggregator
-type Source struct {
-	Id        int    `json:"id"`         // Unique identifier for the source.
-	Name      string `json:"name"`       // Full name of the source, as it appears in the news aggregator.
-	Link      string `json:"link"`       // URL link to the source.
-	ShortName string `json:"short_name"` // Shortened name of the source for search purposes.
-}
 
 // Reconcile is the main logic for reconciling a Source resource.
 // It handles creating, updating, and deleting sources in the news aggregator service.
@@ -146,7 +139,7 @@ func (r *SourceReconciler) createSource(ctx context.Context, source *aggregatorv
 	}
 
 	// Parse the response body into a new SourceSpec
-	var createdSource Source
+	var createdSource models.Source
 	if err := json.NewDecoder(resp.Body).Decode(&createdSource); err != nil {
 		errUp := r.updateSourceStatus(ctx, source, aggregatorv1.SourceAdded, metav1.ConditionFalse, ReasonFailedCr, err.Error())
 		if errUp != nil {
