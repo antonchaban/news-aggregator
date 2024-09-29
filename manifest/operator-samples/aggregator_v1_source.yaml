@@ -1,12 +1,3 @@
-apiVersion: aggregator.com.teamdev/v1
-kind: Source
-metadata:
-  name: bbc-source
-  namespace: news-alligator
-spec:
-  name: "BBC News"
-  link: "https://feeds.bbci.co.uk/news/rss.xml"
-  short_name: "bbc"
 ---
 apiVersion: aggregator.com.teamdev/v1
 kind: Source
