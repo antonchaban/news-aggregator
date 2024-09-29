@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: news-alligator-config
-  namespace: news-alligator
-data:
-  POSTGRES_DB: postgres
-  POSTGRES_HOST: postgres:5432
-  STORAGE_TYPE: postgres
