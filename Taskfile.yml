@@ -297,7 +297,7 @@ tasks:
     cmds:
       - aws ecr get-login-password --region {{.REGION}} | helm registry login --username AWS --password-stdin {{.ACCOUNT_ID}}.dkr.ecr.{{.REGION}}.amazonaws.com
 
-  helmPush2Ecr:
+  helmPushToEcr:
     deps:
       - ecrHelmLogin
       - createChart
