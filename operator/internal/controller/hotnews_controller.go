@@ -25,13 +25,11 @@ import (
 
 // HotNewsReconciler reconciles a HotNews object
 type HotNewsReconciler struct {
-	Client             client.Client   // Client for interacting with the Kubernetes API.
-	Scheme             *runtime.Scheme // Scheme for the reconciler.
-	HTTPClient         *http.Client    // HTTP client for making external requests.
-	ArticleSvcURL      string          // URL of the news aggregator service.
-	ConfigMapName      string          // Name of the ConfigMap that contains feed groups.
-	ConfigMapNamespace string          // Namespace of the ConfigMap.
-	WorkingNamespace   string          // Namespace where CRDs are created.
+	Client        client.Client   // Client for interacting with the Kubernetes API.
+	Scheme        *runtime.Scheme // Scheme for the reconciler.
+	HTTPClient    *http.Client    // HTTP client for making external requests.
+	ArticleSvcURL string          // URL of the news aggregator service.
+	ConfigMapName string          // Name of the ConfigMap that contains feed groups.
 }
 
 const HotNewsFinalizer = "hotnews.finalizers.teamdev.com"
@@ -116,7 +114,6 @@ func (r *HotNewsReconciler) handleDeletion(ctx context.Context, hotNews *aggrega
 func (r *HotNewsReconciler) deleteOwnerReferences(ctx context.Context, namespace, hotNewsName string) error {
 	var sources aggregatorv1.SourceList
 	if err := r.Client.List(ctx, &sources, &client.ListOptions{Namespace: namespace}); err != nil {
-		logrus.Errorf("Failed to list Sources: %v", err)
 		return fmt.Errorf("failed to list Sources: %w", err)
 	}
 
@@ -149,18 +146,17 @@ func removeOwnerReference(ownerRefs []metav1.OwnerReference, name, kind string) 
 // Performs the main reconciliation logic for the HotNews resource.
 // Resolves feed groups, sets owner references, fetches articles, and updates the status.
 func (r *HotNewsReconciler) reconcileHotNews(ctx context.Context, hotNews *aggregatorv1.HotNews) (ctrl.Result, error) {
-	configMap, err := r.fetchConfigMap(ctx)
+	configMap, err := r.fetchConfigMap(ctx, hotNews.Namespace)
 	if err != nil {
 		if errors.IsNotFound(err) {
-			logrus.Warn("ConfigMap not found, proceeding without resolving feed groups")
-			r.updateStatusCondition(ctx, hotNews, metav1.ConditionFalse, "ConfigMapNotFound", "ConfigMap not found, proceeding without feed groups")
+			logrus.Warnf("ConfigMap %s not found in namespace %s, proceeding without resolving feed groups", r.ConfigMapName, hotNews.Namespace)
+			r.updateStatusCondition(ctx, hotNews, metav1.ConditionFalse, "ConfigMapNotFound", fmt.Sprintf("ConfigMap %s not found in namespace %s", r.ConfigMapName, hotNews.Namespace))
 			configMap = nil
 		} else {
-			logrus.Error(err, "Failed to fetch ConfigMap")
+			logrus.Errorf("Failed to fetch ConfigMap: %v", err)
 			r.updateStatusCondition(ctx, hotNews, metav1.ConditionFalse, "ConfigMapFetchFailed", "Failed to fetch ConfigMap")
 			return ctrl.Result{}, err
 		}
-
 	}
 
 	// Combine sources from Spec.Sources and resolved FeedGroups
@@ -202,9 +198,9 @@ func (r *HotNewsReconciler) reconcileHotNews(ctx context.Context, hotNews *aggre
 }
 
 // Retrieves the ConfigMap that contains feed group definitions.
-func (r *HotNewsReconciler) fetchConfigMap(ctx context.Context) (*corev1.ConfigMap, error) {
+func (r *HotNewsReconciler) fetchConfigMap(ctx context.Context, namespace string) (*corev1.ConfigMap, error) {
 	configMap := &corev1.ConfigMap{}
-	err := r.Client.Get(ctx, client.ObjectKey{Namespace: r.ConfigMapNamespace, Name: r.ConfigMapName}, configMap)
+	err := r.Client.Get(ctx, client.ObjectKey{Namespace: namespace, Name: r.ConfigMapName}, configMap)
 	if err != nil {
 		return nil, err
 	}
@@ -360,11 +356,11 @@ func (r *HotNewsReconciler) updateStatusCondition(ctx context.Context, hotNews *
 func (r *HotNewsReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&aggregatorv1.HotNews{}).
-		WithEventFilter(predicates.HotNews(r.WorkingNamespace)).
+		WithEventFilter(predicates.HotNews()).
 		Watches(
 			&corev1.ConfigMap{},
 			handler.EnqueueRequestsFromMapFunc(
-				handlers.MapConfigMapToHotNews(r.Client, r.ConfigMapName, r.ConfigMapNamespace),
+				handlers.MapConfigMapToHotNews(r.Client, r.ConfigMapName),
 			),
 		).
 		Watches(

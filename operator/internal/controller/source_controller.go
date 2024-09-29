@@ -273,6 +273,6 @@ func (r *SourceReconciler) updateSourceStatus(ctx context.Context, source *aggre
 func (r *SourceReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&aggregatorv1.Source{}).
-		WithEventFilter(predicates.Source(r.WorkingNamespace)).
+		WithEventFilter(predicates.Source()).
 		Complete(r)
 }

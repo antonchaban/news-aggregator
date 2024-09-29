@@ -6,17 +6,16 @@ import (
 )
 
 // Source returns the predicates for the Source controller, filtering events by the specified namespace.
-func Source(namespace string) predicate.Predicate {
+func Source() predicate.Predicate {
 	return predicate.Funcs{
 		CreateFunc: func(e event.CreateEvent) bool {
-			return e.Object.GetNamespace() == namespace
+			return true
 		},
 		DeleteFunc: func(e event.DeleteEvent) bool {
-			return !e.DeleteStateUnknown && e.Object.GetNamespace() == namespace
+			return !e.DeleteStateUnknown
 		},
 		UpdateFunc: func(e event.UpdateEvent) bool {
-			return e.ObjectNew.GetNamespace() == namespace &&
-				e.ObjectNew.GetGeneration() != e.ObjectOld.GetGeneration()
+			return e.ObjectNew.GetGeneration() != e.ObjectOld.GetGeneration()
 		},
 		GenericFunc: func(e event.GenericEvent) bool {
 			return true
