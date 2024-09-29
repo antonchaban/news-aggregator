@@ -324,7 +324,6 @@ tasks:
 
   push-all:
     deps:
-      - ecr-login
       - build-all
     cmds:
       - task operator:docker-push VERSION={{.VERSION}}
