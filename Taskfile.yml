@@ -318,13 +318,15 @@ tasks:
   # Build and push all images
   build-all:
     cmds:
-      - task operator:docker-build
+      - task operator:docker-build VERSION={{.VERSION}}
       - task build DOCKER_IMAGE_NAME={{.DOCKER_IMAGE_NAME}}
-      - task fetcher:build
+      - task fetcher:build VERSION={{.VERSION}}
 
   push-all:
-    deps: [build-all]
+    deps:
+      - ecr-login
+      - build-all
     cmds:
-      - task operator:docker-push
+      - task operator:docker-push VERSION={{.VERSION}}
       - task push-docker DOCKER_IMAGE_NAME={{.DOCKER_IMAGE_NAME}}
-      - task fetcher:push
+      - task fetcher:push VERSION={{.VERSION}}
