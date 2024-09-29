@@ -18,5 +18,8 @@ func Source(namespace string) predicate.Predicate {
 			return e.ObjectNew.GetNamespace() == namespace &&
 				e.ObjectNew.GetGeneration() != e.ObjectOld.GetGeneration()
 		},
+		GenericFunc: func(e event.GenericEvent) bool {
+			return true
+		},
 	}
 }
