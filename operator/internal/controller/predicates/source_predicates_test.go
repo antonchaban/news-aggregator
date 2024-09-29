@@ -127,4 +127,16 @@ func TestSourcePredicatesWithNamespace(t *testing.T) {
 			t.Errorf("UpdateFunc should return false when generation has not changed")
 		}
 	})
+
+	t.Run("GenericFunc Always True", func(t *testing.T) {
+		obj := &unstructured.Unstructured{}
+		obj.SetNamespace(namespace)
+		genericEvent := event.GenericEvent{
+			Object: obj,
+		}
+
+		if !pred.Generic(genericEvent) {
+			t.Errorf("GenericFunc should always return true")
+		}
+	})
 }
