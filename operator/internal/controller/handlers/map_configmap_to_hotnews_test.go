@@ -47,7 +47,7 @@ func TestMapConfigMapToHotNews(t *testing.T) {
 	configMapName := "feed-group-source"
 	configMapNamespace := "default"
 
-	mapFunc := MapConfigMapToHotNews(c, configMapName, configMapNamespace)
+	mapFunc := MapConfigMapToHotNews(c, configMapName)
 
 	configMap := &corev1.ConfigMap{
 		ObjectMeta: metav1.ObjectMeta{

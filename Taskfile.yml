@@ -9,14 +9,15 @@ vars:
   REGION: "us-west-2"
   ACCOUNT_ID: "406477933661"
   VERSION: '{{.VERSION}}'
-  DOCKER_IMAGE_NAME: "{{.ACCOUNT_ID}}.dkr.ecr.{{.REGION}}.amazonaws.com/antohachaban/news-alligator-web:{{.VERSION}}"
+#  DOCKER_IMAGE_NAME: "{{.ACCOUNT_ID}}.dkr.ecr.{{.REGION}}.amazonaws.com/antohachaban/news-alligator-web:{{.VERSION}}"
+  DOCKER_IMAGE_NAME: "antohachaban/news-alligator-web:{{.VERSION}}"
 
 includes:
   operator:
     taskfile: ./operator/Taskfile.yml
+    dir: ./operator/
   fetcher:
     taskfile: ./fetcher/Taskfile.yml
-
 
 tasks:
   build:
@@ -281,7 +282,7 @@ tasks:
       - docker push {{.ACCOUNT_ID}}.dkr.ecr.{{.REGION}}.amazonaws.com/{{.IMAGE_NAME}}
 
   # Combined task to build, tag, and push the image to ECR
-  deployAws:
+  imgPushToEcr:
     deps:
       - ecr-login
       - docker-tag
@@ -297,7 +298,7 @@ tasks:
     cmds:
       - aws ecr get-login-password --region {{.REGION}} | helm registry login --username AWS --password-stdin {{.ACCOUNT_ID}}.dkr.ecr.{{.REGION}}.amazonaws.com
 
-  helmPush2Ecr:
+  helmPushToEcr:
     deps:
       - ecrHelmLogin
       - createChart
@@ -317,13 +318,14 @@ tasks:
   # Build and push all images
   build-all:
     cmds:
-      - task operator:docker-build-root
+      - task operator:docker-build VERSION={{.VERSION}}
       - task build DOCKER_IMAGE_NAME={{.DOCKER_IMAGE_NAME}}
-      - task fetcher:build
+      - task fetcher:build VERSION={{.VERSION}}
 
   push-all:
-    deps: [build-all]
+    deps:
+      - build-all
     cmds:
-      - task operator:docker-push
+      - task operator:docker-push VERSION={{.VERSION}}
       - task push-docker DOCKER_IMAGE_NAME={{.DOCKER_IMAGE_NAME}}
-      - task fetcher:push
+      - task fetcher:push VERSION={{.VERSION}}

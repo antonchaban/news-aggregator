@@ -3,6 +3,7 @@ package controller
 import (
 	"bytes"
 	aggregatorv1 "com.teamdev/news-aggregator/api/v1"
+	"com.teamdev/news-aggregator/internal/controller/models"
 	"com.teamdev/news-aggregator/internal/controller/predicates"
 	"context"
 	"encoding/json"
@@ -138,7 +139,7 @@ func (r *SourceReconciler) createSource(ctx context.Context, source *aggregatorv
 	}
 
 	// Parse the response body into a new SourceSpec
-	var createdSource aggregatorv1.SourceSpec
+	var createdSource models.Source
 	if err := json.NewDecoder(resp.Body).Decode(&createdSource); err != nil {
 		errUp := r.updateSourceStatus(ctx, source, aggregatorv1.SourceAdded, metav1.ConditionFalse, ReasonFailedCr, err.Error())
 		if errUp != nil {
@@ -272,6 +273,6 @@ func (r *SourceReconciler) updateSourceStatus(ctx context.Context, source *aggre
 func (r *SourceReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&aggregatorv1.Source{}).
-		WithEventFilter(predicates.Source(r.WorkingNamespace)).
+		WithEventFilter(predicates.Source()).
 		Complete(r)
 }

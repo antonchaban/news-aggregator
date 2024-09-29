@@ -43,9 +43,6 @@ spec:
               SourceSpec defines the desired state of Source,
               includes fields for source creation and management in the news aggregator.
             properties:
-              id:
-                description: '- Id: Unique identifier for the source.'
-                type: integer
               link:
                 description: '- Link: URL link to the source.'
                 type: string
