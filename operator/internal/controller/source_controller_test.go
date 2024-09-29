@@ -64,12 +64,12 @@ var _ = Describe("Create source tests", func() {
 		// Create fake HTTP server to mock an external service
 		server = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			if r.Method == http.MethodPost {
-				var spec aggregatorv1.SourceSpec
-				err := json.NewDecoder(r.Body).Decode(&spec)
+				var src controller.Source
+				err := json.NewDecoder(r.Body).Decode(&src)
 				Expect(err).NotTo(HaveOccurred())
 
-				spec.Id = 1
-				respData, err := json.Marshal(spec)
+				src.Id = 1
+				respData, err := json.Marshal(src)
 				Expect(err).NotTo(HaveOccurred())
 
 				w.WriteHeader(http.StatusOK)
@@ -112,12 +112,12 @@ var _ = Describe("Create source tests", func() {
 		// Create fake HTTP server to mock an external service
 		server = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			if r.Method == http.MethodPost {
-				var spec aggregatorv1.SourceSpec
-				err := json.NewDecoder(r.Body).Decode(&spec)
+				var src controller.Source
+				err := json.NewDecoder(r.Body).Decode(&src)
 				Expect(err).NotTo(HaveOccurred())
 
-				spec.Id = 1
-				respData, err := json.Marshal(spec)
+				src.Id = 1
+				respData, err := json.Marshal(src)
 				Expect(err).NotTo(HaveOccurred())
 
 				w.WriteHeader(http.StatusOK)
@@ -159,12 +159,12 @@ var _ = Describe("Create source tests", func() {
 	It("should handle creation failure, when error in resp.StatusCode", func() {
 		server = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			if r.Method == http.MethodPost {
-				var spec aggregatorv1.SourceSpec
-				err := json.NewDecoder(r.Body).Decode(&spec)
+				var src controller.Source
+				err := json.NewDecoder(r.Body).Decode(&src)
 				Expect(err).NotTo(HaveOccurred())
 
-				spec.Id = 1
-				respData, err := json.Marshal(spec)
+				src.Id = 1
+				respData, err := json.Marshal(src)
 				Expect(err).NotTo(HaveOccurred())
 
 				w.WriteHeader(http.StatusMethodNotAllowed)
@@ -205,12 +205,12 @@ var _ = Describe("Create source tests", func() {
 	It("should add finalizers if not present", func() {
 		server = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			if r.Method == http.MethodPost {
-				var spec aggregatorv1.SourceSpec
-				err := json.NewDecoder(r.Body).Decode(&spec)
+				var src controller.Source
+				err := json.NewDecoder(r.Body).Decode(&src)
 				Expect(err).NotTo(HaveOccurred())
 
-				spec.Id = 1
-				respData, err := json.Marshal(spec)
+				src.Id = 1
+				respData, err := json.Marshal(src)
 				Expect(err).NotTo(HaveOccurred())
 
 				w.WriteHeader(http.StatusOK)
@@ -349,11 +349,11 @@ var _ = Describe("Update source tests", func() {
 				w.WriteHeader(http.StatusOK)
 				w.Write(respData)
 			} else if r.Method == http.MethodPut {
-				var spec aggregatorv1.SourceSpec
-				spec.Name = "Updated Source"
-				spec.Link = "http://example.com/rss"
-				spec.Id = 1
-				respData, err := json.Marshal(spec)
+				var src controller.Source
+				src.Name = "Updated Source"
+				src.Link = "http://example.com/rss"
+				src.Id = 1
+				respData, err := json.Marshal(src)
 				Expect(err).NotTo(HaveOccurred())
 
 				w.WriteHeader(http.StatusOK)
@@ -404,11 +404,11 @@ var _ = Describe("Update source tests", func() {
 				w.WriteHeader(http.StatusOK)
 				w.Write(respData)
 			} else if r.Method == http.MethodPut {
-				var spec aggregatorv1.SourceSpec
-				spec.Name = "Updated Source"
-				spec.Link = "http://example.com/rss"
-				spec.Id = 1
-				respData, err := json.Marshal(spec)
+				var src controller.Source
+				src.Name = "Updated Source"
+				src.Link = "http://example.com/rss"
+				src.Id = 1
+				respData, err := json.Marshal(src)
 				Expect(err).NotTo(HaveOccurred())
 
 				w.WriteHeader(http.StatusOK)
@@ -459,11 +459,11 @@ var _ = Describe("Update source tests", func() {
 				w.WriteHeader(http.StatusOK)
 				w.Write(respData)
 			} else if r.Method == http.MethodPut {
-				var spec aggregatorv1.SourceSpec
-				spec.Name = "Updated Source"
-				spec.Link = "http://example.com/rss"
-				spec.Id = 1
-				respData, err := json.Marshal(spec)
+				var src controller.Source
+				src.Name = "Updated Source"
+				src.Link = "http://example.com/rss"
+				src.Id = 1
+				respData, err := json.Marshal(src)
 				Expect(err).NotTo(HaveOccurred())
 
 				w.WriteHeader(http.StatusMethodNotAllowed)
