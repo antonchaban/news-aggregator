@@ -9,14 +9,15 @@ vars:
   REGION: "us-west-2"
   ACCOUNT_ID: "406477933661"
   VERSION: '{{.VERSION}}'
-  DOCKER_IMAGE_NAME: "{{.ACCOUNT_ID}}.dkr.ecr.{{.REGION}}.amazonaws.com/antohachaban/news-alligator-web:{{.VERSION}}"
+#  DOCKER_IMAGE_NAME: "{{.ACCOUNT_ID}}.dkr.ecr.{{.REGION}}.amazonaws.com/antohachaban/news-alligator-web:{{.VERSION}}"
+  DOCKER_IMAGE_NAME: "antohachaban/news-alligator-web:{{.VERSION}}"
 
 includes:
   operator:
     taskfile: ./operator/Taskfile.yml
+    dir: ./operator/
   fetcher:
     taskfile: ./fetcher/Taskfile.yml
-
 
 tasks:
   build:
@@ -317,7 +318,7 @@ tasks:
   # Build and push all images
   build-all:
     cmds:
-      - task operator:docker-build-root
+      - task operator:docker-build
       - task build DOCKER_IMAGE_NAME={{.DOCKER_IMAGE_NAME}}
       - task fetcher:build
 
