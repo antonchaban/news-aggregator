@@ -118,16 +118,27 @@ func (r *HotNewsReconciler) deleteOwnerReferences(ctx context.Context, namespace
 	}
 
 	for _, src := range sources.Items {
-		updatedOwnerRefs := removeOwnerReference(src.OwnerReferences, hotNewsName, "HotNews")
-		if len(updatedOwnerRefs) != len(src.OwnerReferences) {
-			src.OwnerReferences = updatedOwnerRefs
-			if err := r.Client.Update(ctx, &src); err != nil {
-				logrus.Errorf("Failed to update Source %s: %v", src.Name, err)
-				return fmt.Errorf("failed to update Source %s: %w", src.Name, err)
-			}
-			logrus.Infof("Owner reference removed from Source %s", src.Name)
+		if err := r.removeOwnerReferenceFromSource(ctx, &src, hotNewsName); err != nil {
+			return err
 		}
 	}
+	return nil
+}
+
+// Removes the owner reference to the HotNews resource from a single Source resource.
+func (r *HotNewsReconciler) removeOwnerReferenceFromSource(ctx context.Context, src *aggregatorv1.Source, hotNewsName string) error {
+	updatedOwnerRefs := removeOwnerReference(src.OwnerReferences, hotNewsName, "HotNews")
+	if len(updatedOwnerRefs) == len(src.OwnerReferences) {
+		// No change in owner references so skip update
+		return nil
+	}
+
+	src.OwnerReferences = updatedOwnerRefs
+	if err := r.Client.Update(ctx, src); err != nil {
+		logrus.Errorf("Failed to update Source %s: %v", src.Name, err)
+		return fmt.Errorf("failed to update Source %s: %w", src.Name, err)
+	}
+	logrus.Infof("Owner reference removed from Source %s", src.Name)
 	return nil
 }
 
