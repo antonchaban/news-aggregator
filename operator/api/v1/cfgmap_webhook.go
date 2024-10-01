@@ -54,9 +54,9 @@ func (v *CfgMapValidatorWebHook) ValidateDelete(ctx context.Context, obj runtime
 	logrus.Printf("Validating deletion of ConfigMap %s/%s", cm.Namespace, cm.Name)
 
 	var hotNewsList HotNewsList
-	if err := v.Client.List(ctx, &hotNewsList); err != nil {
-		logrus.Errorf("Failed to list HotNews resources: %v", err)
-		return nil, fmt.Errorf("failed to list HotNews resources: %v", err)
+	if err := v.Client.List(ctx, &hotNewsList, client.InNamespace(cm.Namespace)); err != nil {
+		logrus.Errorf("Failed to list HotNews resources in namespace %s: %v", cm.Namespace, err)
+		return nil, fmt.Errorf("failed to list HotNews resources in namespace %s: %v", cm.Namespace, err)
 	}
 
 	// Check if any HotNews resource depends on this ConfigMap
