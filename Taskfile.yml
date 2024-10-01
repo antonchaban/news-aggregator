@@ -9,8 +9,8 @@ vars:
   REGION: "us-west-2"
   ACCOUNT_ID: "406477933661"
   VERSION: '{{.VERSION}}'
-#  DOCKER_IMAGE_NAME: "{{.ACCOUNT_ID}}.dkr.ecr.{{.REGION}}.amazonaws.com/antohachaban/news-alligator-web:{{.VERSION}}"
-  DOCKER_IMAGE_NAME: "antohachaban/news-alligator-web:{{.VERSION}}"
+  DOCKER_IMAGE_NAME: "{{.ACCOUNT_ID}}.dkr.ecr.{{.REGION}}.amazonaws.com/antohachaban/news-alligator-web:{{.VERSION}}"
+#  DOCKER_IMAGE_NAME: "antohachaban/news-alligator-web:{{.VERSION}}"
 
 includes:
   operator:
