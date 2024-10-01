@@ -10,16 +10,45 @@ import (
 	"github.com/aws/jsii-runtime-go"
 )
 
+const (
+	vpcCIDR       = "10.0.0.0/16"
+	myClusterName = "anton-eks-cluster-cdk"
+	nodeInstance  = "t2.medium"
+	minNodeSize   = 1
+	maxNodeSize   = 10
+	desiredSize   = 2
+	sshKey        = "anton"
+)
+
 type EKSStackProps struct {
 	awscdk.StackProps
+}
+
+// Params is a struct to hold parameters for the EKS stack configuration from context
+type Params struct {
+	VpcCidr          string
+	ClusterName      string
+	NodeInstanceType string
+	MinNodeSize      float64
+	MaxNodeSize      float64
+	DesiredNodeSize  float64
+	SshKey           string
+}
+
+type EnvParams struct {
+	Account string
+	Region  string
 }
 
 func NewEKSStack(scope constructs.Construct, id string, props *EKSStackProps) awscdk.Stack {
 	stack := awscdk.NewStack(scope, &id, &props.StackProps)
 
+	// Fetch parameters as a struct
+	params := fetchParams(stack)
+
 	// Create VPC with public and private subnets
 	vpc := awsec2.NewVpc(stack, jsii.String("antonvpc-cdk"), &awsec2.VpcProps{
-		IpAddresses: awsec2.IpAddresses_Cidr(jsii.String("10.0.0.0/16")),
+		IpAddresses: awsec2.IpAddresses_Cidr(jsii.String(params.VpcCidr)),
 		SubnetConfiguration: &[]*awsec2.SubnetConfiguration{
 			{
 				Name:                jsii.String("anton-public-subnet"),
@@ -83,7 +112,7 @@ func NewEKSStack(scope constructs.Construct, id string, props *EKSStackProps) aw
 	// Create EKS Cluster
 	cluster := awseks.NewCluster(stack, jsii.String("antonekscluster-cdk"), &awseks.ClusterProps{
 		EndpointAccess:  awseks.EndpointAccess_PUBLIC(),
-		ClusterName:     jsii.String("anton-eks-cluster-cdk"),
+		ClusterName:     jsii.String(params.ClusterName),
 		Vpc:             vpc,
 		DefaultCapacity: jsii.Number(0),
 		SecurityGroup:   clusterSG,
@@ -115,14 +144,14 @@ func NewEKSStack(scope constructs.Construct, id string, props *EKSStackProps) aw
 
 	cluster.AddNodegroupCapacity(jsii.String("anton-node-group-cdk"), &awseks.NodegroupOptions{
 		InstanceTypes: &[]awsec2.InstanceType{
-			awsec2.NewInstanceType(jsii.String("t2.medium")),
+			awsec2.NewInstanceType(jsii.String(params.NodeInstanceType)),
 		},
 		NodeRole:    nodegRole,
-		MinSize:     jsii.Number(1),
-		MaxSize:     jsii.Number(10),
-		DesiredSize: jsii.Number(2),
+		MinSize:     jsii.Number(params.MinNodeSize),
+		MaxSize:     jsii.Number(params.MaxNodeSize),
+		DesiredSize: jsii.Number(params.DesiredNodeSize),
 		RemoteAccess: &awseks.NodegroupRemoteAccess{
-			SshKeyName: jsii.String("anton"),
+			SshKeyName: jsii.String(params.SshKey),
 		},
 		Subnets: &awsec2.SubnetSelection{
 			Subnets: publicSubnets,
@@ -170,21 +199,71 @@ func NewEKSStack(scope constructs.Construct, id string, props *EKSStackProps) aw
 	return stack
 }
 
+func getString(stack awscdk.Stack, key string, defaultValue string) string {
+	if value := stack.Node().TryGetContext(jsii.String(key)); value != nil {
+		if str, ok := value.(string); ok {
+			return str
+		}
+	}
+	return defaultValue
+}
+
+func getFloat64(stack awscdk.Stack, key string, defaultValue float64) float64 {
+	if value := stack.Node().TryGetContext(jsii.String(key)); value != nil {
+		if num, ok := value.(float64); ok {
+			return num
+		}
+	}
+	return defaultValue
+}
+
+func fetchParams(stack awscdk.Stack) Params {
+	return Params{
+		VpcCidr:          getString(stack, "vpcCidr", vpcCIDR),
+		ClusterName:      getString(stack, "eksClusterName", myClusterName),
+		NodeInstanceType: getString(stack, "nodeInstanceType", nodeInstance),
+		MinNodeSize:      getFloat64(stack, "minNodeSize", minNodeSize),
+		MaxNodeSize:      getFloat64(stack, "maxNodeSize", maxNodeSize),
+		DesiredNodeSize:  getFloat64(stack, "desiredNodeSize", desiredSize),
+		SshKey:           getString(stack, "ec2SshKey", sshKey),
+	}
+}
+
+func fetchEnvParams(app constructs.Construct) EnvParams {
+	getString := func(key string, defaultValue string) string {
+		if value := app.Node().TryGetContext(jsii.String(key)); value != nil {
+			if str, ok := value.(string); ok {
+				return str
+			}
+		}
+		return defaultValue
+	}
+
+	return EnvParams{
+		Account: getString("account", "406477933661"),
+		Region:  getString("region", "us-west-2"),
+	}
+}
+
 func main() {
 	app := awscdk.NewApp(nil)
 
-	NewEKSStack(app, "anton-EKSStack", &EKSStackProps{
-		StackProps: awscdk.StackProps{
-			Env: env(),
-		},
+	envParams := fetchEnvParams(app)
+
+	stackProps := awscdk.StackProps{
+		Env: env(envParams),
+	}
+
+	NewEKSStack(app, "MyEKSStack", &EKSStackProps{
+		StackProps: stackProps,
 	})
 
 	app.Synth(nil)
 }
 
-func env() *awscdk.Environment {
+func env(params EnvParams) *awscdk.Environment {
 	return &awscdk.Environment{
-		Account: jsii.String("406477933661"),
-		Region:  jsii.String("us-west-2"),
+		Account: jsii.String(params.Account),
+		Region:  jsii.String(params.Region),
 	}
 }

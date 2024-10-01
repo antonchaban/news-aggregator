@@ -1,21 +1,31 @@
 package main
 
 import (
+	"github.com/aws/jsii-runtime-go"
 	"testing"
 
 	"github.com/aws/aws-cdk-go/awscdk/v2"
 	"github.com/aws/aws-cdk-go/awscdk/v2/assertions"
-	"github.com/aws/jsii-runtime-go"
 )
 
 func TestEKSStack(t *testing.T) {
 	// GIVEN
 	app := awscdk.NewApp(nil)
 
+	acc := "account"
+	region := "region"
+
+	// Set context parameters
+	app.Node().SetContext(&acc, "123456789012")
+	app.Node().SetContext(&region, "us-west-2")
+
+	// Fetch environment parameters
+	envParams := fetchEnvParams(app)
+
 	// WHEN
 	stack := NewEKSStack(app, "TestEKSStack", &EKSStackProps{
 		StackProps: awscdk.StackProps{
-			Env: env(),
+			Env: env(envParams),
 		},
 	})
 
@@ -38,9 +48,9 @@ func TestEKSStack(t *testing.T) {
 	template.HasResourceProperties(jsii.String("AWS::EKS::Nodegroup"), map[string]interface{}{
 		"InstanceTypes": []interface{}{"t2.medium"},
 		"ScalingConfig": map[string]interface{}{
-			"MinSize":     1,
-			"MaxSize":     10,
-			"DesiredSize": 2,
+			"MinSize":     float64(1),
+			"MaxSize":     float64(10),
+			"DesiredSize": float64(2),
 		},
 	})
 
