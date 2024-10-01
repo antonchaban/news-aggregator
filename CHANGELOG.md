@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0](https://github.com/antonchaban/news-aggregator/compare/news-alligator@v1.4.0...news-alligator@v1.5.0) (2024-10-01)
+
+
+### Features
+
+* Facilitate the management of certificates with cert-manager ([3c79b2a](https://github.com/antonchaban/news-aggregator/commit/3c79b2acff8d716bd7a6ba70d40c35931ca39f3f))
+
 ## [1.4.0](https://github.com/antonchaban/news-aggregator/compare/news-alligator@v1.3.0...news-alligator@v1.4.0) (2024-10-01)
 
 
