@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/antonchaban/news-aggregator/compare/news-alligator@v1.3.0...news-alligator@v1.4.0) (2024-10-01)
+
+
+### Features
+
+* Add endpoint to news aggregator to view all available sources ([df08aa0](https://github.com/antonchaban/news-aggregator/commit/df08aa02cf9f1e98e665344862fdbc73b904d44e))
+
 ## [1.3.0](https://github.com/antonchaban/news-aggregator/compare/news-alligator@v1.2.0...news-alligator@v1.3.0) (2024-10-01)
 
 
