@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.0](https://github.com/antonchaban/news-aggregator/compare/news-alligator@v1.7.1...news-alligator@v1.8.0) (2024-10-01)
+
+
+### Features
+
+* Add AWS cloud formation for cluster creation ([9ba22d8](https://github.com/antonchaban/news-aggregator/commit/9ba22d8cd7614ace2381559e86b8fe6956073309))
+
 ## [1.7.1](https://github.com/antonchaban/news-aggregator/compare/news-alligator@v1.7.0...news-alligator@v1.7.1) (2024-10-01)
 
 
