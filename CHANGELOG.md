@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.1](https://github.com/antonchaban/news-aggregator/compare/news-alligator@v1.7.0...news-alligator@v1.7.1) (2024-10-01)
+
+
+### Bug Fixes
+
+* Update ECR docker image name ([c78c557](https://github.com/antonchaban/news-aggregator/commit/c78c557cb16cc70e85c3842c7a3170dd42d8b0c0))
+
 ## [1.7.0](https://github.com/antonchaban/news-aggregator/compare/news-alligator@v1.6.0...news-alligator@v1.7.0) (2024-10-01)
 
 
