@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/antonchaban/news-aggregator/compare/news-alligator@v1.2.0...news-alligator@v1.3.0) (2024-10-01)
+
+
+### Features
+
+* Add helm for managing k8s manifests ([8f8352c](https://github.com/antonchaban/news-aggregator/commit/8f8352c3cb42ddb6f92b807d6783557506ff976f))
+
 ## [1.2.0](https://github.com/antonchaban/news-aggregator/compare/news-alligator@v1.1.0...news-alligator@v1.2.0) (2024-09-23)
 
 
