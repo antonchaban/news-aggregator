@@ -201,7 +201,7 @@ func (r *HotNewsReconciler) reconcileHotNews(ctx context.Context, hotNews *aggre
 		return ctrl.Result{}, err
 	}
 
-	// Update HotNews status fields
+	// Configure HotNews status fields
 	r.updateHotNewsStatus(hotNews, articles, reqURL)
 	r.updateStatusCondition(hotNews, metav1.ConditionTrue, "Reconciled", "Successfully reconciled HotNews")
 
