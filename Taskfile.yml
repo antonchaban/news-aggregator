@@ -1,18 +1,29 @@
 version: '3'
 
-env:
-  DOCKER_IMAGE_NAME: antohachaban/news-alligator-web
-
 vars:
-  Namespace: "news-alligator"
+  ACCESS_KEY_ID: '{{.ACCESS_KEY_ID | default ""}}'
+  SECRET_ACCESS_KEY: '{{.SECRET_ACCESS_KEY | default ""}}'
+  DB_USER: '{{.DB_USER | default "admin"}}'
+  DB_PASSWORD: '{{.DB_PASSWORD | default "admin"}}'
+  NAMESPACE: '{{.Namespace | default "news-alligator"}}'
+  REGION: "us-west-2"
+  ACCOUNT_ID: "406477933661"
+  VERSION: '{{.VERSION}}'
+#  DOCKER_IMAGE_NAME: "{{.ACCOUNT_ID}}.dkr.ecr.{{.REGION}}.amazonaws.com/antohachaban/news-alligator-web:{{.VERSION}}"
+  DOCKER_IMAGE_NAME: "antohachaban/news-alligator-web:{{.VERSION}}"
+
+includes:
+  operator:
+    taskfile: ./operator/Taskfile.yml
+    dir: ./operator/
+  fetcher:
+    taskfile: ./fetcher/Taskfile.yml
 
 tasks:
   build:
     cmds:
-      - docker build . -f ./.Dockerfile -t {{.DOCKER_IMAGE_NAME}}:{{.VERSION}}
-    vars:
-      VERSION: '{{.VERSION | default "latest"}}'
-    desc: "Build the Docker image, example: task build VERSION=0.1.2"
+      - docker build . -f ./.Dockerfile -t {{.DOCKER_IMAGE_NAME}}
+    desc: "Build the Docker image"
 
   run-docker:
     cmds:
@@ -117,10 +128,18 @@ tasks:
       - |
         if ! kubectl get namespace news-alligator > /dev/null 2>&1; then
           kubectl create namespace news-alligator
+          echo "Namespace news-alligator created."
         else
           echo "Namespace news-alligator already exists."
         fi
-    desc: Create a Kubernetes namespace
+  
+        if ! kubectl get namespace operator-system > /dev/null 2>&1; then
+          kubectl create namespace operator-system
+          echo "Namespace operator-system created."
+        else
+          echo "Namespace operator-system already exists."
+        fi
+    desc: Create Kubernetes namespaces if they do not exist
     internal: true
 
   apply-secret:
@@ -206,23 +225,107 @@ tasks:
 
 
   createChart:
-    desc: "Create Helm chart for news-aggregator"
+    desc: "Create Helm charts for all directories in manifest/helm"
     cmds:
-      - helm package manifest/helm/news-alligator
+      - |
+        echo "Packaging Helm charts in manifest/helm/"
+        for chart in manifest/helm/*/; do
+          if [ -f "${chart}/Chart.yaml" ]; then
+            echo "Packaging chart: ${chart}"
+            helm package "$chart"
+          else
+            echo "No Chart.yaml found in: ${chart}"
+          fi
+        done
       - mkdir -p manifest/helm/charts
-      - mv *.tgz manifest/helm/charts
+      - echo "Moving packaged charts to manifest/helm/charts/"
+      - mv *.tgz manifest/helm/charts || echo "No charts found to move."
+
+  installSecrets:
+    deps:
+      - createChart
+    desc: "Install secrets for the application"
+    cmds:
+      - helm upgrade --install news-alligator oci://{{.ACCOUNT_ID}}.dkr.ecr.{{.REGION}}.amazonaws.com/antohachaban-secret-generator-chart --namespace {{.NAMESPACE}} --create-namespace --set aws.accessKeyId={{.ACCESS_KEY_ID}} --set aws.secretAccessKey={{.SECRET_ACCESS_KEY}}
 
   installChart:
-    vars:
-      DB_PASSWORD: '{{.DB_PASSWORD | default "admin"}}'
-      DB_USER: '{{.DB_USER | default "admin"}}'
     deps:
         - createChart
+        - installSecrets
     desc: "Install Helm chart on Kubernetes cluster"
     cmds:
-      - helm upgrade --install news-alligator manifest/helm/charts/news-alligator-*.tgz --namespace {{.Namespace}} --create-namespace --set postgresql.auth.username={{.DB_USER}} --set postgresql.auth.password={{.DB_PASSWORD}}
+      - helm upgrade --install news-alligator oci://{{.ACCOUNT_ID}}.dkr.ecr.{{.REGION}}.amazonaws.com/antohachaban-news-alligator-chart --namespace {{.NAMESPACE}} --create-namespace --set aws.accessKeyId={{.ACCESS_KEY_ID}} --set aws.secretAccessKey={{.SECRET_ACCESS_KEY}} --set postgresql.auth.username={{.DB_USER}} --set postgresql.auth.password={{.DB_PASSWORD}}
 
   uninstallChart:
     desc: "Uninstall Helm chart from Kubernetes cluster"
     cmds:
       - helm uninstall news-alligator --namespace {{.Namespace}}
+      - helm uninstall secret-generator --namespace {{.Namespace}}
+
+#  AWS
+
+  ecr-login:
+    desc: "Login to AWS ECR"
+    cmds:
+      - aws ecr get-login-password --region {{.REGION}} | docker login --username AWS --password-stdin {{.ACCOUNT_ID}}.dkr.ecr.{{.REGION}}.amazonaws.com
+
+  # Task to tag the Docker image with ECR repository URI
+  docker-tag:
+    desc: "Tag Docker image for ECR"
+    cmds:
+      - docker tag {{.IMAGE_NAME}} {{.ACCOUNT_ID}}.dkr.ecr.{{.REGION}}.amazonaws.com/{{.IMAGE_NAME}}
+
+  # Task to push Docker image to ECR
+  docker-push:
+    desc: "Push Docker image to ECR"
+    cmds:
+      - docker push {{.ACCOUNT_ID}}.dkr.ecr.{{.REGION}}.amazonaws.com/{{.IMAGE_NAME}}
+
+  # Combined task to build, tag, and push the image to ECR
+  imgPushToEcr:
+    deps:
+      - ecr-login
+      - docker-tag
+      - docker-push
+    desc: "Build, tag, and push Docker image to ECR"
+    vars:
+      IMAGE_NAME: ""
+
+  # Tasks to push helm charts
+
+  ecrHelmLogin:
+    desc: "Login to AWS ECR"
+    cmds:
+      - aws ecr get-login-password --region {{.REGION}} | helm registry login --username AWS --password-stdin {{.ACCOUNT_ID}}.dkr.ecr.{{.REGION}}.amazonaws.com
+
+  helmPushToEcr:
+    deps:
+      - ecrHelmLogin
+      - createChart
+    desc: "Push Helm charts to ECR"
+    dir: manifest/helm/charts
+    cmds:
+      - |
+        for chart in *.tgz; do
+          if [ -f "$chart" ]; then
+            echo "Pushing $chart to ECR"
+            helm push "$chart" oci://{{.ACCOUNT_ID}}.dkr.ecr.{{.REGION}}.amazonaws.com
+          else
+            echo "No Helm charts found to push."
+          fi
+        done
+
+  # Build and push all images
+  build-all:
+    cmds:
+      - task operator:docker-build VERSION={{.VERSION}}
+      - task build DOCKER_IMAGE_NAME={{.DOCKER_IMAGE_NAME}}
+      - task fetcher:build VERSION={{.VERSION}}
+
+  push-all:
+    deps:
+      - build-all
+    cmds:
+      - task operator:docker-push VERSION={{.VERSION}}
+      - task push-docker DOCKER_IMAGE_NAME={{.DOCKER_IMAGE_NAME}}
+      - task fetcher:push VERSION={{.VERSION}}

@@ -14,6 +14,8 @@ spec:
         app: {{ .Release.Name }}
     spec:
       serviceAccountName: {{ .Values.serviceAccount | default "default" }}
+      imagePullSecrets:
+        - name: {{ .Values.ecrSecretName }}
       initContainers:
         - name: run-migrations
           image: {{ .Values.migrationsImage }}
@@ -32,7 +34,7 @@ spec:
             - name: POSTGRESQL_URL
               value: "postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@postgres:5432/postgres?sslmode=disable"
             - name: VERSION
-              value: {{ .Values.migrationVersion }}
+              value: {{ .Values.migrationVersion | quote }}
       containers:
         - name: news-alligator
           image: {{ .Values.imageName }}

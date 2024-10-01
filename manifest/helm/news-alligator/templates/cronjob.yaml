@@ -10,6 +10,8 @@ spec:
     spec:
       template:
         spec:
+          imagePullSecrets:
+            - name: {{ .Values.ecrSecretName }}
           containers:
             - name: news-fetcher
               image: {{ .Values.cronjob.image.name }}
