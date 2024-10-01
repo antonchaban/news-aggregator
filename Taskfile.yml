@@ -18,6 +18,9 @@ includes:
     dir: ./operator/
   fetcher:
     taskfile: ./fetcher/Taskfile.yml
+  cdk:
+    taskfile: ./infra/aws/cdk/Taskfile.yml
+    dir: ./infra/aws/cdk/
 
 tasks:
   build:
@@ -46,6 +49,7 @@ tasks:
     deps: [mockgen]
     cmds:
       - go test -v ./...
+      - task cdk:test
     desc: Run tests
 
   pull-docker:
