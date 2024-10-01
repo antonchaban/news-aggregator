@@ -1,11 +1,13 @@
 package web
 
 import (
+	"errors"
 	service_mocks "github.com/antonchaban/news-aggregator/pkg/handler/web/mocks"
 	"github.com/antonchaban/news-aggregator/pkg/model"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/mock/gomock"
+	"net/http"
 	"net/http/httptest"
 	"strconv"
 	"strings"
@@ -259,6 +261,64 @@ func TestHandler_updateSource(t *testing.T) {
 			// Assert
 			assert.Equal(t, w.Code, test.expectedCode)
 			assert.JSONEq(t, w.Body.String(), test.expectedResponseBody)
+		})
+	}
+}
+
+func TestHandler_getAllSources(t *testing.T) {
+	type mockBehavior func(r *service_mocks.MockSourceService)
+	tests := []struct {
+		name                 string
+		mockBehavior         mockBehavior
+		expectedCode         int
+		expectedResponseBody string
+	}{
+		{
+			name: "OK",
+			mockBehavior: func(r *service_mocks.MockSourceService) {
+				r.EXPECT().GetAll().Return([]model.Source{
+					{
+						Id:        1,
+						Name:      "CNN",
+						Link:      "http://cnn.com",
+						ShortName: "cnn",
+					},
+					{
+						Id:        2,
+						Name:      "BBC",
+						Link:      "http://bbc.com",
+						ShortName: "bbc",
+					},
+				}, nil)
+			},
+			expectedCode:         200,
+			expectedResponseBody: `[{"id":1,"name":"CNN","link":"http://cnn.com","short_name":"cnn"},{"id":2,"name":"BBC","link":"http://bbc.com","short_name":"bbc"}]`,
+		},
+		{
+			name: "Service Error",
+			mockBehavior: func(r *service_mocks.MockSourceService) {
+				r.EXPECT().GetAll().Return(nil, errors.New("internal server error"))
+			},
+			expectedCode:         http.StatusInternalServerError,
+			expectedResponseBody: `{"message":"internal server error"}`,
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			c := gomock.NewController(t)
+			defer c.Finish()
+
+			srcSvc := service_mocks.NewMockSourceService(c)
+			test.mockBehavior(srcSvc)
+			r := gin.New()
+			r.GET("/source", NewHandler(nil, srcSvc).getAllSources)
+			w := httptest.NewRecorder()
+			req := httptest.NewRequest("GET", "/source", nil)
+
+			r.ServeHTTP(w, req)
+
+			assert.Equal(t, test.expectedCode, w.Code)
+			assert.JSONEq(t, test.expectedResponseBody, w.Body.String())
 		})
 	}
 }

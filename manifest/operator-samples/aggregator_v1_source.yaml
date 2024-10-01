@@ -18,3 +18,31 @@ spec:
   name: "FOX NEWS"
   link: "https://moxie.foxnews.com/google-publisher/world.xml"
   short_name: "foxnews"
+---
+apiVersion: aggregator.com.teamdev/v1
+kind: Source
+metadata:
+  name: wshngtn-source
+spec:
+  name: "Washington Times"
+  link: "https://www.washingtontimes.com/rss/headlines/news/world/"
+  short_name: "washingtontimes"
+---
+apiVersion: aggregator.com.teamdev/v1
+kind: Source
+metadata:
+  name: usatoday-source
+spec:
+  name: "USA TODAY"
+  link: "https://www.usatoday.com/news/world/"
+  short_name: "usatoday"
+---
+apiVersion: aggregator.com.teamdev/v1
+kind: Source
+metadata:
+  name: washpost-source
+spec:
+  name: "Washington Post"
+  link: "http://feeds.washingtonpost.com/rss/world"
+  short_name: "washingtonpost"
+---

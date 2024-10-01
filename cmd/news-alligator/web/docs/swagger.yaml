@@ -82,6 +82,31 @@ paths:
       tags:
       - articles
   /sources:
+    get:
+      consumes:
+      - application/json
+      description: Gets all currently available sources for fetching news
+      operationId: get-all-sources
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Source'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/web.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.errorResponse'
+      summary: Get all sources
+      tags:
+      - sources
     post:
       consumes:
       - application/json
