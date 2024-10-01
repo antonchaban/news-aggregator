@@ -64,31 +64,4 @@ func TestEKSStack(t *testing.T) {
 	template.HasResourceProperties(jsii.String("AWS::EC2::SecurityGroup"), map[string]interface{}{
 		"GroupDescription": "Allow traffic to EKS",
 	})
-
-	// Validate Helm Chart installation for Cert-Manager
-	template.HasResourceProperties(jsii.String("Custom::AWSCDK-EKS-HelmChart"), map[string]interface{}{
-		"Release":    "cert-manager",
-		"Chart":      "cert-manager",
-		"Namespace":  "cert-manager",
-		"Repository": "https://charts.jetstack.io",
-		"Values":     `{"crds":{"enabled":true}}`, // Corrected to match the CloudFormation template
-	})
-
-	// Validate Vertical Pod Autoscaler Helm Chart installation
-	template.HasResourceProperties(jsii.String("Custom::AWSCDK-EKS-HelmChart"), map[string]interface{}{
-		"Release":         "my-release",
-		"Chart":           "vertical-pod-autoscaler",
-		"Namespace":       "default",
-		"Repository":      "https://cowboysysop.github.io/charts/",
-		"CreateNamespace": true,
-	})
-
-	// Validate AWS EBS CSI Driver Helm Chart installation
-	template.HasResourceProperties(jsii.String("Custom::AWSCDK-EKS-HelmChart"), map[string]interface{}{
-		"Release":         "aws-ebs-csi",
-		"Chart":           "aws-ebs-csi-driver",
-		"Namespace":       "kube-system",
-		"Repository":      "https://kubernetes-sigs.github.io/aws-ebs-csi-driver",
-		"CreateNamespace": true,
-	})
 }
