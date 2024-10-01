@@ -1,5 +1,3 @@
-# Welcome to your CDK Go project!
-
 This is a stack for starting EKS cluster with CDK for news aggregator app, written in Go and deployed to AWS.
 This CDK stack will create an EKS cluster with a managed node group and a VPC.
 It will also install all required charts for the news aggregator app.
