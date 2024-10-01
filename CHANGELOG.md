@@ -1,5 +1,47 @@
 # Changelog
 
+## [1.6.0](https://github.com/antonchaban/news-aggregator/compare/news-alligator@v1.5.0...news-alligator@v1.6.0) (2024-10-01)
+
+
+### Features
+
+* Add scaling features for news aggregator application ([9093f69](https://github.com/antonchaban/news-aggregator/commit/9093f69944fb2584632705f5926828ec141565e5))
+
+## [1.5.0](https://github.com/antonchaban/news-aggregator/compare/news-alligator@v1.4.0...news-alligator@v1.5.0) (2024-10-01)
+
+
+### Features
+
+* Facilitate the management of certificates with cert-manager ([3c79b2a](https://github.com/antonchaban/news-aggregator/commit/3c79b2acff8d716bd7a6ba70d40c35931ca39f3f))
+
+## [1.4.0](https://github.com/antonchaban/news-aggregator/compare/news-alligator@v1.3.0...news-alligator@v1.4.0) (2024-10-01)
+
+
+### Features
+
+* Add endpoint to news aggregator to view all available sources ([df08aa0](https://github.com/antonchaban/news-aggregator/commit/df08aa02cf9f1e98e665344862fdbc73b904d44e))
+
+## [1.3.0](https://github.com/antonchaban/news-aggregator/compare/news-alligator@v1.2.0...news-alligator@v1.3.0) (2024-10-01)
+
+
+### Features
+
+* Add helm for managing k8s manifests ([8f8352c](https://github.com/antonchaban/news-aggregator/commit/8f8352c3cb42ddb6f92b807d6783557506ff976f))
+
+## [1.2.0](https://github.com/antonchaban/news-aggregator/compare/news-alligator@v1.1.0...news-alligator@v1.2.0) (2024-09-23)
+
+
+### Features
+
+* Add DB and separate fetcher service for news fetching as cron job ([12f0d27](https://github.com/antonchaban/news-aggregator/commit/12f0d27d2c8a38964b44cdb0407e8f61d5fc8eb5))
+
+## [1.1.0](https://github.com/antonchaban/news-aggregator/compare/news-alligator@v1.0.1...news-alligator@v1.1.0) (2024-09-23)
+
+
+### Features
+
+* Add volumes to k8s cluster ([f77b924](https://github.com/antonchaban/news-aggregator/commit/f77b9245fc4e5eb45100addb096dfc1519948a2a))
+
 ## [1.0.1](https://github.com/antonchaban/news-aggregator/compare/news-alligator-v1.0.0...news-alligator@v1.0.1) (2024-08-01)
 
 
