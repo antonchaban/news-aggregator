@@ -1,5 +1,71 @@
 # Changelog
 
+## [1.7.1](https://github.com/antonchaban/news-aggregator/compare/news-alligator@v1.7.0...news-alligator@v1.7.1) (2024-10-01)
+
+
+### Bug Fixes
+
+* Update ECR docker image name ([c78c557](https://github.com/antonchaban/news-aggregator/commit/c78c557cb16cc70e85c3842c7a3170dd42d8b0c0))
+
+## [1.7.0](https://github.com/antonchaban/news-aggregator/compare/news-alligator@v1.6.0...news-alligator@v1.7.0) (2024-10-01)
+
+
+### Features
+
+* Create a k8s CronJob which creates and updates a k8s Secret with credentials to ECR; ([9befef3](https://github.com/antonchaban/news-aggregator/commit/9befef3b3affcbb3ada0bd6c0a3aaacf17e6f00f))
+* create storages for all docker images and helm charts in private ECR ([dce631f](https://github.com/antonchaban/news-aggregator/commit/dce631f77aa4ccbbc23ad79cb6f69786b9f56f87))
+* Update all k8s deployments to use the secret to pull images from ECR ([bff6f9b](https://github.com/antonchaban/news-aggregator/commit/bff6f9bec55fa7ce6a3f1d4475c74d3f5007941c))
+* Update GithubActions to push image to ECR on it's release; ([cd6cf80](https://github.com/antonchaban/news-aggregator/commit/cd6cf800964c45d72b5e367acd52087e13b1b5aa))
+* Update Taskfile to be able to push images/charts to ECR; ([e4c2088](https://github.com/antonchaban/news-aggregator/commit/e4c2088daf40aeb7fb2aa3002662fe25f5f25075))
+
+
+### Bug Fixes
+
+* Add task tool installation ([3fbea2d](https://github.com/antonchaban/news-aggregator/commit/3fbea2d8cdf9d116df4bd26db0c03add36bb2371))
+* update release please to use version from release ([43501f5](https://github.com/antonchaban/news-aggregator/commit/43501f5be47d8d8a1e96805957e793d03214ec58))
+
+## [1.6.0](https://github.com/antonchaban/news-aggregator/compare/news-alligator@v1.5.0...news-alligator@v1.6.0) (2024-10-01)
+
+
+### Features
+
+* Add scaling features for news aggregator application ([9093f69](https://github.com/antonchaban/news-aggregator/commit/9093f69944fb2584632705f5926828ec141565e5))
+
+## [1.5.0](https://github.com/antonchaban/news-aggregator/compare/news-alligator@v1.4.0...news-alligator@v1.5.0) (2024-10-01)
+
+
+### Features
+
+* Facilitate the management of certificates with cert-manager ([3c79b2a](https://github.com/antonchaban/news-aggregator/commit/3c79b2acff8d716bd7a6ba70d40c35931ca39f3f))
+
+## [1.4.0](https://github.com/antonchaban/news-aggregator/compare/news-alligator@v1.3.0...news-alligator@v1.4.0) (2024-10-01)
+
+
+### Features
+
+* Add endpoint to news aggregator to view all available sources ([df08aa0](https://github.com/antonchaban/news-aggregator/commit/df08aa02cf9f1e98e665344862fdbc73b904d44e))
+
+## [1.3.0](https://github.com/antonchaban/news-aggregator/compare/news-alligator@v1.2.0...news-alligator@v1.3.0) (2024-10-01)
+
+
+### Features
+
+* Add helm for managing k8s manifests ([8f8352c](https://github.com/antonchaban/news-aggregator/commit/8f8352c3cb42ddb6f92b807d6783557506ff976f))
+
+## [1.2.0](https://github.com/antonchaban/news-aggregator/compare/news-alligator@v1.1.0...news-alligator@v1.2.0) (2024-09-23)
+
+
+### Features
+
+* Add DB and separate fetcher service for news fetching as cron job ([12f0d27](https://github.com/antonchaban/news-aggregator/commit/12f0d27d2c8a38964b44cdb0407e8f61d5fc8eb5))
+
+## [1.1.0](https://github.com/antonchaban/news-aggregator/compare/news-alligator@v1.0.1...news-alligator@v1.1.0) (2024-09-23)
+
+
+### Features
+
+* Add volumes to k8s cluster ([f77b924](https://github.com/antonchaban/news-aggregator/commit/f77b9245fc4e5eb45100addb096dfc1519948a2a))
+
 ## [1.0.1](https://github.com/antonchaban/news-aggregator/compare/news-alligator-v1.0.0...news-alligator@v1.0.1) (2024-08-01)
 
 
