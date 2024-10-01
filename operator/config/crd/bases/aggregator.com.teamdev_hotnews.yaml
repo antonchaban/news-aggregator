@@ -1,0 +1,152 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.15.0
+  name: hotnews.aggregator.com.teamdev
+spec:
+  group: aggregator.com.teamdev
+  names:
+    kind: HotNews
+    listKind: HotNewsList
+    plural: hotnews
+    singular: hotnews
+  scope: Namespaced
+  versions:
+  - name: v1
+    schema:
+      openAPIV3Schema:
+        description: |-
+          HotNews is the Schema for the hotnews API
+          It represents a hot news resource in the Kubernetes cluster.
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: |-
+              HotNewsSpec defines the desired state of HotNews.
+              It contains specifications for filtering news articles based on keywords,
+              dates, sources, and feed groups, as well as summary configuration.
+            properties:
+              date_end:
+                description: |-
+                  DateEnd is the end date for filtering news articles.
+                  Format must be YYYY-MM-DD.
+                  This field is optional.
+                pattern: ^\d{4}-\d{2}-\d{2}$
+                type: string
+              date_start:
+                description: |-
+                  DateStart is the start date for filtering news articles.
+                  Format must be YYYY-MM-DD.
+                  This field is optional.
+                pattern: ^\d{4}-\d{2}-\d{2}$
+                type: string
+              feed_groups:
+                description: |-
+                  FeedGroups specifies the feed groups defined in the 'feed-group-source' ConfigMap
+                  in the 'news-alligator' namespace. The feeds in these groups will be used to filter news.
+                  The specified feed groups must exist in the ConfigMap; otherwise, validation will fail.
+                  This field is optional.
+                items:
+                  type: string
+                type: array
+              keywords:
+                description: |-
+                  Keywords is a list of keywords to filter news articles.
+                  This field is required and must contain at least one keyword.
+                items:
+                  type: string
+                minItems: 1
+                type: array
+              sources:
+                description: |-
+                  Sources specifies the short names of Source resources to filter news from.
+                  These should match the 'spec.shortName' field of Source resources in the same namespace.
+                  If empty, all available feeds will be used.
+                  This field is optional.
+                items:
+                  type: string
+                type: array
+              summary_config:
+                description: SummaryConfig defines the configuration for the summary
+                  in the status.
+                properties:
+                  titles_count:
+                    description: |-
+                      TitlesCount is the number of article titles to include in the summary.
+                      Must be greater than or equal to 1.
+                      Defaults to 10 if not specified.
+                    type: integer
+                required:
+                - titles_count
+                type: object
+            required:
+            - keywords
+            - summary_config
+            type: object
+          status:
+            description: |-
+              HotNewsStatus represents the observed state of HotNews.
+              It contains information about the count of articles, a link to the news aggregator,
+              a summary of article titles, and conditions.
+            properties:
+              articles_count:
+                description: '- ArticlesCount: The count of articles by the criteria.'
+                type: integer
+              articles_titles:
+                description: '- ArticlesTitles: The first ''spec.summaryConfig.titlesCount''
+                  article titles, sorted by feed name.'
+                items:
+                  type: string
+                type: array
+              conditions:
+                description: '- Conditions: Conditions of the HotNews resource.'
+                items:
+                  description: HotNewsCondition represents the condition of a HotNews
+                    resource.
+                  properties:
+                    lastUpdateTime:
+                      format: date-time
+                      type: string
+                    message:
+                      type: string
+                    reason:
+                      type: string
+                    status:
+                      type: string
+                    type:
+                      description: HNewsConditionType is a string representing the
+                        condition type for HotNews.
+                      type: string
+                  required:
+                  - status
+                  - type
+                  type: object
+                type: array
+              news_link:
+                description: '- NewsLink: A link to the news-aggregator HTTPS server
+                  to get all news by the criteria in JSON format.'
+                type: string
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

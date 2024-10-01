@@ -5,8 +5,8 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/predicate"
 )
 
-// Source returns the predicates for the Source controller, filtering events by the specified namespace.
-func Source() predicate.Predicate {
+// HotNews returns the predicates for the HotNews controller.
+func HotNews() predicate.Predicate {
 	return predicate.Funcs{
 		CreateFunc: func(e event.CreateEvent) bool {
 			return true

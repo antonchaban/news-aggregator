@@ -3,6 +3,7 @@ package controller_test
 import (
 	aggregatorv1 "com.teamdev/news-aggregator/api/v1"
 	"com.teamdev/news-aggregator/internal/controller"
+	"com.teamdev/news-aggregator/internal/controller/models"
 	"context"
 	"encoding/json"
 	. "github.com/onsi/ginkgo/v2"
@@ -64,7 +65,7 @@ var _ = Describe("Create source tests", func() {
 		// Create fake HTTP server to mock an external service
 		server = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			if r.Method == http.MethodPost {
-				var src controller.Source
+				var src models.Source
 				err := json.NewDecoder(r.Body).Decode(&src)
 				Expect(err).NotTo(HaveOccurred())
 
@@ -112,7 +113,7 @@ var _ = Describe("Create source tests", func() {
 		// Create fake HTTP server to mock an external service
 		server = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			if r.Method == http.MethodPost {
-				var src controller.Source
+				var src models.Source
 				err := json.NewDecoder(r.Body).Decode(&src)
 				Expect(err).NotTo(HaveOccurred())
 
@@ -159,7 +160,7 @@ var _ = Describe("Create source tests", func() {
 	It("should handle creation failure, when error in resp.StatusCode", func() {
 		server = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			if r.Method == http.MethodPost {
-				var src controller.Source
+				var src models.Source
 				err := json.NewDecoder(r.Body).Decode(&src)
 				Expect(err).NotTo(HaveOccurred())
 
@@ -205,7 +206,7 @@ var _ = Describe("Create source tests", func() {
 	It("should add finalizers if not present", func() {
 		server = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			if r.Method == http.MethodPost {
-				var src controller.Source
+				var src models.Source
 				err := json.NewDecoder(r.Body).Decode(&src)
 				Expect(err).NotTo(HaveOccurred())
 
@@ -349,7 +350,7 @@ var _ = Describe("Update source tests", func() {
 				w.WriteHeader(http.StatusOK)
 				w.Write(respData)
 			} else if r.Method == http.MethodPut {
-				var src controller.Source
+				var src models.Source
 				src.Name = "Updated Source"
 				src.Link = "http://example.com/rss"
 				src.Id = 1
@@ -404,7 +405,7 @@ var _ = Describe("Update source tests", func() {
 				w.WriteHeader(http.StatusOK)
 				w.Write(respData)
 			} else if r.Method == http.MethodPut {
-				var src controller.Source
+				var src models.Source
 				src.Name = "Updated Source"
 				src.Link = "http://example.com/rss"
 				src.Id = 1
@@ -459,7 +460,7 @@ var _ = Describe("Update source tests", func() {
 				w.WriteHeader(http.StatusOK)
 				w.Write(respData)
 			} else if r.Method == http.MethodPut {
-				var src controller.Source
+				var src models.Source
 				src.Name = "Updated Source"
 				src.Link = "http://example.com/rss"
 				src.Id = 1

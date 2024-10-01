@@ -45,8 +45,9 @@ func main() {
 	var secureMetrics bool
 	var enableHTTP2 bool
 	var newsAggregatorSrcServiceURL string
+	var newsAggregatorServiceURL string
+	var cfgMapName string
 	var tlsOpts []func(*tls.Config)
-	var workingNamespace string
 
 	flag.StringVar(&metricsAddr, "metrics-bind-address", "0", "The address the metrics endpoint binds to. "+
 		"Use :8443 for HTTPS or :8080 for HTTP, or leave as 0 to disable the metrics service.")
@@ -59,7 +60,8 @@ func main() {
 	flag.BoolVar(&enableHTTP2, "enable-http2", false,
 		"If set, HTTP/2 will be enabled for the metrics and webhook servers")
 	flag.StringVar(&newsAggregatorSrcServiceURL, "news-aggregator-src-service-url", "https://news-alligator-service.news-alligator.svc.cluster.local:8443/sources", "The URL of the news aggregator source service")
-	flag.StringVar(&workingNamespace, "working-namespace", "news-alligator", "The namespace in which CRDs will be watched")
+	flag.StringVar(&newsAggregatorServiceURL, "news-aggregator-service-url", "https://news-alligator-service.news-alligator.svc.cluster.local:8443/articles", "The URL of the news aggregator service")
+	flag.StringVar(&cfgMapName, "config-map-name", "feed-group-source", "The name of the ConfigMap that contains feed groups")
 	opts := zap.Options{
 		Development: true,
 	}
@@ -116,7 +118,6 @@ func main() {
 		Scheme:                      mgr.GetScheme(),
 		HTTPClient:                  httpClient,
 		NewsAggregatorSrcServiceURL: newsAggregatorSrcServiceURL,
-		WorkingNamespace:            workingNamespace,
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "Source")
 		os.Exit(1)
@@ -127,6 +128,35 @@ func main() {
 			os.Exit(1)
 		}
 	}
+	if err = (&controller.HotNewsReconciler{
+		Client:        mgr.GetClient(),
+		Scheme:        mgr.GetScheme(),
+		HTTPClient:    httpClient,
+		ArticleSvcURL: newsAggregatorServiceURL,
+		ConfigMapName: cfgMapName,
+	}).SetupWithManager(mgr); err != nil {
+		setupLog.Error(err, "unable to create controller", "controller", "HotNews")
+		os.Exit(1)
+	}
+	if os.Getenv("ENABLE_WEBHOOKS") != "false" {
+		if err = (&aggregatorv1.HotNews{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "HotNews")
+			os.Exit(1)
+		}
+	}
+
+	// Register the ConfigMap webhook
+	if os.Getenv("ENABLE_WEBHOOKS") != "false" {
+		cfgValidator := &aggregatorv1.CfgMapValidatorWebHook{
+			Client:     mgr.GetClient(),
+			CfgMapName: cfgMapName,
+		}
+		if err = cfgValidator.SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ConfigMap")
+			os.Exit(1)
+		}
+	}
+
 	// +kubebuilder:scaffold:builder
 
 	if err := mgr.AddHealthzCheck("healthz", healthz.Ping); err != nil {

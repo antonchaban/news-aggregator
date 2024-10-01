@@ -1,0 +1,60 @@
+---
+apiVersion: aggregator.com.teamdev/v1
+kind: HotNews
+metadata:
+  name: olympics-news
+  namespace: news-alligator
+spec:
+  keywords:
+    - "olympics"
+    - "russia"
+    - "ukraine"
+    - "putin"
+    - "war"
+    - "biden"
+  date_start: "2024-07-01"
+  date_end: "2025-08-30"
+  feed_groups:
+    - "westMedias"
+  summary_config:
+    titles_count: 6
+---
+apiVersion: aggregator.com.teamdev/v1
+kind: HotNews
+metadata:
+  name: world-news
+  namespace: news-alligator
+spec:
+  keywords:
+    - "russia"
+    - "ukraine"
+    - "putin"
+    - "war"
+    - "biden"
+    - "zelensky"
+    - "kursk"
+  date_start: "2024-07-01"
+  date_end: "2025-08-30"
+  feed_groups:
+    - "westMedias"
+  summary_config:
+    titles_count: 7
+---
+apiVersion: aggregator.com.teamdev/v1
+kind: HotNews
+metadata:
+  name: special-news
+  namespace: news-alligator
+spec:
+  keywords:
+    - "russia"
+    - "ukraine"
+    - "putin"
+    - "war"
+    - "usa"
+  date_start: "2024-07-07"
+  date_end: "2025-08-10"
+  sources:
+    - "foxnews"
+  summary_config:
+    titles_count: 11

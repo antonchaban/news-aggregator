@@ -27,6 +27,7 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
+	"slices"
 	"time"
 )
 
@@ -87,6 +88,20 @@ func (r *Source) ValidateUpdate(old runtime.Object) (admission.Warnings, error) 
 // - error: Returns an error if validation fails.
 func (r *Source) ValidateDelete() (admission.Warnings, error) {
 	logrus.Println("validate delete", "name", r.Name)
+
+	// Check if the source is referenced by any HotNews resources
+	var hotNewsList HotNewsList
+	err := SourceClient.Client.List(context.Background(), &hotNewsList, &client.ListOptions{Namespace: r.Namespace})
+	if err != nil {
+		return nil, err
+	}
+
+	for _, hotNews := range hotNewsList.Items {
+		if slices.Contains(hotNews.Spec.Sources, r.Spec.ShortName) {
+			return nil, fmt.Errorf("cannot delete Source %s as it is referenced by HotNews %s", r.Spec.ShortName, hotNews.Name)
+		}
+	}
+
 	return nil, nil
 }
 

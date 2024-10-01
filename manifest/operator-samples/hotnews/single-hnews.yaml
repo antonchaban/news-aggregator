@@ -1,0 +1,20 @@
+apiVersion: aggregator.com.teamdev/v1
+kind: HotNews
+metadata:
+  name: special-news
+  namespace: operator-system
+spec:
+  keywords:
+    - "russia"
+    - "ukraine"
+    - "putin"
+    - "war"
+    - "usa"
+    - "china"
+    - "nato"
+  date_start: "2024-07-07"
+  date_end: "2025-08-10"
+  sources:
+    - "bbc-os"
+  summary_config:
+    titles_count: 11
