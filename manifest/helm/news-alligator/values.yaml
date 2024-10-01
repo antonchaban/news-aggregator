@@ -1,0 +1,49 @@
+# Application-specific values
+replicaCount: 1
+containerPort: 443
+imageName: "antohachaban/news-alligator-web:0.2.2"
+namespace: "news-alligator"
+serviceAccount: "news-alligator-sa"
+
+# Resource requests and limits for the application container
+resources:
+  limits:
+    cpu: "500m"
+    memory: "128Mi"
+  requests:
+    cpu: "250m"
+    memory: "64Mi"
+
+# Autoscaling settings (currently disabled)
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+
+# PostgreSQL configuration from the Bitnami chart
+postgresql:
+  fullnameOverride: "postgres"
+  auth:
+    database: "postgres"
+    username: ""
+    password: ""
+  primary:
+    persistence:
+      size: 2Gi
+      mountPath: /bitnami/postgresql
+
+# CronJob settings
+cronjob:
+  enabled: true
+  name: "news-fetcher"
+#  schedule: "0 0 * * *" # Default: Run once a day at midnight
+  schedule: "* * * * *" # Run every minute for testing
+  image:
+    name: "antohachaban/news-fetcher:0.1"
+  env:
+    secretName: "news-alligator-secret"
+    configMapName: "news-alligator-config"
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+

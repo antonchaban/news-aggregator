@@ -3,6 +3,9 @@ version: '3'
 env:
   DOCKER_IMAGE_NAME: antohachaban/news-alligator-web
 
+vars:
+  Namespace: "news-alligator"
+
 tasks:
   build:
     cmds:
@@ -200,3 +203,26 @@ tasks:
     cmds:
       - task delete-namespace
     desc: Undeploy the entire application stack
+
+
+  createChart:
+    desc: "Create Helm chart for news-aggregator"
+    cmds:
+      - helm package manifest/helm/news-alligator
+      - mkdir -p manifest/helm/charts
+      - mv *.tgz manifest/helm/charts
+
+  installChart:
+    vars:
+      DB_PASSWORD: '{{.DB_PASSWORD | default "admin"}}'
+      DB_USER: '{{.DB_USER | default "admin"}}'
+    deps:
+        - createChart
+    desc: "Install Helm chart on Kubernetes cluster"
+    cmds:
+      - helm upgrade --install news-alligator manifest/helm/charts/news-alligator-*.tgz --namespace {{.Namespace}} --create-namespace --set postgresql.auth.username={{.DB_USER}} --set postgresql.auth.password={{.DB_PASSWORD}}
+
+  uninstallChart:
+    desc: "Uninstall Helm chart from Kubernetes cluster"
+    cmds:
+      - helm uninstall news-alligator --namespace {{.Namespace}}

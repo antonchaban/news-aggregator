@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-config
+  namespace: {{ .Values.namespace }}
+data:
+  POSTGRES_DB: {{ .Values.postgresql.auth.database | quote }}
+  POSTGRES_HOST: {{ .Values.postgresql.fullnameOverride }}:5432
+  STORAGE_TYPE: postgres
