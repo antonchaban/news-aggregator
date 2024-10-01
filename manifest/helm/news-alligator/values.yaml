@@ -1,11 +1,18 @@
 # Application-specific values
 replicaCount: 1
 containerPort: 443
-imageName: "antohachaban/news-alligator-web:0.2.3"
+imageName: "antohachaban/news-alligator-web:0.2.4"
 namespace: "news-alligator"
 serviceAccount: "news-alligator-sa"
 migrationsImage: "antohachaban/alligator-migrations:0.2"
 migrationVersion: "000002"
+
+tlsSecretName: "news-alligator-tls-secret"
+certvalues:
+  commonName: "https://news-alligator-service.news-alligator.svc.cluster.local"
+  duration: "8760h"
+  organization: "News Alligator"
+  dnsName: "news-alligator-service.news-alligator.svc.cluster.local"
 
 # Resource requests and limits for the application container
 resources:
