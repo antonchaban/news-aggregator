@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.7.0](https://github.com/antonchaban/news-aggregator/compare/news-alligator@v1.6.0...news-alligator@v1.7.0) (2024-10-01)
+
+
+### Features
+
+* Create a k8s CronJob which creates and updates a k8s Secret with credentials to ECR; ([9befef3](https://github.com/antonchaban/news-aggregator/commit/9befef3b3affcbb3ada0bd6c0a3aaacf17e6f00f))
+* create storages for all docker images and helm charts in private ECR ([dce631f](https://github.com/antonchaban/news-aggregator/commit/dce631f77aa4ccbbc23ad79cb6f69786b9f56f87))
+* Update all k8s deployments to use the secret to pull images from ECR ([bff6f9b](https://github.com/antonchaban/news-aggregator/commit/bff6f9bec55fa7ce6a3f1d4475c74d3f5007941c))
+* Update GithubActions to push image to ECR on it's release; ([cd6cf80](https://github.com/antonchaban/news-aggregator/commit/cd6cf800964c45d72b5e367acd52087e13b1b5aa))
+* Update Taskfile to be able to push images/charts to ECR; ([e4c2088](https://github.com/antonchaban/news-aggregator/commit/e4c2088daf40aeb7fb2aa3002662fe25f5f25075))
+
+
+### Bug Fixes
+
+* Add task tool installation ([3fbea2d](https://github.com/antonchaban/news-aggregator/commit/3fbea2d8cdf9d116df4bd26db0c03add36bb2371))
+
 ## [1.6.0](https://github.com/antonchaban/news-aggregator/compare/news-alligator@v1.5.0...news-alligator@v1.6.0) (2024-10-01)
 
 
