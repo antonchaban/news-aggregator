@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0](https://github.com/antonchaban/news-aggregator/compare/news-alligator@v1.5.0...news-alligator@v1.6.0) (2024-10-01)
+
+
+### Features
+
+* Add scaling features for news aggregator application ([9093f69](https://github.com/antonchaban/news-aggregator/commit/9093f69944fb2584632705f5926828ec141565e5))
+
 ## [1.5.0](https://github.com/antonchaban/news-aggregator/compare/news-alligator@v1.4.0...news-alligator@v1.5.0) (2024-10-01)
 
 
