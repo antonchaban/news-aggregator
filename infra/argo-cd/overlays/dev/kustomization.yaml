@@ -1,7 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - base/cert-manager.yaml
+#  - base/cert-manager.yaml
   - base/vpa.yaml
   - base/ebs-csi.yaml
   - base/secret-generator.yaml
