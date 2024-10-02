@@ -5,11 +5,13 @@ metadata:
   namespace: argocd
 spec:
   project: default
+
   source:
     repoURL: https://cowboysysop.github.io/charts/
     targetRevision: 9.8.3
     chart: vertical-pod-autoscaler
-    releaseName: my-release
+    helm:
+      releaseName: my-release
   destination:
     namespace: default
     server: https://kubernetes.default.svc
