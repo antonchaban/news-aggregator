@@ -3,5 +3,6 @@ kind: Kustomization
 resources:
   - base/cert-manager.yaml
   - base/vpa.yaml
+  - base/ebs-csi.yaml
 commonLabels:
   maintainer: antonchaban
