@@ -26,4 +26,4 @@ spec:
     retry:
       limit: 3
     syncOptions:
-        - CreateNamespace=true
+      - CreateNamespace=true
