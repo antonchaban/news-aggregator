@@ -160,7 +160,7 @@ func NewEKSStack(scope constructs.Construct, id string, props *EKSStackProps) aw
 		DiskSize: jsii.Number(20),
 	})
 
-	argoChart := cluster.AddHelmChart(jsii.String("argo-cd"), &awseks.HelmChartOptions{
+	cluster.AddHelmChart(jsii.String("argo-cd"), &awseks.HelmChartOptions{
 		Chart:      jsii.String("argo-cd"),
 		Repository: jsii.String("https://argoproj.github.io/argo-helm"),
 		Release:    jsii.String("argo-cd"),
@@ -175,40 +175,6 @@ func NewEKSStack(scope constructs.Construct, id string, props *EKSStackProps) aw
 		},
 	})
 
-	day0App := cluster.AddManifest(jsii.String("Day0ArgoCDApplication"), &map[string]interface{}{
-		"apiVersion": "argoproj.io/v1alpha1",
-		"kind":       "Application",
-		"metadata": &map[string]interface{}{
-			"name":      "day-0",
-			"namespace": "argocd",
-		},
-		"spec": &map[string]interface{}{
-			"destination": &map[string]interface{}{
-				"namespace": "argocd",
-				"server":    "https://kubernetes.default.svc",
-			},
-			"project": "default",
-			"source": &map[string]interface{}{
-				"repoURL":        "https://github.com/antonchaban/news-aggregator.git",
-				"path":           "infra/argo-cd/overlays/dev",
-				"targetRevision": "feature/argo-cd",
-			},
-			"syncPolicy": &map[string]interface{}{
-				"automated": &map[string]interface{}{
-					"prune":    true,
-					"selfHeal": true,
-				},
-				"retry": &map[string]interface{}{
-					"backoff": &map[string]interface{}{
-						"maxDuration": "300s",
-					},
-					"limit": 3,
-				},
-			},
-		},
-	})
-
-	day0App.Node().AddDependency(argoChart)
 	// EKS Add-ons
 	awseks.NewCfnAddon(stack, jsii.String("VPCCNIAddon"), &awseks.CfnAddonProps{
 		ClusterName:      cluster.ClusterName(),
