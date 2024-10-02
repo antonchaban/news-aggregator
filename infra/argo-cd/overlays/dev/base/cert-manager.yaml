@@ -25,5 +25,5 @@ spec:
       selfHeal: true
     retry:
       limit: 3
-  syncOptions:
-    - CreateNamespace=true
+    syncOptions:
+        - CreateNamespace=true
