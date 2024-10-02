@@ -9,7 +9,7 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    repoURL: https://github.com/your-repo.git
+    repoURL: https://github.com/antonchaban/news-aggregator.git
     path: infra/argo-cd/overlays/dev
     targetRevision: feature/argo-cd
   syncPolicy:
