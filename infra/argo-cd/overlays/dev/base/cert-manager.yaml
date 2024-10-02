@@ -11,11 +11,9 @@ spec:
     chart: cert-manager
     targetRevision: v1.15.3
     helm:
-      valuesObjects:
-        crds:
-            create: true
-        prometheus:
-            enabled: true
+      parameters:
+        - name: installCRDs
+          value: "true"
   destination:
     namespace: cert-manager
     server: https://kubernetes.default.svc
