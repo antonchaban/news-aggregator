@@ -5,5 +5,6 @@ resources:
   - base/vpa.yaml
   - base/ebs-csi.yaml
   - base/secret-generator.yaml
+  - base/news-alligator.yaml
 commonLabels:
   maintainer: antonchaban
