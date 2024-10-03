@@ -160,6 +160,21 @@ func NewEKSStack(scope constructs.Construct, id string, props *EKSStackProps) aw
 		DiskSize: jsii.Number(20),
 	})
 
+	cluster.AddHelmChart(jsii.String("argo-cd"), &awseks.HelmChartOptions{
+		Chart:      jsii.String("argo-cd"),
+		Repository: jsii.String("https://argoproj.github.io/argo-helm"),
+		Release:    jsii.String("argo-cd"),
+		Namespace:  jsii.String("argocd"),
+		Values: &map[string]interface{}{
+			"installCRDs": true,
+			"server": map[string]interface{}{
+				"service": map[string]interface{}{
+					"type": "LoadBalancer",
+				},
+			},
+		},
+	})
+
 	// EKS Add-ons
 	awseks.NewCfnAddon(stack, jsii.String("VPCCNIAddon"), &awseks.CfnAddonProps{
 		ClusterName:      cluster.ClusterName(),
