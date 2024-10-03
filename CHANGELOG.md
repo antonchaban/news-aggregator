@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.1](https://github.com/antonchaban/news-aggregator/compare/news-alligator@v1.8.0...news-alligator@v1.8.1) (2024-10-03)
+
+
+### Bug Fixes
+
+* Remove helm charts installation from cdk ([5bdf1ed](https://github.com/antonchaban/news-aggregator/commit/5bdf1ed1478c9851ebdb8b2c6d8240bbd78fcf22))
+
 ## [1.8.0](https://github.com/antonchaban/news-aggregator/compare/news-alligator@v1.7.1...news-alligator@v1.8.0) (2024-10-01)
 
 
