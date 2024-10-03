@@ -48,7 +48,7 @@ Parameters:
   InstanceType:
     Description: Node instance type
     Type: String
-    Default: t2.micro
+    Default: t3.medium
     AllowedValues:
       - t3.medium
       - t2.medium
@@ -73,8 +73,6 @@ Resources:
     Type: AWS::EC2::VPC
     Properties:
       CidrBlock: 10.0.0.0/24
-      EnableDnsSupport: true
-      EnableDnsHostnames: true
       Tags:
         - Key: Name
           Value: antonvpc
