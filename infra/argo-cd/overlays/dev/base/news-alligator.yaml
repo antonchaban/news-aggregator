@@ -11,7 +11,7 @@ spec:
   source:
     path: manifest/helm/news-alligator
     repoURL: https://github.com/antonchaban/news-aggregator.git
-    targetRevision: feature/argo-cd
+    targetRevision: master
     helm:
       values: |
         postgresql:

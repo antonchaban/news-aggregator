@@ -13,7 +13,7 @@ spec:
   source:
     repoURL: https://github.com/antonchaban/news-aggregator.git
     path: infra/argo-cd/overlays/dev
-    targetRevision: feature/argo-cd
+    targetRevision: master
   syncPolicy:
     automated:
       prune: true
